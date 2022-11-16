@@ -20,7 +20,7 @@
     "locale": "en-US"
   },
   "hashtag": "DevFestWarsaw",
-  "disabledSchedule": true,
+  "disabledSchedule": false,
   "navigation": [
     {
       "route": "home",

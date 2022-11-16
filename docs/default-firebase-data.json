@@ -23,10 +23,10 @@
       "server": ""
     },
     "site": {
-      "domain": "devfest.gdgwarsaw.pl"
+      "domain": "https://warsaw.devfest.pl/"
     },
     "schedule": {
-      "enabled": false
+      "enabled": true
     },
     "mailchimp": {
       "dc": "",
@@ -45,86 +45,62 @@
         },
         {
           "order": 1,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
-        },
-        {
-          "order": 2,
-          "logoUrl": "../images/logos/google.svg",
-          "name": "Google",
-          "url": "https://www.google.com.ua/intl/en/about/"
-        },
-        {
-          "order": 3,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
-        },
-        {
-          "order": 4,
-          "logoUrl": "../images/logos/google.svg",
-          "name": "Google",
-          "url": "https://www.google.com.ua/intl/en/about/"
-        },
-        {
-          "order": 5,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
-        },
-        {
-          "order": 6,
-          "logoUrl": "../images/logos/google.svg",
-          "name": "Google",
-          "url": "https://www.google.com.ua/intl/en/about/"
-        },
-        {
-          "order": 7,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
-        },
-        {
-          "order": 8,
-          "logoUrl": "../images/logos/google.svg",
-          "name": "Google",
-          "url": "https://www.google.com.ua/intl/en/about/"
-        },
-        {
-          "order": 9,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
+          "logoUrl": "../images/logos/google_cloud-ar21.svg",
+          "name": "Google Cloud",
+          "url": "https://cloud.google.com"
         }
       ],
       "order": 0,
-      "title": "General Partner"
-    },
-    {
-      "items": [
-        {
-          "order": 0,
-          "logoUrl": "../images/logos/gdg-lviv.svg",
-          "name": "GDG Lviv",
-          "url": "https://www.meetup.com/GDG-Lviv/"
-        },
-        {
-          "order": 1,
-          "logoUrl": "../images/logos/gdg-x.svg",
-          "name": "GDG[x]",
-          "url": "https://github.com/gdg-x"
-        }
-      ],
-      "order": 1,
-      "title": "Template Creator"
+      "title": "General Partners"
     }
   ],
   "schedule": {
+    "2022-12-10": {
+      "date": "2022-12-10",
+      "dateReadable": "December 9",
+      "timeslots": [
+        {
+          "endTime": "10:00",
+          "sessions": [
+            {
+              "items": [
+                "101"
+              ]
+            }
+          ],
+          "startTime": "09:00"
+        }
+      ]
+    }
   },
   "sessions": {
+    "101": {
+      "complexity": "Beginner",
+      "description": "In this session, we will take a look at Windows and .NET support on Google Cloud Platform. We will build a simple ASP.NET app, deploy to Google Compute Engine and take a look at some of the tools and APIs available to .NET developers on Google Cloud Platform. ",
+      "language": "English",
+      "presentation": "https://speakerdeck.com/gdglviv/mete-atamel-windows-and-net-on-google-cloud-platform",
+      "speakers": ["mete_atamel", "adrian_kajda"],
+      "tags": ["Cloud"],
+      "title": "Windows and .NET on Google Cloud Platform "
+    }
   },
   "speakers": {
+    "jakub_kolakowski": {
+      "bio": "God",
+      "company": "Sygic",
+      "companyLogo": "/images/logos/gdg-lviv.svg",
+      "companyLogoUrl": "https://storage.googleapis.com/hoverboard-experimental.appspot.com/images/logos/gdg-lviv.svg",
+      "country": "Creator of Fuelio app. Fuelio blah blah, Poland",
+      "featured": true,
+      "name": "jakub_kolakowski",
+      "photo": "/images/people/adrian_kajda.jpg",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
+      "pronouns": "he/him",
+      "shortBio": "Creator of Fuelio app. Fuelio was his hooby project started in 2012. Three years later the app wa...",
+      "socials": [],
+      "order": 0,
+      "title": "GOD of GDG"
+    }
   },
   "team": [
     {
@@ -232,38 +208,9 @@
       "inDemand": true,
       "info": "First come, first serve :) 2days of workshops and lectures",
       "name": "Early Bird",
-      "price": 49,
+      "price": 29,
       "primary": false,
       "regular": true,
-      "soldOut": false,
-
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-    },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": false,
-      "info": "2 days with us",
-      "name": "Regular: 2 days",
-      "price": 99,
-      "primary": true,
-      "regular": true,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-    },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": true,
-      "info": "A patron of what we create together as GDG",
-      "name": "Fan+Supporter",
-      "price": 249,
-      "primary": false,
-      "regular": false,
       "soldOut": false,
       "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
     },
@@ -287,6 +234,34 @@
       "starts": " ",
       "ends": "Dec10 & Dec11 -",
       "inDemand": false,
+      "info": "2 days with us",
+      "name": "Regular",
+      "price": 49,
+      "primary": true,
+      "regular": true,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": true,
+      "info": "A patron of what we create together as GDG",
+      "name": "Patron",
+      "price": 500,
+      "primary": false,
+      "regular": false,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": false,
       "info": "Tickets for those in need, free of charge",
       "name": "Free",
       "price": 0,
@@ -299,6 +274,8 @@
   "triggers": {
     "images": false
   },
-  "videos": [{}],
+  "videos": [
+    {}
+  ],
   "previousSpeakers": {}
 }

@@ -172,10 +172,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="action-buttons" layout horizontal center-justified wrap>
-<!--            <paper-button class="watch-video" on-click="playVideo">-->
-<!--              <iron-icon icon="hoverboard:movie"></iron-icon>-->
-<!--              [[viewHighlights]]-->
-<!--            </paper-button>-->
             <paper-button on-click="scrollToTickets" primary invert>
               <iron-icon icon="hoverboard:ticket"></iron-icon>
               [[buyTicket]]

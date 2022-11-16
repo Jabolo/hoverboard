@@ -14,7 +14,7 @@ import {
   PotentialPartnersState,
 } from '../store/potential-partners/state';
 import { queueSnackbar } from '../store/snackbars';
-import { loading, partnersBlock } from '../utils/data';
+import { loading, partnersBlock, partnershipProposition } from '../utils/data';
 import '../utils/icons';
 import './shared-styles';
 
@@ -65,6 +65,19 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
             grid-template-columns: repeat(5, 1fr);
           }
         }
+        .action-buttons {
+          margin: 0 -8px;
+          font-size: 14px;
+        }
+
+        .action-buttons paper-button {
+          margin: 8px;
+        }
+
+        .action-buttons iron-icon {
+          --iron-icon-fill-color: currentColor;
+          margin-right: 8px;
+        }
       </style>
 
       <div class="container">
@@ -101,10 +114,20 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           </div>
         </template>
 
-        <paper-button class="cta-button animated icon-right" on-click="addPotentialPartner">
-          <span>[[partnersBlock.button]]</span>
-          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-        </paper-button>
+        <div class="action-buttons" layout horizontal wrap>
+          <paper-button class="cta-button animated icon-right" on-click="addPotentialPartner">
+            <span>[[partnersBlock.button]]</span>
+            <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+          </paper-button>
+          <a href="https://docs.google.com/presentation/d/e/2PACX-1vTTrjNNjJNe5OHkY00R6peWPKp8qzFLFOV8BrnxsfJlrLTN1Zucmn7z-RYSn40wjV27i6O7mKaXS_-s/pub?start=true&loop=false&delayms=5000&slide=id.g16dc087ff94_0_510"
+             target="_blank">
+            <paper-button class="cta-button animated icon-right"">
+              <span>Partnership Proposition</span>
+              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+            </paper-button>
+          </a>
+          </a>
+        </div>
       </div>
     `;
   }

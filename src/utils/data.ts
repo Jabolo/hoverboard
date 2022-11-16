@@ -26,6 +26,7 @@ export {
   notifications,
   offlineMessage,
   partnersBlock,
+  partnershipProposition,
   previousSpeakersBlock,
   refresh,
   schedule,
