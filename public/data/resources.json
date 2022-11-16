@@ -65,11 +65,6 @@
           "newTab": true
         },
         {
-          "name": "PJATK GDSC",
-          "url": "https://gdsc.community.dev/polish-japanese-academy-of-information-technology/",
-          "newTab": true
-        },
-        {
           "name": "WTM",
           "url": "https://developers.google.com/womentechmakers",
           "newTab": true
@@ -303,7 +298,7 @@
     "blocks": [
       {
         "title": "Organizer",
-        "description": "<a href='https://gdg.community.dev/gdg-warszawa/' target='_blank'>GDG Warsaw</a>, with the support of the <a href='https://gdsc.community.dev/polish-japanese-academy-of-information-technology/' target='_blank'>PJATK GDSC</a>, the <a href='https://developers.google.com/womentechmakers' target='_blank'>WTM</a>, an AWESOME team, sponsors, and volunteers, is the proud organizer of DevFest Warsaw.",
+        "description": "<a href='https://gdg.community.dev/gdg-warszawa/' target='_blank'>GDG Warsaw</a>, with the support of the <a href='https://developers.google.com/womentechmakers' target='_blank'>WTM</a>, an AWESOME team, sponsors, and volunteers, is the proud organizer of DevFest Warsaw.",
         "callToAction": {
           "label": "Open team page",
           "link": "/team"
