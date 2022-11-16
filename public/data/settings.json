@@ -1,13 +1,13 @@
 {
   "organizer": {
     "name": "GDG Warsaw",
-    "fb" : "https://www.facebook.com/gdgwarszawa/",
-    "linkedin" : "https://www.linkedin.com/company/10662341/",
-    "instagram" : "https://www.instagram.com/gdgwarszawa/",
-    "yt" : "https://www.youtube.com/c/GdgWarszawaPl/featured",
+    "fb": "https://www.facebook.com/gdgwarszawa/",
+    "linkedin": "https://www.linkedin.com/company/10662341/",
+    "instagram": "https://www.instagram.com/gdgwarszawa/",
+    "yt": "https://www.youtube.com/c/GdgWarszawaPl/featured",
     "twitter": "https://twitter.com/dev_fest",
     "url": "https://gdg.community.dev/gdg-warszawa/",
-    "blog" : ""
+    "blog": ""
   },
   "startDate": "2022-12-10T09:00:00+01:00",
   "endDate": "2022-12-11T16:00:00+01:00",
@@ -20,7 +20,7 @@
     "locale": "en-US"
   },
   "hashtag": "DevFestWarsaw",
-  "disabledSchedule": false,
+  "disabledSchedule": true,
   "navigation": [
     {
       "route": "home",
@@ -162,7 +162,7 @@
       }
     ]
   },
-  "mailto": "contact@devfest.pl",
+  "mailto": "contact@gdgwarsaw.pl",
   "signInProviders": {
     "providersData": [
       {
@@ -196,5 +196,8 @@
       "itemsCount": 5
     }
   },
-  "showForkMeBlockForProjectIds": ["hoverboard-master", "hoverboard-dev"]
+  "showForkMeBlockForProjectIds": [
+    "hoverboard-master",
+    "hoverboard-dev"
+  ]
 }

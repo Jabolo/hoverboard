@@ -25,6 +25,7 @@
   "country": "Country",
   "time": "Time",
   "faq": "/data/faq.md",
+  "freeTickets": "/data/freeTickets.md",
   "coc": "/data/coc.md",
   "timezoneOffset": "-180",
   "loading": "Loading...",
@@ -80,7 +81,7 @@
       "links": [
         {
           "name": "DevFestPoland 2019",
-          "url": "https://2019.devfest.pl",
+          "url": "https://warrad-devfest-pl.web.app/",
           "newTab": true
         },
         {
@@ -117,7 +118,7 @@
     "organization": "DevFest",
     "form": "https://forms.gle/PumADy1bgpPDocrs5",
     "contacts": [
-      "Organizers , coc-warsaw@devfest.pl"
+      "Organizers , coc@gdgwarsaw.pl"
     ]
   },
   "aboutBlock": {

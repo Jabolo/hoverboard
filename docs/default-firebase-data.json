@@ -26,7 +26,7 @@
       "domain": "https://warsaw.devfest.pl/"
     },
     "schedule": {
-      "enabled": true
+      "enabled": false
     },
     "mailchimp": {
       "dc": "",
@@ -70,212 +70,250 @@
           ],
           "startTime": "09:00"
         }
+      ],
+      "tracks": [
+        {
+          "title": "Expo hall"
+        }
       ]
     }
   },
-  "sessions": {
-    "101": {
-      "complexity": "Beginner",
-      "description": "In this session, we will take a look at Windows and .NET support on Google Cloud Platform. We will build a simple ASP.NET app, deploy to Google Compute Engine and take a look at some of the tools and APIs available to .NET developers on Google Cloud Platform. ",
-      "language": "English",
-      "presentation": "https://speakerdeck.com/gdglviv/mete-atamel-windows-and-net-on-google-cloud-platform",
-      "speakers": ["mete_atamel", "adrian_kajda"],
-      "tags": ["Cloud"],
-      "title": "Windows and .NET on Google Cloud Platform "
-    }
-  },
-  "speakers": {
-    "jakub_kolakowski": {
-      "bio": "God",
-      "company": "Sygic",
-      "companyLogo": "/images/logos/gdg-lviv.svg",
-      "companyLogoUrl": "https://storage.googleapis.com/hoverboard-experimental.appspot.com/images/logos/gdg-lviv.svg",
-      "country": "Creator of Fuelio app. Fuelio blah blah, Poland",
-      "featured": true,
-      "name": "jakub_kolakowski",
-      "photo": "/images/people/adrian_kajda.jpg",
-      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
-      "pronouns": "he/him",
-      "shortBio": "Creator of Fuelio app. Fuelio was his hooby project started in 2012. Three years later the app wa...",
-      "socials": [],
-      "order": 0,
-      "title": "GOD of GDG"
-    }
-  },
-  "team": [
-    {
-      "members": [
-        {
-          "name": "Jakub Kołakowski",
-          "photo": "",
-          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
-          "socials": [
-            {
-              "icon": "linkedin",
-              "link": "https://www.linkedin.com/in/sandtalker/",
-              "name": "LinkedIn"
-            },
-            {
-              "icon": "twitter",
-              "link": "https://twitter.com/sandtalker",
-              "name": "Twitter"
-            },
-            {
-              "icon": "facebook",
-              "link": "https://www.facebook.com/sandtalker",
-              "name": "Facebook"
-            },
-            {
-              "icon": "website",
-              "link": "https://kolakow.ski/",
-              "name": "Blog"
-            }
-          ],
-          "order": 0,
-          "title": "Leader of GDG Warsaw"
-        },
-        {
-          "name": "Michał Jabłoński",
-          "photo": "",
-          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FMichal_Jablonski_400x400.JPG?alt=media&token=5d9275de-7198-409b-9a39-7a345a8ae60d",
-          "socials": [
-            {
-              "icon": "linkedin",
-              "link": "https://www.linkedin.com/in/m-jab/",
-              "name": "Linkedin"
-            }
-          ],
-          "order": 1,
-          "title": "Website & Tickets"
-        },
-        {
-          "name": "Vatsal Patel",
-          "photo": "",
-          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FVatsal_Patel_400x400.jpg?alt=media&token=f3234c29-0742-4e22-82d1-5160845adf76",
-          "socials": [
-            {
-              "icon": "linkedin",
-              "link": "https://www.linkedin.com/in/vatsal-patel-py/",
-              "name": "Linkedin"
-            },
-            {
-              "icon": "facebook",
-              "link": "https://www.instagram.com/vatsal.py/",
-              "name": "Instagram"
-            }
-          ],
-          "order": 2,
-          "title": "GDSC lead, keynote, event support,sponsors&budget"
-        },
-        {
-          "name": "Aleksandra Wozniak",
-          "photo": "",
-          "photoUrl": "",
-          "socials": [
-            {
-              "icon": "linkedin",
-              "link": "https://www.linkedin.com/in/aleksandra-wozniak/",
-              "name": "Linkedin"
-            }
-          ],
-          "order": 3,
-          "title": ""
-        },
-        {
-          "name": "Stanislaw Smyl",
-          "photo": "",
-          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fstano.JPG?alt=media&token=2b97e360-8250-4420-a8db-53d41f803764",
-          "socials": [
-            {
-              "icon": "linkedin",
-              "link": "https://www.linkedin.com/in/stanis%C5%82aw-smyl-a81074155/",
-              "name": "Linkedin"
-            }
-          ],
-          "order": 4,
-          "title": "Everything and nothing"
-        }
-      ],
-      "title": "Our Team"
-    }
-  ],
-  "tickets": [
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": true,
-      "info": "First come, first serve :) 2days of workshops and lectures",
-      "name": "Early Bird",
-      "price": 29,
-      "primary": false,
-      "regular": true,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    "sessions": {
+      "101": {
+        "complexity": "Beginner",
+        "description": "In this session, we will take a look at Windows and .NET support on Google Cloud Platform. We will build a simple ASP.NET app, deploy to Google Compute Engine and take a look at some of the tools and APIs available to .NET developers on Google Cloud Platform. ",
+        "language": "English",
+        "presentation": "https://speakerdeck.com/gdglviv/mete-atamel-windows-and-net-on-google-cloud-platform",
+        "speakers": [
+          "jakub_kolakowski"
+        ],
+        "tags": [
+          "Cloud"
+        ],
+        "title": "Windows and .NET on Google Cloud Platform "
+      }
     },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": false,
-      "info": "Requires valid student ID",
-      "name": "Edu",
-      "price": 39,
-      "primary": false,
-      "regular": true,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    "speakers": {
+      "jakub_kolakowski": {
+        "bio": "GDG Warsaw",
+        "company": "Sygic",
+        "companyLogo": "/images/logos/gdg-lviv.svg",
+        "companyLogoUrl": "https://storage.googleapis.com/hoverboard-experimental.appspot.com/images/logos/gdg-lviv.svg",
+        "country": "Creator of Fuelio app. Fuelio blah blah, Poland",
+        "featured": true,
+        "name": "jakub_kolakowski",
+        "photo": "/images/people/adrian_kajda.jpg",
+        "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
+        "pronouns": "he/him",
+        "shortBio": "Creator of Fuelio app. Fuelio was his hooby project started in 2012. Three years later the app wa...",
+        "socials": [],
+        "order": 0,
+        "title": "GOD of GDG"
+      }
     },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": false,
-      "info": "2 days with us",
-      "name": "Regular",
-      "price": 49,
-      "primary": true,
-      "regular": true,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    "team": [
+      {
+        "members": [
+          {
+            "name": "Jakub Kołakowski",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/sandtalker/",
+                "name": "LinkedIn"
+              },
+              {
+                "icon": "twitter",
+                "link": "https://twitter.com/sandtalker",
+                "name": "Twitter"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.facebook.com/sandtalker",
+                "name": "Facebook"
+              },
+              {
+                "icon": "website",
+                "link": "https://kolakow.ski/",
+                "name": "Blog"
+              }
+            ],
+            "order": 0,
+            "title": "Leader of GDG Warsaw"
+          },
+          {
+            "name": "Michał Jabłoński",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FMichal_Jablonski_400x400.JPG?alt=media&token=5d9275de-7198-409b-9a39-7a345a8ae60d",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/m-jab/",
+                "name": "Linkedin"
+              }
+            ],
+            "order": 1,
+            "title": "Website & Tickets"
+          },
+          {
+            "name": "Vatsal Patel",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FVatsal_Patel_400x400.jpg?alt=media&token=f3234c29-0742-4e22-82d1-5160845adf76",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/vatsal-patel-py/",
+                "name": "Linkedin"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.instagram.com/vatsal.py/",
+                "name": "Instagram"
+              }
+            ],
+            "order": 2,
+            "title": "GDSC lead, keynote, event support,sponsors&budget"
+          },
+          {
+            "name": "Aleksandra Wozniak",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FAleksandra%20Wozniak_400x400.jpg?alt=media&token=6b18db91-80c7-47b9-8161-d7f45fe07824",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/aleksandra-wozniak/",
+                "name": "Linkedin"
+              }
+            ],
+            "order": 3,
+            "title": ""
+          },
+          {
+            "name": "Stanislaw Smyl",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fstano.JPG?alt=media&token=2b97e360-8250-4420-a8db-53d41f803764",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/stanis%C5%82aw-smyl-a81074155/",
+                "name": "Linkedin"
+              }
+            ],
+            "order": 4,
+            "title": "Everything and nothing"
+          },
+          {
+            "name": "Tomasz Flis",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FTomasz_Flis.jpeg?alt=media&token=acb450ca-b1c1-4713-a50b-874e13da3e82",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+                "name": "LinkedIn"
+              },
+              {
+                "icon": "twitter",
+                "link": "https://twitter.com/TomWebwalker",
+                "name": "Twitter"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.facebook.com/tomasz.flis/",
+                "name": "Facebook"
+              },
+              {
+                "icon": "website",
+                "link": "https://www.tomwebwalker.pl/",
+                "name": "Blog"
+              }
+            ],
+            "order": 5,
+            "title": "Web track"
+          }
+        ],
+        "title": "Our Team"
+      }
+    ],
+    "tickets": [
+      {
+        "available": true,
+        "currency": "PLN",
+        "starts": " ",
+        "ends": "Dec10 & Dec11 -",
+        "inDemand": true,
+        "info": "First come, first serve :) 2days of workshops and lectures",
+        "name": "Early Bird",
+        "price": 29,
+        "primary": false,
+        "regular": true,
+        "soldOut": false,
+        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+      },
+      {
+        "available": true,
+        "currency": "PLN",
+        "starts": " ",
+        "ends": "Dec10 & Dec11 -",
+        "inDemand": false,
+        "info": "Requires valid student ID",
+        "name": "Edu",
+        "price": 39,
+        "primary": false,
+        "regular": true,
+        "soldOut": false,
+        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+      },
+      {
+        "available": true,
+        "currency": "PLN",
+        "starts": " ",
+        "ends": "Dec10 & Dec11 -",
+        "inDemand": false,
+        "info": "2 days with us",
+        "name": "Regular",
+        "price": 49,
+        "primary": true,
+        "regular": true,
+        "soldOut": false,
+        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+      },
+      {
+        "available": true,
+        "currency": "PLN",
+        "starts": " ",
+        "ends": "Dec10 & Dec11 -",
+        "inDemand": true,
+        "info": "A patron of what we create together as GDG",
+        "name": "Patron",
+        "price": 500,
+        "primary": false,
+        "regular": false,
+        "soldOut": false,
+        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+      },
+      {
+        "available": true,
+        "currency": "PLN",
+        "starts": " ",
+        "ends": "We want you on board -",
+        "inDemand": false,
+        "info": "If you cannot afford a ticket for this event -> email_us: free-tickets@gdgwarsaw.pl",
+        "name": "Free",
+        "price": 0,
+        "primary": false,
+        "regular": false,
+        "soldOut": false,
+        "url": "https://warsaw.devfest.pl/free-tickets"
+      }
+    ],
+    "triggers": {
+      "images": false
     },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": true,
-      "info": "A patron of what we create together as GDG",
-      "name": "Patron",
-      "price": 500,
-      "primary": false,
-      "regular": false,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-    },
-    {
-      "available": true,
-      "currency": "PLN",
-      "starts": " ",
-      "ends": "Dec10 & Dec11 -",
-      "inDemand": false,
-      "info": "Tickets for those in need, free of charge",
-      "name": "Free",
-      "price": 0,
-      "primary": false,
-      "regular": false,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-    }
-  ],
-  "triggers": {
-    "images": false
-  },
-  "videos": [
-    {}
-  ],
-  "previousSpeakers": {}
-}
+    "videos": [
+      {}
+    ],
+    "previousSpeakers": {}
+  }
