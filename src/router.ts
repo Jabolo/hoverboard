@@ -150,13 +150,13 @@ const ROUTES: Route[] = [
       await import('./pages/team-page.js');
     },
   },
-  {
-    path: '/faq',
-    component: 'faq-page',
-    action: async () => {
-      await import('./pages/faq-page.js');
-    },
-  },
+  // {
+  //   path: '/faq',
+  //   component: 'faq-page',
+  //   action: async () => {
+  //     await import('./pages/faq-page.js');
+  //   },
+  // },
   {
     path: '/coc',
     component: 'coc-page',
