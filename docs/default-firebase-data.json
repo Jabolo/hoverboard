@@ -181,6 +181,105 @@
             ],
             "order": 5,
             "title": "Web track"
+          },
+          {
+            "name": "Dmytro Andeieiev",
+            "photo": "",
+            "photoUrl": "",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "linkedin.com/in/dmytro-andrieiev-494b16141",
+                "name": "LinkedIn"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.facebook.com/dima.andreyev.37",
+                "name": "Facebook"
+              }
+            ],
+            "order": 6,
+            "title": ""
+          },
+          {
+            "name": "Zeynep Sila",
+            "photo": "",
+            "photoUrl": "",
+            "socials": [
+            ],
+            "order": 7,
+            "title": ""
+          },
+          {
+            "name": "Oleksandr Katrych",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FOleksandr_Katrych.jpg?alt=media&token=2a3f31e5-3457-444d-a18e-b309f0d64ccb",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/oleksandr-katrych",
+                "name": "LinkedIn"
+              }
+            ],
+            "order": 8,
+            "title": ""
+          },
+          {
+            "name": "Jacek Akwarski",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fakwarski_square_400x400.jpg?alt=media&token=205ba948-9f8c-455d-97ed-18a0cffa0a8d",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/akwarski/",
+                "name": "LinkedIn"
+              },
+              {
+                "icon": "twitter",
+                "link": "https://twitter.com/Akwarski",
+                "name": "Twitter"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.facebook.com/jacek.akwarski/",
+                "name": "Facebook"
+              }
+            ],
+            "order": 9,
+            "title": ""
+          },
+          {
+            "name": "Nataliya Pasichnyk",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FNatalia_square_400x400.jpg?alt=media&token=4be18828-4b9e-4514-aa7f-d3fe152fede6",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/nataliya-pasichnyk/",
+                "name": "LinkedIn"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.facebook.com/nataly.pasichnyk.5",
+                "name": "Facebook"
+              }
+            ],
+            "order": 10,
+            "title": ""
+          },
+          {
+            "name": "Anhelina Mukha",
+            "photo": "",
+            "photoUrl": "",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/anhelina-mukha/",
+                "name": "LinkedIn"
+              }
+            ],
+            "order": 11,
+            "title": "swags, keynote and wrap-up presentations"
           }
         ],
         "title": "Our Team"
