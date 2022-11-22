@@ -120,7 +120,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
             <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
           </paper-button>
-          <a href="https://drive.google.com/file/d/1vmmK-aMs_iT3np0sGlqucOSDTX8OXu8T/view?usp=sharing"
+          <a href="https://docs.google.com/presentation/d/e/2PACX-1vTTrjNNjJNe5OHkY00R6peWPKp8qzFLFOV8BrnxsfJlrLTN1Zucmn7z-RYSn40wjV27i6O7mKaXS_-s/pub?start=true&loop=false&delayms=5000&slide=id.g16dc087ff94_0_510"
              target="_blank">
             <paper-button class="cta-button animated icon-right"">
               <span>Partnership Proposition</span>
