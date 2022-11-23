@@ -280,6 +280,25 @@
             ],
             "order": 11,
             "title": "swags, keynote and wrap-up presentations"
+          },
+          {
+            "name": "Mostafa Mekawy",
+            "photo": "",
+            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fmostafa.jpg?alt=media&token=3499f642-a37c-42a8-9f4b-46840d063ea9",
+            "socials": [
+              {
+                "icon": "linkedin",
+                "link": "https://www.linkedin.com/in/mostafa-mekawy-a281b815b/",
+                "name": "Linkedin"
+              },
+              {
+                "icon": "facebook",
+                "link": "https://www.instagram.com/mostafa_mekawy/",
+                "name": "Instagram"
+              }
+            ],
+            "order": 12,
+            "title": "Organizing & one workshop"
           }
         ],
         "title": "Our Team"
