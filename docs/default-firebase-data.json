@@ -56,341 +56,394 @@
   ],
   "schedule": {
   },
-    "sessions": {
+  "sessions": {
+  },
+  "speakers": {
+    "Azimjon__Pulatov": {
+      "bio": "I am a software engineer at Amazon, recently interned at Facebook and currently study at Polish-Japanese Academy. In my free time, I like to learn and share my knowledge about programming, distributed systems and soft skills. Also a part-time YouTuber :)",
+      "company": "Amazon",
+      "companyLogo": "/images/logos/Amazon_logo.svg",
+      "companyLogoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/logos%2FAmazon_logo.svg?alt=media&token=55f33d67-bf79-49a7-a562-f73d4778012d",
+      "country": "Poland",
+      "featured": true,
+      "name": "Azimjon Pulatov",
+      "photo": "/images/people/azimjon_pulatov_400x400.png",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fazimjon_pulatov_400x400.png?alt=media&token=6ae2d146-0c06-48cc-b373-2e197102a0b4",
+      "shortBio": "SDE @ Amazon | CS @ PJAIT",
+      "socials": [
+      ],
+      "order": 0,
+      "title": "Software Development Engineer"
     },
-    "speakers": {
+    "Marcin__Moskala": {
+      "bio": "Marcin Moskala is an experienced developer and Kotlin trainer. He is the founder of the Kt. Academy, an official JetBrains partner for Kotlin training, author of the books Effective Kotlin, Kotlin Coroutines, Functional Kotlin and Android Development with Kotlin. He is also the main author of the biggest medium publication about Kotlin and a speaker invited to many programming conferences.",
+      "company": "Kt. Academy",
+      "companyLogo": "/images/logos/kt_academy.webp",
+      "companyLogoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/logos%2Fkt_academy.webp?alt=media&token=270d2ca8-4ad2-44d0-94ee-c29b6624cde7",
+      "country": "Poland",
+      "featured": true,
+      "name": "Marcin Moskała",
+      "photo": "/images/people/marcin_moskala.jpg",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fmarcin_moskala.jpg?alt=media&token=32b07b43-7ed5-40e6-97a1-3f832f339b6a",
+      "shortBio": "Experienced developer, writer and Kotlin trainer.",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/marcinmoskala",
+          "name": "Twitter"
+        }
+      ],
+      "order": 1,
+      "title": "Senior Developer"
     },
-    "team": [
-      {
-        "members": [
-          {
-            "name": "Jakub Kołakowski",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/sandtalker/",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "twitter",
-                "link": "https://twitter.com/sandtalker",
-                "name": "Twitter"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/sandtalker",
-                "name": "Facebook"
-              },
-              {
-                "icon": "website",
-                "link": "https://kolakow.ski/",
-                "name": "Blog"
-              }
-            ],
-            "order": 0,
-            "title": "Leader of GDG Warsaw"
-          },
-          {
-            "name": "Michał Jabłoński",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FMichal_Jablonski_400x400.JPG?alt=media&token=5d9275de-7198-409b-9a39-7a345a8ae60d",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/m-jab/",
-                "name": "Linkedin"
-              }
-            ],
-            "order": 1,
-            "title": "Website & Tickets"
-          },
-          {
-            "name": "Vatsal Patel",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FVatsal_Patel_400x400.jpg?alt=media&token=f3234c29-0742-4e22-82d1-5160845adf76",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/vatsal-patel-py/",
-                "name": "Linkedin"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.instagram.com/vatsal.py/",
-                "name": "Instagram"
-              }
-            ],
-            "order": 2,
-            "title": "GDSC lead, keynote, event support,sponsors&budget"
-          },
-          {
-            "name": "Aleksandra Wozniak",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FAleksandra%20Wozniak_400x400.jpg?alt=media&token=6b18db91-80c7-47b9-8161-d7f45fe07824",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/aleksandra-wozniak/",
-                "name": "Linkedin"
-              }
-            ],
-            "order": 3,
-            "title": ""
-          },
-          {
-            "name": "Stanislaw Smyl",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fstano.JPG?alt=media&token=2b97e360-8250-4420-a8db-53d41f803764",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/stanis%C5%82aw-smyl-a81074155/",
-                "name": "Linkedin"
-              }
-            ],
-            "order": 4,
-            "title": "Everything and nothing"
-          },
-          {
-            "name": "Tomasz Flis",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FTomasz_Flis.jpeg?alt=media&token=acb450ca-b1c1-4713-a50b-874e13da3e82",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "twitter",
-                "link": "https://twitter.com/TomWebwalker",
-                "name": "Twitter"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/tomasz.flis/",
-                "name": "Facebook"
-              },
-              {
-                "icon": "website",
-                "link": "https://www.tomwebwalker.pl/",
-                "name": "Blog"
-              }
-            ],
-            "order": 5,
-            "title": "Web track"
-          },
-          {
-            "name": "Dmytro Andeieiev",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FDima.jpg?alt=media&token=71f9875e-438d-4aaa-9c15-c73502c9f2c7",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "linkedin.com/in/dmytro-andrieiev-494b16141",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/dima.andreyev.37",
-                "name": "Facebook"
-              }
-            ],
-            "order": 6,
-            "title": ""
-          },
-          {
-            "name": "Zeynep Sila",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FZanyap.jpg?alt=media&token=7d1956fd-48f5-4f56-880a-4742305b9e29",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/zeynepsilasaglam/",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/zeynep.saglam.52090008",
-                "name": "Facebook"
-              }
-            ],
-            "order": 7,
-            "title": "GDSC Lead, design, social media"
-          },
-          {
-            "name": "Oleksandr Katrych",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FOleksandr_Katrych.jpg?alt=media&token=2a3f31e5-3457-444d-a18e-b309f0d64ccb",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/oleksandr-katrych",
-                "name": "LinkedIn"
-              }
-            ],
-            "order": 8,
-            "title": ""
-          },
-          {
-            "name": "Jacek Akwarski",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fakwarski_square_400x400.jpg?alt=media&token=205ba948-9f8c-455d-97ed-18a0cffa0a8d",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/akwarski/",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "twitter",
-                "link": "https://twitter.com/Akwarski",
-                "name": "Twitter"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/jacek.akwarski/",
-                "name": "Facebook"
-              }
-            ],
-            "order": 9,
-            "title": ""
-          },
-          {
-            "name": "Nataliya Pasichnyk",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FNatalia_square_400x400.jpg?alt=media&token=4be18828-4b9e-4514-aa7f-d3fe152fede6",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/nataliya-pasichnyk/",
-                "name": "LinkedIn"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.facebook.com/nataly.pasichnyk.5",
-                "name": "Facebook"
-              }
-            ],
-            "order": 10,
-            "title": ""
-          },
-          {
-            "name": "Anhelina Mukha",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FAnhelina.jpg?alt=media&token=85bc2af6-65a1-454c-8ce2-52e17cdf934b",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/anhelina-mukha/",
-                "name": "LinkedIn"
-              }
-            ],
-            "order": 11,
-            "title": "swags, keynote and wrap-up presentations"
-          },
-          {
-            "name": "Mostafa Mekawy",
-            "photo": "",
-            "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fmostafa.jpg?alt=media&token=3499f642-a37c-42a8-9f4b-46840d063ea9",
-            "socials": [
-              {
-                "icon": "linkedin",
-                "link": "https://www.linkedin.com/in/mostafa-mekawy-a281b815b/",
-                "name": "Linkedin"
-              },
-              {
-                "icon": "facebook",
-                "link": "https://www.instagram.com/mostafa_mekawy/",
-                "name": "Instagram"
-              }
-            ],
-            "order": 12,
-            "title": "Organizing & one workshop"
-          }
-        ],
-        "title": "Our Team"
-      }
-    ],
-    "tickets": [
-      {
-        "available": true,
-        "currency": "PLN",
-        "starts": " ",
-        "ends": "Dec10 & Dec11 -",
-        "inDemand": true,
-        "info": "First come, first serve :) 2days of workshops and lectures",
-        "name": "Early Bird",
-        "price": 29,
-        "primary": false,
-        "regular": true,
-        "soldOut": false,
-        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-      },
-      {
-        "available": true,
-        "currency": "PLN",
-        "starts": " ",
-        "ends": "Dec10 & Dec11 -",
-        "inDemand": false,
-        "info": "Requires valid student ID",
-        "name": "Edu",
-        "price": 39,
-        "primary": false,
-        "regular": true,
-        "soldOut": false,
-        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-      },
-      {
-        "available": true,
-        "currency": "PLN",
-        "starts": " ",
-        "ends": "Dec10 & Dec11 -",
-        "inDemand": false,
-        "info": "2 days with us",
-        "name": "Regular",
-        "price": 49,
-        "primary": true,
-        "regular": true,
-        "soldOut": false,
-        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-      },
-      {
-        "available": true,
-        "currency": "PLN",
-        "starts": " ",
-        "ends": "Dec10 & Dec11 -",
-        "inDemand": true,
-        "info": "A patron of what we create together as GDG",
-        "name": "Patron",
-        "price": 500,
-        "primary": false,
-        "regular": false,
-        "soldOut": false,
-        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-      },
-      {
-        "available": true,
-        "currency": "PLN",
-        "starts": " ",
-        "ends": "We want you on board -",
-        "inDemand": false,
-        "info": "If you cannot afford a ticket for this event -> email_us: free-tickets@gdgwarsaw.pl",
-        "name": "Free",
-        "price": 0,
-        "primary": false,
-        "regular": false,
-        "soldOut": false,
-        "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
-      }
-    ],
-    "triggers": {
-      "images": false
+    "Diyorbek__Sadullaev": {
+      "bio": "I am a software developer with 4 years of professional experience in building web applications. My primary area of expertise is frontend development, particularly React JS and React Native applications. I also have experience building server-side applications in Node.js utilizing frameworks such as Express and Next.js. I usually work with the JavaScript/TypeScript ecosystem, however, I love coding in C++. I have created a few projects in C++ and some of them are hybrid Node.js applications that have lightning-fast core written in C++.",
+      "company": "Super Dispatch",
+      "companyLogo": "/images/logos/suprDispatch_600x400.png",
+      "companyLogoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/logos%2FsuprDispatch_600x400.png?alt=media&token=0cb0fec6-8798-4267-821e-f20572e11bd2",
+      "country": "Poland",
+      "featured": false,
+      "name": "Diyorbek Sadullaev",
+      "photo": "/images/people/Diyorbek_Sadullaev.webp",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2FDiyorbek_Sadullaev.webp?alt=media&token=e8377f30-0f73-48c3-89b5-1b0e9c354515",
+      "shortBio": "I am a frontend developer with 4 years of professional experience.",
+      "socials": [
+      ],
+      "order": 2,
+      "title": "Frontend Developer"
+    }
+  },
+  "team": [
+    {
+      "members": [
+        {
+          "name": "Jakub Kołakowski",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/sandtalker/",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "twitter",
+              "link": "https://twitter.com/sandtalker",
+              "name": "Twitter"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/sandtalker",
+              "name": "Facebook"
+            },
+            {
+              "icon": "website",
+              "link": "https://kolakow.ski/",
+              "name": "Blog"
+            }
+          ],
+          "order": 0,
+          "title": "Leader of GDG Warsaw"
+        },
+        {
+          "name": "Michał Jabłoński",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FMichal_Jablonski_400x400.JPG?alt=media&token=5d9275de-7198-409b-9a39-7a345a8ae60d",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/m-jab/",
+              "name": "Linkedin"
+            }
+          ],
+          "order": 1,
+          "title": "Website & Tickets"
+        },
+        {
+          "name": "Vatsal Patel",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FVatsal_Patel_400x400.jpg?alt=media&token=f3234c29-0742-4e22-82d1-5160845adf76",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/vatsal-patel-py/",
+              "name": "Linkedin"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.instagram.com/vatsal.py/",
+              "name": "Instagram"
+            }
+          ],
+          "order": 2,
+          "title": "GDSC lead, keynote, event support,sponsors&budget"
+        },
+        {
+          "name": "Aleksandra Wozniak",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FAleksandra%20Wozniak_400x400.jpg?alt=media&token=6b18db91-80c7-47b9-8161-d7f45fe07824",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/aleksandra-wozniak/",
+              "name": "Linkedin"
+            }
+          ],
+          "order": 3,
+          "title": ""
+        },
+        {
+          "name": "Stanislaw Smyl",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fstano.JPG?alt=media&token=2b97e360-8250-4420-a8db-53d41f803764",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/stanis%C5%82aw-smyl-a81074155/",
+              "name": "Linkedin"
+            }
+          ],
+          "order": 4,
+          "title": "Everything and nothing"
+        },
+        {
+          "name": "Tomasz Flis",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FTomasz_Flis.jpeg?alt=media&token=acb450ca-b1c1-4713-a50b-874e13da3e82",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "twitter",
+              "link": "https://twitter.com/TomWebwalker",
+              "name": "Twitter"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/tomasz.flis/",
+              "name": "Facebook"
+            },
+            {
+              "icon": "website",
+              "link": "https://www.tomwebwalker.pl/",
+              "name": "Blog"
+            }
+          ],
+          "order": 5,
+          "title": "Web track"
+        },
+        {
+          "name": "Dmytro Andeieiev",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FDima.jpg?alt=media&token=71f9875e-438d-4aaa-9c15-c73502c9f2c7",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "linkedin.com/in/dmytro-andrieiev-494b16141",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/dima.andreyev.37",
+              "name": "Facebook"
+            }
+          ],
+          "order": 6,
+          "title": ""
+        },
+        {
+          "name": "Zeynep Sila",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FZanyap.jpg?alt=media&token=7d1956fd-48f5-4f56-880a-4742305b9e29",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/zeynepsilasaglam/",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/zeynep.saglam.52090008",
+              "name": "Facebook"
+            }
+          ],
+          "order": 7,
+          "title": "GDSC Lead, design, social media"
+        },
+        {
+          "name": "Oleksandr Katrych",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FOleksandr_Katrych.jpg?alt=media&token=2a3f31e5-3457-444d-a18e-b309f0d64ccb",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/oleksandr-katrych",
+              "name": "LinkedIn"
+            }
+          ],
+          "order": 8,
+          "title": ""
+        },
+        {
+          "name": "Jacek Akwarski",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fakwarski_square_400x400.jpg?alt=media&token=205ba948-9f8c-455d-97ed-18a0cffa0a8d",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/akwarski/",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "twitter",
+              "link": "https://twitter.com/Akwarski",
+              "name": "Twitter"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/jacek.akwarski/",
+              "name": "Facebook"
+            }
+          ],
+          "order": 9,
+          "title": ""
+        },
+        {
+          "name": "Nataliya Pasichnyk",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FNatalia_square_400x400.jpg?alt=media&token=4be18828-4b9e-4514-aa7f-d3fe152fede6",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/nataliya-pasichnyk/",
+              "name": "LinkedIn"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.facebook.com/nataly.pasichnyk.5",
+              "name": "Facebook"
+            }
+          ],
+          "order": 10,
+          "title": ""
+        },
+        {
+          "name": "Anhelina Mukha",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FAnhelina.jpg?alt=media&token=85bc2af6-65a1-454c-8ce2-52e17cdf934b",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/anhelina-mukha/",
+              "name": "LinkedIn"
+            }
+          ],
+          "order": 11,
+          "title": "swags, keynote and wrap-up presentations"
+        },
+        {
+          "name": "Mostafa Mekawy",
+          "photo": "",
+          "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fmostafa.jpg?alt=media&token=3499f642-a37c-42a8-9f4b-46840d063ea9",
+          "socials": [
+            {
+              "icon": "linkedin",
+              "link": "https://www.linkedin.com/in/mostafa-mekawy-a281b815b/",
+              "name": "Linkedin"
+            },
+            {
+              "icon": "facebook",
+              "link": "https://www.instagram.com/mostafa_mekawy/",
+              "name": "Instagram"
+            }
+          ],
+          "order": 12,
+          "title": "Organizing & one workshop"
+        }
+      ],
+      "title": "Our Team"
+    }
+  ],
+  "tickets": [
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": true,
+      "info": "First come, first serve :) 2days of workshops and lectures",
+      "name": "Early Bird",
+      "price": 29,
+      "primary": false,
+      "regular": true,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
     },
-    "videos": [
-      {}
-    ],
-    "previousSpeakers": {}
-  }
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": false,
+      "info": "Requires valid student ID",
+      "name": "Edu",
+      "price": 39,
+      "primary": false,
+      "regular": true,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": false,
+      "info": "2 days with us",
+      "name": "Regular",
+      "price": 49,
+      "primary": true,
+      "regular": true,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "Dec10 & Dec11 -",
+      "inDemand": true,
+      "info": "A patron of what we create together as GDG",
+      "name": "Patron",
+      "price": 500,
+      "primary": false,
+      "regular": false,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": " ",
+      "ends": "We want you on board -",
+      "inDemand": false,
+      "info": "If you cannot afford a ticket for this event -> email_us: free-tickets@gdgwarsaw.pl",
+      "name": "Free",
+      "price": 0,
+      "primary": false,
+      "regular": false,
+      "soldOut": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2022/"
+    }
+  ],
+  "triggers": {
+    "images": false
+  },
+  "videos": [
+    {}
+  ],
+  "previousSpeakers": {}
+}
