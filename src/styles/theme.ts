@@ -7,7 +7,7 @@ export const theme = css`
     --focused-color: #003a89;
     --light-primary-color: #80b4ff;
     --text-primary-color: #fff;
-    --accent-color: #ea4335;
+    --accent-color: #4285f4;
     --primary-background-color: #fff;
     --primary-text-color: #424242;
     --secondary-text-color: #757575;
