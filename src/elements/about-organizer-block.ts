@@ -77,6 +77,13 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
               alt="Organizer"
             ></lazy-image>
           </a>
+          <a href="https://gdsc.community.dev/polish-japanese-academy-of-information-technology/" class="image-link">
+            <lazy-image
+              class="gdg-photo"
+              src="/images/GDSC-logo.svg"
+              alt="Organizer"
+            ></lazy-image>
+          </a>
         </div>
 
         <div class="description-block" flex>
