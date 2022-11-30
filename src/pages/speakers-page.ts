@@ -260,7 +260,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
             <lazy-image
               class="company-logo"
               src="[[speaker.companyLogoUrl]]"
-              alt="https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/logos%2Fno.webp?alt=media&token=da2a53cd-7f9c-492f-9ca8-d774c4613a29"
+              alt=""
             ></lazy-image>
 
             <div class="description">
