@@ -111,6 +111,263 @@
       ],
       "order": 2,
       "title": "Frontend Developer"
+    },
+    "Dominika__Zając": {
+      "name": "Dominika Zając",
+      "bio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
+      "shortBio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
+      "company": "Qualtrics",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "https://www.qualtrics.com/m/qualtrics-xm-2x.svg",
+      "country": "Poland",
+      "featured": true,
+      "photo": "/images/people/",
+      "photoUrl": "https://sessionize.com/image/e451-400o400o2-04-d2a4-4818-87e8-3007a3e73d79.8bb00bca-2e21-410e-80b4-412ab8b393ed.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": " https://twitter.com/domizajac",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dominikazajac/",
+          "name": "LinkedIn"
+        }
+      ],
+      "order": 3,
+      "title": "Software Engineer"
+    },
+    "Emil__Dabrowski": {
+      "name": "Emil Dabrowski",
+      "bio": "Twenty-eight years experience in IT. He worked with the best technologies, such as Microsoft, Sun, EMC, Citrix, CyberArk, IBM, and VMWare and last five years with GCP. He works with enterprises on movement to the GCP and architecting applications in the new environment. He focuses on infrastructure automation (Terraform) and containerization (Kubernetes). He has certificates for all used technologies: GCP x 8, Kubernetes x 8, and Terraform x 1. He is Google Cloud Authorized Trainer and Google Developer Expert (GCP).",
+      "shortBio": "Senior Cloud Architect in Devoteam G Cloud focused on Google Cloud Platform, infrastructure automation and security.",
+      "company": "Devoteam G Cloud",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "https://gcloud.devoteam.com/wp-content/uploads/sites/32/2021/08/devoteam_gcloud.svg",
+      "country": "Poland",
+      "featured": true,
+      "photo": "/images/people/",
+      "photoUrl": "https://media-exp1.licdn.com/dms/image/C4D03AQGXyYs0vAYFLA/profile-displayphoto-shrink_800_800/0/1579629289785?e=1675296000&v=beta&t=bhKT7UqhoVAS2lxN6M2-iZpKsEK70yp8HrRCTjgJQd4",
+      "socials": [
+        {
+          "icon": "facebook",
+          "link": "",
+          "name": "Facebook"
+        },
+        {
+          "icon": "website",
+          "link": "https://googlecloudcertified.credential.net/profile/ea88bc3b234f75972b50db155f790f3c4cfcef29?name=emil",
+          "name": "googlecloudcertified"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/emildabrowski/",
+          "name": "LinkedIn"
+        }
+
+      ],
+      "order": 4,
+      "title": "Senior Cloud Architect"
+    },
+    "Jakub__Kołakowski": {
+      "name": "Jakub Kołakowski",
+      "bio": "Leader of GDG Warsaw",
+      "shortBio": "Leader of GDG Warsaw",
+      "company": "SandGroup",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fjkdf.png?alt=media&token=9a3ae4aa-6d9e-4fed-8fd8-ece0273c0c93",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/sandtalker/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/sandtalker",
+          "name": "Twitter"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/sandtalker",
+          "name": "Facebook"
+        },
+        {
+          "icon": "website",
+          "link": "https://kolakow.ski/",
+          "name": "Blog"
+        }
+      ],
+      "order": 5,
+      "title": "Leader of GDG Warsaw"
+    },
+    "Stanislaw__Smyl": {
+      "name": "Stanislaw Smyl",
+      "bio": "",
+      "shortBio": "",
+      "company": "NY Mets",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2Fstano.JPG?alt=media&token=2b97e360-8250-4420-a8db-53d41f803764",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/stanis%C5%82aw-smyl-a81074155/",
+          "name": "Linkedin"
+        }
+      ],
+      "order": 6,
+      "title": "Everything and nothing"
+    },
+    "Tomasz__Flis": {
+      "name": "Tomasz Flis",
+      "bio": "GDG Warsaw",
+      "shortBio": "GDG Warsaw",
+      "company": "GDG Warsaw",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FTomasz_Flis.jpeg?alt=media&token=acb450ca-b1c1-4713-a50b-874e13da3e82",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/TomWebwalker",
+          "name": "Twitter"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/tomasz.flis/",
+          "name": "Facebook"
+        },
+        {
+          "icon": "website",
+          "link": "https://www.tomwebwalker.pl/",
+          "name": "Blog"
+        }
+      ],
+      "order": 7,
+      "title": "Web track"
+    },
+    "Mateusz__Herych ": {
+      "name": "Mateusz Herych ",
+      "bio": "",
+      "shortBio": "",
+      "company": "Chess.com",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fconfused_small.webp?alt=media&token=94c837ed-b930-4376-8a48-d91af69a7d17",
+      "socials": [
+      ],
+      "order": 8,
+      "title": ""
+    },
+    "Dominik__Roszkowski": {
+      "name": "Dominik Roszkowski",
+      "bio": "GDE",
+      "shortBio": "",
+      "company": "",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fconfused_small.webp?alt=media&token=94c837ed-b930-4376-8a48-d91af69a7d17",
+      "socials": [
+      ],
+      "order": 9,
+      "title": "GDE"
+    },
+    "Aleksandr__Denisov": {
+      "name": "Aleksandr Denisov",
+      "bio": "",
+      "shortBio": "",
+      "company": "EPAM Systems",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fconfused_small.webp?alt=media&token=94c837ed-b930-4376-8a48-d91af69a7d17",
+      "socials": [
+      ],
+      "order": 10,
+      "title": ""
+    },
+    "Aiden__Sadigov": {
+      "name": "Aiden Sadigov",
+      "bio": "",
+      "shortBio": "",
+      "company": "Awesomic Inc.",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fconfused_small.webp?alt=media&token=94c837ed-b930-4376-8a48-d91af69a7d17",
+      "socials": [
+      ],
+      "order": 11,
+      "title": ""
+    },
+    "Kateryna__Hrytsaienko ": {
+      "name": "Kateryna Hrytsaienko ",
+      "bio": "",
+      "shortBio": "",
+      "company": "Valtech",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/speakers-people%2Fconfused_small.webp?alt=media&token=94c837ed-b930-4376-8a48-d91af69a7d17",
+      "socials": [
+      ],
+      "order": 12,
+      "title": ""
+    },
+    "Nataliya__Pasichnyk": {
+      "name": "Nataliya Pasichnyk",
+      "bio": "",
+      "shortBio": "",
+      "company": "Codility",
+      "companyLogo": "/images/logos/",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "/images/people/",
+      "photoUrl": "https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/team-people%2FNatalia_square_400x400.jpg?alt=media&token=4be18828-4b9e-4514-aa7f-d3fe152fede6",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/nataliya-pasichnyk/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/nataly.pasichnyk.5",
+          "name": "Facebook"
+        }
+      ],
+      "order": 13,
+      "title": ""
     }
   },
   "team": [

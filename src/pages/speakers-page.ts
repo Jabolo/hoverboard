@@ -208,86 +208,86 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
       </div>
 
 
-            <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
+      <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
-            <filter-menu
-              filter-groups="[[filterGroups]]"
-              selected-filters="[[selectedFilters]]"
-              results-count="[[speakersToRender.length]]"
-            ></filter-menu>
+      <filter-menu
+        filter-groups="[[filterGroups]]"
+        selected-filters="[[selectedFilters]]"
+        results-count="[[speakersToRender.length]]"
+      ></filter-menu>
 
-            <content-loader
-              class="container"
-              card-padding="32px"
-              card-height="400px"
-              avatar-size="128px"
-              avatar-circle="64px"
-              horizontal-position="50%"
-              border-radius="4px"
-              box-shadow="var(--box-shadow)"
-              items-count="[[contentLoaders.speakers.itemsCount]]"
-              hidden$="[[contentLoaderVisibility]]"
-            ></content-loader>
+      <content-loader
+        class="container"
+        card-padding="32px"
+        card-height="400px"
+        avatar-size="128px"
+        avatar-circle="64px"
+        horizontal-position="50%"
+        border-radius="4px"
+        box-shadow="var(--box-shadow)"
+        items-count="[[contentLoaders.speakers.itemsCount]]"
+        hidden$="[[contentLoaderVisibility]]"
+      ></content-loader>
 
 
-            <div class="container">
-              <template is="dom-repeat" items="[[speakersToRender]]" as="speaker">
-                <a class="speaker card" href$="[[speakerUrl(speaker.id)]]">
-                  <div relative>
-                    <lazy-image
-                      class="photo"
-                      src="[[speaker.photoUrl]]"
-                      alt="[[speaker.name]]"
-                    ></lazy-image>
-                    <div class="badges" layout horizontal>
-                      <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-                        <a
-                          class$="badge [[badge.name]]-b"
-                          href$="[[badge.link]]"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title$="[[badge.description]]"
-                          layout
-                          horizontal
-                          center-center
-                        >
-                          <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
-                        </a>
-                      </template>
-                    </div>
-                  </div>
+      <div class="container">
+        <template is="dom-repeat" items="[[speakersToRender]]" as="speaker">
+          <a class="speaker card" href$="[[speakerUrl(speaker.id)]]">
+            <div relative>
+              <lazy-image
+                class="photo"
+                src="[[speaker.photoUrl]]"
+                alt="[[speaker.name]]"
+              ></lazy-image>
+              <div class="badges" layout horizontal>
+                <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
+                  <a
+                    class$="badge [[badge.name]]-b"
+                    href$="[[badge.link]]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title$="[[badge.description]]"
+                    layout
+                    horizontal
+                    center-center
+                  >
+                    <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
+                  </a>
+                </template>
+              </div>
+            </div>
 
-                  <lazy-image
-                    class="company-logo"
-                    src="[[speaker.companyLogoUrl]]"
-                    alt="[[speaker.company]]"
-                  ></lazy-image>
+            <lazy-image
+              class="company-logo"
+              src="[[speaker.companyLogoUrl]]"
+              alt="https://firebasestorage.googleapis.com/v0/b/gdg-warsaw-devfest22-website.appspot.com/o/logos%2Fno.webp?alt=media&token=da2a53cd-7f9c-492f-9ca8-d774c4613a29"
+            ></lazy-image>
 
-                  <div class="description">
-                    <h2 class="name">[[speaker.name]]</h2>
-                    <div class="origin">[[speaker.country]]</div>
+            <div class="description">
+              <h2 class="name">[[speaker.name]]</h2>
+              <div class="origin">[[speaker.country]]</div>
 
-                    <text-truncate lines="5">
-                      <div class="bio">[[speaker.bio]]</div>
-                    </text-truncate>
-                  </div>
+              <text-truncate lines="5">
+                <div class="bio">[[speaker.bio]]</div>
+              </text-truncate>
+            </div>
 
-                  <div class="contacts">
-                    <template is="dom-repeat" items="[[speaker.socials]]" as="social">
-                      <a href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
-                        <paper-icon-button
-                          class="social-icon"
-                          icon="hoverboard:{{social.icon}}"
-                        ></paper-icon-button>
-                      </a>
-                    </template>
-                  </div>
+            <div class="contacts">
+              <template is="dom-repeat" items="[[speaker.socials]]" as="social">
+                <a href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
+                  <paper-icon-button
+                    class="social-icon"
+                    icon="hoverboard:{{social.icon}}"
+                  ></paper-icon-button>
                 </a>
               </template>
             </div>
+          </a>
+        </template>
+      </div>
 
 
-<!--            <previous-speakers-block></previous-speakers-block>-->
+      <!--            <previous-speakers-block></previous-speakers-block>-->
 
       <footer-block></footer-block>
     `;
