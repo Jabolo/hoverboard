@@ -61,6 +61,91 @@
     }
   ],
   "schedule": {
+    "2022-10-12": {
+      "timeslots": [
+        {
+          "startTime": "09:30",
+          "endTime": "10:00",
+          "sessions": [
+            {
+              "items": [
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "10:00",
+          "endTime": "10:30",
+          "sessions": [
+            {
+              "items": [
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "10:30",
+          "endTime": "11:00",
+          "sessions": [
+            {
+              "items": [
+                "122"
+              ]
+            },
+            {
+              "items": [
+                "125"
+              ]
+            },
+            {
+              "items": [
+                "120"
+              ],
+              "extends": 2
+            }
+          ]
+        },
+        {
+          "startTime": "11:00",
+          "endTime": "11:30",
+          "sessions": [
+            {
+              "items": [
+                "102"
+              ]
+            },
+            {
+              "items": [
+                "108"
+              ]
+            },
+            {
+              "items": [
+                "103"
+              ]
+            }
+          ]
+        }
+      ],
+      "dateReadable": "December 10",
+      "tracks": [
+        {
+          "title": "Main auditorium (200)"
+        },
+        {
+          "title": "Room 1 (100) A 160"
+        },
+        {
+          "title": "Room 2 (30) A364"
+        },
+        {
+          "title": "Room 3 (20) A 362"
+        }
+      ],
+      "date": "2022-12-10"
+    }
   },
   "sessions": {
     "101": {
