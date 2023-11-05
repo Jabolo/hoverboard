@@ -1,6 +1,6 @@
 {
   "basepath": "/",
-  "url": "https://gdg-warsaw-devfest23.web.app",
+  "url": "warsaw.devfest.pl",
   "firebase": {
     "apiKey": "AIzaSyCKkwmJlE5XH6arlobsZI-R6DJ11XvVfQU",
     "authDomain": "gdg-warsaw-devfest23-web-11997.firebaseapp.com",

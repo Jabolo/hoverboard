@@ -26,9 +26,9 @@ export const selectRouteName = (pathname: string): string => {
       part = 'home';
       break;
 
-    case 'sessions':
+/*    case 'sessions':
       part = 'schedule';
-      break;
+      break;*/
 
     case 'previous-speakers':
       part = 'speakers';

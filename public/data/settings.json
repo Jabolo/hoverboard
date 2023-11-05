@@ -33,11 +33,6 @@
       "label": "Speakers"
     },
     {
-      "route": "schedule",
-      "permalink": "/schedule",
-      "label": "Schedule"
-    },
-    {
       "route": "team",
       "permalink": "/team",
       "label": "Team"
@@ -72,7 +67,7 @@
     "schedule": {
       "title": "Schedule",
       "metaDescription": "Choose your sessions to visit",
-      "description": "",
+      "description": "Share Your Tech Expertise: DevFest 2023 Warsaw Call for Papers is Live!",
       "background": {
         "color": "#fff"
       },

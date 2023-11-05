@@ -195,7 +195,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
       <simple-hero page="speakers"></simple-hero>
             <div class="container">
               <div class="action-buttons" layout horizontal wrap>
-                <a href="https://forms.gle/jmEC6CQJXtpNx75N6"
+                <a href="https://sessionize.com/warsawdevfest2023"
                    target="_blank">
                   <paper-button class="cta-button animated icon-right"
                   ">

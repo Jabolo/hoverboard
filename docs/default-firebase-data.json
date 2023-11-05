@@ -51,11 +51,399 @@
       ],
       "order": 0,
       "title": "General Partners"
+    },
+    {
+      "items": [
+        {
+          "order": 0,
+          "logoUrl": "../images/logos/composables_on_light.png",
+          "name": "Composables",
+          "url": "https://composables.com"
+        }
+      ],
+      "order": 1,
+      "title": "Bronze Sponsor"
+    },
+    {
+      "items": [
+        {
+          "order": 0,
+          "logoUrl": "../images/logos/mobile_warsaw_logo_black.png",
+          "name": "Mobile Warsaw",
+          "url": "https://www.meetup.com/pl-PL/mobilewarsaw"
+        },
+        {
+          "order": 1,
+          "logoUrl": "../images/logos/logo-angular-love-czerwone.png",
+          "name": "Angular.love",
+          "url": "https://www.angular.love/"
+        }
+      ],
+      "order": 2,
+      "title": "Community partners"
     }
   ],
   "schedule": {},
   "sessions": {},
   "speakers": {
+    "Kateryna__Hrytsaienko": {
+      "name": "Kateryna Hrytsaienko",
+      "bio": "Hi there!\ud83d\udc4b\n\nMy name is Kateryna Hrytsaienko, I'm Software Engineering Consultant at Valtech, Google Developer Student Club Menor, Google Woman Techmakers Ambassador, passionate Cloud and CI/CD Automation Enthusiast.\n\nI mostly work with E-commerce projects, developing composable solutions and contributing to libraries for company-wide use. I summarize my experience in my blog, where I also share leadership tips and tricks for novice GDSC leaders.\n\nAbout GDSC\u2026 that's where things got even more interesting! With our local chapters, we host workshops, tech talks and speaker sessions for educational purposes. One of our latest projects is about algorithms for beginners -- AlgoClub. A completely awesome initiative. For 3 years, our chapter has kept organizing tech events for beginners, and even when the war started -- we kept our vector on doing our best to give students access to free educational materials. In-person, on-demand and virtual.\ud83e\udd17\n\nThank you for your time and hope to see you soon at the summit. Cheers!",
+      "shortBio": "Software Engineer Consultant Valtech | Woman Techmakers Ambassador| GDSC Mentor ",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/ed4d-400o400o2-PypmLUNjrDwo6WKS4zCMGD.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/ekaterina-gricaenko",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/grizik_ek?t=ZKu9YW613y2VhCRY4YgrPA&s=09",
+          "name": "Twitter"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/profile.php?id=100017821537652",
+          "name": "Facebook"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/grizik_k/",
+          "name": "Instagram"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Dominik__Roszkowski": {
+      "name": "Dominik Roszkowski",
+      "bio": "Dominik is Google Developer Expert in Flutter eager to create beautiful apps for mobile and desktop. He\u2019s Lead Engineer at Visible and co-founder of Flutter Europe conference. He is active speaker on local meetups and writes Flutter-related articles on his blog roszkowski.dev.",
+      "shortBio": "Google Developer Expert in Flutter",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/e8e9-400o400o2-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dominik-roszkowski/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/OrestesGaolin",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Vladyslav__Kampov": {
+      "name": "Vladyslav Kampov",
+      "bio": "- Senior UI Engineer \u0443 Netflix\n- Former Frontend Guild Engineering Manager \u0443 Wix.com\n- Host of the podcast \"\u0416\u0435\u041f\u0435\u0422\u0435\" (https://linktr.ee/podcastgepete)",
+      "shortBio": "Senior UI Engineer at Netflix, Host of Podcast GePeTe",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/cdc6-400o400o2-GkJ2MSWHCk7h79dv2t3v1n.png",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://linkedin.com/in/kampov",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/vladkampov",
+          "name": "Twitter"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/vladkampov",
+          "name": "Facebook"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://instagram.com/vladkampov",
+          "name": "Instagram"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Rodolfo__Dias": {
+      "name": "Rodolfo Dias",
+      "bio": "Team Leadership \u2764\ufe0f JS \u2764\ufe0f Open Source\n\nRodolfo has worked in a diverse pool of companies and research centers, in South America and Europe. He is Software Engineering Manager at Yara International and manages the software engineering teams of Yara's farming experience platform, with the goal of enabling regenerative agriculture and minimizing the climate impact of farming",
+      "shortBio": "Google Developer Expert for Web Technologies \u2022 Software Engineering Manager, Yara International",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/d0bb-400o400o2-whmSdeL7iud1cCCHrxDtZg.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/rmdias29/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/r_mdias",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Hajer__Mahjoub": {
+      "name": "Hajer Mahjoub",
+      "bio": "Deeplearning.ai ambassador\nAI and Data Engineer  at Digitty.io\nFacebook developer circle: BERLIN ",
+      "shortBio": "AI and Data Engineer  at Digitty.io",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/637f-400o400o2-9Dxq2T6f36G3eWhN3jMWta.jpeg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/hajermahjoub/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/TkdHajer",
+          "name": "Twitter"
+        },
+        {
+          "icon": "facebook",
+          "link": "Https://Www.facebook.com/HajerMahjoub.it",
+          "name": "Facebook"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Irine__Kokilashvili": {
+      "name": "Irine Kokilashvili",
+      "bio": "Systems engineer by day at EPAM and hobbyist open source contributor by night at Next Hat",
+      "shortBio": "Irine Kokilashvili - Systems Engineer | EPAM Systems",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/da5d-400o400o2-BDrbUmF3DkxCbRKBdWEi2P.png",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
+          "name": "Linkedin"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Tamta__Kapanadze": {
+      "name": "Tamta Kapanadze",
+      "bio": "Tamta Kapanadze is a software engineer specialized in backend development. She has experience crafting seamless APIs and essential system components such as socket servers.\n\nTamta's passion for technology extends beyond coding. She is an active member of the tech community, participating in community programs like Google Developer Groups and Google Developer Student Club Programs. She also organizes events like DevFest in Georgia, creating vibrant platforms for learning and networking.",
+      "shortBio": "Software Engineer ",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/fe2d-400o400o2-wvkzPEnZiyNanzMTX1VRrL.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tamta-kapanadze/",
+          "name": "Linkedin"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Akanksha__Singh": {
+      "name": "Akanksha Singh",
+      "bio": "Software Engineer at JP Morgan Chase & Co. | Interested in Flutter, Open Source, Hackathons, Community building",
+      "shortBio": "Flutter Dev | SWE at JP Morgan Chase & Co.",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/28cf-400o400o2-sZ8qevh2buTGRUqZDEDr7v.jpeg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/akanksha1212/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/coder_jedi",
+          "name": "Twitter"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/akankshasingh1212/",
+          "name": "Instagram"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Tomasz__Flis": {
+      "name": "Tomasz Flis",
+      "bio": "Angular passionate, in love with clean code, perfect design, and simple approach, part of GDG Warsaw, a public speaking enthusiast from Poland",
+      "shortBio": "Senior Frontend Developer - Deskbird",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/4b7b-400o400o2-S14zNaTcpfbUjV3tTt8V9x.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/TomWebwalker",
+          "name": "Twitter"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/tomwebwalker/",
+          "name": "Instagram"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Piotr__Prus": {
+      "name": "Piotr Prus",
+      "bio": "I am an android developer with 5+ years of experience, addicted to new things. I love clean architecture and clean, simple designs. I am trying to create meaningful articles and speeches. Currently composing and KMMing all the things.",
+      "shortBio": "Android developer",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/7cba-400o400o2-ainA1gVSSCHxugeFJdVjM2.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/piotrprus/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/piotr_prus",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Dominika__Zaj\u0105c": {
+      "name": "Dominika Zaj\u0105c",
+      "bio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, senior software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
+      "shortBio": "GDE for Web | Software Engineer at Qualtrics",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dominikazajac/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/domizajac",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Mateusz__Stefa\u0144czyk": {
+      "name": "Mateusz Stefa\u0144czyk",
+      "bio": "Team leader of the Angular team at House of Angular company and a blogger on the angular.love blog, where he shares knowledge and experience about Angular. He develops Angular web applications and is passionate about business analysis and designing custom web application architectures. Mateusz is also keen on gaining expertise in the field of reverse engineering.",
+      "shortBio": "Senior Angular Developer at House of Angular",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/3fb4-400o400o2-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/mateusz-stefa%C5%84czyk-22080b164/",
+          "name": "Linkedin"
+        },
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/m_stefanczyk",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    },
+    "Marcin__Moskala": {
+      "name": "Marcin Moskala",
+      "bio": "Marcin Moskala is an experienced developer and Kotlin trainer. He is the founder of the Kt. Academy, an official JetBrains partner for Kotlin training, author of the books Effective Kotlin, Kotlin Coroutines, and Android Development with Kotlin. He is also the main author of influential articles about Kotlin and a speaker invited to many programming conferences.",
+      "shortBio": "Developer during the day, author at night, trainer at Kt. Academy",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "Poland",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/6036-400o400o2-3FjkVzve3a6N6W5Qdawkwk.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/marcinmoskala",
+          "name": "Twitter"
+        }
+      ],
+      "order": 0,
+      "title": ""
+    }
   },
   "team": [
     {
@@ -278,7 +666,7 @@
       "available": true,
       "currency": "PLN",
       "starts": "",
-      "ends": "Ends on Sep30",
+      "ends": "Ends on Oct15",
       "inDemand": true,
       "info": "Better be fast",
       "name": "Early Bird",
