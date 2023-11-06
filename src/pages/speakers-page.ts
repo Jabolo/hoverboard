@@ -192,20 +192,20 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <simple-hero page="speakers"></simple-hero>
-            <div class="container">
-              <div class="action-buttons" layout horizontal wrap>
-                <a href="https://sessionize.com/warsawdevfest2023"
-                   target="_blank">
-                  <paper-button class="cta-button animated icon-right"
-                  ">
-                  <span>Call4Papers</span>
-                  <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-                  </paper-button>
-                </a>
-                </a>
-              </div>
-            </div>
+      <!--      <simple-hero page="speakers"></simple-hero>-->
+      <!--            <div class="container">-->
+      <!--              <div class="action-buttons" layout horizontal wrap>-->
+      <!--                <a href="https://sessionize.com/warsawdevfest2023"-->
+      <!--                   target="_blank">-->
+      <!--                  <paper-button class="cta-button animated icon-right"-->
+      <!--                  ">-->
+      <!--                  <span>Call4Papers</span>-->
+      <!--                  <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>-->
+      <!--                  </paper-button>-->
+      <!--                </a>-->
+      <!--                </a>-->
+      <!--              </div>-->
+      <!--            </div>-->
 
       <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
@@ -254,12 +254,13 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 </template>
               </div>
             </div>
-
-            <lazy-image
-              class="company-logo"
-              src="[[speaker.companyLogoUrl]]"
-              alt="[[speaker.company]]"
-            ></lazy-image>
+            <template is="dom-if" if="[[speaker.companyLogoUrl]]">
+              <lazy-image
+                class="company-logo"
+                src="[[speaker.companyLogoUrl]]"
+                alt="[[speaker.company]]"
+              ></lazy-image>
+            </template>
 
             <div class="description">
               <h2 class="name">[[speaker.name]]</h2>
@@ -284,7 +285,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         </template>
       </div>
 
-                  <previous-speakers-block></previous-speakers-block>
+      <previous-speakers-block></previous-speakers-block>
 
       <footer-block></footer-block>
     `;

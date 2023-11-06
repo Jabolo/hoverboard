@@ -83,30 +83,751 @@
       "title": "Community partners"
     }
   ],
-  "schedule": {},
-  "sessions": {},
+    "schedule": {
+        "2023-11-25": {
+            "dateReadable": "November 25",
+            "date": "2023-11-25",
+            "timeslots": [
+                {
+                    "startTime": "09:00",
+                    "endTime": "10:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Door_open_🚪"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "10:30",
+                    "endTime": "11:00",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Keynote"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "11:00",
+                    "endTime": "11:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Anna__Migas_Demystifying_web_performance_tooling"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "12:00",
+                    "endTime": "12:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Dominika__Zając_There_is_an_IMPOSTOR_among_us"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Tomasz__Flis_Angular_renaissance"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "13:00",
+                    "endTime": "13:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Marcin__Moskala_Effective_Coroutines"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Mateusz__Stefańczyk_Angular_17's_Revolutionary_Control_Flow:_Introducing_@-Syntax_and_Deferrable_Views"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "14:00",
+                    "endTime": "15:00",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "15:00",
+                    "endTime": "15:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Kateryna__Hrytsaienko_Speed_Up_Microservice_Setup_with_Composable_Approach"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Mateusz__Łędzewicz_To_module_or_not_to_module,_that_is_the_question!"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "16:00",
+                    "endTime": "16:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Rodolfo__Dias_Beyond_Instant_Noodles:_The_challenges_of_Team_Leadership"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Akanksha__Singh_The_Hitchhiker's_Guide_to_Developing_Accessible_Apps"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "17:00",
+                    "endTime": "17:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Vladyslav__Kampov_Do_you_really_need_your_test_environment?"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Tamta__Kapanadze_Real-time_messaging_101"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "18:00",
+                    "endTime": "18:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Closing_session"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "18:30",
+                    "endTime": "19:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Networking"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "tracks": [
+                {
+                    "title": "Auditorium (Main Hall)"
+                },
+                {
+                    "title": "Classroom (1st floor)"
+                },
+                {
+                    "title": "Collaboration space (0 floor)"
+                }
+            ]
+        }
+    },
+  "sessions": {
+    "_Keynote": {
+      "description": "Main Hall",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Keynote",
+      "complexity": "",
+      "language": ""
+    },
+    "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!": {
+      "description": "Join me for an electrifying live coding event where I'll push the boundaries of Generative AI by teaching Google's advanced AI model, PaLM2, some incredible new tricks!\r\n\r\nIn this action-packed session, I'll dive into the world of LangChain, a revolutionary framework that's changing the game in developing applications powered by language models. I will create custom tools from scratch - perhaps with a little help from Codey for Code Generation (code-bison) and empower PaLM2 to wield them, and even guide this sophisticated AI to leverage unique data — all without the need for intricate fine-tuning!",
+      "tags": [],
+      "speakers": [
+        "Tomek__Porożyński"
+      ],
+      "presentation": "",
+      "title": "Teaching PaLM 2 new tricks - a Live Coding Spectacle!",
+      "complexity": "",
+      "language": ""
+    },
+    "Dominika__Zając_There_is_an_IMPOSTOR_among_us": {
+      "description": "Did you know that, according to data, 58% of tech employees experience impostor syndrome, which is a persistent feeling of inadequacy and doubt about one's abilities and achievements? It's time to delve deeper into this important topic. In my presentation, I will share my personal experiences and offer practical tips that have helped me overcome impostor syndrome. Together, let's unlock the untapped potential that often remains dormant due to these self-doubts.",
+      "tags": [],
+      "speakers": [
+        "Dominika__Zając"
+      ],
+      "presentation": "",
+      "title": "There is an IMPOSTOR among us",
+      "complexity": "",
+      "language": ""
+    },
+    "Marcin__Moskala_Effective_Coroutines": {
+      "description": "Kotlin Coroutines can be intuitive, efficient, and safe when used well, or confusing and unreliable when used poorly. In this session, I will present the essential lessons to use them well: typical use-cases, best practices, common mistakes, and misunderstandings. Knowing them, you should be able to improve your applications and libraries. ",
+      "tags": [],
+      "speakers": [
+        "Marcin__Moskala"
+      ],
+      "presentation": "",
+      "title": "Effective Coroutines",
+      "complexity": "",
+      "language": ""
+    },
+    "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App": {
+      "description": "Scaling an app to thousands of daily active users is a dream come true, but it also comes with its own set of challenges. At Visible, we quickly realized that some of our assumptions about network connectivity and stability were too optimistic. Even a 0.5% failure rate would result in dozens of complaints related to network issues every day.\r\n\r\nIn this talk, I will share how we overcame this challenge by enabling our app with full offline capability while continuously adding new features for our users. I will dive deep into the technical details, discussing topics like GraphQL caching, background processing, and local storage.\r\n\r\nJoin me as I share our journey and offer valuable insights for Flutter developers looking to tackle similar challenges.",
+      "tags": [],
+      "speakers": [
+        "Dominik__Roszkowski"
+      ],
+      "presentation": "",
+      "title": "From Network Failures to Offline Success: A Journey of Visible App",
+      "complexity": "",
+      "language": ""
+    },
+    "Rodolfo__Dias_Beyond_Instant_Noodles:_The_challenges_of_Team_Leadership": {
+      "description": "In an environment that often seeks quick fixes and instant gratification, it's tempting to imagine team leadership as simple as making instant noodles in three minutes. But, this analogy may seem superficial when you see the challenging nature of effective leadership.\r\n",
+      "tags": [],
+      "speakers": [
+        "Rodolfo__Dias"
+      ],
+      "presentation": "",
+      "title": "Beyond Instant Noodles: The challenges of Team Leadership",
+      "complexity": "",
+      "language": ""
+    },
+    "Vladyslav__Kampov_Do_you_really_need_your_test_environment?": {
+      "description": "In this talk we will explore a way to develop and deploy using only local and production environment. Together we will take a look how AB-tests, feature toggles, good test strategy and CI/CD can increase the development velocity and time-to-fix rate.",
+      "tags": [],
+      "speakers": [
+        "Vladyslav__Kampov"
+      ],
+      "presentation": "",
+      "title": "Do you really need your test environment?",
+      "complexity": "",
+      "language": ""
+    },
+    "_Closing_session": {
+      "description": "Join Kahoot and get a chance to win exciting prizes.",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Closing session",
+      "complexity": "",
+      "language": ""
+    },
+    "_Door_open_🚪": {
+      "description": "",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Door open 🚪",
+      "complexity": "",
+      "language": ""
+    },
+    "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons": {
+      "description": "Managing a state might be a challenge. Managing the state with hundreds of updates and constant recomposition of floating emojis is a challenge indeed. In this talk, I will share how to build emoji cannon that floods your screen with UI elements, update the state, and does not freeze your UI. All of that with Jetpack Compose :) \r\nIn addition to covering the technical aspects of building and managing a state, I will also share how to build a responsive UI that takes the user input and animates.",
+      "tags": [],
+      "speakers": [
+        "Piotr__Prus"
+      ],
+      "presentation": "",
+      "title": "Blast Off: Managing Hundreds of UI Updates for Emoji Cannons",
+      "complexity": "",
+      "language": ""
+    },
+    "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud": {
+      "description": "Sustainability in the cloud is the continuous dedication to primarily decrease energy usage and optimize efficiency across all aspects of workloads.\r\n\r\nAssuming the responsibility for your emissions embodies ethical values, cost-efficiency, regulatory compliance, and environmental impact awareness.\r\nIt also reflects your commitment to being the part of the solution rather than contributing to the problem.\r\n\r\nIn this talk you will learn about design principles, best-practices, potential trade-offs, and improvement plans you can use to meet sustainability targets for your Google Cloud workloads.",
+      "tags": [],
+      "speakers": [
+        "Irine__Kokilashvili"
+      ],
+      "presentation": "",
+      "title": "Sustainability for workloads in Google Cloud",
+      "complexity": "",
+      "language": ""
+    },
+    "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice": {
+      "description": "Session will include the benefits of cloud along with hosting microservices on Kubernetes ",
+      "tags": [],
+      "speakers": [
+        "Dilraj__Singh"
+      ],
+      "presentation": "",
+      "title": "Kubernetes on Cloud and best practice",
+      "complexity": "",
+      "language": ""
+    },
+    "Kateryna__Hrytsaienko_Speed_Up_Microservice_Setup_with_Composable_Approach": {
+      "description": "Imagine how good it would be to have a magic button to set up and integrate a brand-new microservice in your ecosystem in XX minutes. Infrastructure, CI/CD, and basic code snippets all in one. \r\n\r\nThis talk aimed to familiarize you with the composable approach -- closest to the \"magic button\" as possible. \r\n\r\nIn this session, we'll walk you through how Terraform conjures infrastructure like magic, shared workflows streamline processes, and Maven archetypes simplify code generation.\r\n\r\nAs the cherry on top -- live demo of the accelerator approach with Google cloud platfrom.\r\n \r\n\r\n",
+      "tags": [],
+      "speakers": [
+        "Kateryna__Hrytsaienko"
+      ],
+      "presentation": "",
+      "title": "Speed Up Microservice Setup with Composable Approach",
+      "complexity": "",
+      "language": ""
+    },
+    "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go": {
+      "description": "In the talk, I'd like to share my experience building a resilient reverse proxy in Go - github.com/azimjohn/jprq\r\n\r\nHow I turned an idea into working solution over a weekend and how it evolved in 3 years and what it tought about computer networks, internet protocols and maintaining an open-source project.",
+      "tags": [],
+      "speakers": [
+        "Azimjon__Pulatov"
+      ],
+      "presentation": "",
+      "title": "Building Reverse Proxy in Go",
+      "complexity": "",
+      "language": ""
+    },
+    "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!": {
+      "description": "In this engaging and hands-on talk, you'll witness the speed and efficiency of application development using Flutter and Firebase. \r\n\r\nThe session will revolve around live coding a chat app from scratch, illustrating how users can seamlessly log in, log out, and post messages to a group chat channel.\r\n\r\nThis demonstration aims to inspire both beginners and experienced developers. If you're new to Flutter or Firebase, you'll see how straightforward it is to kickstart your journey. For seasoned developers, the talk will highlight the remarkable productivity and speed that these technologies offer.\r\n\r\nBy the end of this session, you'll have seen the process of creating a working chat app within the span of a single talk. Don't miss this opportunity to witness the power of Flutter and Firebase in action and learn how they can revolutionize your development process.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+      "tags": [],
+      "speakers": [
+        "Alicja__Ogonowska"
+      ],
+      "presentation": "",
+      "title": "Let’s Build a Flutter App, Fast!",
+      "complexity": "",
+      "language": ""
+    },
+    "_Networking": {
+      "description": "",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Networking",
+      "complexity": "",
+      "language": ""
+    },
+    "Anna__Migas_Demystifying_web_performance_tooling": {
+      "description": "Web performance has been one of the most talked about web development topics in the recent years. Yet if you try to start your journey with the speed optimisations, you might find yourself in a pickle. With the tooling, you might feel overwhelmed—it looks complex and hard to comprehend. With the metrics: at first glance all of them seem similar, not to mention that they change over time and you cannot figure out which of them to take into account.\r\n\r\nIn this talk I we will take a look at the most popular web performance tooling. There will be no more secrets around the topic and you will be able to dive into the web speed optimisations with confidence. We will also briefly mention metrics and services to monitor your improvements over time. ",
+      "tags": [],
+      "speakers": [
+        "Anna__Migas"
+      ],
+      "presentation": "",
+      "title": "Demystifying web performance tooling",
+      "complexity": "",
+      "language": ""
+    },
+    "Tomasz__Flis_Angular_renaissance": {
+      "description": "The angular framework has been going through a real renaissance during the last months/years. This talk is about the biggest features and how the community is more connected to the changes. \r\nThis talk consists of the following:\r\n- brief Angular history\r\n- recent features, such as:\r\n-- Reactive typed forms\r\n-- Standalone components\r\n-- Signals\r\n- RFCs",
+      "tags": [],
+      "speakers": [
+        "Tomasz__Flis"
+      ],
+      "presentation": "",
+      "title": "Angular renaissance",
+      "complexity": "",
+      "language": ""
+    },
+    "Mateusz__Stefańczyk_Angular_17's_Revolutionary_Control_Flow:_Introducing_@-Syntax_and_Deferrable_Views": {
+      "description": "Explore the groundbreaking features of Angular 17 in this talk, which will focus on @-Syntax and Deferrable Views. You will learn how @-Syntax simplifies asynchronous operations, making it easier to read and maintain your code. Additionally, you will discover Deferrable Views’ performance optimization techniques and gain practical insights and best practices for integrating these innovations into your projects. Stay ahead of the curve and revolutionize your web app development with Angular 17! ",
+      "tags": [],
+      "speakers": [
+        "Mateusz__Stefańczyk"
+      ],
+      "presentation": "",
+      "title": "Angular 17's Revolutionary Control Flow: Introducing @-Syntax and Deferrable Views",
+      "complexity": "",
+      "language": ""
+    },
+    "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯": {
+      "description": "",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Lunch Break 🍔🍔🍟🍿🥗🥙🥪🌮🌯",
+      "complexity": "",
+      "language": ""
+    },
+    "Mateusz__Łędzewicz_To_module_or_not_to_module,_that_is_the_question!": {
+      "description": "A Brief Exploration of Modularity in Angular: Learn what truly matters when creating modules. Discover the essentials of module composition and how to architect your codebase to fully capitalize on modularity. If you're interested in employing simple yet effective principles to make your codebase more modular, this session is not to be missed.",
+      "tags": [],
+      "speakers": [
+        "Mateusz__Łędzewicz"
+      ],
+      "presentation": "",
+      "title": "To module or not to module, that is the question!",
+      "complexity": "",
+      "language": ""
+    },
+    "Akanksha__Singh_The_Hitchhiker's_Guide_to_Developing_Accessible_Apps": {
+      "description": "For years, accessibility features and experiences were seen as nice to have when it came to app development. Shockingly, many developers overlook this vital aspect, inadvertently excluding a significant user base. The World Health Organization reveals that about 15% of the global population, over a billion people, live with disabilities. In a digital age, it's unjust to marginalize this substantial demographic based on abilities.\r\n\r\nThis talk emphasizes the critical role of accessibility in mobile apps. Adhering to accessibility standards ensures inclusivity, making apps usable for everyone. Emphasizing an \"accessible-first\" approach, the session guides developers from initial app strategy through design, development, and quality assurance. Accessibility becomes not just a guideline but a core project requirement, shaping every phase.\r\n\r\nThis talk will cover best practices that one must follow to ensure accessibility in Flutter apps. While this talk focuses more on developing accessible Flutter apps it'll be relevant to all developers in understanding the accessibility features and best practices.",
+      "tags": [],
+      "speakers": [
+        "Akanksha__Singh"
+      ],
+      "presentation": "",
+      "title": "The Hitchhiker's Guide to Developing Accessible Apps",
+      "complexity": "",
+      "language": ""
+    },
+    "Tamta__Kapanadze_Real-time_messaging_101": {
+      "description": "Speed of data exchange is essential in today's world. Digital product development teams strive to improve the performance of applications, especially collaboration and communication platforms.\r\n\r\nReal-time messaging systems are one of the main tools for sending and receiving messages, connecting publishers and subscribers.\r\n\r\nIn this talk, we will discuss real-time messaging in general, identify popular platforms that use the same technologies, and review Google Cloud Pub/Sub, a fully managed real-time messaging service that is highly scalable and reliable and can handle millions of messages per second.",
+      "tags": [],
+      "speakers": [
+        "Tamta__Kapanadze"
+      ],
+      "presentation": "",
+      "title": "Real-time messaging 101",
+      "complexity": "",
+      "language": ""
+    }
+  },
   "speakers": {
+    "Akanksha__Singh": {
+      "name": "Akanksha Singh",
+      "bio": "Software Engineer at JP Morgan Chase & Co. | Interested in Flutter, Open Source, Hackathons, Community building",
+      "shortBio": "Flutter Dev | SWE at JP Morgan Chase & Co.",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/28cf-400o400o2-sZ8qevh2buTGRUqZDEDr7v.jpeg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/coder_jedi",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/akanksha1212/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/akankshasingh1212/",
+          "name": "Instagram"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/AkankshaSingh",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Flutter Dev | SWE at JP Morgan Chase & Co."
+    },
+    "Alicja__Ogonowska": {
+      "name": "Alicja Ogonowska",
+      "bio": "I am a mobile app developer with 7 years of experience. I started as an Android developer and then moved to Flutter over three years ago, never regretting the change! Currently I work at EQUIQO where I'm developing a mobile app for flaconi.\r\nIf I don't code, I probably cook or eat.",
+      "shortBio": "Flutter Developer at EQUIQO",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Alicja_Ogonowska_https___sessionize.com_download_islatyer_4ZJa86WxRLaH7z5EYLweQR.png_web-CB-equiqo_logo1000px.png",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/df54-400o400o2-wFexMLi5bbBzxqKzGXgQQ3.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/AlicjaOgonowska",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/alicja-ogonowska/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://instagram.com/alicja.ogonowska",
+          "name": "Instagram"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://equiqo.com",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/alicja-ogonowska",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Flutter Developer at EQUIQO"
+    },
+    "Anna__Migas": {
+      "name": "Anna Migas",
+      "bio": "Anna works as a Lead UI Developer at Field Intelligence helping to bring healthcare the fastest emerging markets in the world. She is always trying to find ways to make people fall in love with coding and has a long history of organizing coding workshops for WebMuses and Rails Girls. She holds a Google Developer Expert title in Web Technologies area. In her spare time she is practicing Pilates, playing Hearthstone and traveling.",
+      "shortBio": "Lead UI Developer",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Anna_Migas_https___sessionize.com_download_imgakseq_pzbntmEb2zox4TaUWwhhkp.png_Field_Logo_RGB_Black.png",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/764a-400o400o2-ni4UGc3pwVqxGgcXUJC3rs.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/szynszyliszys",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/anna-migas-56575159/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://field.inc/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/szynszyliszys",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Lead UI Developer"
+    },
+    "Azimjon__Pulatov": {
+      "name": "Azimjon Pulatov",
+      "bio": "I've been in software development for past 6 years, building distributed systems and doing cloud development. Previously worked in Amazon Alexa and Facebook Messenger.",
+      "shortBio": "Software Engineer @ Google",
+      "company": "Google",
+      "companyLogo": "/images/logos/google.png",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/f634-400o400o2-7XhoN7zkrxLW1kTziNhTBo.jpeg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/azimjon-pulatov",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://google.com",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/azimjon-pulatov",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Software Engineer @ Google"
+    },
+    "Dilraj__Singh": {
+      "name": "Dilraj Singh",
+      "bio": "Cloud Architect with more than 13  years of experience, certified in multiple cloud (AWS, Google and Azure) also certified in Kubernetes and Infrastructure As Code having hold on project management as certified Scrum Master and Product Owner.",
+      "shortBio": "Infosys Consulting / Principal CIO Advisory / Cloud Architect",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/1cf7-400o400o2-ErYYHdbdD7oYM66Wez6JMx.png",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dilraj-singh/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/dilraj-singh",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Infosys Consulting / Principal CIO Advisory / Cloud Architect"
+    },
+    "Dominik__Roszkowski": {
+      "name": "Dominik Roszkowski",
+      "bio": "Dominik is Google Developer Expert in Flutter eager to create beautiful apps for mobile and desktop. He’s Lead Engineer at Visible and co-founder of Flutter Europe conference. He is active speaker on local meetups and writes Flutter-related articles on his blog roszkowski.dev.",
+      "shortBio": "Google Developer Expert in Flutter",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/e8e9-400o400o2-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/OrestesGaolin",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dominik-roszkowski/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "blog",
+          "link": "https://roszkowski.dev",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://makevisible.com",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/dominik-roszkowski",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Google Developer Expert in Flutter"
+    },
+    "Dominika__Zając": {
+      "name": "Dominika Zając",
+      "bio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, senior software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
+      "shortBio": "GDE for Web | Software Engineer at Qualtrics",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": true,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/domizajac",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/dominikazajac/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/domi-zajac",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "GDE for Web | Software Engineer at Qualtrics"
+    },
+    "Irine__Kokilashvili": {
+      "name": "Irine Kokilashvili",
+      "bio": "Systems engineer by day at EPAM and hobbyist open source contributor by night at Next Hat",
+      "shortBio": "Irine Kokilashvili - Systems Engineer | EPAM Systems",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Irine_Kokilashvili_https___sessionize.com_download_iyivox_P8EGFsEMoMXdxWSbyx5Tbc.png_Effective_Programming_for_America_logo.svg.png",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/da5d-400o400o2-BDrbUmF3DkxCbRKBdWEi2P.png",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "blog",
+          "link": "https://github.com/scirin",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/irine-kokilashvili",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Irine Kokilashvili - Systems Engineer | EPAM Systems"
+    },
     "Kateryna__Hrytsaienko": {
       "name": "Kateryna Hrytsaienko",
-      "bio": "Hi there!\ud83d\udc4b\n\nMy name is Kateryna Hrytsaienko, I'm Software Engineering Consultant at Valtech, Google Developer Student Club Menor, Google Woman Techmakers Ambassador, passionate Cloud and CI/CD Automation Enthusiast.\n\nI mostly work with E-commerce projects, developing composable solutions and contributing to libraries for company-wide use. I summarize my experience in my blog, where I also share leadership tips and tricks for novice GDSC leaders.\n\nAbout GDSC\u2026 that's where things got even more interesting! With our local chapters, we host workshops, tech talks and speaker sessions for educational purposes. One of our latest projects is about algorithms for beginners -- AlgoClub. A completely awesome initiative. For 3 years, our chapter has kept organizing tech events for beginners, and even when the war started -- we kept our vector on doing our best to give students access to free educational materials. In-person, on-demand and virtual.\ud83e\udd17\n\nThank you for your time and hope to see you soon at the summit. Cheers!",
+      "bio": "Hi there!👋\r\n\r\nMy name is Kateryna Hrytsaienko, I'm Software Engineering Consultant at Valtech, Google Developer Student Club Menor, Google Woman Techmakers Ambassador, passionate Cloud and CI/CD Automation Enthusiast.\r\n\r\nI mostly work with E-commerce projects, developing composable solutions and contributing to libraries for company-wide use. I summarize my experience in my blog, where I also share leadership tips and tricks for novice GDSC leaders.\r\n\r\nAbout GDSC… that's where things got even more interesting! With our local chapters, we host workshops, tech talks and speaker sessions for educational purposes. One of our latest projects is about algorithms for beginners -- AlgoClub. A completely awesome initiative. For 3 years, our chapter has kept organizing tech events for beginners, and even when the war started -- we kept our vector on doing our best to give students access to free educational materials. In-person, on-demand and virtual.🤗\r\n\r\nThank you for your time and hope to see you soon at the summit. Cheers!",
       "shortBio": "Software Engineer Consultant Valtech | Woman Techmakers Ambassador| GDSC Mentor ",
       "company": "",
       "companyLogo": "",
       "companyLogoUrl": "",
-      "country": "Poland",
+      "country": "",
       "featured": false,
       "photo": "",
       "photoUrl": "https://sessionize.com/image/ed4d-400o400o2-PypmLUNjrDwo6WKS4zCMGD.jpg",
       "socials": [
         {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/ekaterina-gricaenko",
-          "name": "Linkedin"
-        },
-        {
           "icon": "twitter",
           "link": "https://twitter.com/grizik_ek?t=ZKu9YW613y2VhCRY4YgrPA&s=09",
           "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/ekaterina-gricaenko",
+          "name": "LinkedIn"
         },
         {
           "icon": "facebook",
@@ -117,58 +838,335 @@
           "icon": "instagram",
           "link": "https://www.instagram.com/grizik_k/",
           "name": "Instagram"
+        },
+        {
+          "icon": "blog",
+          "link": "https://www.linkedin.com/feed/",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://www.valtech.com/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/grizik",
+          "name": "Sessionize"
         }
       ],
       "order": 0,
-      "title": ""
+      "title": "Software Engineer Consultant Valtech | Woman Techmakers Ambassador| GDSC Mentor "
     },
-    "Dominik__Roszkowski": {
-      "name": "Dominik Roszkowski",
-      "bio": "Dominik is Google Developer Expert in Flutter eager to create beautiful apps for mobile and desktop. He\u2019s Lead Engineer at Visible and co-founder of Flutter Europe conference. He is active speaker on local meetups and writes Flutter-related articles on his blog roszkowski.dev.",
-      "shortBio": "Google Developer Expert in Flutter",
+    "Marcin__Moskala": {
+      "name": "Marcin Moskala",
+      "bio": "Marcin Moskala is an experienced developer and Kotlin trainer. He is the founder of the Kt. Academy, an official JetBrains partner for Kotlin training, author of the books Effective Kotlin, Kotlin Coroutines, and Android Development with Kotlin. He is also the main author of influential articles about Kotlin and a speaker invited to many programming conferences.",
+      "shortBio": "Developer during the day, author at night, trainer at Kt. Academy",
       "company": "",
       "companyLogo": "",
       "companyLogoUrl": "",
-      "country": "Poland",
+      "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/e8e9-400o400o2-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
+      "photoUrl": "https://sessionize.com/image/6036-400o400o2-3FjkVzve3a6N6W5Qdawkwk.jpg",
       "socials": [
         {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/dominik-roszkowski/",
-          "name": "Linkedin"
+          "icon": "twitter",
+          "link": "https://twitter.com/marcinmoskala",
+          "name": "Twitter"
         },
         {
-          "icon": "twitter",
-          "link": "https://twitter.com/OrestesGaolin",
-          "name": "Twitter"
+          "icon": "blog",
+          "link": "https://blog.kotlin-academy.com/",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://kt.academy/",
+          "name": "Company Website"
         }
       ],
       "order": 0,
-      "title": ""
+      "title": "Developer during the day, author at night, trainer at Kt. Academy"
+    },
+    "Mateusz__Łędzewicz": {
+      "name": "Mateusz Łędzewicz",
+      "bio": "I started my coding journey 20 years ago and I always treated it as a passion, not a work till now. \r\nCurrently I am Principal Consultant and Trainer at Lowgular, where I am teaching people Angular from the scratch. From other hand I am helping our clients in boosting developers performance, training their developers to use best engineering practices and reducing technical debt.",
+      "shortBio": "Principal Angular Consultant and Trainer in Lowgular",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Mateusz_Łędzewicz_https___sessionize.com_download_iwdagleh_RxvJ4gtG3F1exYnpBp489p.svg_LOGO_BLUE.svg",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/eed9-400o400o2-VpDUjvzeYLEHWd1AfxMkSU.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/mat_ledzewicz",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/mateusz-%C5%82%C4%99dzewicz-36197080",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/januszek.programowania/",
+          "name": "Instagram"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://lowgular.io/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/mateusz-ledzewicz",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Principal Angular Consultant and Trainer in Lowgular"
+    },
+    "Mateusz__Stefańczyk": {
+      "name": "Mateusz Stefańczyk",
+      "bio": "Team leader of the Angular team at House of Angular company and a blogger on the angular.love blog, where he shares knowledge and experience about Angular. He develops Angular web applications and is passionate about business analysis and designing custom web application architectures. Mateusz is also keen on gaining expertise in the field of reverse engineering.",
+      "shortBio": "Senior Angular Developer at House of Angular",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Mateusz_Stefańczyk_https___sessionize.com_download_ccaotkeh_fRsRwke3vdKXDtpa9rCkQi.png_Logo-main-color-1__1___8_.png",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/3fb4-400o400o2-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/m_stefanczyk",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/mateusz-stefa%C5%84czyk-22080b164/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "blog",
+          "link": "https://www.angular.love/en/author/mateusz-stefanczykvalueadd-pl/",
+          "name": "Blog"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/mateuszstefanczyk",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Senior Angular Developer at House of Angular"
+    },
+    "Piotr__Prus": {
+      "name": "Piotr Prus",
+      "bio": "I am an android developer with 5+ years of experience, addicted to new things. I love clean architecture and clean, simple designs. I am trying to create meaningful articles and speeches. Currently composing and KMMing all the things.",
+      "shortBio": "Android developer",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/7cba-400o400o2-ainA1gVSSCHxugeFJdVjM2.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/piotr_prus",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/piotrprus/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "blog",
+          "link": "https://piotrprus.medium.com/",
+          "name": "Blog"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/piotrprus",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Android developer"
+    },
+    "Rodolfo__Dias": {
+      "name": "Rodolfo Dias",
+      "bio": "Team Leadership ❤️ JS ❤️ Open Source\r\n\r\nRodolfo has worked in a diverse pool of companies and research centers, in South America and Europe. He is Software Engineering Manager at Yara International and manages the software engineering teams of Yara's farming experience platform, with the goal of enabling regenerative agriculture and minimizing the climate impact of farming",
+      "shortBio": "Google Developer Expert for Web Technologies • Software Engineering Manager, Yara International",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/d0bb-400o400o2-whmSdeL7iud1cCCHrxDtZg.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/r_mdias",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/rmdias29/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/rodolfo-dias",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Google Developer Expert for Web Technologies • Software Engineering Manager, Yara International"
+    },
+    "Tamta__Kapanadze": {
+      "name": "Tamta Kapanadze",
+      "bio": "Tamta Kapanadze is a software engineer specialized in backend development. She has experience crafting seamless APIs and essential system components such as socket servers.\r\n\r\nTamta's passion for technology extends beyond coding. She is an active member of the tech community, participating in community programs like Google Developer Groups and Google Developer Student Club Programs. She also organizes events like DevFest in Georgia, creating vibrant platforms for learning and networking.",
+      "shortBio": "Software Engineer ",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/fe2d-400o400o2-wvkzPEnZiyNanzMTX1VRrL.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tamta-kapanadze/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/tamta",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Software Engineer "
+    },
+    "Tomasz__Flis": {
+      "name": "Tomasz Flis",
+      "bio": "Angular passionate, in love with clean code, perfect design, and simple approach, part of GDG Warsaw, a public speaking enthusiast from Poland",
+      "shortBio": "Senior Frontend Developer - Deskbird",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/4b7b-400o400o2-S14zNaTcpfbUjV3tTt8V9x.jpg",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/TomWebwalker",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/tomwebwalker/",
+          "name": "Instagram"
+        },
+        {
+          "icon": "blog",
+          "link": "https://dev.to/tomwebwalker",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://www.deskbird.com/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/tomasz-flis",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Senior Frontend Developer - Deskbird"
+    },
+    "Tomek__Porożyński": {
+      "name": "Tomek Porożyński",
+      "bio": "Experienced Google Cloud Engineer with a passion for open source projects, particularly Kubernetes. Active contributor to the technology community through YouTube channel, Open Source projects and tech blog advocating for Cloud Native development.",
+      "shortBio": "Cloud System Architect, Atos",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Tomek_Porożyński_https___sessionize.com_download_ccabsevca_VVPF1UrfSUJNvxZ9AKDC8B.jpg_Logotype_Eviden_RGB_Orange.jpg",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/c4fa-400o400o2-16-a0fb-4226-b7ee-2f49eabe37c8.dd5d6524-0bfe-43ce-982a-3150773998d0.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/tomaszporozynski/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "blog",
+          "link": "https://www.storagefreak.net",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://eviden.com/",
+          "name": "Company Website"
+        },
+        {
+          "icon": "other",
+          "link": "https://youtube.com/c/storagefreak",
+          "name": "Youtube"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/tomekporozynski",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Cloud System Architect, Atos"
     },
     "Vladyslav__Kampov": {
       "name": "Vladyslav Kampov",
-      "bio": "- Senior UI Engineer \u0443 Netflix\n- Former Frontend Guild Engineering Manager \u0443 Wix.com\n- Host of the podcast \"\u0416\u0435\u041f\u0435\u0422\u0435\" (https://linktr.ee/podcastgepete)",
+      "bio": "- Senior UI Engineer у Netflix\r\n- Former Frontend Guild Engineering Manager у Wix.com\r\n- Host of the podcast \"ЖеПеТе\" (https://linktr.ee/podcastgepete)",
       "shortBio": "Senior UI Engineer at Netflix, Host of Podcast GePeTe",
       "company": "",
       "companyLogo": "",
       "companyLogoUrl": "",
-      "country": "Poland",
+      "country": "",
       "featured": false,
       "photo": "",
       "photoUrl": "https://sessionize.com/image/cdc6-400o400o2-GkJ2MSWHCk7h79dv2t3v1n.png",
       "socials": [
         {
-          "icon": "linkedin",
-          "link": "https://linkedin.com/in/kampov",
-          "name": "Linkedin"
-        },
-        {
           "icon": "twitter",
           "link": "https://twitter.com/vladkampov",
           "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://linkedin.com/in/kampov",
+          "name": "LinkedIn"
         },
         {
           "icon": "facebook",
@@ -179,270 +1177,15 @@
           "icon": "instagram",
           "link": "https://instagram.com/vladkampov",
           "name": "Instagram"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Rodolfo__Dias": {
-      "name": "Rodolfo Dias",
-      "bio": "Team Leadership \u2764\ufe0f JS \u2764\ufe0f Open Source\n\nRodolfo has worked in a diverse pool of companies and research centers, in South America and Europe. He is Software Engineering Manager at Yara International and manages the software engineering teams of Yara's farming experience platform, with the goal of enabling regenerative agriculture and minimizing the climate impact of farming",
-      "shortBio": "Google Developer Expert for Web Technologies \u2022 Software Engineering Manager, Yara International",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/d0bb-400o400o2-whmSdeL7iud1cCCHrxDtZg.jpg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/rmdias29/",
-          "name": "Linkedin"
         },
         {
-          "icon": "twitter",
-          "link": "https://twitter.com/r_mdias",
-          "name": "Twitter"
+          "icon": "company_website",
+          "link": "https://kampov.com",
+          "name": "Company Website"
         }
       ],
       "order": 0,
-      "title": ""
-    },
-    "Hajer__Mahjoub": {
-      "name": "Hajer Mahjoub",
-      "bio": "Deeplearning.ai ambassador\nAI and Data Engineer  at Digitty.io\nFacebook developer circle: BERLIN ",
-      "shortBio": "AI and Data Engineer  at Digitty.io",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/637f-400o400o2-9Dxq2T6f36G3eWhN3jMWta.jpeg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/hajermahjoub/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/TkdHajer",
-          "name": "Twitter"
-        },
-        {
-          "icon": "facebook",
-          "link": "Https://Www.facebook.com/HajerMahjoub.it",
-          "name": "Facebook"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Irine__Kokilashvili": {
-      "name": "Irine Kokilashvili",
-      "bio": "Systems engineer by day at EPAM and hobbyist open source contributor by night at Next Hat",
-      "shortBio": "Irine Kokilashvili - Systems Engineer | EPAM Systems",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/da5d-400o400o2-BDrbUmF3DkxCbRKBdWEi2P.png",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
-          "name": "Linkedin"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Tamta__Kapanadze": {
-      "name": "Tamta Kapanadze",
-      "bio": "Tamta Kapanadze is a software engineer specialized in backend development. She has experience crafting seamless APIs and essential system components such as socket servers.\n\nTamta's passion for technology extends beyond coding. She is an active member of the tech community, participating in community programs like Google Developer Groups and Google Developer Student Club Programs. She also organizes events like DevFest in Georgia, creating vibrant platforms for learning and networking.",
-      "shortBio": "Software Engineer ",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/fe2d-400o400o2-wvkzPEnZiyNanzMTX1VRrL.jpg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/tamta-kapanadze/",
-          "name": "Linkedin"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Akanksha__Singh": {
-      "name": "Akanksha Singh",
-      "bio": "Software Engineer at JP Morgan Chase & Co. | Interested in Flutter, Open Source, Hackathons, Community building",
-      "shortBio": "Flutter Dev | SWE at JP Morgan Chase & Co.",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/28cf-400o400o2-sZ8qevh2buTGRUqZDEDr7v.jpeg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/akanksha1212/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/coder_jedi",
-          "name": "Twitter"
-        },
-        {
-          "icon": "instagram",
-          "link": "https://www.instagram.com/akankshasingh1212/",
-          "name": "Instagram"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Tomasz__Flis": {
-      "name": "Tomasz Flis",
-      "bio": "Angular passionate, in love with clean code, perfect design, and simple approach, part of GDG Warsaw, a public speaking enthusiast from Poland",
-      "shortBio": "Senior Frontend Developer - Deskbird",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/4b7b-400o400o2-S14zNaTcpfbUjV3tTt8V9x.jpg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/TomWebwalker",
-          "name": "Twitter"
-        },
-        {
-          "icon": "instagram",
-          "link": "https://www.instagram.com/tomwebwalker/",
-          "name": "Instagram"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Piotr__Prus": {
-      "name": "Piotr Prus",
-      "bio": "I am an android developer with 5+ years of experience, addicted to new things. I love clean architecture and clean, simple designs. I am trying to create meaningful articles and speeches. Currently composing and KMMing all the things.",
-      "shortBio": "Android developer",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/7cba-400o400o2-ainA1gVSSCHxugeFJdVjM2.jpg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/piotrprus/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/piotr_prus",
-          "name": "Twitter"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Dominika__Zaj\u0105c": {
-      "name": "Dominika Zaj\u0105c",
-      "bio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, senior software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
-      "shortBio": "GDE for Web | Software Engineer at Qualtrics",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/dominikazajac/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/domizajac",
-          "name": "Twitter"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Mateusz__Stefa\u0144czyk": {
-      "name": "Mateusz Stefa\u0144czyk",
-      "bio": "Team leader of the Angular team at House of Angular company and a blogger on the angular.love blog, where he shares knowledge and experience about Angular. He develops Angular web applications and is passionate about business analysis and designing custom web application architectures. Mateusz is also keen on gaining expertise in the field of reverse engineering.",
-      "shortBio": "Senior Angular Developer at House of Angular",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/3fb4-400o400o2-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
-      "socials": [
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/mateusz-stefa%C5%84czyk-22080b164/",
-          "name": "Linkedin"
-        },
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/m_stefanczyk",
-          "name": "Twitter"
-        }
-      ],
-      "order": 0,
-      "title": ""
-    },
-    "Marcin__Moskala": {
-      "name": "Marcin Moskala",
-      "bio": "Marcin Moskala is an experienced developer and Kotlin trainer. He is the founder of the Kt. Academy, an official JetBrains partner for Kotlin training, author of the books Effective Kotlin, Kotlin Coroutines, and Android Development with Kotlin. He is also the main author of influential articles about Kotlin and a speaker invited to many programming conferences.",
-      "shortBio": "Developer during the day, author at night, trainer at Kt. Academy",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "Poland",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/6036-400o400o2-3FjkVzve3a6N6W5Qdawkwk.jpg",
-      "socials": [
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/marcinmoskala",
-          "name": "Twitter"
-        }
-      ],
-      "order": 0,
-      "title": ""
+      "title": "Senior UI Engineer at Netflix, Host of Podcast GePeTe"
     }
   },
   "team": [

@@ -147,8 +147,8 @@
         "number": "100%"
       },
       "tracks": {
-        "label": "Diversity & Inclusion",
-        "number": "Sure thing!"
+        "label": "Sessions",
+        "number": "15+"
       }
     }
   },
@@ -301,7 +301,7 @@
     "blocks": [
       {
         "title": "Organizer",
-        "description": "<a href='https://gdg.community.dev/gdg-warszawa/' target='_blank'>GDG Warsaw</a>, with the support of the <a href='https://gdsc.community.dev/polish-japanese-academy-of-information-technology/' target='_blank'>PJATK GDSC</a>, the <a href='https://developers.google.com/womentechmakers' target='_blank'>WTM</a>, an AWESOME team, sponsors, and volunteers, is the proud organizer of DevFest Warsaw.",
+        "description": "<a href='https://gdg.community.dev/gdg-warszawa/' target='_blank'>GDG Warsaw</a>, in collaboration with <a href='https://gdsc.community.dev/polish-japanese-academy-of-information-technology/' target='_blank'>PJATK GDSC</a>, <a href='https://gdsc.community.dev/university-of-warsaw/' target='_blank'>GDSC UW</a>, <a href='https://gdsc.community.dev/warsaw-university-of-technology/' target='_blank'>GDSC WUT</a>, the <a href='https://developers.google.com/womentechmakers' target='_blank'>WTM</a>, an AWESOME team, sponsors, and a host of volunteers, is the proud organizer of DevFest Warsaw.",
         "callToAction": {
           "label": "Open team page",
           "link": "/team"
