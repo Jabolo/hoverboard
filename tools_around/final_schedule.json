@@ -1,0 +1,197 @@
+{
+    "schedule": {
+        "2023-11-25": {
+            "dateReadable": "November 25",
+            "date": "2023-11-25",
+            "timeslots": [
+                {
+                    "startTime": "09:00",
+                    "endTime": "10:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Door_open_🚪"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "10:30",
+                    "endTime": "11:00",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Keynote"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "11:00",
+                    "endTime": "11:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Anna__Migas_Demystifying_web_performance_tooling"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "12:00",
+                    "endTime": "12:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Dominika__Zając_There_is_an_IMPOSTOR_among_us"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Tomasz__Flis_Angular_renaissance"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "13:00",
+                    "endTime": "13:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Marcin__Moskala_Effective_Coroutines"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Mateusz__Stefańczyk_Angular_17's_Revolutionary_Control_Flow:_Introducing_@-Syntax_and_Deferrable_Views"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "14:00",
+                    "endTime": "15:00",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "15:00",
+                    "endTime": "15:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Mateusz__Łędzewicz_To_module_or_not_to_module,_that_is_the_question!"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "16:00",
+                    "endTime": "16:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Rodolfo__Dias_Beyond_Instant_Noodles:_The_challenges_of_Team_Leadership"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Akanksha__Singh_The_Hitchhiker's_Guide_to_Developing_Accessible_Apps"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "17:00",
+                    "endTime": "17:45",
+                    "sessions": [
+                        {
+                            "items": [
+                                "Vladyslav__Kampov_Do_you_really_need_your_test_environment?"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Tamta__Kapanadze_Real-time_messaging_101"
+                            ]
+                        },
+                        {
+                            "items": [
+                                "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "18:00",
+                    "endTime": "18:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Closing_session"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "startTime": "18:30",
+                    "endTime": "19:30",
+                    "sessions": [
+                        {
+                            "items": [
+                                "_Networking"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "tracks": [
+                {
+                    "title": "Auditorium (Main Hall)"
+                },
+                {
+                    "title": "Classroom (1st floor)"
+                },
+                {
+                    "title": "Collaboration space (0 floor)"
+                }
+            ]
+        }
+    }
+}

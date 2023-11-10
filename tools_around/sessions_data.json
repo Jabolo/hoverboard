@@ -1,0 +1,667 @@
+[
+    {
+        "groupId": 40601,
+        "groupName": "Auditorium (Main Hall)",
+        "sessions": [
+            {
+                "questionAnswers": [],
+                "id": "9f35d8e8-1768-4ccc-9192-b5fd9e758848",
+                "title": "Keynote",
+                "description": "Main Hall",
+                "startsAt": "2023-11-25T10:30:00",
+                "endsAt": "2023-11-25T11:00:00",
+                "isServiceSession": true,
+                "isPlenumSession": true,
+                "speakers": [],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": null
+            },
+            {
+                "questionAnswers": [],
+                "id": "560909",
+                "title": "Teaching PaLM 2 new tricks - a Live Coding Spectacle!",
+                "description": "Join me for an electrifying live coding event where I'll push the boundaries of Generative AI by teaching Google's advanced AI model, PaLM2, some incredible new tricks!\r\n\r\nIn this action-packed session, I'll dive into the world of LangChain, a revolutionary framework that's changing the game in developing applications powered by language models. I will create custom tools from scratch - perhaps with a little help from Codey for Code Generation (code-bison) and empower PaLM2 to wield them, and even guide this sophisticated AI to leverage unique data — all without the need for intricate fine-tuning!",
+                "startsAt": "2023-11-25T11:00:00",
+                "endsAt": "2023-11-25T11:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "4b57c216-a0fb-4226-b7ee-2f49eabe37c8",
+                        "name": "Tomek Porożyński"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "556730",
+                "title": "There is an IMPOSTOR among us",
+                "description": "Did you know that, according to data, 58% of tech employees experience impostor syndrome, which is a persistent feeling of inadequacy and doubt about one's abilities and achievements? It's time to delve deeper into this important topic. In my presentation, I will share my personal experiences and offer practical tips that have helped me overcome impostor syndrome. Together, let's unlock the untapped potential that often remains dormant due to these self-doubts.",
+                "startsAt": "2023-11-25T12:00:00",
+                "endsAt": "2023-11-25T12:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "c1a63204-d2a4-4818-87e8-3007a3e73d79",
+                        "name": "Dominika Zając"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "559611",
+                "title": "Effective Coroutines",
+                "description": "Kotlin Coroutines can be intuitive, efficient, and safe when used well, or confusing and unreliable when used poorly. In this session, I will present the essential lessons to use them well: typical use-cases, best practices, common mistakes, and misunderstandings. Knowing them, you should be able to improve your applications and libraries. ",
+                "startsAt": "2023-11-25T13:00:00",
+                "endsAt": "2023-11-25T13:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "ef7c1115-d852-44b9-9f72-530ba7223c55",
+                        "name": "Marcin Moskala"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "555166",
+                "title": "From Network Failures to Offline Success: A Journey of Visible App",
+                "description": "Scaling an app to thousands of daily active users is a dream come true, but it also comes with its own set of challenges. At Visible, we quickly realized that some of our assumptions about network connectivity and stability were too optimistic. Even a 0.5% failure rate would result in dozens of complaints related to network issues every day.\r\n\r\nIn this talk, I will share how we overcame this challenge by enabling our app with full offline capability while continuously adding new features for our users. I will dive deep into the technical details, discussing topics like GraphQL caching, background processing, and local storage.\r\n\r\nJoin me as I share our journey and offer valuable insights for Flutter developers looking to tackle similar challenges.",
+                "startsAt": "2023-11-25T15:00:00",
+                "endsAt": "2023-11-25T15:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "29ba7916-20b4-48e5-9715-bddfbdd1aa3a",
+                        "name": "Dominik Roszkowski"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "558671",
+                "title": "Beyond Instant Noodles: The challenges of Team Leadership",
+                "description": "In an environment that often seeks quick fixes and instant gratification, it's tempting to imagine team leadership as simple as making instant noodles in three minutes. But, this analogy may seem superficial when you see the challenging nature of effective leadership.\r\n",
+                "startsAt": "2023-11-25T16:00:00",
+                "endsAt": "2023-11-25T16:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "3cb7db3a-d2ad-41f1-9345-572186a27b92",
+                        "name": "Rodolfo Dias"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "554001",
+                "title": "Do you really need your test environment?",
+                "description": "In this talk we will explore a way to develop and deploy using only local and production environment. Together we will take a look how AB-tests, feature toggles, good test strategy and CI/CD can increase the development velocity and time-to-fix rate.",
+                "startsAt": "2023-11-25T17:00:00",
+                "endsAt": "2023-11-25T17:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "2de63513-1f3f-4e96-b24a-2a4e66e3bf38",
+                        "name": "Vladyslav Kampov"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "6fe643ef-4af4-47d8-83d7-9e5434143181",
+                "title": "Closing session",
+                "description": "Join Kahoot and get a chance to win exciting prizes.",
+                "startsAt": "2023-11-25T18:00:00",
+                "endsAt": "2023-11-25T18:30:00",
+                "isServiceSession": true,
+                "isPlenumSession": true,
+                "speakers": [],
+                "categories": [],
+                "roomId": 40601,
+                "room": "Auditorium (Main Hall)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": null
+            }
+        ],
+        "isDefault": false
+    },
+    {
+        "groupId": 40600,
+        "groupName": "Classroom (1st floor)",
+        "sessions": [
+            {
+                "questionAnswers": [],
+                "id": "559533",
+                "title": "Demystifying web performance tooling",
+                "description": "Web performance has been one of the most talked about web development topics in the recent years. Yet if you try to start your journey with the speed optimisations, you might find yourself in a pickle. With the tooling, you might feel overwhelmed—it looks complex and hard to comprehend. With the metrics: at first glance all of them seem similar, not to mention that they change over time and you cannot figure out which of them to take into account.\r\n\r\nIn this talk I we will take a look at the most popular web performance tooling. There will be no more secrets around the topic and you will be able to dive into the web speed optimisations with confidence. We will also briefly mention metrics and services to monitor your improvements over time. ",
+                "startsAt": "2023-11-25T11:00:00",
+                "endsAt": "2023-11-25T11:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "0c1d5199-8674-4245-ac23-d2e6c1a8c611",
+                        "name": "Anna Migas"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "554760",
+                "title": "Angular renaissance",
+                "description": "The angular framework has been going through a real renaissance during the last months/years. This talk is about the biggest features and how the community is more connected to the changes. \r\nThis talk consists of the following:\r\n- brief Angular history\r\n- recent features, such as:\r\n-- Reactive typed forms\r\n-- Standalone components\r\n-- Signals\r\n- RFCs",
+                "startsAt": "2023-11-25T12:00:00",
+                "endsAt": "2023-11-25T12:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "b1dca39c-9a0d-49a9-99d9-8ab18425c72b",
+                        "name": "Tomasz Flis"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "551275",
+                "title": "Angular 17's Revolutionary Control Flow: Introducing @-Syntax and Deferrable Views",
+                "description": "Explore the groundbreaking features of Angular 17 in this talk, which will focus on @-Syntax and Deferrable Views. You will learn how @-Syntax simplifies asynchronous operations, making it easier to read and maintain your code. Additionally, you will discover Deferrable Views’ performance optimization techniques and gain practical insights and best practices for integrating these innovations into your projects. Stay ahead of the curve and revolutionize your web app development with Angular 17! ",
+                "startsAt": "2023-11-25T13:00:00",
+                "endsAt": "2023-11-25T13:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "cc5deac1-f090-46b2-9d31-14d8718075a8",
+                        "name": "Mateusz Stefańczyk"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "e1a0c6af-4c51-4836-ae64-9d16a456c2ea",
+                "title": "Lunch Break 🍔🍔🍟🍿🥗🥙🥪🌮🌯",
+                "description": null,
+                "startsAt": "2023-11-25T14:00:00",
+                "endsAt": "2023-11-25T15:00:00",
+                "isServiceSession": true,
+                "isPlenumSession": true,
+                "speakers": [],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": null
+            },
+            {
+                "questionAnswers": [],
+                "id": "550708",
+                "title": "To module or not to module, that is the question!",
+                "description": "A Brief Exploration of Modularity in Angular: Learn what truly matters when creating modules. Discover the essentials of module composition and how to architect your codebase to fully capitalize on modularity. If you're interested in employing simple yet effective principles to make your codebase more modular, this session is not to be missed.",
+                "startsAt": "2023-11-25T15:00:00",
+                "endsAt": "2023-11-25T15:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "df09d45c-9141-4634-b106-ffc158f6777b",
+                        "name": "Mateusz Łędzewicz"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "554196",
+                "title": "The Hitchhiker's Guide to Developing Accessible Apps",
+                "description": "For years, accessibility features and experiences were seen as nice to have when it came to app development. Shockingly, many developers overlook this vital aspect, inadvertently excluding a significant user base. The World Health Organization reveals that about 15% of the global population, over a billion people, live with disabilities. In a digital age, it's unjust to marginalize this substantial demographic based on abilities.\r\n\r\nThis talk emphasizes the critical role of accessibility in mobile apps. Adhering to accessibility standards ensures inclusivity, making apps usable for everyone. Emphasizing an \"accessible-first\" approach, the session guides developers from initial app strategy through design, development, and quality assurance. Accessibility becomes not just a guideline but a core project requirement, shaping every phase.\r\n\r\nThis talk will cover best practices that one must follow to ensure accessibility in Flutter apps. While this talk focuses more on developing accessible Flutter apps it'll be relevant to all developers in understanding the accessibility features and best practices.",
+                "startsAt": "2023-11-25T16:00:00",
+                "endsAt": "2023-11-25T16:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "76ce51b1-7dd4-4858-98de-0b51b3c9abcb",
+                        "name": "Akanksha Singh"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "554595",
+                "title": "Real-time messaging 101",
+                "description": "Speed of data exchange is essential in today's world. Digital product development teams strive to improve the performance of applications, especially collaboration and communication platforms.\r\n\r\nReal-time messaging systems are one of the main tools for sending and receiving messages, connecting publishers and subscribers.\r\n\r\nIn this talk, we will discuss real-time messaging in general, identify popular platforms that use the same technologies, and review Google Cloud Pub/Sub, a fully managed real-time messaging service that is highly scalable and reliable and can handle millions of messages per second.",
+                "startsAt": "2023-11-25T17:00:00",
+                "endsAt": "2023-11-25T17:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "724b2e51-2a2b-41e0-8a61-7ab5d17ca47b",
+                        "name": "Tamta Kapanadze"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40600,
+                "room": "Classroom (1st floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            }
+        ],
+        "isDefault": false
+    },
+    {
+        "groupId": 40599,
+        "groupName": "Collaboration space (0 floor)",
+        "sessions": [
+            {
+                "questionAnswers": [],
+                "id": "ebb798f4-0247-47a1-946d-55fabd14d6b3",
+                "title": "Door open 🚪",
+                "description": null,
+                "startsAt": "2023-11-25T09:00:00",
+                "endsAt": "2023-11-25T10:30:00",
+                "isServiceSession": true,
+                "isPlenumSession": true,
+                "speakers": [],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": null
+            },
+            {
+                "questionAnswers": [],
+                "id": "559327",
+                "title": "Blast Off: Managing Hundreds of UI Updates for Emoji Cannons",
+                "description": "Managing a state might be a challenge. Managing the state with hundreds of updates and constant recomposition of floating emojis is a challenge indeed. In this talk, I will share how to build emoji cannon that floods your screen with UI elements, update the state, and does not freeze your UI. All of that with Jetpack Compose :) \r\nIn addition to covering the technical aspects of building and managing a state, I will also share how to build a responsive UI that takes the user input and animates.",
+                "startsAt": "2023-11-25T11:00:00",
+                "endsAt": "2023-11-25T11:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "b6dc4b56-ca5d-4e55-8a57-e37f6e6d6af0",
+                        "name": "Piotr Prus"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "569282",
+                "title": "Elevating Your App's Performance",
+                "description": "With apps being developed at a rapid pace for diverse locales and users, it is crucial to continuously enhance app performance to provide an exceptional user experience. This talk will focus on various strategies to improve app performance and empower developers to create high-performing apps.\r\n\r\nIn this talk we will cover, \r\n\r\n- Understanding the Baseline Profile\r\n\r\n- Explore how we practical approached to seamlessly integrate the Baseline Profile into a popular app with over 50 million downloads.\r\n\r\n- How specific improvements  were made during the critical user journey positively impacted app conversion rates.\r\n\r\n- Let's understand the techniques to enhance the performance of Jetpack Compose layouts.\r\n\r\n- Tips and Tricks for Boosting App Performance\r\n\r\n\r\nBy the end of the talk, participants will be equipped with practical knowledge and actionable strategies to power up their apps and enhance their performance. With a focus on improving the user experience, this talk aims to provide developers with the tools they need to create performant and successful applications",
+                "startsAt": "2023-11-25T12:00:00",
+                "endsAt": "2023-11-25T12:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "57f666e2-409c-4998-8ce1-bb98e5d6b82f",
+                        "name": "Himanshu Singh"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "560821",
+                "title": "Kubernetes on Cloud and best practice",
+                "description": "Session will include the benefits of cloud along with hosting microservices on Kubernetes ",
+                "startsAt": "2023-11-25T13:00:00",
+                "endsAt": "2023-11-25T13:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "ced4cb5c-b668-4424-9485-808fe1301300",
+                        "name": "Dilraj Singh"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "550560",
+                "title": "Sustainability for workloads in Google Cloud",
+                "description": "Sustainability in the cloud is the continuous dedication to primarily decrease energy usage and optimize efficiency across all aspects of workloads.\r\n\r\nAssuming the responsibility for your emissions embodies ethical values, cost-efficiency, regulatory compliance, and environmental impact awareness.\r\nIt also reflects your commitment to being the part of the solution rather than contributing to the problem.\r\n\r\nIn this talk you will learn about design principles, best-practices, potential trade-offs, and improvement plans you can use to meet sustainability targets for your Google Cloud workloads.",
+                "startsAt": "2023-11-25T15:00:00",
+                "endsAt": "2023-11-25T15:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "6950e141-cf19-4b37-b5fb-48fad626d9a6",
+                        "name": "Irine Kokilashvili"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "555629",
+                "title": "Building Reverse Proxy in Go",
+                "description": "In the talk, I'd like to share my experience building a resilient reverse proxy in Go - github.com/azimjohn/jprq\r\n\r\nHow I turned an idea into working solution over a weekend and how it evolved in 3 years and what it tought about computer networks, internet protocols and maintaining an open-source project.",
+                "startsAt": "2023-11-25T16:00:00",
+                "endsAt": "2023-11-25T16:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "f9ddb59c-912f-42c8-b99b-d08e6fb0bf20",
+                        "name": "Azimjon Pulatov"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "559109",
+                "title": "Let’s Build a Flutter App, Fast!",
+                "description": "In this engaging and hands-on talk, you'll witness the speed and efficiency of application development using Flutter and Firebase. \r\n\r\nThe session will revolve around live coding a chat app from scratch, illustrating how users can seamlessly log in, log out, and post messages to a group chat channel.\r\n\r\nThis demonstration aims to inspire both beginners and experienced developers. If you're new to Flutter or Firebase, you'll see how straightforward it is to kickstart your journey. For seasoned developers, the talk will highlight the remarkable productivity and speed that these technologies offer.\r\n\r\nBy the end of this session, you'll have seen the process of creating a working chat app within the span of a single talk. Don't miss this opportunity to witness the power of Flutter and Firebase in action and learn how they can revolutionize your development process.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+                "startsAt": "2023-11-25T17:00:00",
+                "endsAt": "2023-11-25T17:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "d63cf645-9a0e-434b-bebe-4a3825755cb5",
+                        "name": "Alicja Ogonowska"
+                    }
+                ],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "c6706b62-018a-4db2-9de9-dce74d2da1f5",
+                "title": "Networking",
+                "description": null,
+                "startsAt": "2023-11-25T18:30:00",
+                "endsAt": "2023-11-25T19:30:00",
+                "isServiceSession": true,
+                "isPlenumSession": true,
+                "speakers": [],
+                "categories": [],
+                "roomId": 40599,
+                "room": "Collaboration space (0 floor)",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": null
+            }
+        ],
+        "isDefault": false
+    },
+    {
+        "groupId": 42285,
+        "groupName": "Cafeteria (0 floor) Lean Coffee Space",
+        "sessions": [
+            {
+                "questionAnswers": [],
+                "id": "569383",
+                "title": "11:00 Discussion groups in Lean Coffee style",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T11:00:00",
+                "endsAt": "2023-11-25T12:00:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "571426",
+                "title": "13.00 Discussion groups in Lean Coffee style ",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T13:00:00",
+                "endsAt": "2023-11-25T13:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "571427",
+                "title": "14:00 Meta Discussion about Lean Coffee style ",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T14:00:00",
+                "endsAt": "2023-11-25T14:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "571430",
+                "title": "15.00 Discussion groups in Lean Coffee style",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T15:00:00",
+                "endsAt": "2023-11-25T15:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "571431",
+                "title": "16.00 Discussion groups in Lean Coffee style",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T16:00:00",
+                "endsAt": "2023-11-25T16:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            },
+            {
+                "questionAnswers": [],
+                "id": "571435",
+                "title": "17:00 Open Discussion",
+                "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+                "startsAt": "2023-11-25T17:00:00",
+                "endsAt": "2023-11-25T17:45:00",
+                "isServiceSession": false,
+                "isPlenumSession": false,
+                "speakers": [
+                    {
+                        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+                        "name": "Dastin Sandura"
+                    },
+                    {
+                        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+                        "name": "Piotr Suwała"
+                    }
+                ],
+                "categories": [],
+                "roomId": 42285,
+                "room": "Cafeteria (0 floor) Lean Coffee Space",
+                "liveUrl": null,
+                "recordingUrl": null,
+                "status": "Accepted"
+            }
+        ],
+        "isDefault": false
+    }
+]

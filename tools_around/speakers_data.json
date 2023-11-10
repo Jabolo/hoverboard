@@ -1,0 +1,1236 @@
+[
+    {
+        "id": "76ce51b1-7dd4-4858-98de-0b51b3c9abcb",
+        "firstName": "Akanksha",
+        "lastName": "Singh",
+        "fullName": "Akanksha Singh",
+        "bio": "Software Engineer at JP Morgan Chase & Co. | Interested in Flutter, Open Source, Hackathons, Community building",
+        "tagLine": "Flutter Dev | SWE at JP Morgan Chase & Co.",
+        "profilePicture": "https://sessionize.com/image/28cf-400o400o2-sZ8qevh2buTGRUqZDEDr7v.jpeg",
+        "sessions": [
+            {
+                "id": 554196,
+                "name": "The Hitchhiker's Guide to Developing Accessible Apps"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/coder_jedi",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/akanksha1212/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://www.instagram.com/akankshasingh1212/",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/AkankshaSingh",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "d63cf645-9a0e-434b-bebe-4a3825755cb5",
+        "firstName": "Alicja",
+        "lastName": "Ogonowska",
+        "fullName": "Alicja Ogonowska",
+        "bio": "I am a mobile app developer with 7 years of experience. I started as an Android developer and then moved to Flutter over three years ago, never regretting the change! Currently I work at EQUIQO where I'm developing a mobile app for flaconi.\r\nIf I don't code, I probably cook or eat.",
+        "tagLine": "Flutter Developer at EQUIQO",
+        "profilePicture": "https://sessionize.com/image/df54-400o400o2-wFexMLi5bbBzxqKzGXgQQ3.jpg",
+        "sessions": [
+            {
+                "id": 559109,
+                "name": "Let’s Build a Flutter App, Fast!"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/AlicjaOgonowska",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/alicja-ogonowska/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://instagram.com/alicja.ogonowska",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://equiqo.com",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/alicja-ogonowska",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/islatyer~4ZJa86WxRLaH7z5EYLweQR.png~web-CB-equiqo_logo1000px.png",
+                "sort": 16,
+                "answerExtra": "web-CB-equiqo_logo1000px.png"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "0c1d5199-8674-4245-ac23-d2e6c1a8c611",
+        "firstName": "Anna",
+        "lastName": "Migas",
+        "fullName": "Anna Migas",
+        "bio": "Anna works as a Lead UI Developer at Field Intelligence helping to bring healthcare the fastest emerging markets in the world. She is always trying to find ways to make people fall in love with coding and has a long history of organizing coding workshops for WebMuses and Rails Girls. She holds a Google Developer Expert title in Web Technologies area. In her spare time she is practicing Pilates, playing Hearthstone and traveling.",
+        "tagLine": "Lead UI Developer",
+        "profilePicture": "https://sessionize.com/image/764a-400o400o2-ni4UGc3pwVqxGgcXUJC3rs.jpg",
+        "sessions": [
+            {
+                "id": 559533,
+                "name": "Demystifying web performance tooling"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/szynszyliszys",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/anna-migas-56575159/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://field.inc/",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/szynszyliszys",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/imgakseq~pzbntmEb2zox4TaUWwhhkp.png~Field_Logo_RGB_Black.png",
+                "sort": 16,
+                "answerExtra": "Field_Logo_RGB_Black.png"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "f9ddb59c-912f-42c8-b99b-d08e6fb0bf20",
+        "firstName": "Azimjon",
+        "lastName": "Pulatov",
+        "fullName": "Azimjon Pulatov",
+        "bio": "I've been in software development for past 6 years, building distributed systems and doing cloud development. Previously worked in Amazon Alexa and Facebook Messenger.",
+        "tagLine": "Software Engineer @ Google",
+        "profilePicture": "https://sessionize.com/image/f634-400o400o2-7XhoN7zkrxLW1kTziNhTBo.jpeg",
+        "sessions": [
+            {
+                "id": 555629,
+                "name": "Building Reverse Proxy in Go"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/azimjon-pulatov",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://google.com",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/azimjon-pulatov",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "8d93bb95-c977-4168-a0b8-8e1bd0375552",
+        "firstName": "Dastin",
+        "lastName": "Sandura",
+        "fullName": "Dastin Sandura",
+        "bio": "External biographies of Piotr Suwała: https://jdd.org.pl/bio_2023/#id=53460\r\n\r\nDastin Sandura jest inżynierem oprogramowania z 8 letnim doświadczeniem w branży IT. Przez 5 lat pracował w startupie w wielu rolach, między innymi: front-end i back-end developera, konsultanta, dowódcy zespołu konsultantów, dowódcy działu wsparcia IT oraz międzynarodowego trenera prowadzącego w języku angielskim szkolenia dla klientów takich jak SONY Interactive Entertainment Europe, Tom Tom w biurach Las Vegas, Monachium, Estonii oraz U.K. Wierzy, że sprawna komunikacja potrafi zaoszczędzić wiele czas, energii i jednocześnie sprawić, że nieosiągalny cel staje się SMART.\r\n",
+        "tagLine": "DDD-GDA co-organizer",
+        "profilePicture": "https://sessionize.com/image/dddd-400o400o2-K6wCtL6otKrBydxQBAYCxu.jpg",
+        "sessions": [
+            {
+                "id": 569383,
+                "name": "11:00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571426,
+                "name": "13.00 Discussion groups in Lean Coffee style "
+            },
+            {
+                "id": 571427,
+                "name": "14:00 Meta Discussion about Lean Coffee style "
+            },
+            {
+                "id": 571430,
+                "name": "15.00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571431,
+                "name": "16.00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571435,
+                "name": "17:00 Open Discussion"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "ced4cb5c-b668-4424-9485-808fe1301300",
+        "firstName": "Dilraj",
+        "lastName": "Singh",
+        "fullName": "Dilraj Singh",
+        "bio": "Cloud Architect with more than 13  years of experience, certified in multiple cloud (AWS, Google and Azure) also certified in Kubernetes and Infrastructure As Code having hold on project management as certified Scrum Master and Product Owner.",
+        "tagLine": "Infosys Consulting / Principal CIO Advisory / Cloud Architect",
+        "profilePicture": "https://sessionize.com/image/1cf7-400o400o2-ErYYHdbdD7oYM66Wez6JMx.png",
+        "sessions": [
+            {
+                "id": 560821,
+                "name": "Kubernetes on Cloud and best practice"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/dilraj-singh/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/dilraj-singh",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "29ba7916-20b4-48e5-9715-bddfbdd1aa3a",
+        "firstName": "Dominik",
+        "lastName": "Roszkowski",
+        "fullName": "Dominik Roszkowski",
+        "bio": "Dominik is Google Developer Expert in Flutter eager to create beautiful apps for mobile and desktop. He’s Lead Engineer at Visible and co-founder of Flutter Europe conference. He is active speaker on local meetups and writes Flutter-related articles on his blog roszkowski.dev.",
+        "tagLine": "Google Developer Expert in Flutter",
+        "profilePicture": "https://sessionize.com/image/e8e9-400o400o2-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
+        "sessions": [
+            {
+                "id": 555166,
+                "name": "From Network Failures to Offline Success: A Journey of Visible App"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/OrestesGaolin",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/dominik-roszkowski/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Blog",
+                "url": "https://roszkowski.dev",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://makevisible.com",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/dominik-roszkowski",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "c1a63204-d2a4-4818-87e8-3007a3e73d79",
+        "firstName": "Dominika",
+        "lastName": "Zając",
+        "fullName": "Dominika Zając",
+        "bio": "Full-stack developer who loves sharing their knowledge and singing. Google Developer Expert for Web Technologies, senior software engineer at Qualtrics, public speaker, trainer and blogger. Talking and writing about Web, a11y, teaching others how to code and code best practices.",
+        "tagLine": "GDE for Web | Software Engineer at Qualtrics",
+        "profilePicture": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
+        "sessions": [
+            {
+                "id": 556730,
+                "name": "There is an IMPOSTOR among us"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/domizajac",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/dominikazajac/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/domi-zajac",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "57f666e2-409c-4998-8ce1-bb98e5d6b82f",
+        "firstName": "Himanshu",
+        "lastName": "Singh",
+        "fullName": "Himanshu Singh",
+        "bio": "Himanshu is a Full Stack Kotlin engineer and works as Android Engineer on the professional side. He is also a Google developer expert in Android and Kotlin. He is an active blogger, speaker, and content creator. He loves to mentor and share his knowledge to help people move into the development world!",
+        "tagLine": "Android @NordVPN",
+        "profilePicture": "https://sessionize.com/image/69b1-400o400o2-VVo5jsYfYGtVhsxNDJMShw.png",
+        "sessions": [
+            {
+                "id": 569282,
+                "name": "Elevating Your App's Performance"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/hi_man_shoe",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/himanshoe-singh/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Facebook",
+                "url": "https://facebook.com/scorpiey",
+                "linkType": "Facebook"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://instagram.com/hi_man_shoe",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Blog",
+                "url": "https://himanshoe.com",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://nordvpn.com",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/himanshoe",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "6950e141-cf19-4b37-b5fb-48fad626d9a6",
+        "firstName": "Irine",
+        "lastName": "Kokilashvili",
+        "fullName": "Irine Kokilashvili",
+        "bio": "Systems engineer by day at EPAM and hobbyist open source contributor by night at Next Hat",
+        "tagLine": "Irine Kokilashvili - Systems Engineer | EPAM Systems",
+        "profilePicture": "https://sessionize.com/image/da5d-400o400o2-BDrbUmF3DkxCbRKBdWEi2P.png",
+        "sessions": [
+            {
+                "id": 550560,
+                "name": "Sustainability for workloads in Google Cloud"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Blog",
+                "url": "https://github.com/scirin",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://www.linkedin.com/in/irine-kokilashvili-84627a264/",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/irine-kokilashvili",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/iyivox~P8EGFsEMoMXdxWSbyx5Tbc.png~Effective_Programming_for_America_logo.svg.png",
+                "sort": 16,
+                "answerExtra": "Effective_Programming_for_America_logo.svg.png"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "ef7c1115-d852-44b9-9f72-530ba7223c55",
+        "firstName": "Marcin",
+        "lastName": "Moskala",
+        "fullName": "Marcin Moskala",
+        "bio": "Marcin Moskala is an experienced developer and Kotlin trainer. He is the founder of the Kt. Academy, an official JetBrains partner for Kotlin training, author of the books Effective Kotlin, Kotlin Coroutines, and Android Development with Kotlin. He is also the main author of influential articles about Kotlin and a speaker invited to many programming conferences.",
+        "tagLine": "Developer during the day, author at night, trainer at Kt. Academy",
+        "profilePicture": "https://sessionize.com/image/6036-400o400o2-3FjkVzve3a6N6W5Qdawkwk.jpg",
+        "sessions": [
+            {
+                "id": 559611,
+                "name": "Effective Coroutines"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/marcinmoskala",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "Blog",
+                "url": "https://blog.kotlin-academy.com/",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://kt.academy/",
+                "linkType": "Company_Website"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "df09d45c-9141-4634-b106-ffc158f6777b",
+        "firstName": "Mateusz",
+        "lastName": "Łędzewicz",
+        "fullName": "Mateusz Łędzewicz",
+        "bio": "I started my coding journey 20 years ago and I always treated it as a passion, not a work till now. \r\nCurrently I am Principal Consultant and Trainer at Lowgular, where I am teaching people Angular from the scratch. From other hand I am helping our clients in boosting developers performance, training their developers to use best engineering practices and reducing technical debt.",
+        "tagLine": "Principal Angular Consultant and Trainer in Lowgular",
+        "profilePicture": "https://sessionize.com/image/eed9-400o400o2-VpDUjvzeYLEHWd1AfxMkSU.jpg",
+        "sessions": [
+            {
+                "id": 550708,
+                "name": "To module or not to module, that is the question!"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/mat_ledzewicz",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/mateusz-%C5%82%C4%99dzewicz-36197080",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://www.instagram.com/januszek.programowania/",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://lowgular.io/",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/mateusz-ledzewicz",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/iwdagleh~RxvJ4gtG3F1exYnpBp489p.svg~LOGO_BLUE.svg",
+                "sort": 16,
+                "answerExtra": "LOGO_BLUE.svg"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "cc5deac1-f090-46b2-9d31-14d8718075a8",
+        "firstName": "Mateusz",
+        "lastName": "Stefańczyk",
+        "fullName": "Mateusz Stefańczyk",
+        "bio": "Team leader of the Angular team at House of Angular company and a blogger on the angular.love blog, where he shares knowledge and experience about Angular. He develops Angular web applications and is passionate about business analysis and designing custom web application architectures. Mateusz is also keen on gaining expertise in the field of reverse engineering.",
+        "tagLine": "Senior Angular Developer at House of Angular",
+        "profilePicture": "https://sessionize.com/image/3fb4-400o400o2-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
+        "sessions": [
+            {
+                "id": 551275,
+                "name": "Angular 17's Revolutionary Control Flow: Introducing @-Syntax and Deferrable Views"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/m_stefanczyk",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/mateusz-stefa%C5%84czyk-22080b164/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Blog",
+                "url": "https://www.angular.love/en/author/mateusz-stefanczykvalueadd-pl/",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/mateuszstefanczyk",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/ickakseu~fRsRwke3vdKXDtpa9rCkQi.png~Logo-main-color-1 1 8.png",
+                "sort": 16,
+                "answerExtra": "Logo-main-color-1 (1) (8).png"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "b6dc4b56-ca5d-4e55-8a57-e37f6e6d6af0",
+        "firstName": "Piotr",
+        "lastName": "Prus",
+        "fullName": "Piotr Prus",
+        "bio": "I am an android developer with 5+ years of experience, addicted to new things. I love clean architecture and clean, simple designs. I am trying to create meaningful articles and speeches. Currently composing and KMMing all the things.",
+        "tagLine": "Android developer",
+        "profilePicture": "https://sessionize.com/image/7cba-400o400o2-ainA1gVSSCHxugeFJdVjM2.jpg",
+        "sessions": [
+            {
+                "id": 559327,
+                "name": "Blast Off: Managing Hundreds of UI Updates for Emoji Cannons"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/piotr_prus",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/piotrprus/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Blog",
+                "url": "https://piotrprus.medium.com/",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/piotrprus",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "d65e6cc9-2913-483d-9243-c38951cdfb80",
+        "firstName": "Piotr",
+        "lastName": "Suwała",
+        "fullName": "Piotr Suwała",
+        "bio": "Piotr jest założycielem DDD-GDA. Teraz pracuje jako Software Architect w Firmie Kinguin. Jego silnymi stronami jest architektura systemów, facylitacja, zarządzanie. Można spotkać go jako prelegenta/uczestnika na wielu konferencjach IT. Założył meetup, ponieważ chciał rozprzestrzenić idee DDD na firmy i osoby pracujące w Trójmieście. Wierzy, że dzięki temu zaczniemy wytwarzać lepsze oprogramowanie i nauczymy się czerpać radość z rozwijania systemów informatycznych.",
+        "tagLine": "Senior Architect @ Kinguin - Carl Jung Enjoyer",
+        "profilePicture": "https://sessionize.com/image/1a08-400o400o2-9228afd4-7624-4d58-8167-3463e956001d.jpg",
+        "sessions": [
+            {
+                "id": 569383,
+                "name": "11:00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571426,
+                "name": "13.00 Discussion groups in Lean Coffee style "
+            },
+            {
+                "id": 571427,
+                "name": "14:00 Meta Discussion about Lean Coffee style "
+            },
+            {
+                "id": 571430,
+                "name": "15.00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571431,
+                "name": "16.00 Discussion groups in Lean Coffee style"
+            },
+            {
+                "id": 571435,
+                "name": "17:00 Open Discussion"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/piotr-suwa%C5%82a-928b1817a/",
+                "linkType": "LinkedIn"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/ypampet~SSgLzXgcxnDa1MdfUX4GuM.jpg~1A-standard-light-shadow-e1675857725222.jpg",
+                "sort": 16,
+                "answerExtra": "1A-standard-light-shadow-e1675857725222.jpg"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "3cb7db3a-d2ad-41f1-9345-572186a27b92",
+        "firstName": "Rodolfo",
+        "lastName": "Dias",
+        "fullName": "Rodolfo Dias",
+        "bio": "Team Leadership ❤️ JS ❤️ Open Source\r\n\r\nRodolfo has worked in a diverse pool of companies and research centers, in South America and Europe. He is Software Engineering Manager at Yara International and manages the software engineering teams of Yara's farming experience platform, with the goal of enabling regenerative agriculture and minimizing the climate impact of farming",
+        "tagLine": "Google Developer Expert for Web Technologies • Software Engineering Manager, Yara International",
+        "profilePicture": "https://sessionize.com/image/d0bb-400o400o2-whmSdeL7iud1cCCHrxDtZg.jpg",
+        "sessions": [
+            {
+                "id": 558671,
+                "name": "Beyond Instant Noodles: The challenges of Team Leadership"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/r_mdias",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/rmdias29/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/rodolfo-dias",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "724b2e51-2a2b-41e0-8a61-7ab5d17ca47b",
+        "firstName": "Tamta",
+        "lastName": "Kapanadze",
+        "fullName": "Tamta Kapanadze",
+        "bio": "Tamta Kapanadze is a software engineer specialized in backend development. She has experience crafting seamless APIs and essential system components such as socket servers.\r\n\r\nTamta's passion for technology extends beyond coding. She is an active member of the tech community, participating in community programs like Google Developer Groups and Google Developer Student Club Programs. She also organizes events like DevFest in Georgia, creating vibrant platforms for learning and networking.",
+        "tagLine": "Software Engineer ",
+        "profilePicture": "https://sessionize.com/image/fe2d-400o400o2-wvkzPEnZiyNanzMTX1VRrL.jpg",
+        "sessions": [
+            {
+                "id": 554595,
+                "name": "Real-time messaging 101"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/tamta-kapanadze/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/tamta",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "b1dca39c-9a0d-49a9-99d9-8ab18425c72b",
+        "firstName": "Tomasz",
+        "lastName": "Flis",
+        "fullName": "Tomasz Flis",
+        "bio": "Angular passionate, in love with clean code, perfect design, and simple approach, part of GDG Warsaw, a public speaking enthusiast from Poland",
+        "tagLine": "Senior Frontend Developer - Deskbird",
+        "profilePicture": "https://sessionize.com/image/4b7b-400o400o2-S14zNaTcpfbUjV3tTt8V9x.jpg",
+        "sessions": [
+            {
+                "id": 554760,
+                "name": "Angular renaissance"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/TomWebwalker",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/tomasz-flis-webdeveloper/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://www.instagram.com/tomwebwalker/",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Blog",
+                "url": "https://dev.to/tomwebwalker",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://www.deskbird.com/",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/tomasz-flis",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213867,
+                        "name": "Intro"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "4b57c216-a0fb-4226-b7ee-2f49eabe37c8",
+        "firstName": "Tomek",
+        "lastName": "Porożyński",
+        "fullName": "Tomek Porożyński",
+        "bio": "Experienced Google Cloud Engineer with a passion for open source projects, particularly Kubernetes. Active contributor to the technology community through YouTube channel, Open Source projects and tech blog advocating for Cloud Native development.",
+        "tagLine": "Cloud System Architect, Atos",
+        "profilePicture": "https://sessionize.com/image/c4fa-400o400o2-16-a0fb-4226-b7ee-2f49eabe37c8.dd5d6524-0bfe-43ce-982a-3150773998d0.jpg",
+        "sessions": [
+            {
+                "id": 560909,
+                "name": "Teaching PaLM 2 new tricks - a Live Coding Spectacle!"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "LinkedIn",
+                "url": "https://www.linkedin.com/in/tomaszporozynski/",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Blog",
+                "url": "https://www.storagefreak.net",
+                "linkType": "Blog"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://eviden.com/",
+                "linkType": "Company_Website"
+            },
+            {
+                "title": "Youtube",
+                "url": "https://youtube.com/c/storagefreak",
+                "linkType": "Other"
+            },
+            {
+                "title": "Sessionize",
+                "url": "https://sessionize.com/tomekporozynski",
+                "linkType": "Sessionize"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": "https://sessionize.com/download/ccabsevca~VVPF1UrfSUJNvxZ9AKDC8B.jpg~Logotype_Eviden_RGB_Orange.jpg",
+                "sort": 16,
+                "answerExtra": "Logotype_Eviden_RGB_Orange.jpg"
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213869,
+                        "name": "Advanced"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    },
+    {
+        "id": "2de63513-1f3f-4e96-b24a-2a4e66e3bf38",
+        "firstName": "Vladyslav",
+        "lastName": "Kampov",
+        "fullName": "Vladyslav Kampov",
+        "bio": "- Senior UI Engineer у Netflix\r\n- Former Frontend Guild Engineering Manager у Wix.com\r\n- Host of the podcast \"ЖеПеТе\" (https://linktr.ee/podcastgepete)",
+        "tagLine": "Senior UI Engineer at Netflix, Host of Podcast GePeTe",
+        "profilePicture": "https://sessionize.com/image/cdc6-400o400o2-GkJ2MSWHCk7h79dv2t3v1n.png",
+        "sessions": [
+            {
+                "id": 554001,
+                "name": "Do you really need your test environment?"
+            }
+        ],
+        "isTopSpeaker": false,
+        "links": [
+            {
+                "title": "Twitter",
+                "url": "https://twitter.com/vladkampov",
+                "linkType": "Twitter"
+            },
+            {
+                "title": "LinkedIn",
+                "url": "https://linkedin.com/in/kampov",
+                "linkType": "LinkedIn"
+            },
+            {
+                "title": "Facebook",
+                "url": "https://www.facebook.com/vladkampov",
+                "linkType": "Facebook"
+            },
+            {
+                "title": "Instagram",
+                "url": "https://instagram.com/vladkampov",
+                "linkType": "Instagram"
+            },
+            {
+                "title": "Company Website",
+                "url": "https://kampov.com",
+                "linkType": "Company_Website"
+            }
+        ],
+        "questionAnswers": [
+            {
+                "id": 61059,
+                "question": "Company logo",
+                "questionType": "File_upload",
+                "answer": null,
+                "sort": 16,
+                "answerExtra": null
+            }
+        ],
+        "categories": [
+            {
+                "id": 61061,
+                "name": "Talk Complexity ",
+                "categoryItems": [
+                    {
+                        "id": 213868,
+                        "name": "Intermediate"
+                    }
+                ],
+                "sort": 14
+            }
+        ]
+    }
+]

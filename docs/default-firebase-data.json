@@ -83,206 +83,201 @@
       "title": "Community partners"
     }
   ],
-    "schedule": {
-        "2023-11-25": {
-            "dateReadable": "November 25",
-            "date": "2023-11-25",
-            "timeslots": [
-                {
-                    "startTime": "09:00",
-                    "endTime": "10:30",
-                    "sessions": [
-                        {
-                            "items": [
-                                "_Door_open_🚪"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "10:30",
-                    "endTime": "11:00",
-                    "sessions": [
-                        {
-                            "items": [
-                                "_Keynote"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "11:00",
-                    "endTime": "11:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Anna__Migas_Demystifying_web_performance_tooling"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "12:00",
-                    "endTime": "12:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Dominika__Zając_There_is_an_IMPOSTOR_among_us"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Tomasz__Flis_Angular_renaissance"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "13:00",
-                    "endTime": "13:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Marcin__Moskala_Effective_Coroutines"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Mateusz__Stefańczyk_Angular_17's_Revolutionary_Control_Flow:_Introducing_@-Syntax_and_Deferrable_Views"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "14:00",
-                    "endTime": "15:00",
-                    "sessions": [
-                        {
-                            "items": [
-                                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "15:00",
-                    "endTime": "15:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Kateryna__Hrytsaienko_Speed_Up_Microservice_Setup_with_Composable_Approach"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Mateusz__Łędzewicz_To_module_or_not_to_module,_that_is_the_question!"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "16:00",
-                    "endTime": "16:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Rodolfo__Dias_Beyond_Instant_Noodles:_The_challenges_of_Team_Leadership"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Akanksha__Singh_The_Hitchhiker's_Guide_to_Developing_Accessible_Apps"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "17:00",
-                    "endTime": "17:45",
-                    "sessions": [
-                        {
-                            "items": [
-                                "Vladyslav__Kampov_Do_you_really_need_your_test_environment?"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!"
-                            ]
-                        },
-                        {
-                            "items": [
-                                "Tamta__Kapanadze_Real-time_messaging_101"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "18:00",
-                    "endTime": "18:30",
-                    "sessions": [
-                        {
-                            "items": [
-                                "_Closing_session"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "startTime": "18:30",
-                    "endTime": "19:30",
-                    "sessions": [
-                        {
-                            "items": [
-                                "_Networking"
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "tracks": [
-                {
-                    "title": "Auditorium (Main Hall)"
-                },
-                {
-                    "title": "Classroom (1st floor)"
-                },
-                {
-                    "title": "Collaboration space (0 floor)"
-                }
-            ]
+  "schedule": {
+    "2023-11-25": {
+      "dateReadable": "November 25",
+      "date": "2023-11-25",
+      "timeslots": [
+        {
+          "startTime": "09:00",
+          "endTime": "10:30",
+          "sessions": [
+            {
+              "items": [
+                "_Door_open_🚪"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "10:30",
+          "endTime": "11:00",
+          "sessions": [
+            {
+              "items": [
+                "_Keynote"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "sessions": [
+            {
+              "items": [
+                "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!"
+              ]
+            },
+            {
+              "items": [
+                "Anna__Migas_Demystifying_web_performance_tooling"
+              ]
+            },
+            {
+              "items": [
+                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "12:00",
+          "endTime": "12:45",
+          "sessions": [
+            {
+              "items": [
+                "Dominika__Zając_There_is_an_IMPOSTOR_among_us"
+              ]
+            },
+            {
+              "items": [
+                "Tomasz__Flis_Angular_renaissance"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "13:00",
+          "endTime": "13:45",
+          "sessions": [
+            {
+              "items": [
+                "Marcin__Moskala_Effective_Coroutines"
+              ]
+            },
+            {
+              "items": [
+                "Mateusz__Stefańczyk_Angular_17's_Revolutionary_Control_Flow:_Introducing_@-Syntax_and_Deferrable_Views"
+              ]
+            },
+            {
+              "items": [
+                "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "sessions": [
+            {
+              "items": [
+                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "15:00",
+          "endTime": "15:45",
+          "sessions": [
+            {
+              "items": [
+                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
+              ]
+            },
+            {
+              "items": [
+                "Mateusz__Łędzewicz_To_module_or_not_to_module,_that_is_the_question!"
+              ]
+            },
+            {
+              "items": [
+                "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "16:00",
+          "endTime": "16:45",
+          "sessions": [
+            {
+              "items": [
+                "Rodolfo__Dias_Beyond_Instant_Noodles:_The_challenges_of_Team_Leadership"
+              ]
+            },
+            {
+              "items": [
+                "Akanksha__Singh_The_Hitchhiker's_Guide_to_Developing_Accessible_Apps"
+              ]
+            },
+            {
+              "items": [
+                "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "17:00",
+          "endTime": "17:45",
+          "sessions": [
+            {
+              "items": [
+                "Vladyslav__Kampov_Do_you_really_need_your_test_environment?"
+              ]
+            },
+            {
+              "items": [
+                "Tamta__Kapanadze_Real-time_messaging_101"
+              ]
+            },
+            {
+              "items": [
+                "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "18:00",
+          "endTime": "18:30",
+          "sessions": [
+            {
+              "items": [
+                "_Closing_session"
+              ]
+            }
+          ]
+        },
+        {
+          "startTime": "18:30",
+          "endTime": "19:30",
+          "sessions": [
+            {
+              "items": [
+                "_Networking"
+              ]
+            }
+          ]
         }
-    },
+      ],
+      "tracks": [
+        {
+          "title": "Auditorium (Main Hall)"
+        },
+        {
+          "title": "Classroom (1st floor)"
+        },
+        {
+          "title": "Collaboration space (0 floor)"
+        }
+      ]
+    }
+  },
   "sessions": {
     "_Keynote": {
       "description": "Main Hall",
@@ -646,8 +641,8 @@
       "name": "Azimjon Pulatov",
       "bio": "I've been in software development for past 6 years, building distributed systems and doing cloud development. Previously worked in Amazon Alexa and Facebook Messenger.",
       "shortBio": "Software Engineer @ Google",
-      "company": "Google",
-      "companyLogo": "/images/logos/google.png",
+      "company": "",
+      "companyLogo": "",
       "companyLogoUrl": "",
       "country": "",
       "featured": false,
@@ -672,6 +667,21 @@
       ],
       "order": 0,
       "title": "Software Engineer @ Google"
+    },
+    "Dastin__Sandura": {
+      "name": "Dastin Sandura",
+      "bio": "External biographies of Piotr Suwała: https://jdd.org.pl/bio_2023/#id=53460\r\n\r\nDastin Sandura jest inżynierem oprogramowania z 8 letnim doświadczeniem w branży IT. Przez 5 lat pracował w startupie w wielu rolach, między innymi: front-end i back-end developera, konsultanta, dowódcy zespołu konsultantów, dowódcy działu wsparcia IT oraz międzynarodowego trenera prowadzącego w języku angielskim szkolenia dla klientów takich jak SONY Interactive Entertainment Europe, Tom Tom w biurach Las Vegas, Monachium, Estonii oraz U.K. Wierzy, że sprawna komunikacja potrafi zaoszczędzić wiele czas, energii i jednocześnie sprawić, że nieosiągalny cel staje się SMART.\r\n",
+      "shortBio": "DDD-GDA co-organizer",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/dddd-400o400o2-K6wCtL6otKrBydxQBAYCxu.jpg",
+      "socials": [],
+      "order": 0,
+      "title": "DDD-GDA co-organizer"
     },
     "Dilraj__Singh": {
       "name": "Dilraj Singh",
@@ -748,7 +758,7 @@
       "companyLogo": "",
       "companyLogoUrl": "",
       "country": "",
-      "featured": true,
+      "featured": false,
       "photo": "",
       "photoUrl": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
       "socials": [
@@ -770,6 +780,57 @@
       ],
       "order": 0,
       "title": "GDE for Web | Software Engineer at Qualtrics"
+    },
+    "Himanshu__Singh": {
+      "name": "Himanshu Singh",
+      "bio": "Himanshu is a Full Stack Kotlin engineer and works as Android Engineer on the professional side. He is also a Google developer expert in Android and Kotlin. He is an active blogger, speaker, and content creator. He loves to mentor and share his knowledge to help people move into the development world!",
+      "shortBio": "Android @NordVPN",
+      "company": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/69b1-400o400o2-VVo5jsYfYGtVhsxNDJMShw.png",
+      "socials": [
+        {
+          "icon": "twitter",
+          "link": "https://twitter.com/hi_man_shoe",
+          "name": "Twitter"
+        },
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/himanshoe-singh/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://facebook.com/scorpiey",
+          "name": "Facebook"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://instagram.com/hi_man_shoe",
+          "name": "Instagram"
+        },
+        {
+          "icon": "blog",
+          "link": "https://himanshoe.com",
+          "name": "Blog"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://nordvpn.com",
+          "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/himanshoe",
+          "name": "Sessionize"
+        }
+      ],
+      "order": 0,
+      "title": "Android @NordVPN"
     },
     "Irine__Kokilashvili": {
       "name": "Irine Kokilashvili",
@@ -806,57 +867,6 @@
       ],
       "order": 0,
       "title": "Irine Kokilashvili - Systems Engineer | EPAM Systems"
-    },
-    "Kateryna__Hrytsaienko": {
-      "name": "Kateryna Hrytsaienko",
-      "bio": "Hi there!👋\r\n\r\nMy name is Kateryna Hrytsaienko, I'm Software Engineering Consultant at Valtech, Google Developer Student Club Menor, Google Woman Techmakers Ambassador, passionate Cloud and CI/CD Automation Enthusiast.\r\n\r\nI mostly work with E-commerce projects, developing composable solutions and contributing to libraries for company-wide use. I summarize my experience in my blog, where I also share leadership tips and tricks for novice GDSC leaders.\r\n\r\nAbout GDSC… that's where things got even more interesting! With our local chapters, we host workshops, tech talks and speaker sessions for educational purposes. One of our latest projects is about algorithms for beginners -- AlgoClub. A completely awesome initiative. For 3 years, our chapter has kept organizing tech events for beginners, and even when the war started -- we kept our vector on doing our best to give students access to free educational materials. In-person, on-demand and virtual.🤗\r\n\r\nThank you for your time and hope to see you soon at the summit. Cheers!",
-      "shortBio": "Software Engineer Consultant Valtech | Woman Techmakers Ambassador| GDSC Mentor ",
-      "company": "",
-      "companyLogo": "",
-      "companyLogoUrl": "",
-      "country": "",
-      "featured": false,
-      "photo": "",
-      "photoUrl": "https://sessionize.com/image/ed4d-400o400o2-PypmLUNjrDwo6WKS4zCMGD.jpg",
-      "socials": [
-        {
-          "icon": "twitter",
-          "link": "https://twitter.com/grizik_ek?t=ZKu9YW613y2VhCRY4YgrPA&s=09",
-          "name": "Twitter"
-        },
-        {
-          "icon": "linkedin",
-          "link": "https://www.linkedin.com/in/ekaterina-gricaenko",
-          "name": "LinkedIn"
-        },
-        {
-          "icon": "facebook",
-          "link": "https://www.facebook.com/profile.php?id=100017821537652",
-          "name": "Facebook"
-        },
-        {
-          "icon": "instagram",
-          "link": "https://www.instagram.com/grizik_k/",
-          "name": "Instagram"
-        },
-        {
-          "icon": "blog",
-          "link": "https://www.linkedin.com/feed/",
-          "name": "Blog"
-        },
-        {
-          "icon": "company_website",
-          "link": "https://www.valtech.com/",
-          "name": "Company Website"
-        },
-        {
-          "icon": "sessionize",
-          "link": "https://sessionize.com/grizik",
-          "name": "Sessionize"
-        }
-      ],
-      "order": 0,
-      "title": "Software Engineer Consultant Valtech | Woman Techmakers Ambassador| GDSC Mentor "
     },
     "Marcin__Moskala": {
       "name": "Marcin Moskala",
@@ -935,7 +945,7 @@
       "bio": "Team leader of the Angular team at House of Angular company and a blogger on the angular.love blog, where he shares knowledge and experience about Angular. He develops Angular web applications and is passionate about business analysis and designing custom web application architectures. Mateusz is also keen on gaining expertise in the field of reverse engineering.",
       "shortBio": "Senior Angular Developer at House of Angular",
       "company": "",
-      "companyLogo": "/tools_around/photos/Mateusz_Stefańczyk_https___sessionize.com_download_ccaotkeh_fRsRwke3vdKXDtpa9rCkQi.png_Logo-main-color-1__1___8_.png",
+      "companyLogo": "/tools_around/photos/Mateusz_Stefańczyk_https___sessionize.com_download_ickakseu_fRsRwke3vdKXDtpa9rCkQi.png_Logo-main-color-1_1_8.png",
       "companyLogoUrl": "",
       "country": "",
       "featured": false,
@@ -1001,6 +1011,27 @@
       ],
       "order": 0,
       "title": "Android developer"
+    },
+    "Piotr__Suwała": {
+      "name": "Piotr Suwała",
+      "bio": "Piotr jest założycielem DDD-GDA. Teraz pracuje jako Software Architect w Firmie Kinguin. Jego silnymi stronami jest architektura systemów, facylitacja, zarządzanie. Można spotkać go jako prelegenta/uczestnika na wielu konferencjach IT. Założył meetup, ponieważ chciał rozprzestrzenić idee DDD na firmy i osoby pracujące w Trójmieście. Wierzy, że dzięki temu zaczniemy wytwarzać lepsze oprogramowanie i nauczymy się czerpać radość z rozwijania systemów informatycznych.",
+      "shortBio": "Senior Architect @ Kinguin - Carl Jung Enjoyer",
+      "company": "",
+      "companyLogo": "/tools_around/photos/Piotr_Suwała_https___sessionize.com_download_ypampet_SSgLzXgcxnDa1MdfUX4GuM.jpg_1A-standard-light-shadow-e1675857725222.jpg",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/1a08-400o400o2-9228afd4-7624-4d58-8167-3463e956001d.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/in/piotr-suwa%C5%82a-928b1817a/",
+          "name": "LinkedIn"
+        }
+      ],
+      "order": 0,
+      "title": "Senior Architect @ Kinguin - Carl Jung Enjoyer"
     },
     "Rodolfo__Dias": {
       "name": "Rodolfo Dias",
@@ -1860,7 +1891,7 @@
       "title": "Senior Solutions Architect"
     },
     "Michal__Tajchert": {
-      "bio": "My adventure with mobile started with Windows Mobile PDAs ☎️ and quickly moved to Android development. 2 years in Software \uD83C\uDFE0, 2 years doing startups and working for them, then 5 years in \uD83D\uDCB6 banking sector, currently in eCommerce \uD83D\uDED2. Since 2019 I'm working more on the management side of things and leading mobile teams. I like to stay on the verge of new stuff (Kotlin, Flutter, Compose, GraphQL - early enthusiast). In my spare time, I still love to code - ex. Kanarek app. I love to chat&work with people passionate about technology.",
+      "bio": "My adventure with mobile started with Windows Mobile PDAs ☎️ and quickly moved to Android development. 2 years in Software 🏠, 2 years doing startups and working for them, then 5 years in 💶 banking sector, currently in eCommerce 🛒. Since 2019 I'm working more on the management side of things and leading mobile teams. I like to stay on the verge of new stuff (Kotlin, Flutter, Compose, GraphQL - early enthusiast). In my spare time, I still love to code - ex. Kanarek app. I love to chat&work with people passionate about technology.",
       "company": "MODIVO",
       "companyLogo": "/images/logos/modivo_logo.jpg",
       "country": "Poland",
@@ -1952,7 +1983,7 @@
       "title": "Principal Consultant"
     },
     "Dariusz__Kalbarczyk": {
-      "bio": "Google Developer Expert, Developer Avocado \uD83E\uDD51, Angular lover, author, speaker, @ngPolandConf & @jsPolandConf conference organizer. Co-founder of the group Angular Warsaw and Angular Krakow. Skilled programmer with over 20 years of IT industry experience. Emerging technologies and social media enthusiast. He’s also spent years working closely with some of the biggest companies on the financial and telecommunication markets. While working with AngularJS/Angular for the past 7 years, he participated in the creation of a cutting edge banking transaction system designed for mobile platforms, and a group insurance support system, among others.",
+      "bio": "Google Developer Expert, Developer Avocado 🥑, Angular lover, author, speaker, @ngPolandConf & @jsPolandConf conference organizer. Co-founder of the group Angular Warsaw and Angular Krakow. Skilled programmer with over 20 years of IT industry experience. Emerging technologies and social media enthusiast. He’s also spent years working closely with some of the biggest companies on the financial and telecommunication markets. While working with AngularJS/Angular for the past 7 years, he participated in the creation of a cutting edge banking transaction system designed for mobile platforms, and a group insurance support system, among others.",
       "company": "NG-POLAND",
       "companyLogo": "/images/logos/ng-poland-logo-media.png",
       "country": "Poland",
