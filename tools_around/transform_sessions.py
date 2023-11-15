@@ -24,65 +24,39 @@ def extract_date_and_time(iso_string):
     dt = datetime.fromisoformat(iso_string)
     return dt.strftime('%Y-%m-%d'), dt.strftime('%H:%M')
 
+def create_session_key(speakers, title):
+    if speakers:
+        speaker_names = "_".join(speaker['name'].replace(" ", "__") for speaker in speakers)
+        return f"{speaker_names}_{title.replace(' ', '_')}"
+    else:
+        return f"_{title.replace(' ', '_')}"
+
+def format_speaker_name(name):
+    return name.replace(" ", "__")
+
 def main():
-    # Read the data from the JSON files
     speakers_data = read_json('transformed_speakers_data.json')
     sessions_data = read_json('sessions_data.json')
-    final_sessions = read_json('final_sessions_data.json')
 
-    # Preparing the final schedule structure
-    final_schedule = {"schedule": {}}
+    final_sessions = {"sessions": {}}
 
-    # Assuming we're only dealing with one day
-    timeslots_dict = {}
-    tracks_set = set()
-
-    # Iterate over the sessions to populate timeslots and tracks
     for session_group in sessions_data:
+        group_name = session_group['groupName']
         for session in session_group['sessions']:
-            start_date, start_time = extract_date_and_time(session['startsAt'])
-            end_time = extract_date_and_time(session['endsAt'])[1]
+            session_key = create_session_key(session['speakers'], session['title'])
+            formatted_speakers = [format_speaker_name(speaker['name']) for speaker in session['speakers']]
+            final_sessions['sessions'][session_key] = {
+                "description": session.get('description', ''),
+                "tags": session.get('categories', []),
+                "speakers": formatted_speakers,
+                "presentation": session.get('liveUrl', ''),
+                "title": session['title'],
+                "complexity": "",
+                "language": ""
+            }
+            print(f"Created session '{session_key}' from group '{group_name}' with title '{session['title']}' and speakers: {formatted_speakers}")
 
-            # Using session ID as reference to match with final_sessions_data
-            session_key = next((key for key, value in final_sessions['sessions'].items()
-                                if value['title'] == session['title']), None)
-
-            # Skip if no matching session is found
-            if not session_key:
-                continue
-
-            # Add the room to the set of tracks
-            tracks_set.add(session['room'])
-
-            # Create a timeslot if it doesn't exist
-            if start_date not in final_schedule['schedule']:
-                final_schedule['schedule'][start_date] = {
-                    'dateReadable': datetime.fromisoformat(start_date).strftime('%B %d'),
-                    'date': start_date,
-                    'timeslots': []
-                }
-
-            # Add to timeslot dictionary
-            timeslot_key = (start_date, start_time, end_time)
-            if timeslot_key not in timeslots_dict:
-                timeslots_dict[timeslot_key] = {
-                    'startTime': start_time,
-                    'endTime': end_time,
-                    'sessions': []
-                }
-            # Create a new session entry with the session key
-            timeslots_dict[timeslot_key]['sessions'].append({'items': [session_key]})
-
-    # Sort and add timeslots to the final schedule
-    for timeslot_key in sorted(timeslots_dict.keys()):
-        final_schedule['schedule'][timeslot_key[0]]['timeslots'].append(timeslots_dict[timeslot_key])
-
-    # Add the tracks
-    for date in final_schedule['schedule']:
-        final_schedule['schedule'][date]['tracks'] = [{'title': track} for track in sorted(tracks_set)]
-
-    # Save the final schedule data
-    write_json(final_schedule, 'final_schedule.json')
+    write_json(final_sessions, 'final_sessions_data.json')
 
 if __name__ == "__main__":
     main()

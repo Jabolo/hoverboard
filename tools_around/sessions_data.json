@@ -511,7 +511,7 @@
                 "title": "11:00 Discussion groups in Lean Coffee style",
                 "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
                 "startsAt": "2023-11-25T11:00:00",
-                "endsAt": "2023-11-25T12:00:00",
+                "endsAt": "2023-11-25T11:45:00",
                 "isServiceSession": false,
                 "isPlenumSession": false,
                 "speakers": [
@@ -563,7 +563,7 @@
                 "title": "14:00 Meta Discussion about Lean Coffee style ",
                 "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
                 "startsAt": "2023-11-25T14:00:00",
-                "endsAt": "2023-11-25T14:45:00",
+                "endsAt": "2023-11-25T15:00:00",
                 "isServiceSession": false,
                 "isPlenumSession": false,
                 "speakers": [

@@ -128,6 +128,11 @@
               "items": [
                 "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
               ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_11:00_Discussion_groups_in_Lean_Coffee_style"
+              ]
             }
           ]
         },
@@ -143,6 +148,11 @@
             {
               "items": [
                 "Tomasz__Flis_Angular_renaissance"
+              ]
+            },
+            {
+              "items": [
+                "Himanshu__Singh_Elevating_Your_App's_Performance"
               ]
             }
           ]
@@ -165,6 +175,11 @@
               "items": [
                 "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice"
               ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_13.00_Discussion_groups_in_Lean_Coffee_style_"
+              ]
             }
           ]
         },
@@ -175,6 +190,11 @@
             {
               "items": [
                 "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+              ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_14:00_Meta_Discussion_about_Lean_Coffee_style_"
               ]
             }
           ]
@@ -197,6 +217,11 @@
               "items": [
                 "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud"
               ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_15.00_Discussion_groups_in_Lean_Coffee_style"
+              ]
             }
           ]
         },
@@ -218,6 +243,11 @@
               "items": [
                 "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
               ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_16.00_Discussion_groups_in_Lean_Coffee_style"
+              ]
             }
           ]
         },
@@ -238,6 +268,11 @@
             {
               "items": [
                 "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!"
+              ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_17:00_Open_Discussion"
               ]
             }
           ]
@@ -274,6 +309,9 @@
         },
         {
           "title": "Collaboration space (0 floor)"
+        },
+        {
+          "title": "Cafeteria (0 floor) Lean Coffee Space"
         }
       ]
     }
@@ -363,90 +401,6 @@
       "complexity": "",
       "language": ""
     },
-    "_Door_open_🚪": {
-      "description": "",
-      "tags": [],
-      "speakers": [],
-      "presentation": "",
-      "title": "Door open 🚪",
-      "complexity": "",
-      "language": ""
-    },
-    "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons": {
-      "description": "Managing a state might be a challenge. Managing the state with hundreds of updates and constant recomposition of floating emojis is a challenge indeed. In this talk, I will share how to build emoji cannon that floods your screen with UI elements, update the state, and does not freeze your UI. All of that with Jetpack Compose :) \r\nIn addition to covering the technical aspects of building and managing a state, I will also share how to build a responsive UI that takes the user input and animates.",
-      "tags": [],
-      "speakers": [
-        "Piotr__Prus"
-      ],
-      "presentation": "",
-      "title": "Blast Off: Managing Hundreds of UI Updates for Emoji Cannons",
-      "complexity": "",
-      "language": ""
-    },
-    "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud": {
-      "description": "Sustainability in the cloud is the continuous dedication to primarily decrease energy usage and optimize efficiency across all aspects of workloads.\r\n\r\nAssuming the responsibility for your emissions embodies ethical values, cost-efficiency, regulatory compliance, and environmental impact awareness.\r\nIt also reflects your commitment to being the part of the solution rather than contributing to the problem.\r\n\r\nIn this talk you will learn about design principles, best-practices, potential trade-offs, and improvement plans you can use to meet sustainability targets for your Google Cloud workloads.",
-      "tags": [],
-      "speakers": [
-        "Irine__Kokilashvili"
-      ],
-      "presentation": "",
-      "title": "Sustainability for workloads in Google Cloud",
-      "complexity": "",
-      "language": ""
-    },
-    "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice": {
-      "description": "Session will include the benefits of cloud along with hosting microservices on Kubernetes ",
-      "tags": [],
-      "speakers": [
-        "Dilraj__Singh"
-      ],
-      "presentation": "",
-      "title": "Kubernetes on Cloud and best practice",
-      "complexity": "",
-      "language": ""
-    },
-    "Kateryna__Hrytsaienko_Speed_Up_Microservice_Setup_with_Composable_Approach": {
-      "description": "Imagine how good it would be to have a magic button to set up and integrate a brand-new microservice in your ecosystem in XX minutes. Infrastructure, CI/CD, and basic code snippets all in one. \r\n\r\nThis talk aimed to familiarize you with the composable approach -- closest to the \"magic button\" as possible. \r\n\r\nIn this session, we'll walk you through how Terraform conjures infrastructure like magic, shared workflows streamline processes, and Maven archetypes simplify code generation.\r\n\r\nAs the cherry on top -- live demo of the accelerator approach with Google cloud platfrom.\r\n \r\n\r\n",
-      "tags": [],
-      "speakers": [
-        "Kateryna__Hrytsaienko"
-      ],
-      "presentation": "",
-      "title": "Speed Up Microservice Setup with Composable Approach",
-      "complexity": "",
-      "language": ""
-    },
-    "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go": {
-      "description": "In the talk, I'd like to share my experience building a resilient reverse proxy in Go - github.com/azimjohn/jprq\r\n\r\nHow I turned an idea into working solution over a weekend and how it evolved in 3 years and what it tought about computer networks, internet protocols and maintaining an open-source project.",
-      "tags": [],
-      "speakers": [
-        "Azimjon__Pulatov"
-      ],
-      "presentation": "",
-      "title": "Building Reverse Proxy in Go",
-      "complexity": "",
-      "language": ""
-    },
-    "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!": {
-      "description": "In this engaging and hands-on talk, you'll witness the speed and efficiency of application development using Flutter and Firebase. \r\n\r\nThe session will revolve around live coding a chat app from scratch, illustrating how users can seamlessly log in, log out, and post messages to a group chat channel.\r\n\r\nThis demonstration aims to inspire both beginners and experienced developers. If you're new to Flutter or Firebase, you'll see how straightforward it is to kickstart your journey. For seasoned developers, the talk will highlight the remarkable productivity and speed that these technologies offer.\r\n\r\nBy the end of this session, you'll have seen the process of creating a working chat app within the span of a single talk. Don't miss this opportunity to witness the power of Flutter and Firebase in action and learn how they can revolutionize your development process.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
-      "tags": [],
-      "speakers": [
-        "Alicja__Ogonowska"
-      ],
-      "presentation": "",
-      "title": "Let’s Build a Flutter App, Fast!",
-      "complexity": "",
-      "language": ""
-    },
-    "_Networking": {
-      "description": "",
-      "tags": [],
-      "speakers": [],
-      "presentation": "",
-      "title": "Networking",
-      "complexity": "",
-      "language": ""
-    },
     "Anna__Migas_Demystifying_web_performance_tooling": {
       "description": "Web performance has been one of the most talked about web development topics in the recent years. Yet if you try to start your journey with the speed optimisations, you might find yourself in a pickle. With the tooling, you might feel overwhelmed—it looks complex and hard to comprehend. With the metrics: at first glance all of them seem similar, not to mention that they change over time and you cannot figure out which of them to take into account.\r\n\r\nIn this talk I we will take a look at the most popular web performance tooling. There will be no more secrets around the topic and you will be able to dive into the web speed optimisations with confidence. We will also briefly mention metrics and services to monitor your improvements over time. ",
       "tags": [],
@@ -519,6 +473,162 @@
       ],
       "presentation": "",
       "title": "Real-time messaging 101",
+      "complexity": "",
+      "language": ""
+    },
+    "_Door_open_🚪": {
+      "description": "",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Door open 🚪",
+      "complexity": "",
+      "language": ""
+    },
+    "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons": {
+      "description": "Managing a state might be a challenge. Managing the state with hundreds of updates and constant recomposition of floating emojis is a challenge indeed. In this talk, I will share how to build emoji cannon that floods your screen with UI elements, update the state, and does not freeze your UI. All of that with Jetpack Compose :) \r\nIn addition to covering the technical aspects of building and managing a state, I will also share how to build a responsive UI that takes the user input and animates.",
+      "tags": [],
+      "speakers": [
+        "Piotr__Prus"
+      ],
+      "presentation": "",
+      "title": "Blast Off: Managing Hundreds of UI Updates for Emoji Cannons",
+      "complexity": "",
+      "language": ""
+    },
+    "Himanshu__Singh_Elevating_Your_App's_Performance": {
+      "description": "With apps being developed at a rapid pace for diverse locales and users, it is crucial to continuously enhance app performance to provide an exceptional user experience. This talk will focus on various strategies to improve app performance and empower developers to create high-performing apps.\r\n\r\nIn this talk we will cover, \r\n\r\n- Understanding the Baseline Profile\r\n\r\n- Explore how we practical approached to seamlessly integrate the Baseline Profile into a popular app with over 50 million downloads.\r\n\r\n- How specific improvements  were made during the critical user journey positively impacted app conversion rates.\r\n\r\n- Let's understand the techniques to enhance the performance of Jetpack Compose layouts.\r\n\r\n- Tips and Tricks for Boosting App Performance\r\n\r\n\r\nBy the end of the talk, participants will be equipped with practical knowledge and actionable strategies to power up their apps and enhance their performance. With a focus on improving the user experience, this talk aims to provide developers with the tools they need to create performant and successful applications",
+      "tags": [],
+      "speakers": [
+        "Himanshu__Singh"
+      ],
+      "presentation": "",
+      "title": "Elevating Your App's Performance",
+      "complexity": "",
+      "language": ""
+    },
+    "Dilraj__Singh_Kubernetes_on_Cloud_and_best_practice": {
+      "description": "Session will include the benefits of cloud along with hosting microservices on Kubernetes ",
+      "tags": [],
+      "speakers": [
+        "Dilraj__Singh"
+      ],
+      "presentation": "",
+      "title": "Kubernetes on Cloud and best practice",
+      "complexity": "",
+      "language": ""
+    },
+    "Irine__Kokilashvili_Sustainability_for_workloads_in_Google_Cloud": {
+      "description": "Sustainability in the cloud is the continuous dedication to primarily decrease energy usage and optimize efficiency across all aspects of workloads.\r\n\r\nAssuming the responsibility for your emissions embodies ethical values, cost-efficiency, regulatory compliance, and environmental impact awareness.\r\nIt also reflects your commitment to being the part of the solution rather than contributing to the problem.\r\n\r\nIn this talk you will learn about design principles, best-practices, potential trade-offs, and improvement plans you can use to meet sustainability targets for your Google Cloud workloads.",
+      "tags": [],
+      "speakers": [
+        "Irine__Kokilashvili"
+      ],
+      "presentation": "",
+      "title": "Sustainability for workloads in Google Cloud",
+      "complexity": "",
+      "language": ""
+    },
+    "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go": {
+      "description": "In the talk, I'd like to share my experience building a resilient reverse proxy in Go - github.com/azimjohn/jprq\r\n\r\nHow I turned an idea into working solution over a weekend and how it evolved in 3 years and what it tought about computer networks, internet protocols and maintaining an open-source project.",
+      "tags": [],
+      "speakers": [
+        "Azimjon__Pulatov"
+      ],
+      "presentation": "",
+      "title": "Building Reverse Proxy in Go",
+      "complexity": "",
+      "language": ""
+    },
+    "Alicja__Ogonowska_Let’s_Build_a_Flutter_App,_Fast!": {
+      "description": "In this engaging and hands-on talk, you'll witness the speed and efficiency of application development using Flutter and Firebase. \r\n\r\nThe session will revolve around live coding a chat app from scratch, illustrating how users can seamlessly log in, log out, and post messages to a group chat channel.\r\n\r\nThis demonstration aims to inspire both beginners and experienced developers. If you're new to Flutter or Firebase, you'll see how straightforward it is to kickstart your journey. For seasoned developers, the talk will highlight the remarkable productivity and speed that these technologies offer.\r\n\r\nBy the end of this session, you'll have seen the process of creating a working chat app within the span of a single talk. Don't miss this opportunity to witness the power of Flutter and Firebase in action and learn how they can revolutionize your development process.\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+      "tags": [],
+      "speakers": [
+        "Alicja__Ogonowska"
+      ],
+      "presentation": "",
+      "title": "Let’s Build a Flutter App, Fast!",
+      "complexity": "",
+      "language": ""
+    },
+    "_Networking": {
+      "description": "",
+      "tags": [],
+      "speakers": [],
+      "presentation": "",
+      "title": "Networking",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_11:00_Discussion_groups_in_Lean_Coffee_style": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "11:00 Discussion groups in Lean Coffee style",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_13.00_Discussion_groups_in_Lean_Coffee_style_": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "13.00 Discussion groups in Lean Coffee style ",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_14:00_Meta_Discussion_about_Lean_Coffee_style_": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "14:00 Meta Discussion about Lean Coffee style ",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_15.00_Discussion_groups_in_Lean_Coffee_style": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "15.00 Discussion groups in Lean Coffee style",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_16.00_Discussion_groups_in_Lean_Coffee_style": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "16.00 Discussion groups in Lean Coffee style",
+      "complexity": "",
+      "language": ""
+    },
+    "Dastin__Sandura_Piotr__Suwała_17:00_Open_Discussion": {
+      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "tags": [],
+      "speakers": [
+        "Dastin__Sandura",
+        "Piotr__Suwała"
+      ],
+      "presentation": "",
+      "title": "17:00 Open Discussion",
       "complexity": "",
       "language": ""
     }
@@ -1437,7 +1547,7 @@
   ],
   "tickets": [
     {
-      "available": true,
+      "available": false,
       "currency": "PLN",
       "starts": "",
       "ends": "Ends on Oct15",
@@ -1493,7 +1603,7 @@
       "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=devfest.warsaw.pl"
     },
     {
-      "available": true,
+      "available": false,
       "currency": "PLN",
       "starts": "",
       "ends": "We want you on board -",
@@ -1503,7 +1613,7 @@
       "price": 0,
       "primary": false,
       "regular": false,
-      "soldOut": false,
+      "soldOut": true,
       "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=free.devfest.warsaw.pl"
     }
   ],
