@@ -112,6 +112,35 @@
         },
         {
           "startTime": "11:00",
+          "endTime": "11:20",
+          "sessions": [
+            {
+              "items": [
+                "Tomek__Porożyński_Teaching_PaLM_2_new_tricks_-_a_Live_Coding_Spectacle!"
+              ],
+              "extend": 2
+            },
+            {
+              "items": [
+                "Anna__Migas_Demystifying_web_performance_tooling"
+              ],
+              "extend": 2
+            },
+            {
+              "items": [
+                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
+              ]
+            },
+            {
+              "items": [
+                "Dastin__Sandura_Piotr__Suwała_11:00_Discussion_groups_in_Lean_Coffee_style"
+              ],
+              "extend": 2
+            }
+          ]
+        },
+        {
+          "startTime": "11:20",
           "endTime": "11:45",
           "sessions": [
             {
@@ -126,12 +155,7 @@
             },
             {
               "items": [
-                "Piotr__Prus_Blast_Off:_Managing_Hundreds_of_UI_Updates_for_Emoji_Cannons"
-              ]
-            },
-            {
-              "items": [
-                "Dastin__Sandura_Piotr__Suwała_11:00_Discussion_groups_in_Lean_Coffee_style"
+                "Piotr__Prus_Spin-to-Win_Experience_with_Jetpack_Compose"
               ]
             }
           ]
@@ -194,6 +218,16 @@
             },
             {
               "items": [
+                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+              ]
+            },
+            {
+              "items": [
+                "_Lunch_Break_🍔🍔🍟🍿🥗🥙🥪🌮🌯"
+              ]
+            },
+            {
+              "items": [
                 "Dastin__Sandura_Piotr__Suwała_14:00_Meta_Discussion_about_Lean_Coffee_style_"
               ]
             }
@@ -241,7 +275,7 @@
             },
             {
               "items": [
-                "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go"
+                "Azimjon__Pulatov_Building_Reverse_Proxy_"
               ]
             },
             {
@@ -498,6 +532,17 @@
       "complexity": "",
       "language": ""
     },
+    "Piotr__Prus_Spin-to-Win_Experience_with_Jetpack_Compose": {
+      "description": "In this talk, we will explore how to create a custom view that enhances the user experience of a Spin-to-Win feature using Jetpack Compose. The view is a horizontal carousel of images, where the system randomly selects a winner and the carousel stops at the winning image, animating and enlarging it to reveal the product won.\r\n\r\nWe will dive into the implementation details of the custom view, discussing how to leverage Jetpack Compose's features to create dynamic, responsive, and fluid UIs. We will explore how to draw the carousel and how to create animations with the Animation API. Additionally, we will discuss best practices for measuring and positioning elements, optimizing performance, and handling the system-selected winner.\r\nCome and maybe you will be lucky to win the spin!",
+      "tags": [],
+      "speakers": [
+        "Piotr__Prus"
+      ],
+      "presentation": "",
+      "title": "Spin-to-Win Experience with Jetpack Compose",
+      "complexity": "",
+      "language": ""
+    },
     "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App": {
       "description": "Scaling an app to thousands of daily active users is a dream come true, but it also comes with its own set of challenges. At Visible, we quickly realized that some of our assumptions about network connectivity and stability were too optimistic. Even a 0.5% failure rate would result in dozens of complaints related to network issues every day.\r\n\r\nIn this talk, I will share how we overcame this challenge by enabling our app with full offline capability while continuously adding new features for our users. I will dive deep into the technical details, discussing topics like GraphQL caching, background processing, and local storage.\r\n\r\nJoin me as I share our journey and offer valuable insights for Flutter developers looking to tackle similar challenges.",
       "tags": [],
@@ -531,14 +576,14 @@
       "complexity": "",
       "language": ""
     },
-    "Azimjon__Pulatov_Building_Reverse_Proxy_in_Go": {
+    "Azimjon__Pulatov_Building_Reverse_Proxy_": {
       "description": "In the talk, I'd like to share my experience building a resilient reverse proxy in Go - github.com/azimjohn/jprq\r\n\r\nHow I turned an idea into working solution over a weekend and how it evolved in 3 years and what it tought about computer networks, internet protocols and maintaining an open-source project.",
       "tags": [],
       "speakers": [
         "Azimjon__Pulatov"
       ],
       "presentation": "",
-      "title": "Building Reverse Proxy in Go",
+      "title": "Building Reverse Proxy ",
       "complexity": "",
       "language": ""
     },
@@ -646,7 +691,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/28cf-400o400o2-sZ8qevh2buTGRUqZDEDr7v.jpeg",
+      "photoUrl": "https://sessionize.com/image/24dc-400o400o1-sZ8qevh2buTGRUqZDEDr7v.jpeg",
       "socials": [
         {
           "icon": "twitter",
@@ -682,7 +727,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/df54-400o400o2-wFexMLi5bbBzxqKzGXgQQ3.jpg",
+      "photoUrl": "https://sessionize.com/image/7a5a-400o400o1-wFexMLi5bbBzxqKzGXgQQ3.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -723,7 +768,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/764a-400o400o2-ni4UGc3pwVqxGgcXUJC3rs.jpg",
+      "photoUrl": "https://sessionize.com/image/d427-400o400o1-ni4UGc3pwVqxGgcXUJC3rs.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -759,7 +804,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/f634-400o400o2-7XhoN7zkrxLW1kTziNhTBo.jpeg",
+      "photoUrl": "https://sessionize.com/image/a5b9-400o400o1-7XhoN7zkrxLW1kTziNhTBo.jpeg",
       "socials": [
         {
           "icon": "linkedin",
@@ -790,7 +835,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/dddd-400o400o2-K6wCtL6otKrBydxQBAYCxu.jpg",
+      "photoUrl": "https://sessionize.com/image/18b8-400o400o1-K6wCtL6otKrBydxQBAYCxu.jpg",
       "socials": [],
       "order": 0,
       "title": "DDD-GDA co-organizer"
@@ -805,7 +850,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/1cf7-400o400o2-ErYYHdbdD7oYM66Wez6JMx.png",
+      "photoUrl": "https://sessionize.com/image/89e6-400o400o1-ErYYHdbdD7oYM66Wez6JMx.png",
       "socials": [
         {
           "icon": "linkedin",
@@ -831,7 +876,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/e8e9-400o400o2-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
+      "photoUrl": "https://sessionize.com/image/9aff-400o400o1-VHDtKbD3b8L3R7aA5ZyDET.jpeg",
       "socials": [
         {
           "icon": "twitter",
@@ -872,7 +917,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/d568-400o400o2-M4QXq3gLG5gQBbe1HyTvLR.png",
+      "photoUrl": "https://sessionize.com/image/d845-400o400o1-M4QXq3gLG5gQBbe1HyTvLR.png",
       "socials": [
         {
           "icon": "twitter",
@@ -903,7 +948,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/69b1-400o400o2-VVo5jsYfYGtVhsxNDJMShw.png",
+      "photoUrl": "https://sessionize.com/image/52ff-400o400o1-VVo5jsYfYGtVhsxNDJMShw.png",
       "socials": [
         {
           "icon": "twitter",
@@ -954,7 +999,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/da5d-400o400o2-BDrbUmF3DkxCbRKBdWEi2P.png",
+      "photoUrl": "https://sessionize.com/image/0910-400o400o1-BDrbUmF3DkxCbRKBdWEi2P.png",
       "socials": [
         {
           "icon": "linkedin",
@@ -990,7 +1035,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/6036-400o400o2-3FjkVzve3a6N6W5Qdawkwk.jpg",
+      "photoUrl": "https://sessionize.com/image/af65-400o400o1-3FjkVzve3a6N6W5Qdawkwk.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1006,6 +1051,11 @@
           "icon": "company_website",
           "link": "https://kt.academy/",
           "name": "Company Website"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/marcin-moskala4982",
+          "name": "Sessionize"
         }
       ],
       "order": 0,
@@ -1021,7 +1071,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/eed9-400o400o2-VpDUjvzeYLEHWd1AfxMkSU.jpg",
+      "photoUrl": "https://sessionize.com/image/255e-400o400o1-VpDUjvzeYLEHWd1AfxMkSU.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1062,7 +1112,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/3fb4-400o400o2-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
+      "photoUrl": "https://sessionize.com/image/04f6-400o400o1-nnSeKrCfbUQ5DAbNc5BFaH.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1098,7 +1148,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/7cba-400o400o2-ainA1gVSSCHxugeFJdVjM2.jpg",
+      "photoUrl": "https://sessionize.com/image/1a52-400o400o1-ainA1gVSSCHxugeFJdVjM2.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1119,6 +1169,11 @@
           "icon": "sessionize",
           "link": "https://sessionize.com/piotrprus",
           "name": "Sessionize"
+        },
+        {
+          "icon": "sessionize",
+          "link": "https://sessionize.com/piotrprus",
+          "name": "Sessionize"
         }
       ],
       "order": 0,
@@ -1134,7 +1189,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/1a08-400o400o2-9228afd4-7624-4d58-8167-3463e956001d.jpg",
+      "photoUrl": "https://sessionize.com/image/dc01-400o400o1-9228afd4-7624-4d58-8167-3463e956001d.jpg",
       "socials": [
         {
           "icon": "linkedin",
@@ -1155,7 +1210,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/d0bb-400o400o2-whmSdeL7iud1cCCHrxDtZg.jpg",
+      "photoUrl": "https://sessionize.com/image/e59e-400o400o1-whmSdeL7iud1cCCHrxDtZg.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1186,7 +1241,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/fe2d-400o400o2-wvkzPEnZiyNanzMTX1VRrL.jpg",
+      "photoUrl": "https://sessionize.com/image/98d6-400o400o1-wvkzPEnZiyNanzMTX1VRrL.jpg",
       "socials": [
         {
           "icon": "linkedin",
@@ -1212,7 +1267,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/4b7b-400o400o2-S14zNaTcpfbUjV3tTt8V9x.jpg",
+      "photoUrl": "https://sessionize.com/image/92d9-400o400o1-S14zNaTcpfbUjV3tTt8V9x.jpg",
       "socials": [
         {
           "icon": "twitter",
@@ -1258,7 +1313,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/c4fa-400o400o2-16-a0fb-4226-b7ee-2f49eabe37c8.dd5d6524-0bfe-43ce-982a-3150773998d0.jpg",
+      "photoUrl": "https://sessionize.com/image/08a3-400o400o1-16-a0fb-4226-b7ee-2f49eabe37c8.dd5d6524-0bfe-43ce-982a-3150773998d0.jpg",
       "socials": [
         {
           "icon": "linkedin",
@@ -1290,16 +1345,16 @@
       "title": "Cloud System Architect, Atos"
     },
     "Vatsal__Zeynep__Michal__Natalia__GDSC__leads__": {
-      "name": "Vatsal, Zeynep, Michal, Natalia, GDSC leads .",
-      "bio": null,
-      "shortBio": null,
+      "name": "Vatsal, Zeynep, Michal, Natalia, GDSC leads",
+      "bio": "",
+      "shortBio": "",
       "company": "",
       "companyLogo": "/tools_around/photos/Vatsal, Zeynep, Michal, Natalia, GDSC leads_._https___sessionize.com_download_ihkayhep_KQoH4mpFahoAMV55jHfzsn.svg_GDG_logo.svg",
       "companyLogoUrl": "",
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/8eef-400o400o2-LX2ia7rS8pBvBDwdxfdAJy.jpg",
+      "photoUrl": "https://sessionize.com/image/9d21-400o400o1-LX2ia7rS8pBvBDwdxfdAJy.jpg",
       "socials": [
         {
           "icon": "linkedin",
@@ -1323,7 +1378,7 @@
         }
       ],
       "order": 0,
-      "title": null
+      "title": ""
     },
     "Vladyslav__Kampov": {
       "name": "Vladyslav Kampov",
@@ -1335,7 +1390,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/cdc6-400o400o2-GkJ2MSWHCk7h79dv2t3v1n.png",
+      "photoUrl": "https://sessionize.com/image/0ee2-400o400o1-GkJ2MSWHCk7h79dv2t3v1n.png",
       "socials": [
         {
           "icon": "twitter",
