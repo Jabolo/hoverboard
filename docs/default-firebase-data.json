@@ -105,7 +105,7 @@
           "sessions": [
             {
               "items": [
-                "_Keynote"
+                "Vatsal__Zeynep__Michal__Natalia__GDSC__leads___Keynote_"
               ]
             }
           ]
@@ -152,7 +152,7 @@
             },
             {
               "items": [
-                "Himanshu__Singh_Elevating_Your_App's_Performance"
+                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
               ]
             }
           ]
@@ -205,7 +205,7 @@
           "sessions": [
             {
               "items": [
-                "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App"
+                "Himanshu__Singh_Elevating_Your_App's_Performance"
               ]
             },
             {
@@ -317,12 +317,14 @@
     }
   },
   "sessions": {
-    "_Keynote": {
-      "description": "Main Hall",
+    "Vatsal__Zeynep__Michal__Natalia__GDSC__leads___Keynote_": {
+      "description": "",
       "tags": [],
-      "speakers": [],
+      "speakers": [
+        "Vatsal__Zeynep__Michal__Natalia__GDSC__leads__"
+      ],
       "presentation": "",
-      "title": "Keynote",
+      "title": "Keynote ",
       "complexity": "",
       "language": ""
     },
@@ -359,14 +361,14 @@
       "complexity": "",
       "language": ""
     },
-    "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App": {
-      "description": "Scaling an app to thousands of daily active users is a dream come true, but it also comes with its own set of challenges. At Visible, we quickly realized that some of our assumptions about network connectivity and stability were too optimistic. Even a 0.5% failure rate would result in dozens of complaints related to network issues every day.\r\n\r\nIn this talk, I will share how we overcame this challenge by enabling our app with full offline capability while continuously adding new features for our users. I will dive deep into the technical details, discussing topics like GraphQL caching, background processing, and local storage.\r\n\r\nJoin me as I share our journey and offer valuable insights for Flutter developers looking to tackle similar challenges.",
+    "Himanshu__Singh_Elevating_Your_App's_Performance": {
+      "description": "With apps being developed at a rapid pace for diverse locales and users, it is crucial to continuously enhance app performance to provide an exceptional user experience. This talk will focus on various strategies to improve app performance and empower developers to create high-performing apps.\r\n\r\nIn this talk we will cover, \r\n\r\n- Understanding the Baseline Profile\r\n\r\n- Explore how we practical approached to seamlessly integrate the Baseline Profile into a popular app with over 50 million downloads.\r\n\r\n- How specific improvements  were made during the critical user journey positively impacted app conversion rates.\r\n\r\n- Let's understand the techniques to enhance the performance of Jetpack Compose layouts.\r\n\r\n- Tips and Tricks for Boosting App Performance\r\n\r\n\r\nBy the end of the talk, participants will be equipped with practical knowledge and actionable strategies to power up their apps and enhance their performance. With a focus on improving the user experience, this talk aims to provide developers with the tools they need to create performant and successful applications",
       "tags": [],
       "speakers": [
-        "Dominik__Roszkowski"
+        "Himanshu__Singh"
       ],
       "presentation": "",
-      "title": "From Network Failures to Offline Success: A Journey of Visible App",
+      "title": "Elevating Your App's Performance",
       "complexity": "",
       "language": ""
     },
@@ -496,14 +498,14 @@
       "complexity": "",
       "language": ""
     },
-    "Himanshu__Singh_Elevating_Your_App's_Performance": {
-      "description": "With apps being developed at a rapid pace for diverse locales and users, it is crucial to continuously enhance app performance to provide an exceptional user experience. This talk will focus on various strategies to improve app performance and empower developers to create high-performing apps.\r\n\r\nIn this talk we will cover, \r\n\r\n- Understanding the Baseline Profile\r\n\r\n- Explore how we practical approached to seamlessly integrate the Baseline Profile into a popular app with over 50 million downloads.\r\n\r\n- How specific improvements  were made during the critical user journey positively impacted app conversion rates.\r\n\r\n- Let's understand the techniques to enhance the performance of Jetpack Compose layouts.\r\n\r\n- Tips and Tricks for Boosting App Performance\r\n\r\n\r\nBy the end of the talk, participants will be equipped with practical knowledge and actionable strategies to power up their apps and enhance their performance. With a focus on improving the user experience, this talk aims to provide developers with the tools they need to create performant and successful applications",
+    "Dominik__Roszkowski_From_Network_Failures_to_Offline_Success:_A_Journey_of_Visible_App": {
+      "description": "Scaling an app to thousands of daily active users is a dream come true, but it also comes with its own set of challenges. At Visible, we quickly realized that some of our assumptions about network connectivity and stability were too optimistic. Even a 0.5% failure rate would result in dozens of complaints related to network issues every day.\r\n\r\nIn this talk, I will share how we overcame this challenge by enabling our app with full offline capability while continuously adding new features for our users. I will dive deep into the technical details, discussing topics like GraphQL caching, background processing, and local storage.\r\n\r\nJoin me as I share our journey and offer valuable insights for Flutter developers looking to tackle similar challenges.",
       "tags": [],
       "speakers": [
-        "Himanshu__Singh"
+        "Dominik__Roszkowski"
       ],
       "presentation": "",
-      "title": "Elevating Your App's Performance",
+      "title": "From Network Failures to Offline Success: A Journey of Visible App",
       "complexity": "",
       "language": ""
     },
@@ -658,7 +660,7 @@
         },
         {
           "icon": "instagram",
-          "link": "https://www.instagram.com/akankshasingh1212/",
+          "link": "https://www.instagram.com/singhakanksha221b/",
           "name": "Instagram"
         },
         {
@@ -961,7 +963,7 @@
         },
         {
           "icon": "blog",
-          "link": "https://github.com/scirin",
+          "link": "https://github.com/mamaicode",
           "name": "Blog"
         },
         {
@@ -1287,6 +1289,42 @@
       "order": 0,
       "title": "Cloud System Architect, Atos"
     },
+    "Vatsal__Zeynep__Michal__Natalia__GDSC__leads__": {
+      "name": "Vatsal, Zeynep, Michal, Natalia, GDSC leads .",
+      "bio": null,
+      "shortBio": null,
+      "company": "",
+      "companyLogo": "/tools_around/photos/Vatsal, Zeynep, Michal, Natalia, GDSC leads_._https___sessionize.com_download_ihkayhep_KQoH4mpFahoAMV55jHfzsn.svg_GDG_logo.svg",
+      "companyLogoUrl": "",
+      "country": "",
+      "featured": false,
+      "photo": "",
+      "photoUrl": "https://sessionize.com/image/8eef-400o400o2-LX2ia7rS8pBvBDwdxfdAJy.jpg",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "link": "https://www.linkedin.com/company/gdg-warszawa/",
+          "name": "LinkedIn"
+        },
+        {
+          "icon": "facebook",
+          "link": "https://www.facebook.com/gdgwarszawa",
+          "name": "Facebook"
+        },
+        {
+          "icon": "instagram",
+          "link": "https://www.instagram.com/gdgwarszawa/",
+          "name": "Instagram"
+        },
+        {
+          "icon": "company_website",
+          "link": "https://gdg.community.dev/gdg-warszawa/",
+          "name": "Company Website"
+        }
+      ],
+      "order": 0,
+      "title": null
+    },
     "Vladyslav__Kampov": {
       "name": "Vladyslav Kampov",
       "bio": "- Senior UI Engineer у Netflix\r\n- Former Frontend Guild Engineering Manager у Wix.com\r\n- Host of the podcast \"ЖеПеТе\" (https://linktr.ee/podcastgepete)",
@@ -1547,31 +1585,17 @@
   ],
   "tickets": [
     {
-      "available": false,
-      "currency": "PLN",
-      "starts": "",
-      "ends": "Ends on Oct15",
-      "inDemand": true,
-      "info": "Better be fast",
-      "name": "Early Bird",
-      "price": 49,
-      "primary": false,
-      "regular": true,
-      "soldOut": false,
-      "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=devfest.warsaw.pl"
-    },
-    {
       "available": true,
       "currency": "PLN",
       "starts": "",
       "ends": "",
       "inDemand": false,
-      "info": "Requires valid student ID",
+      "info": "Requires valid student ID, less than 10 left!",
       "name": "Edu",
       "price": 49,
       "primary": false,
       "regular": true,
-      "soldOut": false,
+      "soldOut": true,
       "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=devfest.warsaw.pl"
     },
     {
@@ -1585,6 +1609,20 @@
       "price": 69,
       "primary": true,
       "regular": true,
+      "soldOut": true,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=devfest.warsaw.pl"
+    },
+    {
+      "available": true,
+      "currency": "PLN",
+      "starts": "",
+      "ends": "See ya!",
+      "inDemand": true,
+      "info": "Last call :)",
+      "name": "Last Bird",
+      "price": 149,
+      "primary": true,
+      "regular": false,
       "soldOut": false,
       "url": "https://app.evenea.pl/event/devfestwarsaw2023/?source=devfest.warsaw.pl"
     },
@@ -1608,7 +1646,7 @@
       "starts": "",
       "ends": "We want you on board -",
       "inDemand": false,
-      "info": "If you cannot afford a ticket for this event -> email_us: free-tickets@gdgwarsaw.pl",
+      "info": "If you cannot afford a ticket for this event",
       "name": "Free",
       "price": 0,
       "primary": false,
