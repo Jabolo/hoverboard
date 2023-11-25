@@ -77,6 +77,12 @@
           "logoUrl": "../images/logos/logo-angular-love-czerwone.png",
           "name": "Angular.love",
           "url": "https://www.angular.love/"
+        },
+        {
+          "order": 1,
+          "logoUrl": "../images/logos/KNI_logotyp_czarny.png",
+          "name": "KNI",
+          "url": "https://www.facebook.com/knimini"
         }
       ],
       "order": 2,
