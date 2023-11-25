@@ -330,11 +330,11 @@
         },
         {
           "startTime": "18:30",
-          "endTime": "19:30",
+          "endTime": "23:10",
           "sessions": [
             {
               "items": [
-                "_Networking"
+                "Vatsal,__Zeynep,__Michal,__Natalia,__GDSC__leads__._AfterParty_+_Networking"
               ]
             }
           ]
@@ -434,12 +434,25 @@
       "complexity": "",
       "language": ""
     },
-    "_Closing_session": {
+    "Vatsal,__Zeynep,__Michal,__Natalia,__GDSC__leads__._Closing_session_+_Kahoot!": {
       "description": "Join Kahoot and get a chance to win exciting prizes.",
       "tags": [],
-      "speakers": [],
+      "speakers": [
+        "Vatsal,__Zeynep,__Michal,__Natalia,__GDSC__leads__."
+      ],
       "presentation": "",
-      "title": "Closing session",
+      "title": "Closing session + Kahoot!",
+      "complexity": "",
+      "language": ""
+    },
+    "Vatsal,__Zeynep,__Michal,__Natalia,__GDSC__leads__._AfterParty_+_Networking": {
+      "description": "Venue: Spółdzielnia.Koneser, just 50 meters from the Campus. - \r\nSpecial Bonus: We've got drink coupons ready for you to make the night even more enjoyable. - \r\nWe're excited to invite you to a fabulous party and networking event! It's a great opportunity to mingle, meet new people, and enjoy a lively evening.\r\n\r\nCan't wait to see you there!",
+      "tags": [],
+      "speakers": [
+        "Vatsal,__Zeynep,__Michal,__Natalia,__GDSC__leads__."
+      ],
+      "presentation": "",
+      "title": "AfterParty + Networking",
       "complexity": "",
       "language": ""
     },
@@ -614,7 +627,7 @@
       "language": ""
     },
     "Dastin__Sandura_Piotr__Suwała_11:00_Discussion_groups_in_Lean_Coffee_style": {
-      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "description": "Pre-Made Sessions:\r\n\r\nTable 1 (~8 people):\r\n- DDD sucks\r\n- AI tools in cloud\r\n\r\nTable 2 (~8 people): \r\n- Microservices - rad or whack?\r\n- Becoming yourself in your work and life\r\n\r\nVoting Link:\r\nhttps://www.linkedin.com/posts/piotr-suwa%C5%82a-928b1817a_gdg-devfest-season-2023-activity-7133872054163939329-6Tq5\r\n\r\nDescription:\r\nDiscussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
       "tags": [],
       "speakers": [
         "Dastin__Sandura",
@@ -633,12 +646,12 @@
         "Piotr__Suwała"
       ],
       "presentation": "",
-      "title": "13.00 Discussion groups in Lean Coffee style ",
+      "title": "13.00 Discussion groups - Gen AI Tools & Strangler Pattern",
       "complexity": "",
       "language": ""
     },
     "Dastin__Sandura_Piotr__Suwała_14:00_Meta_Discussion_about_Lean_Coffee_style_": {
-      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "description": "Here you can meet lean coffee organisers and eat with them lunch.\r\nYou can ask for help in organising similar event or we can event do it for you.\r\nYou can hear:\r\n- how to execute it\r\n- how it all started\r\n- who we are\r\n\r\nAbout lean coffee:\r\nDiscussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
       "tags": [],
       "speakers": [
         "Dastin__Sandura",
@@ -649,32 +662,32 @@
       "complexity": "",
       "language": ""
     },
-    "Dastin__Sandura_Piotr__Suwała_15.00_Discussion_groups_in_Lean_Coffee_style": {
-      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+    "Dastin__Sandura_Piotr__Suwała_15.00_Discussion_groups_-_Contract_Testing_&_Inventing_AI_Startup": {
+      "description": "Voting Link:\r\nhttps://www.linkedin.com/posts/piotr-suwa%C5%82a-928b1817a_gdg-devfest-season-2023-activity-7133872054163939329-6Tq5\r\n\r\nDescription:\r\nDiscussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
       "tags": [],
       "speakers": [
         "Dastin__Sandura",
         "Piotr__Suwała"
       ],
       "presentation": "",
-      "title": "15.00 Discussion groups in Lean Coffee style",
+      "title": "15.00 Discussion groups - Contract Testing & Inventing AI Startup",
       "complexity": "",
       "language": ""
     },
-    "Dastin__Sandura_Piotr__Suwała_16.00_Discussion_groups_in_Lean_Coffee_style": {
-      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+    "Dastin__Sandura_Piotr__Suwała_16.00_Discussion_groups_-_Finding_your_path_in_IT_&_Circular_Dependencies": {
+      "description": "Voting Link:\r\nhttps://www.linkedin.com/posts/piotr-suwa%C5%82a-928b1817a_gdg-devfest-season-2023-activity-7133872054163939329-6Tq5\r\n\r\nDescription:\r\nDiscussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
       "tags": [],
       "speakers": [
         "Dastin__Sandura",
         "Piotr__Suwała"
       ],
       "presentation": "",
-      "title": "16.00 Discussion groups in Lean Coffee style",
+      "title": "16.00 Discussion groups - Finding your path in IT & Circular Dependencies",
       "complexity": "",
       "language": ""
     },
     "Dastin__Sandura_Piotr__Suwała_17:00_Open_Discussion": {
-      "description": "Discussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.",
+      "description": "Voting Link:\r\nThere is no voting link. This session is being voted on the spot in the proper lean coffee formula.\r\n\r\nDescription:\r\nDiscussion groups where topics for discussion are provided and voted on by conference participants. No topic is off limits and everybody is welcome.\r\n\r\n",
       "tags": [],
       "speakers": [
         "Dastin__Sandura",
@@ -1195,7 +1208,7 @@
       "country": "",
       "featured": false,
       "photo": "",
-      "photoUrl": "https://sessionize.com/image/dc01-400o400o1-9228afd4-7624-4d58-8167-3463e956001d.jpg",
+      "photoUrl": "https://sessionize.com/image/a506-400o400o1-VL5Jrp8WksAKyaGuuxrq6A.jpg",
       "socials": [
         {
           "icon": "linkedin",
