@@ -181,6 +181,7 @@ export class HoverboardApp extends PolymerElement {
                 target="_blank"
                 rel="noopener noreferrer"
                 on-click="closeDrawer"
+                hidden$="[[!ticketUrl]]"
                 layout
                 horizontal
                 center
@@ -275,8 +276,7 @@ export class HoverboardApp extends PolymerElement {
   private get ticketUrl(): string {
     if (this.tickets instanceof Success && this.tickets.data.length > 0) {
       const availableTicket = this.tickets.data.find((ticket) => ticket.available);
-      const ticket = availableTicket || this.tickets.data[0];
-      return ticket?.url || '';
+      return availableTicket?.url || '';
     } else {
       return '';
     }

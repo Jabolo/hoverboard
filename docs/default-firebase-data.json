@@ -28,15 +28,103 @@
   "speakers": {},
   "team": [
     {
-      "title": "Event leadership",
+      "title": "GDG Warszawa organizers",
       "members": [
         {
           "name": "Michał Jabłoński",
-          "photo": "/images/organizer-logo.svg",
-          "photoUrl": "/images/organizer-logo.svg",
+          "photo": "/images/team/michal-jablonski.jpg",
+          "photoUrl": "/images/team/michal-jablonski.jpg",
           "socials": [],
           "order": 0,
-          "title": "GDG Warsaw Lead"
+          "title": "GDG Warszawa Lead"
+        },
+        {
+          "name": "Vatsal Patel",
+          "photo": "/images/team/vatsal-patel.jpg",
+          "photoUrl": "/images/team/vatsal-patel.jpg",
+          "socials": [],
+          "order": 1,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Oleksandr Katrych",
+          "photo": "/images/team/oleksandr-katrych.jpg",
+          "photoUrl": "/images/team/oleksandr-katrych.jpg",
+          "socials": [],
+          "order": 2,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Viktoriia Vinnykova",
+          "photo": "/images/team/viktoriia-vinnykova.jpeg",
+          "photoUrl": "/images/team/viktoriia-vinnykova.jpeg",
+          "socials": [],
+          "order": 3,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Maryna Kamienieva",
+          "photo": "/images/team/maryna-kamienieva.jpg",
+          "photoUrl": "/images/team/maryna-kamienieva.jpg",
+          "socials": [],
+          "order": 4,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Kamil Krawczyk",
+          "photo": "/images/team/kamil-krawczyk.jpeg",
+          "photoUrl": "/images/team/kamil-krawczyk.jpeg",
+          "socials": [],
+          "order": 5,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Marcin Samsonowski",
+          "photo": "/images/team/marcin-samsonowski.png",
+          "photoUrl": "/images/team/marcin-samsonowski.png",
+          "socials": [],
+          "order": 6,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Ephrem Worku",
+          "photo": "/images/team/ephrem-worku.jpg",
+          "photoUrl": "/images/team/ephrem-worku.jpg",
+          "socials": [],
+          "order": 7,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Nataliya Pasichnyk",
+          "photo": "/images/team/nataliya-pasichnyk.jpg",
+          "photoUrl": "/images/team/nataliya-pasichnyk.jpg",
+          "socials": [],
+          "order": 8,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Jakub Kołakowski",
+          "photo": "/images/team/jakub-kolakowski.jpeg",
+          "photoUrl": "/images/team/jakub-kolakowski.jpeg",
+          "socials": [],
+          "order": 9,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Tomasz Flis",
+          "photo": "/images/team/tomasz-flis.png",
+          "photoUrl": "/images/team/tomasz-flis.png",
+          "socials": [],
+          "order": 10,
+          "title": "GDG Warszawa Organizer"
+        },
+        {
+          "name": "Anhelina Sudenkova",
+          "photo": "/images/team/anhelina-sudenkova.jpg",
+          "photoUrl": "/images/team/anhelina-sudenkova.jpg",
+          "socials": [],
+          "order": 11,
+          "title": "GDG Warszawa Organizer"
         }
       ]
     }

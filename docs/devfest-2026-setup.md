@@ -18,6 +18,8 @@ This project is based on the current `gdg-x/hoverboard` `main` branch. The previ
 
 The public copy intentionally marks speakers, programme, ticket types, and pricing as pending until the organizing team confirms them.
 
+The team seed uses the current organizer cards from the [GDG Warszawa community page](https://gdg.community.dev/gdg-warszawa/), checked on September 3, 2026. Their public Cloudinary avatars are stored locally under `public/images/team/` and displayed as square, cropped cards so the page does not depend on a third-party image request at runtime.
+
 ## Firebase
 
 The application uses the Firebase project `gdg-warsaw-devfest26-web` under the Michał Tomasz Jabłoński account.

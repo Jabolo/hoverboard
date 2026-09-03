@@ -52,11 +52,11 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           --lazy-image-fit: cover;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
+          aspect-ratio: 1;
           background-color: var(--contrast-additional-background-color);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
-          border-radius: 50%;
           border: 5px solid var(--contrast-additional-background-color);
         }
 

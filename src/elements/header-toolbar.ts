@@ -66,7 +66,8 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           height: 32px;
           background-color: var(--default-primary-color);
           transition: background-color var(--animation);
-          -webkit-mask: url('/images/logo-monochrome.svg') no-repeat;
+          -webkit-mask: url('/images/logo-monochrome.svg') center / contain no-repeat;
+          mask: url('/images/logo-monochrome.svg') center / contain no-repeat;
         }
 
         .nav-items {
@@ -184,7 +185,12 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             [[signInText]]
           </paper-tab>
 
-          <a href$="[[ticketUrl]]" target="_blank" rel="noopener noreferrer">
+          <a
+            href$="[[ticketUrl]]"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden$="[[!ticketUrl]]"
+          >
             <md-filled-button class="buy-button">[[buyTicket]]</md-filled-button>
           </a>
         </paper-tabs>
@@ -309,7 +315,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
   private get ticketUrl() {
     if (this.tickets instanceof Success && this.tickets.data.length > 0) {
       const availableTicket = this.tickets.data.find((ticket) => ticket.available);
-      return (availableTicket || this.tickets.data[0])?.url || '';
+      return availableTicket?.url || '';
     } else {
       return '';
     }
