@@ -1,7 +1,7 @@
 // TODO: enable imports
 // import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
-import { css, html } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { openVideoDialog } from '../store/ui/actions';
 import { aboutBlock } from '../utils/data';
@@ -80,15 +80,21 @@ export class AboutBlock extends ThemedElement {
             </md-text-button>
           </a>
 
-          <p>${aboutBlock.callToAction.howItWas.description}</p>
-          <md-text-button
-            class="animated icon-right"
-            @click="${() => this.playVideo()}"
-            trailing-icon
-          >
-            <span>${aboutBlock.callToAction.howItWas.label}</span>
-            <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
-          </md-text-button>
+          ${
+            aboutBlock.callToAction.howItWas.youtubeId
+              ? html`
+                  <p>${aboutBlock.callToAction.howItWas.description}</p>
+                  <md-text-button
+                    class="animated icon-right"
+                    @click="${() => this.playVideo()}"
+                    trailing-icon
+                  >
+                    <span>${aboutBlock.callToAction.howItWas.label}</span>
+                    <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
+                  </md-text-button>
+                `
+              : nothing
+          }
         </div>
 
         <div class="statistics-block">

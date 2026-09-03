@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { fireEvent, screen, within } from '@testing-library/dom';
+import { screen, within } from '@testing-library/dom';
 import { mocked } from 'jest-mock';
 import { html } from 'lit';
 import { fixture } from '../../__tests__/helpers/fixtures';
@@ -33,16 +33,10 @@ describe('about-block', () => {
     expect(getByText(aboutBlock.statisticsBlock.attendees.label)).toBeInTheDocument();
   });
 
-  it('plays the video', async () => {
+  it('does not render an empty video action', async () => {
     const { shadowRootForWithin } = await fixture(html`<about-block></about-block>`);
-    const { getByText } = within(shadowRootForWithin);
 
-    fireEvent.click(getByText(aboutBlock.callToAction.howItWas.label));
-
-    expect(mockToggleVideoDialogs).toHaveBeenCalledTimes(1);
-    expect(mockToggleVideoDialogs).toHaveBeenCalledWith({
-      title: aboutBlock.callToAction.howItWas.label,
-      youtubeId: aboutBlock.callToAction.howItWas.youtubeId,
-    });
+    expect(shadowRootForWithin.textContent).not.toContain('undefined');
+    expect(mockToggleVideoDialogs).not.toHaveBeenCalled();
   });
 });

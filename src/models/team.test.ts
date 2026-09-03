@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import data from '../../docs/default-firebase-data.json';
 import { MemberData } from './member';
 import { TeamData } from './team';
+import { defaultTeams } from './test-fixtures';
 import { allKeys } from './utils';
 
 type Team = TeamData & {
@@ -10,7 +10,7 @@ type Team = TeamData & {
 
 describe('partner', () => {
   it('matches the shape of the default data', () => {
-    const teams: Team[] = Object.values(data['team']);
+    const teams: Team[] = defaultTeams;
     const keys: Array<keyof Team> = ['members', 'title'];
 
     expect(teams).toHaveLength(2);

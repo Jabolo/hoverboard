@@ -9,6 +9,7 @@ import { initialTicketsState } from '../store/tickets/state';
 import { buyTicket, contentLoaders, ticketsBlock } from '../utils/data';
 import '../utils/icons';
 import './content-loader';
+import './evenea-embed';
 import './shared-styles';
 
 @customElement('tickets-block')
@@ -187,6 +188,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         </div>
 
         <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
+        <evenea-embed></evenea-embed>
       </div>
     `;
   }

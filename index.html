@@ -61,7 +61,9 @@
 
     <!-- Twitter meta data -->
     <meta content="summary_large_image" name="twitter:card" />
+    {% if organizer.twitter %}
     <meta content="@{{ organizer.twitter }}" name="twitter:creator" />
+    {% endif %}
     <meta content="{{ title }}" name="twitter:title" />
     <meta content="{{ description }}" name="twitter:description" />
     <meta content="{{ image }}" name="twitter:image" />

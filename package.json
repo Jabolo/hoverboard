@@ -13,7 +13,7 @@
     "clean": "rm -rf dist",
     "deploy": "npm run build && NODE_ENV=production firebase deploy",
     "firestore:copy": "ts-node-script ./scripts/firestore-copy",
-    "firestore:init": "ts-node-script ./scripts/firestore-init",
+    "firestore:init": "node --loader ts-node/esm ./scripts/firestore-init/index.ts",
     "fix": "concurrently npm:fix:*",
     "fix:eslint": "eslint . --fix",
     "fix:prettier": "prettier . --write",

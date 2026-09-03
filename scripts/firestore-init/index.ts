@@ -1,14 +1,14 @@
-import { importBlog } from './blog';
-import { importConfig } from './config';
-import { importGallery } from './gallery';
-import { importPartners } from './partners';
-import { importPreviousSpeakers } from './previous-speakers';
-import { importSchedule } from './schedule';
-import { importSessions } from './sessions';
-import { importSpeakers } from './speakers';
-import { importTeam } from './team';
-import { importTickets } from './tickets';
-import { importVideos } from './videos';
+import { importBlog } from './blog.js';
+import { importConfig } from './config.js';
+import { importGallery } from './gallery.js';
+import { importPartners } from './partners.js';
+import { importPreviousSpeakers } from './previous-speakers.js';
+import { importSchedule } from './schedule.js';
+import { importSessions } from './sessions.js';
+import { importSpeakers } from './speakers.js';
+import { importTeam } from './team.js';
+import { importTickets } from './tickets.js';
+import { importVideos } from './videos.js';
 
 importConfig() // Should always be first
   .then(() => importBlog())

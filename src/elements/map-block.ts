@@ -64,7 +64,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <template is="dom-if" if="[[viewport.isTabletPlus]]">
+      <template is="dom-if" if="[[showMap]]">
         <google-map
           id="map"
           latitude="[[location.mapCenter.latitude]]"
@@ -110,7 +110,10 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
 
   private location = location;
   private mapBlock = mapBlock;
-  private googleMapApiKey = getConfig(CONFIG.GOOGLE_MAPS_API_KEY);
+  private googleMapApiKey = '';
+
+  @property({ type: Boolean })
+  private showMap = false;
 
   @property({ type: Object })
   private viewport = initialUiState.viewport;
@@ -141,5 +144,17 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
 
   override stateChanged(state: RootState) {
     this.viewport = state.ui.viewport;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+
+    try {
+      this.googleMapApiKey = getConfig(CONFIG.GOOGLE_MAPS_API_KEY);
+    } catch {
+      this.googleMapApiKey = '';
+    }
+
+    this.showMap = Boolean(this.googleMapApiKey) && this.viewport.isTabletPlus;
   }
 }

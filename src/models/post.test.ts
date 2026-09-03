@@ -1,11 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
-import data from '../../docs/default-firebase-data.json';
 import { PostData } from './post';
+import { defaultPosts } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('post', () => {
   it('matches the shape of the default data', () => {
-    const posts: PostData[] = Object.values(data['blog']);
+    const posts: PostData[] = defaultPosts;
     const keys: Array<keyof PostData> = [
       'backgroundColor',
       'brief',

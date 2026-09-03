@@ -10,6 +10,7 @@ export {
   dates,
   description,
   emailUs,
+  eveneaEmbed,
   faq,
   featuredVideos,
   feedback,

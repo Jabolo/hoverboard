@@ -8,11 +8,8 @@ import '../components/about-block';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
-import '../elements/featured-videos';
 import '../elements/footer-block';
 import '../elements/fork-me-block';
-import '../elements/gallery-block';
-import '../elements/latest-posts-block';
 import '../elements/map-block';
 import '../elements/partners-block';
 import '../elements/speakers-block';
@@ -178,7 +175,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="action-buttons" layout horizontal center-justified wrap>
-            <md-outlined-button class="watch-video" on-click="playVideo">
+            <md-outlined-button
+              class="watch-video"
+              on-click="playVideo"
+              hidden$="[[!hasHighlights]]"
+            >
               <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
               [[viewHighlights]]
             </md-outlined-button>
@@ -259,10 +260,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <speakers-block></speakers-block>
       <subscribe-block></subscribe-block>
       <tickets-block id="tickets-block"></tickets-block>
-      <gallery-block></gallery-block>
       <about-organizer-block></about-organizer-block>
-      <featured-videos></featured-videos>
-      <latest-posts-block></latest-posts-block>
       <map-block></map-block>
       <partners-block></partners-block>
       <footer-block></footer-block>
@@ -276,6 +274,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   private buyTicket = buyTicket;
   private heroSettings = heroSettings.home;
   private aboutBlock = aboutBlock;
+  private hasHighlights = Boolean(aboutBlock.callToAction.howItWas.youtubeId);
 
   @query('#hero')
   hero!: HeroBlock;
@@ -305,7 +304,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   private shouldShowForkMeBlock(): boolean {
     const showForkMeBlock = firebaseApp.options.appId
-      ? showForkMeBlockForProjectIds.includes(firebaseApp.options.appId)
+      ? (showForkMeBlockForProjectIds as string[]).includes(firebaseApp.options.appId)
       : false;
     if (showForkMeBlock) {
       import('../elements/fork-me-block');

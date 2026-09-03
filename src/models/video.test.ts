@@ -1,11 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
-import data from '../../docs/default-firebase-data.json';
 import { allKeys } from './utils';
+import { defaultVideos } from './test-fixtures';
 import { Video } from './video';
 
 describe('video', () => {
   it('matches the shape of the default data', () => {
-    const videos: Video[] = Object.values(data['videos']);
+    const videos: Video[] = defaultVideos;
     const keys: Array<keyof Video> = ['speakers', 'thumbnail', 'title', 'youtubeId'];
 
     expect(videos).toHaveLength(22);
