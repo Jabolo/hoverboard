@@ -45,6 +45,8 @@ The private Evenea draft was created for integration testing:
 
 The event remains a draft and is not published. The website uses the official Evenea iframe source and resizer script generated in the organizer panel. Before publication, replace the preview ticket with the final ticket types and confirm the public event state.
 
+While the event is a draft, `eveneaEmbed.published` remains `false` and the website shows a private-preview notice instead of loading the anonymous Evenea page. After human approval and publication in Evenea, set it to `true` in `public/data/resources.json` and redeploy Hosting to activate the iframe.
+
 ## Deployment
 
 As of September 3, 2026, the static Hosting preview and Firestore rules/indexes are deployed and verified. The preview is available at:
