@@ -55,7 +55,8 @@ Deploy the static preview and Firestore configuration to the 2026 Firebase proje
 
 ```bash
 npm run build
-npm exec -- firebase deploy --project=gdg-warsaw-devfest26-web --only hosting,firestore
+npm exec -- firebase deploy --config firebase.preview.json --project=gdg-warsaw-devfest26-web --only hosting
+npm exec -- firebase deploy --project=gdg-warsaw-devfest26-web --only firestore
 ```
 
 The repository also contains the upstream `prerender` Cloud Function configuration. Deploying Functions currently requires upgrading the Firebase project to the Blaze (pay-as-you-go) plan; no billing upgrade was performed. Once that approval is available, deploy the complete configuration with:
