@@ -322,6 +322,8 @@
   "eveneaEmbed": {
     "title": "Registration",
     "description": "The registration flow is currently a private Evenea preview and will be activated after the event page is approved for publication.",
+    "published": false,
+    "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/",
     "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe",
     "resizerScriptSrc": "https://app.evenea.pl/js/iframe/new/iframeResizer2.js"
   }
