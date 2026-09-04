@@ -1,4 +1,4 @@
-import { Failure, Initialized, Pending } from '@abraham/remotedata';
+import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
@@ -42,6 +42,11 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
           margin: 8px;
         }
 
+        .empty-state {
+          margin: 0;
+          color: var(--secondary-text-color);
+        }
+
         .photo {
           --lazy-image-width: 64px;
           --lazy-image-height: 64px;
@@ -83,6 +88,10 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
             <p>Error loading previous speakers.</p>
           </template>
 
+          <template is="dom-if" if="[[empty]]">
+            <p class="empty-state">The previous speaker archive will be added here.</p>
+          </template>
+
           <template is="dom-repeat" items="[[speakers]]" as="speaker">
             <a class="speaker" href$="[[previousSpeakerUrl(speaker.id)]]">
               <lazy-image
@@ -94,7 +103,7 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
           </template>
         </div>
 
-        <a href="[[previousSpeakersBlock.callToAction.link]]">
+        <a href="[[previousSpeakersBlock.callToAction.link]]" hidden$="[[!hasSpeakers]]">
           <md-text-button class="animated icon-right" trailing-icon>
             [[previousSpeakersBlock.callToAction.label]]
             <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
@@ -120,6 +129,16 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
   @computed('previousSpeakers')
   get failure() {
     return this.previousSpeakers instanceof Failure;
+  }
+
+  @computed('previousSpeakers', 'speakers')
+  get empty() {
+    return this.previousSpeakers instanceof Success && this.speakers.length === 0;
+  }
+
+  @computed('speakers')
+  get hasSpeakers() {
+    return this.speakers.length > 0;
   }
 
   override stateChanged(state: RootState) {

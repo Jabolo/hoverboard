@@ -37,7 +37,6 @@ import {
   navigation,
   offlineMessage,
   signInProviders,
-  title,
 } from './utils/data';
 import './utils/icons';
 import './utils/media-query';
@@ -105,11 +104,11 @@ export class HoverboardApp extends PolymerElement {
         }
 
         .toolbar-logo {
-          --lazy-image-width: auto;
-          --lazy-image-height: 32px;
-          --lazy-image-fit: cover;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          --lazy-image-width: 240px;
+          --lazy-image-height: 40px;
+          --lazy-image-fit: contain;
+          width: min(240px, 100%);
+          height: 40px;
         }
 
         app-header-layout {
@@ -150,8 +149,8 @@ export class HoverboardApp extends PolymerElement {
           <app-toolbar layout vertical start>
             <lazy-image
               class="toolbar-logo"
-              src="/images/logo-monochrome.svg"
-              alt="[[alt]]"
+              src="/images/organizer-logo.svg"
+              alt="GDG Warsaw"
             ></lazy-image>
             <h2 class="dates">[[dates]]</h2>
             <h3 class="location">[[shortLocation]]</h3>
@@ -211,7 +210,6 @@ export class HoverboardApp extends PolymerElement {
     `;
   }
 
-  private alt = title;
   private dates = dates;
   private buyTicket = buyTicket;
   private navigation = navigation;

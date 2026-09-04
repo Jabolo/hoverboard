@@ -48,9 +48,8 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           color: var(--hero-font-color, '#fff');
         }
 
-        :host([transparent]) .toolbar-logo {
-          background-color: var(--hero-logo-color);
-          opacity: var(--hero-logo-opacity, 1);
+        :host([transparent]) .toolbar-brand {
+          color: var(--hero-font-color, #fff);
         }
 
         app-toolbar {
@@ -60,14 +59,28 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           max-width: var(--max-container-width);
         }
 
+        .toolbar-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: inherit;
+          text-decoration: none;
+        }
+
         .toolbar-logo {
           display: block;
-          width: 150px;
+          width: 42px;
           height: 32px;
-          background-color: var(--default-primary-color);
-          transition: background-color var(--animation);
-          -webkit-mask: url('/images/logo-monochrome.svg') center / contain no-repeat;
-          mask: url('/images/logo-monochrome.svg') center / contain no-repeat;
+          --lazy-image-width: 42px;
+          --lazy-image-height: 32px;
+          --lazy-image-fit: contain;
+        }
+
+        .toolbar-title {
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          white-space: nowrap;
         }
 
         .nav-items {
@@ -157,14 +170,14 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           ></paper-icon-button>
         </div>
         <div layout horizontal center flex>
-          <a
-            class="toolbar-logo"
-            href="/"
-            hidden$="[[!viewport.isLaptopPlus]]"
-            layout
-            horizontal
-            title="[[logoTitle]]"
-          ></a>
+          <a class="toolbar-brand" href="/" title="[[logoTitle]]">
+            <lazy-image
+              class="toolbar-logo"
+              src="/images/logos/gdg.svg"
+              alt="Google Developer Groups"
+            ></lazy-image>
+            <span class="toolbar-title">GDG DevFest Warsaw 2026</span>
+          </a>
         </div>
 
         <paper-tabs
@@ -229,6 +242,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
         <paper-icon-button
           icon="hoverboard:account"
+          aria-label="Sign in"
           on-click="signIn"
           hidden$="[[isAccountIconHidden(signedIn, viewport.isLaptopPlus)]]"
         ></paper-icon-button>

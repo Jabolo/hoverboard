@@ -93,6 +93,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           <div class="bottom-info" layout horizontal justified center>
             <span class="address">[[location.address]]</span>
             <a
+              aria-label="Get directions to the venue"
               href="https://www.google.com/maps/dir/?api=1&amp;destination=[[location.address]]"
               target="_blank"
               rel="noopener noreferrer"
@@ -100,6 +101,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
               <paper-icon-button
                 class="directions"
                 icon="hoverboard:directions"
+                aria-label="Get directions to the venue"
               ></paper-icon-button>
             </a>
           </div>

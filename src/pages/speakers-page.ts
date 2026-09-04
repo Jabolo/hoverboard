@@ -40,7 +40,14 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 16px;
-          min-height: 80%;
+        }
+
+        .empty-state {
+          margin: 0;
+          padding: 40px 32px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
         }
 
         .speaker {
@@ -178,11 +185,13 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
       <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
-      <filter-menu
-        filter-groups="[[filterGroups]]"
-        selected-filters="[[selectedFilters]]"
-        results-count="[[speakersToRender.length]]"
-      ></filter-menu>
+      <template is="dom-if" if="[[showFilters]]">
+        <filter-menu
+          filter-groups="[[filterGroups]]"
+          selected-filters="[[selectedFilters]]"
+          results-count="[[speakersToRender.length]]"
+        ></filter-menu>
+      </template>
 
       <content-loader
         class="container"
@@ -245,6 +254,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                   <paper-icon-button
                     class="social-icon"
                     icon="hoverboard:{{social.icon}}"
+                    aria-label="Open [[speaker.name]] on [[social.icon]]"
                   ></paper-icon-button>
                 </a>
               </template>
@@ -252,6 +262,15 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           </a>
         </template>
       </div>
+
+      <template is="dom-if" if="[[showEmptyState]]">
+        <div class="container">
+          <p class="empty-state">
+            Speaker profiles and sessions will appear here as they are confirmed. Subscribe for
+            programme updates.
+          </p>
+        </div>
+      </template>
 
       <previous-speakers-block></previous-speakers-block>
 
@@ -292,6 +311,16 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
   @computed('speakers')
   get contentLoaderVisibility() {
     return this.speakers instanceof Success;
+  }
+
+  @computed('speakers')
+  get showEmptyState() {
+    return this.speakers instanceof Success && this.speakers.data.length === 0;
+  }
+
+  @computed('speakers')
+  get showFilters() {
+    return this.speakers instanceof Success && this.speakers.data.length > 0;
   }
 
   speakerUrl(id: string) {

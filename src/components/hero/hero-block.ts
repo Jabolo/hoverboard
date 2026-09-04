@@ -115,6 +115,8 @@ export class HeroBlock extends ThemedElement {
       <lazy-image
         class="hero-image"
         src="${this.backgroundImage}"
+        alt=""
+        role="presentation"
         style="${styleMap({ backgroundColor: this.backgroundColor })}"
         fit
       ></lazy-image>

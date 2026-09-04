@@ -1,4 +1,5 @@
-import { customElement, property, query } from '@polymer/decorators';
+import { Success } from '@abraham/remotedata';
+import { computed, customElement, property, query } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
@@ -16,7 +17,7 @@ import '../elements/speakers-block';
 import '../elements/subscribe-block';
 import '../elements/tickets-block';
 import { firebaseApp } from '../firebase';
-import { store } from '../store';
+import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { queueSnackbar } from '../store/snackbars';
 import { openVideoDialog } from '../store/ui/actions';
@@ -29,11 +30,13 @@ import {
   location,
   showForkMeBlockForProjectIds,
   title,
+  ticketingPreview,
   viewHighlights,
 } from '../utils/data';
 import '../utils/icons';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
+import { initialTicketsState, TicketsState } from '../store/tickets/state';
 
 @customElement('home-page')
 export class HomePage extends ReduxMixin(PolymerElement) {
@@ -57,6 +60,15 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           height: var(--lazy-image-height);
           max-width: 240px;
           max-height: 76px;
+        }
+
+        .community-logo {
+          --lazy-image-width: 250px;
+          --lazy-image-height: 116px;
+          --lazy-image-fit: contain;
+          width: var(--lazy-image-width);
+          height: var(--lazy-image-height);
+          margin-bottom: 12px;
         }
 
         .info-items {
@@ -167,6 +179,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         hide-logo
       >
         <div class="home-content" layout vertical center>
+          <lazy-image
+            class="community-logo"
+            src="/images/logos/gdg-warsaw-white.svg"
+            alt="GDG Warsaw"
+          ></lazy-image>
           <lazy-image class="hero-logo" src="/images/logo.svg" alt="[[siteTitle]]"></lazy-image>
 
           <div class="info-items">
@@ -175,17 +192,15 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="action-buttons" layout horizontal center-justified wrap>
-            <md-outlined-button
-              class="watch-video"
-              on-click="playVideo"
-              hidden$="[[!hasHighlights]]"
-            >
-              <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
-              [[viewHighlights]]
-            </md-outlined-button>
+            <template is="dom-if" if="[[hasHighlights]]">
+              <md-outlined-button class="watch-video" on-click="playVideo">
+                <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
+                [[viewHighlights]]
+              </md-outlined-button>
+            </template>
             <md-filled-button on-click="scrollToTickets">
               <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
-              [[buyTicket]]
+              [[ticketActionLabel]]
             </md-filled-button>
           </div>
 
@@ -274,13 +289,32 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   private buyTicket = buyTicket;
   private heroSettings = heroSettings.home;
   private aboutBlock = aboutBlock;
+  @property({ type: Boolean })
   private hasHighlights = Boolean(aboutBlock.callToAction.howItWas.youtubeId);
+  private ticketingPreview = ticketingPreview;
+
+  @property({ type: Object })
+  tickets: TicketsState = initialTicketsState;
+
+  @computed('tickets')
+  private get hasAvailableTickets() {
+    return this.tickets instanceof Success && this.tickets.data.some((ticket) => ticket.available);
+  }
+
+  @computed('tickets')
+  private get ticketActionLabel() {
+    return this.hasAvailableTickets ? this.buyTicket : this.ticketingPreview;
+  }
 
   @query('#hero')
   hero!: HeroBlock;
 
   @property({ type: Boolean })
   private showForkMeBlock: boolean = false;
+
+  override stateChanged(state: RootState) {
+    this.tickets = state.tickets;
+  }
 
   private playVideo() {
     openVideoDialog({

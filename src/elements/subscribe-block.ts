@@ -114,10 +114,6 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
         firstFieldValue: name[0] || '',
         secondFieldValue: name[1] || '',
       };
-
-      if (this.user.data.email) {
-        this.subscribeAction({ ...userData, email: this.user.data.email });
-      }
     }
 
     if (this.user instanceof Success && this.user.data.email) {

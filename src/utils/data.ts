@@ -45,6 +45,7 @@ export {
   subscribeNote,
   team,
   ticketsBlock,
+  ticketingPreview,
   timezoneOffset,
   title,
   image,

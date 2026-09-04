@@ -28,12 +28,14 @@ class VideoDialog extends ReduxMixin(PolymerElement) {
 
       <mwc-dialog id="dialog" open="[[video.open]]" heading="[[video.title]]">
         <div class="video-wrapper">
-          <lite-youtube
-            video-id="[[video.youtubeId]]"
-            video-title="[[video.title]]"
-            params="autoplay=1"
-            autoload
-          ></lite-youtube>
+          <template is="dom-if" if="[[video.youtubeId]]">
+            <lite-youtube
+              video-id="[[video.youtubeId]]"
+              video-title="[[video.title]]"
+              params="autoplay=1"
+              autoload
+            ></lite-youtube>
+          </template>
         </div>
         <md-outlined-button on-click="closeDialog" slot="primaryAction" dialogAction="close">
           Close

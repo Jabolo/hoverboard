@@ -33,7 +33,14 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 32px;
-          min-height: 80%;
+        }
+
+        .empty-state {
+          margin: 0;
+          padding: 40px 32px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
         }
 
         .speaker:hover .photo {
@@ -164,6 +171,12 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
             </div>
           </a>
         </template>
+
+        <template is="dom-if" if="[[empty]]">
+          <p class="empty-state">
+            The previous speaker archive is being prepared and will appear here when available.
+          </p>
+        </template>
       </div>
 
       <footer-block></footer-block>
@@ -173,6 +186,11 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
   private heroSettings = heroSettings.previousSpeakers;
   private contentLoaders = contentLoaders.previousSpeakers;
   private previousYears = speakers.previousYears;
+
+  @computed('previousSpeakers')
+  private get empty() {
+    return this.previousSpeakers instanceof Success && this.previousSpeakers.data.length === 0;
+  }
 
   override stateChanged(state: RootState) {
     this.previousSpeakers = state.previousSpeakers;

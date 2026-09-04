@@ -39,6 +39,15 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
           background-color: var(--secondary-background-color);
         }
 
+        .empty-state {
+          margin: 48px auto;
+          padding: 40px 32px;
+          max-width: 680px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
+        }
+
         .featured-post {
           height: 200px;
           border-radius: var(--border-radius);
@@ -102,7 +111,7 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
 
       <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
-      <div class="featured">
+      <div class="featured" hidden$="[[showEmptyState]]">
         <div class="container">
           <content-loader
             class="featured-posts-wrapper"
@@ -157,9 +166,16 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
         </div>
       </div>
 
-      <div class="container-narrow">
+      <div class="container-narrow" hidden$="[[showEmptyState]]">
         <posts-list posts="[[posts.data]]"></posts-list>
       </div>
+
+      <template is="dom-if" if="[[showEmptyState]]">
+        <p class="empty-state">
+          News and event updates will be published here as the DevFest Warsaw 2026 programme
+          develops.
+        </p>
+      </template>
 
       <footer-block></footer-block>
     `;
@@ -218,6 +234,11 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
   @computed('posts')
   private get contentLoaderVisibility(): boolean {
     return this.posts instanceof Success || this.posts instanceof Failure;
+  }
+
+  @computed('posts')
+  get showEmptyState() {
+    return this.posts instanceof Success && this.posts.data.length === 0;
   }
 
   addIfNotPhone(base: number, additional: number) {

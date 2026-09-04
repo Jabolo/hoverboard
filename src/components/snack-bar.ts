@@ -35,7 +35,11 @@ export class SnackBar extends ReduxMixin(LitElement) {
       : nothing;
 
     const close = html`
-      <mwc-icon-button slot="dismiss" @click="${this.removeSnackbar}">
+      <mwc-icon-button
+        slot="dismiss"
+        aria-label="Dismiss notification"
+        @click="${this.removeSnackbar}"
+      >
         ${closeIcon}
       </mwc-icon-button>
     `;

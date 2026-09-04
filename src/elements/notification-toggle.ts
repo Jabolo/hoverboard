@@ -68,7 +68,11 @@ export class NotificationToggle extends ReduxMixin(PolymerElement) {
         opened="{{opened}}"
         on-click="requestPermission"
       >
-        <paper-icon-button icon="hoverboard:[[icon]]" slot="dropdown-trigger"></paper-icon-button>
+        <paper-icon-button
+          icon="hoverboard:[[icon]]"
+          aria-label="Notifications"
+          slot="dropdown-trigger"
+        ></paper-icon-button>
 
         <div class="dropdown-panel" slot="dropdown-content">
           <template is="dom-if" if="[[initialized]]">

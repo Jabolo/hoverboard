@@ -6,7 +6,7 @@ import { Ticket } from '../models/ticket';
 import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { initialTicketsState } from '../store/tickets/state';
-import { buyTicket, contentLoaders, ticketsBlock } from '../utils/data';
+import { buyTicket, contentLoaders, eveneaEmbed, ticketsBlock } from '../utils/data';
 import '../utils/icons';
 import './content-loader';
 import './evenea-embed';
@@ -143,49 +143,51 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           load-to="130%"
           animation-time="1s"
           items-count="[[contentLoaders.itemsCount]]"
-          hidden$="[[!pending]]"
+          hidden$="[[!showTicketLoader]]"
         >
         </content-loader>
 
-        <div class="tickets" layout horizontal wrap center-justified>
-          <template is="dom-if" if="[[tickets.error]]"> Error loading tickets </template>
+        <template is="dom-if" if="[[showTicketCards]]">
+          <div class="tickets" layout horizontal wrap center-justified>
+            <template is="dom-if" if="[[tickets.error]]"> Error loading tickets </template>
 
-          <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
-            <a
-              class="ticket-item card"
-              href$="[[ticket.url]]"
-              target="_blank"
-              rel="noopener noreferrer"
-              sold-out$="[[ticket.soldOut]]"
-              in-demand$="[[ticket.inDemand]]"
-              on-click="onTicketTap"
-              layout
-              vertical
-            >
-              <div class="header">
-                <h4>[[ticket.name]]</h4>
-              </div>
-              <div class="content" layout vertical flex-auto>
-                <div class="ticket-price-wrapper">
-                  <div class="price">[[ticket.currency]][[ticket.price]]</div>
-                  <div class="discount">[[getDiscount(ticket)]]</div>
+            <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
+              <a
+                class="ticket-item card"
+                href$="[[ticket.url]]"
+                target="_blank"
+                rel="noopener noreferrer"
+                sold-out$="[[ticket.soldOut]]"
+                in-demand$="[[ticket.inDemand]]"
+                on-click="onTicketTap"
+                layout
+                vertical
+              >
+                <div class="header">
+                  <h4>[[ticket.name]]</h4>
                 </div>
-                <div class="type-description" layout vertical flex-auto center-justified>
-                  <div class="ticket-dates" hidden$="[[!ticket.starts]]">
-                    [[ticket.starts]] - [[ticket.ends]]
+                <div class="content" layout vertical flex-auto>
+                  <div class="ticket-price-wrapper">
+                    <div class="price">[[ticket.currency]][[ticket.price]]</div>
+                    <div class="discount">[[getDiscount(ticket)]]</div>
                   </div>
-                  <div class="ticket-info">[[ticket.info]]</div>
+                  <div class="type-description" layout vertical flex-auto center-justified>
+                    <div class="ticket-dates" hidden$="[[!ticket.starts]]">
+                      [[ticket.starts]] - [[ticket.ends]]
+                    </div>
+                    <div class="ticket-info">[[ticket.info]]</div>
+                  </div>
                 </div>
-              </div>
-              <div class="actions">
-                <div class="sold-out" block$="[[ticket.soldOut]]">[[ticketsBlock.soldOut]]</div>
-                <md-filled-button hidden$="[[ticket.soldOut]]" disabled$="[[!ticket.available]]">
-                  [[getButtonText(ticket.available)]]
-                </md-filled-button>
-              </div>
-            </a>
-          </template>
-        </div>
+                <div class="actions">
+                  <div class="sold-out" block$="[[ticket.soldOut]]">[[ticketsBlock.soldOut]]</div>
+                  <md-filled-button hidden$="[[ticket.soldOut]]" disabled$="[[!ticket.available]]">
+                    [[getButtonText(ticket.available)]]
+                  </md-filled-button>
+                </div>
+              </a>
+            </template>
+          </div>
+        </template>
 
         <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
         <evenea-embed></evenea-embed>
@@ -195,6 +197,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   private ticketsBlock = ticketsBlock;
   private contentLoaders = contentLoaders.tickets;
+  private showTicketCards = Boolean(eveneaEmbed.published);
 
   @property({ type: Object })
   tickets = initialTicketsState;
@@ -206,6 +209,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   @computed('tickets')
   private get pending() {
     return this.tickets instanceof Pending;
+  }
+
+  @computed('tickets')
+  private get showTicketLoader() {
+    return this.showTicketCards && this.pending;
   }
 
   private getDiscount(ticket: Ticket) {

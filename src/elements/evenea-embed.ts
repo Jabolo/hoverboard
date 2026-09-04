@@ -31,7 +31,7 @@ export class EveneaEmbed extends PolymerElement {
           padding: 24px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
-          background: var(--card-background-color);
+          background: var(--default-background-color);
           text-align: center;
         }
 
@@ -41,7 +41,7 @@ export class EveneaEmbed extends PolymerElement {
         }
 
         .draft-link {
-          color: var(--primary-color);
+          color: var(--default-primary-color);
           font-weight: 600;
         }
 

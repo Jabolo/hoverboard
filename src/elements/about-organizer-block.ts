@@ -39,7 +39,7 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
         .organizers-photo {
           --lazy-image-width: 100%;
           --lazy-image-height: 100%;
-          --lazy-image-fit: cover;
+          --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
         }

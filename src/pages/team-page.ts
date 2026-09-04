@@ -157,6 +157,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                         <paper-icon-button
                           class="social-icon"
                           icon="hoverboard:{{social.icon}}"
+                          aria-label="Open [[member.name]] on [[social.icon]]"
                         ></paper-icon-button>
                       </a>
                     </template>

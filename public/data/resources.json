@@ -12,6 +12,7 @@
   "partnershipResources": "Partnership Resources",
   "eventResources": "Event Resources",
   "buyTicket": "Register",
+  "ticketingPreview": "View ticketing status",
   "signIn": "Sign in",
   "signOut": "Sign out",
   "viewHighlights": "View highlights",
@@ -98,7 +99,7 @@
     "callToAction": {
       "featuredSessions": {
         "description": "GDG DevFest Warsaw 2026 brings together developers, designers, engineers, researchers, students, and technology enthusiasts for one day of practical learning and meaningful connections.",
-        "label": "Explore the programme",
+        "label": "View programme updates",
         "link": "/speakers"
       },
       "howItWas": {
