@@ -41,7 +41,7 @@
   ],
   "heroSettings": {
     "home": {
-      "description": "One day of practical sessions, community, and connections for Warsaw's technology community.",
+      "description": "One day of practical sessions, community, and connections",
       "background": {
         "color": "#071426",
         "image": "/images/backgrounds/home-2026.png"
@@ -130,7 +130,7 @@
       "latitude": 52,
       "longitude": 21
     },
-    "description": "Google for Startups Campus Warsaw — the planned venue for DevFest Warsaw 2026."
+    "description": "Google for Startups Campus Warsaw — the venue for DevFest Warsaw 2026."
   },
   "socialNetwork": {
     "follow": [

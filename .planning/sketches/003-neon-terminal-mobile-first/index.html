@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sketch 003 — Neon Terminal Mobile First</title>
+    <link rel="icon" type="image/svg+xml" href="../../../public/images/logos/gdg.svg" />
+    <link id="sketch-theme" data-theme rel="stylesheet" href="../themes/default.css" />
+    <style>
+      :root {
+        --neon-bg: #070c14;
+        --neon-panel: #0d1727;
+        --neon-line: #263d5e;
+        --neon-copy: #eaf2ff;
+        --neon-muted: #9bb0d0;
+        --neon-green: #7ef2a5;
+        --neon-blue: #4c8df7;
+        --neon-yellow: #fbd776;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        background: #eef2f8;
+      }
+      body[data-viewport='phone'] .sketch-stage {
+        max-width: 390px;
+      }
+      body[data-viewport='tablet'] .sketch-stage {
+        max-width: 820px;
+      }
+      body[data-viewport='desktop'] .sketch-stage {
+        max-width: 1460px;
+      }
+
+      .sketch-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 58px;
+        padding: 8px 14px;
+        overflow-x: auto;
+        background: rgba(255, 255, 255, 0.94);
+        border-bottom: 1px solid var(--color-border);
+        backdrop-filter: blur(18px);
+        font-family: var(--font-sans);
+      }
+      .sketch-label {
+        margin-right: 8px;
+        color: var(--color-text-muted);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .concept-tab,
+      .tool-button,
+      .tool-select {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .concept-tab {
+        padding: 9px 14px;
+        font-size: 0.78rem;
+        white-space: nowrap;
+      }
+      .concept-tab:hover,
+      .concept-tab.active {
+        border-color: var(--neon-blue);
+        background: var(--neon-blue);
+        color: #fff;
+      }
+      .sketch-stage {
+        width: calc(100% - 24px);
+        max-width: 1460px;
+        margin: 0 auto;
+        padding: 82px 0 96px;
+        transition: max-width 0.2s ease;
+      }
+
+      .focused-sketch {
+        display: block;
+        animation: appear 0.25s ease both;
+      }
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .neon-page {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #1f324e;
+        border-radius: 24px;
+        background: var(--neon-bg);
+        color: var(--neon-copy);
+        box-shadow: 0 24px 70px rgba(4, 12, 24, 0.3);
+      }
+      .neon-page::before {
+        position: absolute;
+        top: -12%;
+        right: -17%;
+        width: 68%;
+        height: 120%;
+        background: repeating-linear-gradient(
+          124deg,
+          transparent 0 43px,
+          rgba(76, 141, 247, 0.08) 43px 45px,
+          transparent 45px 98px
+        );
+        content: '';
+        transform: rotate(-14deg);
+        pointer-events: none;
+      }
+      .neon-page::after {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--neon-blue) 0 25%,
+          #34a853 25% 50%,
+          #fbbc04 50% 75%,
+          #ea4335 75%
+        );
+        content: '';
+      }
+      .neon-header,
+      .neon-hero,
+      .ticket-section {
+        position: relative;
+        z-index: 1;
+      }
+
+      .neon-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 76px;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.16);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 10px;
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 850;
+        letter-spacing: -0.025em;
+      }
+      .brand img {
+        flex: 0 0 auto;
+        width: 42px;
+        height: 30px;
+        object-fit: contain;
+      }
+      .brand-copy {
+        min-width: 0;
+      }
+      .brand-copy span {
+        display: block;
+        overflow: hidden;
+        color: #fff;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .brand-copy small {
+        display: block;
+        margin-top: 3px;
+        color: #91a9cc;
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      .neon-nav {
+        display: none;
+        align-items: center;
+        gap: 20px;
+      }
+      .neon-nav a {
+        color: #a9bcd9;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+      .neon-nav a:hover {
+        color: #fff;
+      }
+      .header-cta,
+      .menu-toggle {
+        min-height: 44px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--neon-blue);
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .header-cta {
+        display: none;
+        padding: 0 15px;
+        font-size: 0.75rem;
+      }
+      .header-cta:hover,
+      .menu-toggle:hover {
+        background: #79aafa;
+        transform: translateY(-2px);
+      }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        padding: 0;
+        font-size: 1.2rem;
+      }
+      .mobile-menu {
+        display: none;
+        padding: 10px 20px 17px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.16);
+        background: rgba(13, 23, 39, 0.98);
+      }
+      .mobile-menu.open {
+        display: grid;
+        gap: 5px;
+      }
+      .mobile-menu a {
+        min-height: 44px;
+        padding: 12px 4px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.12);
+        color: #c9d8ef;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        text-decoration: none;
+      }
+
+      .neon-hero {
+        display: grid;
+        gap: 44px;
+        padding: 40px 20px 56px;
+      }
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .command-chip,
+      .terminal-command {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(126, 242, 165, 0.36);
+        border-radius: 6px;
+        background: rgba(126, 242, 165, 0.08);
+        color: var(--neon-green);
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .command-chip {
+        min-height: 42px;
+        padding: 0 12px;
+      }
+      .command-chip:hover,
+      .terminal-command:hover {
+        border-color: var(--neon-green);
+        background: rgba(126, 242, 165, 0.16);
+        transform: translateX(4px);
+      }
+      .hero-copy h1 {
+        max-width: 620px;
+        margin: 25px 0 20px;
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: clamp(3.2rem, 17vw, 7.6rem);
+        line-height: 0.9;
+        letter-spacing: -0.12em;
+        text-transform: uppercase;
+      }
+      .hero-copy h1 span {
+        color: var(--neon-green);
+      }
+      .hero-copy p {
+        max-width: 560px;
+        margin: 0;
+        color: var(--neon-muted);
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+      .hero-actions {
+        display: grid;
+        width: 100%;
+        gap: 11px;
+        margin-top: 30px;
+      }
+      .neon-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 17px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--neon-green);
+        color: #09130e;
+        font-size: 0.82rem;
+        font-weight: 850;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(126, 242, 165, 0.16);
+        transition: all 0.15s ease;
+      }
+      .neon-button:hover {
+        background: #a6f8bd;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px rgba(126, 242, 165, 0.24);
+      }
+      .neon-button span,
+      .header-cta span {
+        margin-left: 5px;
+      }
+      .neon-button.secondary {
+        border-color: #526b91;
+        background: transparent;
+        color: #d8e7fb;
+        box-shadow: none;
+      }
+      .neon-button.secondary:hover {
+        border-color: var(--neon-green);
+        background: rgba(126, 242, 165, 0.08);
+      }
+      .micro-meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        gap: 8px;
+        margin-top: 32px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(169, 198, 235, 0.17);
+      }
+      .micro-meta div {
+        color: #748bad;
+        font-family: var(--font-mono);
+        font-size: 0.59rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .micro-meta b {
+        display: block;
+        margin-top: 5px;
+        color: #fff;
+        font-size: 0.8rem;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      .terminal-column {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+      .terminal-window {
+        overflow: hidden;
+        border: 1px solid var(--neon-line);
+        border-radius: 12px;
+        background: rgba(10, 21, 37, 0.93);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+      }
+      .terminal-bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 45px;
+        padding: 0 15px;
+        border-bottom: 1px solid var(--neon-line);
+      }
+      .terminal-bar i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ea4335;
+      }
+      .terminal-bar i:nth-child(2) {
+        background: #fbbc04;
+      }
+      .terminal-bar i:nth-child(3) {
+        background: #34a853;
+      }
+      .terminal-bar span {
+        margin-left: 8px;
+        color: #7890b5;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+      }
+      .terminal-body {
+        padding: 21px 17px 19px;
+        font-family: var(--font-mono);
+        font-size: 0.69rem;
+        line-height: 1.7;
+      }
+      .terminal-line {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 6px;
+      }
+      .terminal-line + .terminal-line {
+        margin-top: 13px;
+      }
+      .terminal-line .prompt {
+        color: var(--neon-green);
+      }
+      .terminal-line .key {
+        color: #8ca6cc;
+      }
+      .terminal-line .value {
+        color: #fff;
+      }
+      .terminal-line .green {
+        color: var(--neon-green);
+      }
+      .terminal-line .blue {
+        color: #8cb5ff;
+      }
+      .terminal-line .yellow {
+        color: var(--neon-yellow);
+      }
+      .terminal-body hr {
+        margin: 17px 0;
+        border: 0;
+        border-top: 1px dashed #304768;
+      }
+      .terminal-command {
+        min-height: 39px;
+        padding: 0 10px;
+      }
+      .terminal-command .cursor {
+        width: 6px;
+        height: 14px;
+        background: var(--neon-green);
+        animation: blink 1.1s steps(2, start) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .status-note {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid rgba(251, 215, 118, 0.28);
+        border-radius: 8px;
+        background: rgba(251, 215, 118, 0.07);
+        color: var(--neon-yellow);
+        font-family: var(--font-mono);
+        font-size: 0.64rem;
+        line-height: 1.45;
+      }
+      .status-note strong {
+        color: #fff;
+      }
+      .countdown-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 17px;
+        border: 1px solid #263d5e;
+        border-radius: 10px;
+        background: #0b1422;
+      }
+      .countdown-card small {
+        display: block;
+        color: #7890b5;
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .countdown-card strong {
+        display: block;
+        margin-top: 5px;
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 1.25rem;
+        letter-spacing: -0.06em;
+      }
+      .countdown-card span {
+        color: var(--neon-green);
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+      }
+
+      .ticket-section {
+        padding: 34px 20px 50px;
+        background: linear-gradient(180deg, rgba(13, 23, 39, 0.75), rgba(7, 12, 20, 0.98));
+        border-top: 1px solid rgba(169, 198, 235, 0.12);
+      }
+      .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .section-heading h2 {
+        margin: 0;
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 1.35rem;
+        letter-spacing: -0.06em;
+      }
+      .section-heading p {
+        max-width: 260px;
+        margin: 0;
+        color: #7991b7;
+        font-size: 0.72rem;
+        line-height: 1.45;
+        text-align: right;
+      }
+      .ticket-grid {
+        display: grid;
+        gap: 10px;
+      }
+      .ticket-choice {
+        position: relative;
+        display: grid;
+        gap: 8px;
+        min-height: 150px;
+        padding: 17px;
+        border: 1px solid #2a4265;
+        border-radius: 10px;
+        background: rgba(12, 26, 44, 0.9);
+        color: #fff;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .ticket-choice:hover,
+      .ticket-choice.selected {
+        border-color: var(--neon-green);
+        background: #112b29;
+        transform: translateY(-2px);
+      }
+      .ticket-choice.selected::after {
+        position: absolute;
+        top: 12px;
+        right: 13px;
+        color: var(--neon-green);
+        content: '✓';
+        font-weight: 900;
+      }
+      .ticket-choice small {
+        color: #7890b5;
+        font-family: var(--font-mono);
+        font-size: 0.59rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .ticket-choice strong {
+        font-family: var(--font-mono);
+        font-size: 1.12rem;
+        letter-spacing: -0.07em;
+      }
+      .ticket-choice span {
+        color: #a9bcd9;
+        font-size: 0.76rem;
+        line-height: 1.45;
+      }
+      .ticket-choice b {
+        align-self: end;
+        color: var(--neon-green);
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+      }
+      .embed-note {
+        margin: 23px 0 0;
+        color: #7d95b9;
+        font-size: 0.7rem;
+        line-height: 1.5;
+      }
+      .embed-note code {
+        color: #b7c9e4;
+        font-family: var(--font-mono);
+      }
+
+      .annotation-mode [data-note] {
+        position: relative;
+      }
+      .annotation-mode [data-note]::after {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        z-index: 2;
+        max-width: 120px;
+        padding: 4px 6px;
+        border: 1px solid #d99b0b;
+        border-radius: 4px;
+        background: rgba(251, 188, 4, 0.94);
+        color: #12213a;
+        content: attr(data-note);
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        font-weight: 800;
+        line-height: 1.2;
+        pointer-events: none;
+      }
+      .toast {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 30;
+        max-width: min(340px, calc(100vw - 28px));
+        padding: 13px 15px;
+        border-radius: 10px;
+        background: #13233a;
+        color: #fff;
+        box-shadow: 0 15px 40px rgba(5, 15, 30, 0.35);
+        font-family: var(--font-sans);
+        font-size: 0.78rem;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: all 0.2s ease;
+      }
+      .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #sketch-tools {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        z-index: 25;
+        width: min(245px, calc(100vw - 24px));
+        padding: 9px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 10px;
+        background: rgba(9, 16, 28, 0.86);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        font-family: var(--font-sans);
+        font-size: 0.67rem;
+        backdrop-filter: blur(12px);
+      }
+      #sketch-tools summary {
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .tool-row {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        align-items: center;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .tool-row > span {
+        color: #a5b7d0;
+      }
+      .tool-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .tool-button {
+        padding: 6px 8px;
+        border-color: #405370;
+        background: #17243a;
+        color: #d8e5f8;
+        font-size: 0.64rem;
+      }
+      .tool-button:hover,
+      .tool-button.active {
+        border-color: var(--neon-green);
+        color: #fff;
+      }
+      .tool-select {
+        width: 100%;
+        padding: 6px 8px;
+        border-color: #405370;
+        background: #17243a;
+        color: #fff;
+        font-size: 0.64rem;
+      }
+      .tool-select option {
+        color: #111;
+      }
+
+      @media (min-width: 700px) {
+        .sketch-stage {
+          width: calc(100% - 40px);
+          padding-top: 92px;
+        }
+        .neon-header {
+          min-height: 82px;
+          padding: 19px 30px;
+        }
+        .neon-nav {
+          display: flex;
+        }
+        .header-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .menu-toggle,
+        .mobile-menu {
+          display: none !important;
+        }
+        .neon-hero {
+          grid-template-columns: minmax(0, 0.95fr) minmax(390px, 1.05fr);
+          gap: 6%;
+          padding: 70px 6% 75px;
+        }
+        .hero-actions {
+          display: flex;
+          width: auto;
+          flex-wrap: wrap;
+        }
+        .micro-meta {
+          max-width: 540px;
+        }
+        .ticket-section {
+          padding: 43px 6% 58px;
+        }
+        .ticket-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (min-width: 1100px) {
+        .neon-page {
+          border-radius: 30px;
+        }
+        .hero-copy h1 {
+          font-size: clamp(4.2rem, 7vw, 8rem);
+        }
+        .terminal-body {
+          padding: 25px 27px 28px;
+          font-size: 0.77rem;
+        }
+        .terminal-bar {
+          min-height: 49px;
+          padding: 0 18px;
+        }
+        .ticket-grid {
+          gap: 14px;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .sketch-stage {
+          width: calc(100% - 16px);
+        }
+        .neon-header {
+          padding-inline: 15px;
+        }
+        .brand {
+          font-size: 0.82rem;
+        }
+        .brand img {
+          width: 36px;
+        }
+        .neon-hero {
+          padding: 34px 15px 45px;
+        }
+        .hero-copy h1 {
+          font-size: clamp(3rem, 17vw, 4.7rem);
+        }
+        .hero-copy p {
+          font-size: 0.94rem;
+        }
+        .terminal-column {
+          gap: 11px;
+        }
+        .ticket-section {
+          padding-inline: 15px;
+        }
+        .section-heading {
+          align-items: start;
+          flex-direction: column;
+        }
+        .section-heading p {
+          max-width: none;
+          text-align: left;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body data-viewport="desktop">
+    <nav class="sketch-nav" aria-label="Sketch controls">
+      <span class="sketch-label">Sketch 003 · focused refinement</span>
+      <button class="concept-tab active" data-variant="neon">A · Neon Terminal</button>
+      <a class="concept-tab" href="../004-google-pulse-mobile-first/index.html"
+        >Compare Google Pulse →</a
+      >
+    </nav>
+
+    <main class="sketch-stage">
+      <section class="focused-sketch" data-variant-panel="neon">
+        <article class="neon-page">
+          <header class="neon-header">
+            <div class="brand" data-note="official GDG icon + event name">
+              <img src="../../../public/images/logos/gdg.svg" alt="Google Developer Groups" />
+              <div class="brand-copy">
+                <span>DevFest Warsaw 2026</span><small>Google Developer Groups</small>
+              </div>
+            </div>
+            <nav class="neon-nav" aria-label="Event navigation">
+              <a href="#event" data-action="nav">Event</a>
+              <a href="#tickets" data-action="nav">Tickets</a>
+              <a href="#community" data-action="nav">Community</a>
+            </nav>
+            <button class="header-cta" data-action="reserve">
+              Register <span aria-hidden="true">↗</span>
+            </button>
+            <button
+              class="menu-toggle"
+              data-action="menu"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+            >
+              ☰
+            </button>
+          </header>
+          <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile event navigation">
+            <a href="#event" data-action="nav">Event overview</a>
+            <a href="#tickets" data-action="nav">Tickets</a>
+            <a href="#community" data-action="nav">Community</a>
+          </nav>
+
+          <section class="neon-hero" id="event">
+            <div class="hero-copy">
+              <button class="command-chip" data-action="preview">
+                &gt; devfest.init --preview <span aria-hidden="true">↗</span>
+              </button>
+              <h1 data-note="mobile-first headline">Join<br /><span>the room.</span></h1>
+              <p>
+                One day of practical sessions, community, and connections. Bring a question. Leave
+                with a few better ones.
+              </p>
+              <div class="hero-actions">
+                <button class="neon-button" data-action="reserve">
+                  Open registration <span aria-hidden="true">↗</span>
+                </button>
+                <button class="neon-button secondary" data-action="preview">Run the signal</button>
+              </div>
+              <div class="micro-meta" aria-label="Event facts">
+                <div>Date<b>21.11.2026</b></div>
+                <div>Places<b>300</b></div>
+                <div>Format<b>One day</b></div>
+              </div>
+            </div>
+
+            <div class="terminal-column" id="community">
+              <div class="terminal-window" data-note="live event status">
+                <div class="terminal-bar"><i></i><i></i><i></i><span>devfest-status.sh</span></div>
+                <div class="terminal-body">
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span class="key">./event --status</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">status:</span>
+                      <span class="value green" id="event-status">confirmed</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">date:</span>
+                      <span class="value blue">2026-11-21</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">format:</span>
+                      <span class="value">one_day / in_person</span></span
+                    >
+                  </div>
+                  <hr />
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span class="key">./tickets --show</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">release:</span>
+                      <span class="value green">early_bird</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">price:</span>
+                      <span class="value yellow">PLN 49</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">capacity:</span> <span class="value">300</span></span>
+                  </div>
+                  <hr />
+                  <button class="terminal-command" data-action="preview">
+                    $ ./countdown --next <span class="cursor"></span>
+                  </button>
+                  <div class="status-note">
+                    <strong>NOTE</strong
+                    ><span
+                      >Registration stays in the page via an Evenea embed. No context switch.</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="countdown-card" data-note="persistent mobile CTA support">
+                <div><small>Doors open in</small><strong id="countdown">--d --h --m</strong></div>
+                <span>21 NOV 2026</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="ticket-section" id="tickets">
+            <div class="section-heading">
+              <h2>Choose your access</h2>
+              <p>Keep the catalogue visible, then let the embed handle registration.</p>
+            </div>
+            <div class="ticket-grid" role="list" aria-label="Ticket options">
+              <button
+                class="ticket-choice selected"
+                data-ticket="Early Bird"
+                role="listitem"
+                aria-pressed="true"
+              >
+                <small>First release</small><strong>Early Bird</strong
+                ><span>One day of sessions, community, and connections.</span><b>PLN 49</b>
+              </button>
+              <button
+                class="ticket-choice"
+                data-ticket="Regular"
+                role="listitem"
+                aria-pressed="false"
+              >
+                <small>Standard access</small><strong>Regular</strong
+                ><span>Access to all lecture and workshop sessions.</span><b>PLN 79</b>
+              </button>
+              <button
+                class="ticket-choice"
+                data-ticket="Supporter"
+                role="listitem"
+                aria-pressed="false"
+              >
+                <small>Support the room</small><strong>Supporter</strong
+                ><span>Help make free places available to people who need them.</span><b>PLN 250</b>
+              </button>
+            </div>
+            <p class="embed-note">
+              Selected: <code id="selected-ticket">Early Bird · PLN 49</code>. Final implementation
+              will place the Evenea registration form directly below these choices.
+            </p>
+          </section>
+        </article>
+      </section>
+    </main>
+
+    <details id="sketch-tools">
+      <summary>Sketch controls</summary>
+      <div class="tool-row">
+        <span>Theme</span
+        ><select id="theme-switcher" class="tool-select">
+          <option value="default">Google / clear</option>
+          <option value="warm">Warm editorial</option>
+          <option value="mono">Monochrome</option>
+        </select>
+      </div>
+      <div class="tool-row">
+        <span>Viewport</span>
+        <div class="tool-controls">
+          <button class="tool-button" data-viewport="phone">Phone</button
+          ><button class="tool-button" data-viewport="tablet">Tablet</button
+          ><button class="tool-button active" data-viewport="desktop">Desktop</button>
+        </div>
+      </div>
+      <div class="tool-row">
+        <span>Notes</span><button id="annotation-toggle" class="tool-button">Off</button>
+      </div>
+    </details>
+    <div class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const toast = document.querySelector('.toast');
+      let toastTimer;
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('visible'), 2200);
+      };
+
+      const scrollToId = (id) =>
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      document.querySelectorAll('[data-action]').forEach((element) => {
+        element.addEventListener('click', (event) => {
+          const action = element.dataset.action;
+          if (element.tagName === 'A') event.preventDefault();
+          if (action === 'reserve') {
+            scrollToId('#tickets');
+            showToast('Registration CTA is ready for the Evenea embed.');
+          } else if (action === 'preview') {
+            const status = document.querySelector('#event-status');
+            status.textContent = status.textContent === 'confirmed' ? 'preview_ready' : 'confirmed';
+            showToast(`Signal: ${status.textContent}.`);
+          } else if (action === 'menu') {
+            const menu = document.querySelector('#mobile-menu');
+            const open = menu.classList.toggle('open');
+            element.setAttribute('aria-expanded', String(open));
+            element.textContent = open ? '×' : '☰';
+          } else if (action === 'nav') {
+            const target = element.getAttribute('href');
+            scrollToId(target);
+            document.querySelector('#mobile-menu').classList.remove('open');
+            document.querySelector('.menu-toggle').setAttribute('aria-expanded', 'false');
+            document.querySelector('.menu-toggle').textContent = '☰';
+          }
+        });
+      });
+
+      document.querySelectorAll('.ticket-choice').forEach((ticket) => {
+        ticket.addEventListener('click', () => {
+          document.querySelectorAll('.ticket-choice').forEach((item) => {
+            item.classList.toggle('selected', item === ticket);
+            item.setAttribute('aria-pressed', String(item === ticket));
+          });
+          document.querySelector('#selected-ticket').textContent =
+            `${ticket.dataset.ticket} · ${ticket.querySelector('b').textContent}`;
+          showToast(`${ticket.dataset.ticket} selected.`);
+        });
+      });
+
+      document.querySelectorAll('button[data-viewport]').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.body.dataset.viewport = button.dataset.viewport;
+          document
+            .querySelectorAll('button[data-viewport]')
+            .forEach((item) => item.classList.toggle('active', item === button));
+          showToast(`Viewport: ${button.textContent}`);
+        });
+      });
+
+      document.querySelector('#theme-switcher').addEventListener('change', (event) => {
+        document.querySelector('#sketch-theme').href = `../themes/${event.target.value}.css`;
+        showToast(`Theme: ${event.target.value}`);
+      });
+
+      document.querySelector('#annotation-toggle').addEventListener('click', (event) => {
+        document.body.classList.toggle('annotation-mode');
+        event.currentTarget.textContent = document.body.classList.contains('annotation-mode')
+          ? 'On'
+          : 'Off';
+        showToast(
+          document.body.classList.contains('annotation-mode')
+            ? 'Design notes on.'
+            : 'Design notes off.',
+        );
+      });
+
+      const eventDate = new Date('2026-11-21T09:00:00+01:00');
+      const updateCountdown = () => {
+        const total = Math.max(0, eventDate.getTime() - Date.now());
+        const days = Math.floor(total / 86400000);
+        const hours = Math.floor((total % 86400000) / 3600000);
+        const minutes = Math.floor((total % 3600000) / 60000);
+        document.querySelector('#countdown').textContent =
+          `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`;
+      };
+      updateCountdown();
+      setInterval(updateCountdown, 60000);
+    </script>
+  </body>
+</html>

@@ -131,12 +131,62 @@
   ],
   "tickets": [
     {
+      "available": true,
+      "currency": "zł",
+      "ends": "September 30, 2026",
+      "inDemand": true,
+      "info": "First come, first served. Early Bird pricing.",
+      "name": "Early Bird",
+      "price": 49,
+      "regular": true,
+      "soldOut": false,
+      "starts": "Available now",
+      "primary": false,
+      "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"
+    },
+    {
+      "available": true,
+      "currency": "zł",
+      "ends": "November 12, 2026",
+      "info": "Access to all lecture and workshop sessions.",
+      "name": "Regular",
+      "price": 79,
+      "primary": true,
+      "soldOut": false,
+      "starts": "Available now",
+      "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"
+    },
+    {
       "available": false,
       "currency": "zł",
-      "info": "Final ticket types and pricing will be announced before publication.",
-      "name": "Ticketing preview — not final",
-      "price": 0,
+      "ends": "November 21, 2026",
+      "info": "Access to all lecture and workshop sessions.",
+      "name": "LastBird",
+      "price": 149,
       "soldOut": false,
+      "starts": "October 31, 2026",
+      "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"
+    },
+    {
+      "available": true,
+      "currency": "zł",
+      "ends": "November 21, 2026",
+      "info": "Support the event and help make free places available to people who need them.",
+      "name": "Supporter",
+      "price": 250,
+      "soldOut": false,
+      "starts": "Available now",
+      "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"
+    },
+    {
+      "available": true,
+      "currency": "zł",
+      "ends": "November 21, 2026",
+      "info": "A special ticket for a patron of the GDG community.",
+      "name": "Patron",
+      "price": 500,
+      "soldOut": false,
+      "starts": "Available now",
       "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"
     }
   ],

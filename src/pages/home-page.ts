@@ -6,6 +6,7 @@ import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/about-block';
+import '../components/event-countdown';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
@@ -27,7 +28,6 @@ import {
   dates,
   description,
   heroSettings,
-  location,
   showForkMeBlockForProjectIds,
   title,
   ticketingPreview,
@@ -68,7 +68,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
-          margin-bottom: 12px;
+          margin-bottom: 24px;
         }
 
         .info-items {
@@ -88,6 +88,14 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .action-buttons md-filled-button,
         .action-buttons md-outlined-button {
           margin: 8px;
+        }
+
+        .action-buttons md-filled-button {
+          --md-filled-button-container-color: var(--google-blue-strong);
+          --md-filled-button-hover-container-color: var(--google-blue);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #fff;
+          --md-filled-button-icon-color: #fff;
         }
 
         .action-buttons .watch-video {
@@ -182,14 +190,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <lazy-image
             class="community-logo"
             src="/images/logos/gdg-warsaw-white.svg"
-            alt="GDG Warsaw"
+            alt="Google Developer Groups Warszawa"
           ></lazy-image>
           <lazy-image class="hero-logo" src="/images/logo.svg" alt="[[siteTitle]]"></lazy-image>
 
           <div class="info-items">
-            <div class="info-item">[[city]]. [[dates]]</div>
+            <div class="info-item">[[dates]]</div>
             <div class="info-item">[[heroSettings.description]]</div>
           </div>
+
+          <event-countdown></event-countdown>
 
           <div class="action-buttons" layout horizontal center-justified wrap>
             <template is="dom-if" if="[[hasHighlights]]">
@@ -282,7 +292,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     `;
   }
 
-  private city = location.city;
   private siteTitle = title;
   private dates = dates;
   private viewHighlights = viewHighlights;

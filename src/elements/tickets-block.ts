@@ -154,9 +154,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
               <a
                 class="ticket-item card"
-                href$="[[ticket.url]]"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#registration"
                 sold-out$="[[ticket.soldOut]]"
                 in-demand$="[[ticket.inDemand]]"
                 on-click="onTicketTap"
@@ -179,7 +177,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                   </div>
                 </div>
                 <div class="actions">
-                  <div class="sold-out" block$="[[ticket.soldOut]]">[[ticketsBlock.soldOut]]</div>
+                  <template is="dom-if" if="[[ticket.soldOut]]">
+                    <div class="sold-out" block>[[ticketsBlock.soldOut]]</div>
+                  </template>
                   <md-filled-button hidden$="[[ticket.soldOut]]" disabled$="[[!ticket.available]]">
                     [[getButtonText(ticket.available)]]
                   </md-filled-button>
@@ -190,7 +190,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         </template>
 
         <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
-        <evenea-embed></evenea-embed>
+        <evenea-embed id="registration"></evenea-embed>
       </div>
     `;
   }

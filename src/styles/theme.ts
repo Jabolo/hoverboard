@@ -2,52 +2,66 @@ import { css } from 'lit';
 
 export const theme = css`
   :host {
-    --dark-primary-color: #512da8;
-    --default-primary-color: #673ab7;
-    --focused-color: #311b92;
-    --light-primary-color: #d1c4e9;
+    /* GDG palette: use the supplied Google colors as accents and accessible
+       companion shades for text, controls, and focus states. */
+    --google-blue: #4285f4;
+    --google-green: #34a853;
+    --google-yellow: #f9ab00;
+    --google-red: #ea4335;
+    --google-blue-strong: #1967d2;
+    --google-green-strong: #137333;
+    --google-yellow-strong: #a15c00;
+    --google-red-strong: #b3261e;
+    --dark-primary-color: var(--google-blue-strong);
+    --default-primary-color: #1a73e8;
+    --focused-color: #174ea6;
+    --light-primary-color: #d2e3fc;
+    --md-sys-color-primary: var(--default-primary-color);
+    --md-sys-color-on-primary: #fff;
+    --md-sys-color-primary-container: var(--primary-color-white);
+    --md-sys-color-on-primary-container: var(--focused-color);
     --text-primary-color: #fff;
-    --accent-color: #ff5252;
+    --accent-color: var(--google-red);
     --primary-background-color: #fff;
-    --primary-text-color: #424242;
-    --secondary-text-color: #757575;
+    --primary-text-color: #3c4043;
+    --secondary-text-color: #5f6368;
     --disabled-text-color: #bdbdbd;
-    --divider-color: #ededed;
-    --footer-background-color: #f5f5f5;
-    --footer-text-color: #616161;
+    --divider-color: #dadce0;
+    --footer-background-color: #f8fafd;
+    --footer-text-color: #5f6368;
     --twitter-color: #4099ff;
     --facebook-color: #3b5998;
     --border-light-color: #e2e2e2;
-    --error-color: #e64a19;
+    --error-color: var(--google-red-strong);
 
     /* Custom */
     --default-background-color: #fff;
-    --secondary-background-color: #f5f5f5;
-    --additional-background-color: #f7f7f7;
-    --contrast-additional-background-color: #e8e8e8;
+    --secondary-background-color: #f8fafd;
+    --additional-background-color: #f1f3f4;
+    --contrast-additional-background-color: #e8eaed;
     --animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --slide-animation: 0.4s cubic-bezier(0, 0, 0.2, 1);
-    --border-radius: 4px;
+    --border-radius: 8px;
     --box-shadow:
       0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
     --box-shadow-primary-color:
-      0 3px 3px -2px rgb(103 58 183 / 30%), 0 3px 4px 0 rgb(103 58 183 / 30%),
-      0 1px 8px 0 rgb(103 58 183 / 30%);
+      0 3px 3px -2px rgb(25 103 210 / 24%), 0 3px 4px 0 rgb(25 103 210 / 24%),
+      0 1px 8px 0 rgb(25 103 210 / 24%);
     --box-shadow-primary-color-hover:
-      0 1px 3px -2px rgb(103 58 183 / 40%), 0 4px 5px 0 rgb(103 58 183 / 40%),
-      0 2px 9px 0 rgb(103 58 183 / 40%);
+      0 1px 3px -2px rgb(25 103 210 / 32%), 0 4px 5px 0 rgb(25 103 210 / 32%),
+      0 2px 9px 0 rgb(25 103 210 / 32%);
     --font-family:
       -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, helvetica, arial, sans-serif,
       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     --max-container-width: 1280px;
-    --primary-color-transparent: rgb(103 58 183 / 10%);
-    --primary-color-light: rgb(103 58 183 / 80%);
-    --primary-color-white: #ede7f6;
+    --primary-color-transparent: rgb(66 133 244 / 12%);
+    --primary-color-light: #4285f4;
+    --primary-color-white: #e8f0fe;
 
     /* Labels */
-    --gde: #3d5afe;
-    --wtm: #1de9b6;
-    --gdg: #00b0ff;
+    --gde: var(--google-blue);
+    --wtm: var(--google-green);
+    --gdg: var(--google-blue);
 
     /* Tags */
     --general: #9e9e9e;

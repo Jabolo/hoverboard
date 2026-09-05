@@ -16,7 +16,7 @@ This project is based on the current `gdg-x/hoverboard` `main` branch. The previ
 - Event lead: Michał Jabłoński
 - Planned capacity: 300 attendees
 
-The public copy intentionally marks speakers, programme, ticket types, and pricing as pending until the organizing team confirms them.
+The public copy marks speakers and programme details as pending until the organizing team confirms them. Ticket types and current prices are mirrored from the live Evenea event into Firestore for the website cards.
 
 The team seed uses the current organizer cards from the [GDG Warszawa community page](https://gdg.community.dev/gdg-warszawa/), checked on September 3, 2026. Their public Cloudinary avatars are stored locally under `public/images/team/` and displayed as square, cropped cards so the page does not depend on a third-party image request at runtime.
 
@@ -39,15 +39,15 @@ GCLOUD_PROJECT=gdg-warsaw-devfest26-web npm run firestore:init
 
 ## Evenea
 
-The private Evenea draft was created for integration testing:
+The Evenea event is published and currently protected by an access code during preview:
 
 - Event ID: `376576`
 - Draft URL: `https://app.evenea.pl/event/devfestwarsaw2026/`
 - Embed source: `https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe`
 
-The event remains a draft and is not published. The website uses the official Evenea iframe source and resizer script generated in the organizer panel. Before publication, replace the preview ticket with the final ticket types and confirm the public event state.
+The website uses the official Evenea iframe source and resizer script generated in the organizer panel. The ticket cards remain visible as the catalogue, but their links stay on the website and scroll to the embedded registration form instead of opening a separate Evenea page. The public event page and the registration form were checked end-to-end on September 5, 2026. The existing 100% one-time Early Bird promotional code was accepted and reduced one Early Bird ticket from 49,00 zł to 0,00 zł in Evenea.
 
-While the event is a draft, `eveneaEmbed.published` remains `false` and the website shows a private-preview notice instead of loading the anonymous Evenea page. After human approval and publication in Evenea, set it to `true` in `public/data/resources.json` and redeploy Hosting to activate the iframe.
+`eveneaEmbed.published` is `true`, so the website loads the Evenea registration iframe. Because the event page is still access-code protected for preview, attendees must enter the organizer-provided access code before the ticket form appears. Do not place that code in source control or public copy.
 
 ## Deployment
 

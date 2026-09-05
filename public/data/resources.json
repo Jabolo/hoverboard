@@ -1,6 +1,6 @@
 {
   "title": "GDG DevFest Warsaw 2026",
-  "description": "A community-led technology conference organized by GDG Warsaw on November 21, 2026.",
+  "description": "A community-led technology conference for Warsaw's technology community on November 21, 2026.",
   "image": "images/backgrounds/home-2026.png",
   "keywords": "GDG, DevFest, Warsaw, developers, technology, community, conference",
   "dates": "November 21, 2026",
@@ -12,7 +12,7 @@
   "partnershipResources": "Partnership Resources",
   "eventResources": "Event Resources",
   "buyTicket": "Register",
-  "ticketingPreview": "View ticketing status",
+  "ticketingPreview": "View registration",
   "signIn": "Sign in",
   "signOut": "Sign out",
   "viewHighlights": "View highlights",
@@ -129,7 +129,7 @@
   },
   "ticketsBlock": {
     "title": "Tickets",
-    "ticketsDetails": "Registration is handled through Evenea. Ticket types and final pricing will be announced before publication.",
+    "ticketsDetails": "Registration is handled securely through Evenea. Select a ticket in the embedded form below and apply a promotional code if you have one.",
     "soldOut": "Sold out",
     "notAvailableYet": "Not available yet",
     "save": "Save ${discount}% today"
@@ -275,7 +275,7 @@
     "blocks": [
       {
         "title": "Organizer",
-        "description": "[GDG Warsaw](https://gdg.community.dev/gdg-warszawa/) is the organizer of DevFest Warsaw 2026, working with community volunteers and partners.",
+        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) (GDG Warsaw) brings DevFest Warsaw 2026 to the community with volunteers and partners.",
         "callToAction": {
           "label": "Meet the team",
           "link": "/team",
@@ -322,8 +322,8 @@
   },
   "eveneaEmbed": {
     "title": "Registration",
-    "description": "The registration flow is currently a private Evenea preview and will be activated after the event page is approved for publication.",
-    "published": false,
+    "description": "Choose a ticket and complete registration securely in the embedded Evenea form below. The current event page is protected by an access code during preview.",
+    "published": true,
     "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/",
     "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe",
     "resizerScriptSrc": "https://app.evenea.pl/js/iframe/new/iframeResizer2.js"

@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sketch 004 — Google Pulse Mobile First</title>
+    <link rel="icon" type="image/svg+xml" href="../../../public/images/logos/gdg.svg" />
+    <link id="sketch-theme" data-theme rel="stylesheet" href="../themes/default.css" />
+    <style>
+      :root {
+        --pulse-navy: #091426;
+        --pulse-blue: #4285f4;
+        --pulse-red: #ea4335;
+        --pulse-yellow: #fbbc04;
+        --pulse-green: #34a853;
+        --pulse-ink: #101a30;
+        --pulse-muted: #aebbd0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        background: #edf2f8;
+      }
+      body[data-viewport='phone'] .sketch-stage {
+        max-width: 390px;
+      }
+      body[data-viewport='tablet'] .sketch-stage {
+        max-width: 820px;
+      }
+      body[data-viewport='desktop'] .sketch-stage {
+        max-width: 1460px;
+      }
+
+      .sketch-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 58px;
+        padding: 8px 14px;
+        overflow-x: auto;
+        background: rgba(255, 255, 255, 0.94);
+        border-bottom: 1px solid var(--color-border);
+        backdrop-filter: blur(18px);
+        font-family: var(--font-sans);
+      }
+      .sketch-label {
+        margin-right: 8px;
+        color: var(--color-text-muted);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .concept-tab,
+      .tool-button,
+      .tool-select {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        background: var(--color-surface);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .concept-tab {
+        padding: 9px 14px;
+        font-size: 0.78rem;
+        white-space: nowrap;
+      }
+      .concept-tab:hover,
+      .concept-tab.active {
+        border-color: var(--pulse-blue);
+        background: var(--pulse-blue);
+        color: #fff;
+      }
+      .sketch-stage {
+        width: calc(100% - 24px);
+        max-width: 1460px;
+        margin: 0 auto;
+        padding: 82px 0 96px;
+        transition: max-width 0.2s ease;
+      }
+
+      .focused-sketch {
+        display: block;
+        animation: appear 0.25s ease both;
+      }
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .pulse-page {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #1c2d48;
+        border-radius: 24px;
+        background: var(--pulse-navy);
+        color: #fff;
+        box-shadow: 0 24px 70px rgba(7, 20, 40, 0.3);
+      }
+      .pulse-page::before {
+        position: absolute;
+        top: 26%;
+        right: -10%;
+        width: 58%;
+        height: 95%;
+        border: 1px solid rgba(66, 133, 244, 0.2);
+        border-radius: 50%;
+        content: '';
+        transform: rotate(-18deg);
+        pointer-events: none;
+      }
+      .pulse-page::after {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 8px;
+        background: linear-gradient(
+          90deg,
+          var(--pulse-blue) 0 25%,
+          var(--pulse-green) 25% 50%,
+          var(--pulse-yellow) 50% 75%,
+          var(--pulse-red) 75%
+        );
+        content: '';
+      }
+      .pulse-header,
+      .pulse-hero,
+      .pulse-support {
+        position: relative;
+        z-index: 1;
+      }
+      .pulse-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 76px;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.16);
+      }
+      .pulse-brand {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 10px;
+      }
+      .pulse-brand img {
+        flex: 0 0 auto;
+        width: 42px;
+        height: 30px;
+        object-fit: contain;
+      }
+      .pulse-brand span {
+        display: block;
+        overflow: hidden;
+        color: #fff;
+        font-size: 0.88rem;
+        font-weight: 850;
+        letter-spacing: -0.025em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .pulse-brand small {
+        display: block;
+        margin-top: 3px;
+        color: #8fa6c9;
+        font-family: var(--font-mono);
+        font-size: 0.57rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .pulse-nav {
+        display: none;
+        align-items: center;
+        gap: 20px;
+      }
+      .pulse-nav a {
+        color: #a9bcd9;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+      .pulse-nav a:hover {
+        color: #fff;
+      }
+      .header-cta,
+      .menu-toggle {
+        min-height: 44px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--pulse-blue);
+        color: #fff;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .header-cta {
+        display: none;
+        padding: 0 15px;
+        font-size: 0.75rem;
+      }
+      .header-cta:hover,
+      .menu-toggle:hover {
+        background: #79aafa;
+        transform: translateY(-2px);
+      }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        padding: 0;
+        font-size: 1.2rem;
+      }
+      .mobile-menu {
+        display: none;
+        padding: 10px 20px 17px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.16);
+        background: rgba(9, 20, 38, 0.98);
+      }
+      .mobile-menu.open {
+        display: grid;
+        gap: 5px;
+      }
+      .mobile-menu a {
+        min-height: 44px;
+        padding: 12px 4px;
+        border-bottom: 1px solid rgba(169, 198, 235, 0.12);
+        color: #d4e1f4;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        text-decoration: none;
+      }
+
+      .pulse-hero {
+        display: grid;
+        gap: 42px;
+        padding: 40px 20px 48px;
+        background: radial-gradient(circle at 92% 60%, rgba(66, 133, 244, 0.16), transparent 40%);
+      }
+      .pulse-copy {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .pulse-eyebrow {
+        color: var(--pulse-yellow);
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .pulse-copy h1 {
+        max-width: 650px;
+        margin: 23px 0 20px;
+        color: #fff;
+        font-size: clamp(3.7rem, 18vw, 8rem);
+        line-height: 0.85;
+        letter-spacing: -0.1em;
+      }
+      .pulse-copy h1 span:nth-child(1) {
+        color: var(--pulse-blue);
+      }
+      .pulse-copy h1 span:nth-child(2) {
+        color: #fff;
+      }
+      .pulse-copy h1 span:nth-child(3) {
+        color: var(--pulse-yellow);
+      }
+      .pulse-copy p {
+        max-width: 530px;
+        margin: 0;
+        color: var(--pulse-muted);
+        font-size: 1rem;
+        line-height: 1.62;
+      }
+      .pulse-actions {
+        display: grid;
+        width: 100%;
+        gap: 10px;
+        margin-top: 30px;
+      }
+      .pulse-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--pulse-blue);
+        color: #fff;
+        font-size: 0.82rem;
+        font-weight: 850;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(66, 133, 244, 0.22);
+        transition: all 0.15s ease;
+      }
+      .pulse-button:hover {
+        background: #73a4fa;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px rgba(66, 133, 244, 0.3);
+      }
+      .pulse-button span,
+      .header-cta span {
+        margin-left: 5px;
+      }
+      .pulse-button.secondary {
+        border-color: #587092;
+        background: transparent;
+        color: #dce8f8;
+        box-shadow: none;
+      }
+      .pulse-button.secondary:hover {
+        border-color: #83afff;
+        background: rgba(66, 133, 244, 0.1);
+      }
+      .pulse-date {
+        display: grid;
+        gap: 5px;
+        margin-top: 30px;
+        padding-top: 19px;
+        border-top: 1px solid rgba(169, 198, 235, 0.17);
+      }
+      .pulse-date strong {
+        color: #fff;
+        font-size: 1.35rem;
+        letter-spacing: -0.05em;
+      }
+      .pulse-date span {
+        color: #8fa6c9;
+        font-family: var(--font-mono);
+        font-size: 0.61rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .pulse-visual {
+        position: relative;
+        min-height: 350px;
+        overflow: hidden;
+        border: 1px solid rgba(126, 164, 218, 0.24);
+        border-radius: 18px;
+        background: linear-gradient(135deg, #122346, #0a1527 65%, #16294a);
+      }
+      .pulse-visual::before,
+      .pulse-visual::after {
+        position: absolute;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 50%;
+        content: '';
+        pointer-events: none;
+      }
+      .pulse-visual::before {
+        top: 8%;
+        right: -18%;
+        width: 110%;
+        height: 82%;
+        transform: rotate(26deg);
+      }
+      .pulse-visual::after {
+        top: 19%;
+        right: -8%;
+        width: 90%;
+        height: 66%;
+        border-color: rgba(66, 133, 244, 0.3);
+        transform: rotate(26deg);
+      }
+      .pulse-node {
+        position: absolute;
+        z-index: 2;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 8px rgba(255, 255, 255, 0.06),
+          0 0 18px currentColor;
+      }
+      .pulse-node.blue {
+        top: 21%;
+        left: 14%;
+        color: var(--pulse-blue);
+        background: var(--pulse-blue);
+      }
+      .pulse-node.green {
+        top: 13%;
+        right: 19%;
+        color: var(--pulse-green);
+        background: var(--pulse-green);
+      }
+      .pulse-node.yellow {
+        right: 9%;
+        bottom: 22%;
+        color: var(--pulse-yellow);
+        background: var(--pulse-yellow);
+      }
+      .pulse-node.red {
+        bottom: 12%;
+        left: 20%;
+        color: var(--pulse-red);
+        background: var(--pulse-red);
+      }
+      .event-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: min(78%, 330px);
+        min-height: 270px;
+        padding: 18px;
+        border: 1px solid rgba(25, 43, 74, 0.1);
+        border-radius: 12px;
+        background: #f8fbff;
+        color: var(--pulse-ink);
+        box-shadow: 0 22px 46px rgba(0, 0, 0, 0.28);
+        transform: translate(-50%, -50%) rotate(-4deg);
+        transition: transform 0.2s ease;
+      }
+      .pulse-visual:hover .event-card,
+      .pulse-visual.flash .event-card {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1.025);
+      }
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #516582;
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .event-card img {
+        display: block;
+        width: min(100%, 220px);
+        height: auto;
+        margin: 12px auto 8px;
+      }
+      .card-bottom {
+        display: flex;
+        align-items: end;
+        gap: 13px;
+        padding-top: 13px;
+        border-top: 1px solid #dce5f1;
+      }
+      .card-bottom strong {
+        font-size: 3.5rem;
+        line-height: 0.8;
+        letter-spacing: -0.09em;
+      }
+      .card-bottom span {
+        color: #5c6e88;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        font-weight: 800;
+        line-height: 1.3;
+        letter-spacing: 0.07em;
+      }
+      .visual-label {
+        position: absolute;
+        right: 15px;
+        bottom: 14px;
+        left: 15px;
+        z-index: 4;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #8ca6cc;
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .pulse-support {
+        display: grid;
+        gap: 34px;
+        padding: 36px 20px 52px;
+        background: #f8fbff;
+        color: var(--pulse-ink);
+      }
+      .pulse-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .pulse-stat {
+        padding: 15px 13px;
+        border-top: 3px solid var(--pulse-blue);
+        background: #eef4fd;
+      }
+      .pulse-stat:nth-child(2) {
+        border-top-color: var(--pulse-green);
+      }
+      .pulse-stat:nth-child(3) {
+        border-top-color: var(--pulse-yellow);
+      }
+      .pulse-stat strong {
+        display: block;
+        font-size: 1.7rem;
+        letter-spacing: -0.08em;
+      }
+      .pulse-stat span {
+        display: block;
+        margin-top: 5px;
+        color: #657693;
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .ticket-panel {
+        display: grid;
+        gap: 20px;
+      }
+      .ticket-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+      }
+      .ticket-heading h2 {
+        margin: 0;
+        font-size: 1.55rem;
+        letter-spacing: -0.06em;
+      }
+      .ticket-heading p {
+        max-width: 230px;
+        margin: 0;
+        color: #687893;
+        font-size: 0.72rem;
+        line-height: 1.45;
+        text-align: right;
+      }
+      .ticket-options {
+        display: grid;
+        gap: 10px;
+      }
+      .ticket-choice {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+        min-height: 76px;
+        padding: 14px 15px;
+        border: 1px solid #d7e0ec;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--pulse-ink);
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .ticket-choice:hover,
+      .ticket-choice.selected {
+        border-color: var(--pulse-blue);
+        background: #eef4ff;
+        transform: translateY(-2px);
+      }
+      .ticket-choice.selected {
+        box-shadow: 0 8px 20px rgba(66, 133, 244, 0.12);
+      }
+      .ticket-choice small {
+        display: block;
+        color: #74839a;
+        font-family: var(--font-mono);
+        font-size: 0.57rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .ticket-choice strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 0.95rem;
+      }
+      .ticket-choice b {
+        color: var(--pulse-blue);
+        font-family: var(--font-mono);
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+      .ticket-note {
+        margin: 0;
+        color: #697995;
+        font-size: 0.7rem;
+        line-height: 1.5;
+      }
+      .ticket-note code {
+        color: var(--pulse-ink);
+        font-family: var(--font-mono);
+      }
+
+      .annotation-mode [data-note] {
+        position: relative;
+      }
+      .annotation-mode [data-note]::after {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        z-index: 8;
+        max-width: 135px;
+        padding: 4px 6px;
+        border: 1px solid #d99b0b;
+        border-radius: 4px;
+        background: rgba(251, 188, 4, 0.94);
+        color: #12213a;
+        content: attr(data-note);
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        font-weight: 800;
+        line-height: 1.2;
+        pointer-events: none;
+      }
+      .toast {
+        position: fixed;
+        right: 14px;
+        bottom: 14px;
+        z-index: 30;
+        max-width: min(340px, calc(100vw - 28px));
+        padding: 13px 15px;
+        border-radius: 10px;
+        background: #13233a;
+        color: #fff;
+        box-shadow: 0 15px 40px rgba(5, 15, 30, 0.35);
+        font-family: var(--font-sans);
+        font-size: 0.78rem;
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: all 0.2s ease;
+      }
+      .toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #sketch-tools {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        z-index: 25;
+        width: min(245px, calc(100vw - 24px));
+        padding: 9px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 10px;
+        background: rgba(9, 16, 28, 0.86);
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        font-family: var(--font-sans);
+        font-size: 0.67rem;
+        backdrop-filter: blur(12px);
+      }
+      #sketch-tools summary {
+        cursor: pointer;
+        font-weight: 800;
+      }
+      .tool-row {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        align-items: center;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .tool-row > span {
+        color: #a5b7d0;
+      }
+      .tool-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .tool-button {
+        padding: 6px 8px;
+        border-color: #405370;
+        background: #17243a;
+        color: #d8e5f8;
+        font-size: 0.64rem;
+      }
+      .tool-button:hover,
+      .tool-button.active {
+        border-color: var(--pulse-blue);
+        color: #fff;
+      }
+      .tool-select {
+        width: 100%;
+        padding: 6px 8px;
+        border-color: #405370;
+        background: #17243a;
+        color: #fff;
+        font-size: 0.64rem;
+      }
+      .tool-select option {
+        color: #111;
+      }
+
+      @media (min-width: 700px) {
+        .sketch-stage {
+          width: calc(100% - 40px);
+          padding-top: 92px;
+        }
+        .pulse-header {
+          min-height: 82px;
+          padding: 19px 30px;
+        }
+        .pulse-nav {
+          display: flex;
+        }
+        .header-cta {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .menu-toggle,
+        .mobile-menu {
+          display: none !important;
+        }
+        .pulse-hero {
+          grid-template-columns: minmax(0, 0.92fr) minmax(400px, 1.08fr);
+          gap: 6%;
+          padding: 70px 6% 72px;
+        }
+        .pulse-actions {
+          display: flex;
+          width: auto;
+          flex-wrap: wrap;
+        }
+        .pulse-date {
+          max-width: 520px;
+        }
+        .pulse-visual {
+          min-height: 540px;
+        }
+        .event-card {
+          width: min(66%, 390px);
+          min-height: 365px;
+          padding: 24px;
+        }
+        .event-card img {
+          width: min(100%, 280px);
+        }
+        .card-bottom strong {
+          font-size: 5rem;
+        }
+        .pulse-support {
+          grid-template-columns: 0.7fr 1.3fr;
+          align-items: start;
+          gap: 7%;
+          padding: 50px 6% 65px;
+        }
+        .pulse-stats {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+      }
+
+      @media (min-width: 1100px) {
+        .pulse-page {
+          border-radius: 30px;
+        }
+        .pulse-copy h1 {
+          font-size: clamp(4.8rem, 7.4vw, 8.5rem);
+        }
+        .pulse-visual {
+          min-height: 590px;
+        }
+        .ticket-options {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .ticket-choice {
+          grid-template-columns: 1fr;
+          align-items: start;
+          min-height: 142px;
+        }
+        .ticket-choice b {
+          align-self: end;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .sketch-stage {
+          width: calc(100% - 16px);
+        }
+        .pulse-header {
+          padding-inline: 15px;
+        }
+        .pulse-brand span {
+          font-size: 0.82rem;
+        }
+        .pulse-brand img {
+          width: 36px;
+        }
+        .pulse-hero {
+          padding: 34px 15px 42px;
+        }
+        .pulse-copy h1 {
+          font-size: clamp(3.35rem, 18vw, 4.8rem);
+        }
+        .pulse-copy p {
+          font-size: 0.94rem;
+        }
+        .pulse-visual {
+          min-height: 320px;
+        }
+        .event-card {
+          min-height: 245px;
+          padding: 15px;
+        }
+        .event-card img {
+          width: min(100%, 205px);
+        }
+        .card-bottom strong {
+          font-size: 3rem;
+        }
+        .pulse-support {
+          padding: 30px 15px 46px;
+        }
+        .ticket-heading {
+          align-items: start;
+          flex-direction: column;
+          gap: 9px;
+        }
+        .ticket-heading p {
+          max-width: none;
+          text-align: left;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body data-viewport="desktop">
+    <nav class="sketch-nav" aria-label="Sketch controls">
+      <span class="sketch-label">Sketch 004 · focused refinement</span>
+      <button class="concept-tab active" data-variant="pulse">A · Google Pulse</button>
+      <a class="concept-tab" href="../003-neon-terminal-mobile-first/index.html"
+        >Compare Neon Terminal →</a
+      >
+    </nav>
+
+    <main class="sketch-stage">
+      <section class="focused-sketch" data-variant-panel="pulse">
+        <article class="pulse-page">
+          <header class="pulse-header">
+            <div class="pulse-brand" data-note="official GDG icon + event name">
+              <img src="../../../public/images/logos/gdg.svg" alt="Google Developer Groups" />
+              <div><span>DevFest Warsaw 2026</span><small>Google Developer Groups</small></div>
+            </div>
+            <nav class="pulse-nav" aria-label="Event navigation">
+              <a href="#event" data-action="nav">Event</a>
+              <a href="#signal" data-action="nav">Signal</a>
+              <a href="#tickets" data-action="nav">Tickets</a>
+            </nav>
+            <button class="header-cta" data-action="reserve">
+              Register <span aria-hidden="true">↗</span>
+            </button>
+            <button
+              class="menu-toggle"
+              data-action="menu"
+              aria-expanded="false"
+              aria-controls="mobile-menu"
+            >
+              ☰
+            </button>
+          </header>
+          <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile event navigation">
+            <a href="#event" data-action="nav">Event overview</a>
+            <a href="#signal" data-action="nav">The signal</a>
+            <a href="#tickets" data-action="nav">Tickets</a>
+          </nav>
+
+          <section class="pulse-hero" id="event">
+            <div class="pulse-copy">
+              <div class="pulse-eyebrow">Google Developer Groups · one day</div>
+              <h1 data-note="mobile-first visual anchor">
+                <span>Build.</span><br /><span>Learn.</span><br /><span>Connect.</span>
+              </h1>
+              <p>
+                One day of practical sessions, community, and connections. A full room, a clear
+                signal, and ideas worth taking home.
+              </p>
+              <div class="pulse-actions">
+                <button class="pulse-button" data-action="reserve">
+                  Reserve a place <span aria-hidden="true">→</span>
+                </button>
+                <button class="pulse-button secondary" data-action="visual">See the pulse</button>
+              </div>
+              <div class="pulse-date">
+                <strong>November 21, 2026</strong
+                ><span>One day of practical sessions, community, and connections</span>
+              </div>
+            </div>
+
+            <div class="pulse-visual" id="signal" data-note="animated event poster">
+              <span class="pulse-node blue"></span><span class="pulse-node green"></span
+              ><span class="pulse-node yellow"></span><span class="pulse-node red"></span>
+              <div class="event-card">
+                <div class="card-top">
+                  <span>Google Developer Groups</span><span>WAW / 26</span>
+                </div>
+                <img src="../../../public/images/logo.svg" alt="GDG DevFest Warsaw 2026" />
+                <div class="card-bottom">
+                  <strong>21</strong><span>NOVEMBER<br />2026</span>
+                </div>
+              </div>
+              <div class="visual-label"><span>signal / 01 day</span><span>300 places</span></div>
+            </div>
+          </section>
+
+          <section class="pulse-support" id="tickets">
+            <div class="pulse-stats" aria-label="Event facts">
+              <div class="pulse-stat"><strong>300</strong><span>people together</span></div>
+              <div class="pulse-stat"><strong>01</strong><span>full day</span></div>
+              <div class="pulse-stat"><strong>TBA</strong><span>sessions to come</span></div>
+            </div>
+            <div class="ticket-panel">
+              <div class="ticket-heading">
+                <h2>Find your place.</h2>
+                <p>Choose a ticket here. Keep registration on the site with the Evenea embed.</p>
+              </div>
+              <div class="ticket-options" role="list" aria-label="Ticket options">
+                <button
+                  class="ticket-choice selected"
+                  data-ticket="Early Bird"
+                  role="listitem"
+                  aria-pressed="true"
+                >
+                  <span><small>First release</small><strong>Early Bird</strong></span
+                  ><b>PLN 49</b>
+                </button>
+                <button
+                  class="ticket-choice"
+                  data-ticket="Regular"
+                  role="listitem"
+                  aria-pressed="false"
+                >
+                  <span><small>Standard access</small><strong>Regular</strong></span
+                  ><b>PLN 79</b>
+                </button>
+                <button
+                  class="ticket-choice"
+                  data-ticket="Supporter"
+                  role="listitem"
+                  aria-pressed="false"
+                >
+                  <span><small>Support the room</small><strong>Supporter</strong></span
+                  ><b>PLN 250</b>
+                </button>
+              </div>
+              <p class="ticket-note">
+                Selected: <code id="selected-ticket">Early Bird · PLN 49</code>. The final
+                registration form lives directly below this section.
+              </p>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+
+    <details id="sketch-tools">
+      <summary>Sketch controls</summary>
+      <div class="tool-row">
+        <span>Theme</span
+        ><select id="theme-switcher" class="tool-select">
+          <option value="default">Google / clear</option>
+          <option value="warm">Warm editorial</option>
+          <option value="mono">Monochrome</option>
+        </select>
+      </div>
+      <div class="tool-row">
+        <span>Viewport</span>
+        <div class="tool-controls">
+          <button class="tool-button" data-viewport="phone">Phone</button
+          ><button class="tool-button" data-viewport="tablet">Tablet</button
+          ><button class="tool-button active" data-viewport="desktop">Desktop</button>
+        </div>
+      </div>
+      <div class="tool-row">
+        <span>Notes</span><button id="annotation-toggle" class="tool-button">Off</button>
+      </div>
+    </details>
+    <div class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const toast = document.querySelector('.toast');
+      let toastTimer;
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('visible'), 2200);
+      };
+      const scrollToId = (id) =>
+        document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      document.querySelectorAll('[data-action]').forEach((element) => {
+        element.addEventListener('click', (event) => {
+          const action = element.dataset.action;
+          if (element.tagName === 'A') event.preventDefault();
+          if (action === 'reserve') {
+            scrollToId('#tickets');
+            showToast('Registration CTA is ready for the Evenea embed.');
+          } else if (action === 'visual') {
+            const visual = document.querySelector('#signal');
+            visual.classList.add('flash');
+            setTimeout(() => visual.classList.remove('flash'), 800);
+            showToast('Pulse sent: the poster responds.');
+          } else if (action === 'menu') {
+            const menu = document.querySelector('#mobile-menu');
+            const open = menu.classList.toggle('open');
+            element.setAttribute('aria-expanded', String(open));
+            element.textContent = open ? '×' : '☰';
+          } else if (action === 'nav') {
+            scrollToId(element.getAttribute('href'));
+            document.querySelector('#mobile-menu').classList.remove('open');
+            document.querySelector('.menu-toggle').setAttribute('aria-expanded', 'false');
+            document.querySelector('.menu-toggle').textContent = '☰';
+          }
+        });
+      });
+
+      document.querySelectorAll('.ticket-choice').forEach((ticket) => {
+        ticket.addEventListener('click', () => {
+          document.querySelectorAll('.ticket-choice').forEach((item) => {
+            item.classList.toggle('selected', item === ticket);
+            item.setAttribute('aria-pressed', String(item === ticket));
+          });
+          document.querySelector('#selected-ticket').textContent =
+            `${ticket.dataset.ticket} · ${ticket.querySelector('b').textContent}`;
+          showToast(`${ticket.dataset.ticket} selected.`);
+        });
+      });
+
+      document.querySelectorAll('button[data-viewport]').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.body.dataset.viewport = button.dataset.viewport;
+          document
+            .querySelectorAll('button[data-viewport]')
+            .forEach((item) => item.classList.toggle('active', item === button));
+          showToast(`Viewport: ${button.textContent}`);
+        });
+      });
+      document.querySelector('#theme-switcher').addEventListener('change', (event) => {
+        document.querySelector('#sketch-theme').href = `../themes/${event.target.value}.css`;
+        showToast(`Theme: ${event.target.value}`);
+      });
+      document.querySelector('#annotation-toggle').addEventListener('click', (event) => {
+        document.body.classList.toggle('annotation-mode');
+        event.currentTarget.textContent = document.body.classList.contains('annotation-mode')
+          ? 'On'
+          : 'Off';
+        showToast(
+          document.body.classList.contains('annotation-mode')
+            ? 'Design notes on.'
+            : 'Design notes off.',
+        );
+      });
+
+      const eventDate = new Date('2026-11-21T09:00:00+01:00');
+      const updateCountdown = () => {
+        const total = Math.max(0, eventDate.getTime() - Date.now());
+        const days = Math.floor(total / 86400000);
+        const hours = Math.floor((total % 86400000) / 3600000);
+        const minutes = Math.floor((total % 3600000) / 60000);
+        document.querySelector('.visual-label').innerHTML =
+          `<span>signal / ${days}d ${String(hours).padStart(2, '0')}h</span><span>300 places</span>`;
+      };
+      updateCountdown();
+      setInterval(updateCountdown, 60000);
+    </script>
+  </body>
+</html>

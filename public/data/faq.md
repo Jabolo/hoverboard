@@ -1,18 +1,18 @@
 ## What is GDG DevFest Warsaw 2026?
 
-GDG DevFest Warsaw 2026 is a community-led technology conference organized by GDG Warsaw.
+GDG DevFest Warsaw 2026 is a community-led technology conference brought to Warsaw by Google Developer Groups Warszawa.
 
 ## When and where is it happening?
 
-The event is planned for **November 21, 2026**, at Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa.
+The event takes place on **November 21, 2026**, at Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa.
 
 ## Who is the event for?
 
 Developers, designers, engineers, researchers, students, entrepreneurs, and anyone interested in learning and sharing around technology.
 
-## When will tickets be available?
+## Where can I register?
 
-The ticketing flow is being prepared in Evenea. Ticket types, pricing, and the registration opening date will be announced before the event is published.
+Registration is available through the embedded Evenea form on this page. The current event page is protected by an access code during preview; ticket types, prices, and availability are shown in the form.
 
 ## When will the programme and speakers be announced?
 

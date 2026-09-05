@@ -64,7 +64,6 @@ export class EveneaEmbed extends PolymerElement {
             src$="[[eveneaEmbed.iframeSrc]]"
             title="Evenea registration"
             scrolling="no"
-            loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </template>
