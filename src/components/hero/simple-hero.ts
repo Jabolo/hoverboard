@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { heroSettings } from '../../utils/data';
 import { ThemedElement } from '../themed-element';
@@ -28,6 +28,17 @@ const hasTitle = (setting: Title | {}): setting is Title => {
 
 @customElement('simple-hero')
 export class SimpleHero extends ThemedElement {
+  static override get styles() {
+    return [
+      ...super.styles,
+      css`
+        hero-block {
+          height: auto;
+        }
+      `,
+    ];
+  }
+
   @property()
   page: SimpleHeroKeys = 'notFound';
 

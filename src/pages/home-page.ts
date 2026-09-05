@@ -310,6 +310,24 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
         }
 
+        @media (max-width: 811px) {
+          hero-block {
+            height: auto;
+            min-height: 0;
+            max-height: none;
+          }
+
+          .home-content {
+            margin-top: 0;
+            padding-top: 24px;
+          }
+
+          .scroll-down {
+            position: static;
+            transform: none;
+          }
+        }
+
         @media (min-width: 812px) {
           hero-block {
             height: calc(100vh + 65px);

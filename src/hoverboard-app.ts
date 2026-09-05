@@ -61,7 +61,14 @@ export class HoverboardApp extends PolymerElement {
           --app-drawer-content-container: {
             display: flex;
             flex-direction: column;
+            background: var(--terminal-panel);
+            color: var(--primary-text-color);
           };
+        }
+
+        app-drawer {
+          background: var(--terminal-panel);
+          color: var(--primary-text-color);
         }
 
         app-drawer app-toolbar {
@@ -94,6 +101,7 @@ export class HoverboardApp extends PolymerElement {
         .drawer-list {
           padding: 16px 0;
           display: block;
+          background: var(--terminal-panel);
         }
 
         .drawer-list a {
