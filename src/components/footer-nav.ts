@@ -1,6 +1,5 @@
 import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import '@power-elements/lazy-image';
 import { codeOfConduct, organizer } from '../utils/data';
 import { ThemedElement } from '../components/themed-element';
 
@@ -30,11 +29,10 @@ export class FooterNav extends ThemedElement {
         }
 
         .footer-logo {
-          --lazy-image-width: 120px;
-          --lazy-image-height: 24px;
-          --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          display: block;
+          width: 120px;
+          height: 54px;
+          object-fit: contain;
           margin: 10px 30px 0 0;
           float: left;
         }
@@ -75,11 +73,11 @@ export class FooterNav extends ThemedElement {
     return html`
       <div class="nav-inline" layout flex>
         <a href="${this.organizer.url}" target="_blank" rel="noopener noreferrer">
-          <lazy-image
+          <img
             class="footer-logo"
-            src="../../images/organizer-logo.svg"
+            src="../../images/logos/gdg-warsaw-white.svg"
             alt="${this.organizer.name}"
-          ></lazy-image>
+          />
         </a>
 
         <div class="copyright">

@@ -2,7 +2,6 @@ import { customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
-import '@power-elements/lazy-image';
 import '../components/markdown/short-markdown';
 import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
@@ -18,10 +17,38 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment positioning">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
+        .container {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--terminal-red);
+          content: '> organizer --info';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .block:not(:last-of-type) {
-          margin-bottom: 32px;
+          margin-bottom: 24px;
+          padding-bottom: 24px;
+          border-bottom: 1px solid var(--divider-color);
+        }
+
+        .block h2 {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
         }
 
         .team-icon {
@@ -32,31 +59,30 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
         }
 
         .image-link {
-          width: 80%;
-          height: 80%;
+          width: min(80%, 280px);
+          padding: 20px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--terminal-panel, var(--default-background-color));
         }
 
         .organizers-photo {
-          --lazy-image-width: 100%;
-          --lazy-image-height: 100%;
-          --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          display: block;
+          width: 100%;
+          height: auto;
+          object-fit: contain;
         }
 
         .description {
           color: var(--secondary-text-color);
+          line-height: 1.7;
         }
       </style>
 
       <div class="container" layout horizontal>
         <div layout horizontal center-center flex hidden$="[[viewport.isPhone]]">
           <a href="/team" class="image-link">
-            <lazy-image
-              class="organizers-photo"
-              src="[[aboutOrganizerBlock.image]]"
-              alt="Organizer"
-            ></lazy-image>
+            <img class="organizers-photo" src="[[aboutOrganizerBlock.image]]" alt="Organizer" />
           </a>
         </div>
 

@@ -15,11 +15,36 @@ export class AboutBlock extends ThemedElement {
     return [
       ...super.styles,
       css`
+        :host {
+          display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
         .container {
-          padding-top: 64px;
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
           display: grid;
           grid-gap: 32px;
           grid-template-columns: 1fr;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--terminal-green);
+          content: '> about --event';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+        }
+
+        p {
+          color: var(--secondary-text-color);
+          line-height: 1.7;
         }
 
         .statistics-block {
@@ -29,8 +54,18 @@ export class AboutBlock extends ThemedElement {
           grid-template-columns: repeat(2, 1fr);
         }
 
+        .item {
+          padding: 16px 12px 14px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
+        }
+
         .numbers {
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
           font-size: 40px;
+          font-weight: 800;
         }
 
         .numbers::after {
@@ -43,6 +78,19 @@ export class AboutBlock extends ThemedElement {
 
         .label {
           margin-top: 4px;
+          color: var(--secondary-text-color);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+
+        md-text-button {
+          --md-text-button-label-text-color: var(--google-blue);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.02em;
         }
 
         @media (min-width: 640px) {

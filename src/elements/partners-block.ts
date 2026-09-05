@@ -25,10 +25,33 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
+        .container {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--google-blue);
+          content: '> partners --network';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .block-title {
           margin: 24px 0 8px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
         }
 
         .logos-wrapper {
@@ -39,6 +62,17 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logo-item {
           padding: 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: #fff;
+          transition:
+            border-color var(--animation),
+            transform var(--animation);
+        }
+
+        .logo-item:hover {
+          border-color: var(--google-blue);
+          transform: translateY(-2px);
         }
 
         .logo-img {

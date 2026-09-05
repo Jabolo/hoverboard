@@ -19,10 +19,27 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment positioning">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
         }
 
         .tickets-wrapper {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 64px;
           text-align: center;
+        }
+
+        .tickets-wrapper::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--google-yellow);
+          content: '> tickets --show';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .tickets {
@@ -31,10 +48,22 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item {
           margin: 16px 8px;
+          min-height: 300px;
+          border: 1px solid var(--divider-color);
           width: 100%;
           text-align: center;
           color: var(--primary-text-color);
-          background-color: var(--default-background-color);
+          background-color: var(--secondary-background-color);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .ticket-item:hover {
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-3px);
         }
 
         .ticket-item[in-demand] {
@@ -62,6 +91,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .header {
           padding: 24px 0 0;
+          font-family: var(--font-mono, monospace);
           font-size: 16px;
         }
 
@@ -81,6 +111,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .price {
           color: var(--default-primary-color);
+          font-family: var(--font-mono, monospace);
+          font-weight: 800;
           font-size: 40px;
         }
 
@@ -102,11 +134,25 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           max-width: 480px;
           font-size: 14px;
           color: var(--secondary-text-color);
+          line-height: 1.6;
         }
 
         .actions {
           padding: 24px;
           position: relative;
+        }
+
+        md-filled-button {
+          --md-filled-button-container-color: var(--google-blue);
+          --md-filled-button-hover-container-color: var(--terminal-green);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-container-height: 46px;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
         }
 
         .tickets-placeholder {

@@ -52,67 +52,67 @@
       "title": "Blog",
       "metaDescription": "News and stories from GDG Warsaw",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "speakers": {
       "title": "Speakers",
       "metaDescription": "Speakers and sessions for GDG DevFest Warsaw 2026",
       "description": "The 2026 speaker lineup will be announced as the programme takes shape.",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "previousSpeakers": {
       "title": "Previous Speakers",
       "metaDescription": "Previous DevFest speakers",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "schedule": {
       "title": "Schedule",
       "metaDescription": "The GDG DevFest Warsaw 2026 schedule",
       "description": "The schedule will be published when the programme is ready.",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "team": {
       "title": "Team",
       "metaDescription": "Meet the GDG Warsaw volunteer team",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "faq": {
       "title": "FAQs",
       "metaDescription": "Frequently asked questions about GDG DevFest Warsaw 2026",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "coc": {
       "title": "Code of Conduct",
       "metaDescription": "Code of Conduct for GDG DevFest Warsaw 2026",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     },
     "notFound": {
       "title": "Not Found",
       "metaDescription": "Page not found",
       "background": {
-        "color": "#FFF"
+        "color": "#070C14"
       },
-      "fontColor": "#424242"
+      "fontColor": "#EAF2FF"
     }
   },
   "location": {

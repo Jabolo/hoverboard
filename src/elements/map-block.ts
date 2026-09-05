@@ -19,13 +19,26 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           margin: 32px auto;
           display: block;
           position: relative;
+          border-bottom: 1px solid var(--divider-color);
         }
 
         .description-card {
           margin: 0 -16px;
           padding: 16px;
-          background-color: var(--default-primary-color);
-          color: var(--text-primary-color);
+          border: 1px solid var(--google-blue);
+          background: var(--terminal-panel);
+          color: var(--terminal-copy);
+        }
+
+        .description-card h2 {
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
+        }
+
+        .description-card p {
+          color: var(--terminal-muted);
+          line-height: 1.6;
         }
 
         .bottom-info {

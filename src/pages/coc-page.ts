@@ -10,9 +10,11 @@ import { updateMetadata } from '../utils/metadata';
 export class CocPage extends PolymerElement {
   static get template() {
     return html`
-      <style>
+      <style include="shared-styles">
         :host {
           display: block;
+          background: var(--primary-background-color);
+          color: var(--primary-text-color);
         }
       </style>
 

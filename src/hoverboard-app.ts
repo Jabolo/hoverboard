@@ -14,7 +14,6 @@ import {
   setRemoveNestedTemplates,
   setSuppressTemplateNotifications,
 } from '@polymer/polymer/lib/utils/settings';
-import '@power-elements/lazy-image';
 import './components/snack-bar';
 import './elements/dialogs/feedback-dialog';
 import './elements/dialogs/signin-dialog';
@@ -56,6 +55,8 @@ export class HoverboardApp extends PolymerElement {
           position: relative;
           min-height: 100%;
           height: 100%;
+          background: var(--terminal-background);
+          color: var(--primary-text-color);
           --paper-menu-button-dropdown-background: var(--primary-background-color);
           --app-drawer-content-container: {
             display: flex;
@@ -64,18 +65,28 @@ export class HoverboardApp extends PolymerElement {
         }
 
         app-drawer app-toolbar {
-          padding: 36px 24px 24px;
+          padding: 28px 24px 24px;
+          background: var(--terminal-panel);
           border-bottom: 1px solid var(--divider-color);
         }
 
+        app-drawer .toolbar-logo {
+          width: 176px;
+          height: 98px;
+          object-fit: contain;
+        }
+
         app-drawer .dates {
-          margin-top: 42px;
+          margin-top: 24px;
+          color: var(--terminal-green);
+          font-family: var(--font-mono);
           font-size: 22px;
           line-height: 0.95;
         }
 
         app-drawer .location {
           margin-top: 4px;
+          font-family: var(--font-mono);
           font-size: 15px;
           color: var(--secondary-text-color);
         }
@@ -87,16 +98,28 @@ export class HoverboardApp extends PolymerElement {
 
         .drawer-list a {
           display: block;
+          border-left: 3px solid transparent;
           color: var(--primary-text-color);
+          font-family: var(--font-mono);
+          font-size: 14px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
           outline: 0;
+          transition:
+            color var(--animation),
+            background-color var(--animation),
+            border-color var(--animation);
         }
 
         app-drawer a {
-          padding: 8px 24px;
+          padding: 12px 24px;
         }
 
         .drawer-list a.selected {
-          font-weight: 500;
+          border-left-color: var(--google-green);
+          background: rgb(126 242 165 / 8%);
+          color: var(--terminal-green);
+          font-weight: 700;
         }
 
         app-toolbar {
@@ -120,7 +143,7 @@ export class HoverboardApp extends PolymerElement {
         }
 
         main {
-          background-color: var(--primary-background-color);
+          background-color: var(--terminal-background);
           min-height: 100%;
           height: 100%;
         }
@@ -147,11 +170,7 @@ export class HoverboardApp extends PolymerElement {
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
         <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>
           <app-toolbar layout vertical start>
-            <lazy-image
-              class="toolbar-logo"
-              src="/images/organizer-logo.svg"
-              alt="GDG Warsaw"
-            ></lazy-image>
+            <img class="toolbar-logo" src="/images/logos/gdg-warsaw-white.svg" alt="GDG Warsaw" />
             <h2 class="dates">[[dates]]</h2>
             <h3 class="location">[[shortLocation]]</h3>
           </app-toolbar>

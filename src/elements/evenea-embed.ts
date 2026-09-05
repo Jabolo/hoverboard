@@ -9,13 +9,21 @@ export class EveneaEmbed extends PolymerElement {
       <style>
         :host {
           display: block;
-          margin: 48px auto 0;
+          margin: 56px auto 0;
+          padding-top: 32px;
+          border-top: 1px solid var(--divider-color);
           max-width: 960px;
         }
 
         .header {
           margin-bottom: 16px;
           text-align: center;
+        }
+
+        .header h2 {
+          font-family: var(--font-mono, monospace);
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
         }
 
         .description {
@@ -31,7 +39,7 @@ export class EveneaEmbed extends PolymerElement {
           padding: 24px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
-          background: var(--default-background-color);
+          background: var(--secondary-background-color);
           text-align: center;
         }
 
@@ -41,7 +49,8 @@ export class EveneaEmbed extends PolymerElement {
         }
 
         .draft-link {
-          color: var(--default-primary-color);
+          color: var(--google-green, var(--default-primary-color));
+          font-family: var(--font-mono, monospace);
           font-weight: 600;
         }
 
@@ -50,6 +59,8 @@ export class EveneaEmbed extends PolymerElement {
           width: 100%;
           min-height: 520px;
           border: 0;
+          border-radius: var(--border-radius);
+          background: #fff;
         }
       </style>
 

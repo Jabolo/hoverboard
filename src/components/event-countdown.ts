@@ -36,12 +36,17 @@ export class EventCountdown extends LitElement {
       color: inherit;
       display: block;
       width: min(100%, 560px);
-      margin: 24px auto 0;
+      margin: 28px auto 0;
+      padding: 14px;
+      border: 1px solid var(--terminal-line, #263d5e);
+      border-radius: 8px;
+      background: rgb(7 12 20 / 64%);
     }
 
     .countdown-kicker {
       margin: 0 0 10px;
       color: inherit;
+      font-family: var(--font-mono, monospace);
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -59,7 +64,7 @@ export class EventCountdown extends LitElement {
     .unit {
       min-width: 0;
       padding: 10px 8px 0;
-      border-top: 3px solid var(--google-blue, #4285f4);
+      border-top: 2px solid var(--google-blue, #4285f4);
     }
 
     .unit[data-tone='green'] {
@@ -77,6 +82,7 @@ export class EventCountdown extends LitElement {
     .value {
       display: block;
       color: inherit;
+      font-family: var(--font-mono, monospace);
       font-size: clamp(24px, 5vw, 40px);
       font-variant-numeric: tabular-nums;
       font-weight: 700;

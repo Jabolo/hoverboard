@@ -29,7 +29,7 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
         :host {
-          background: #fff;
+          background: var(--primary-background-color);
           box-shadow: var(--box-shadow);
           color: var(--primary-text-color);
           display: block;
@@ -59,12 +59,16 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
         }
 
         .name {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           line-height: 1.2;
         }
 
         .subtitle {
           font-size: 16px;
-          color: var(--secondary-text-color);
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
         }
 
         .badge:not(:last-of-type)::after {
@@ -116,7 +120,16 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
         .section {
           margin-top: 16px;
           display: block;
+          padding: 16px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
           color: var(--primary-text-color);
+          transition: border-color var(--animation);
+        }
+
+        .section:hover {
+          border-color: var(--google-blue);
         }
 
         .section-photo {

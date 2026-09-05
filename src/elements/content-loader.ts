@@ -10,10 +10,10 @@ export class ContentLoader extends PolymerElement {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
         :host {
-          --darkgrey: rgba(250, 250, 250, 0);
-          --darkgrey-lighter: rgba(250, 250, 250, 0.8);
-          --background-color: #fff;
-          --content-color: #e2e2e2;
+          --darkgrey: rgba(38, 61, 94, 0);
+          --darkgrey-lighter: rgba(126, 242, 165, 0.16);
+          --background-color: var(--terminal-panel);
+          --content-color: var(--terminal-line);
           --card-padding: 24px;
           --card-height: 340px;
           --card-width: auto;

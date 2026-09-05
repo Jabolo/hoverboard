@@ -20,7 +20,7 @@ describe('footer-nav', () => {
 
     expect(screen.getByTestId('footer')).toBeInTheDocument();
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('src', '../../images/organizer-logo.svg');
+    expect(logo).toHaveAttribute('src', '../../images/logos/gdg-warsaw-white.svg');
     expect(hoverboardLink).toBeInTheDocument();
     expect(hoverboardLink).toHaveAttribute('href', 'https://github.com/gdg-x/hoverboard');
     expect(hoverboardLink).toHaveAttribute('target', '_blank');

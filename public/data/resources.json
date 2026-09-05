@@ -271,7 +271,7 @@
     }
   },
   "aboutOrganizerBlock": {
-    "image": "/images/organizer-logo.svg",
+    "image": "/images/logos/gdg-warsaw-white.svg",
     "blocks": [
       {
         "title": "Organizer",

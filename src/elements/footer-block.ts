@@ -16,8 +16,10 @@ export class FooterBlock extends PolymerElement {
           margin-top: 40px;
           display: block;
           position: relative;
+          border-top: 1px solid var(--divider-color);
           color: var(--footer-text-color);
           background: var(--footer-background-color);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.5;
         }
@@ -35,6 +37,10 @@ export class FooterBlock extends PolymerElement {
           box-shadow:
             0 0 8px 0 rgba(0, 0, 0, 0.12),
             0 8px 8px 0 rgba(0, 0, 0, 0.24);
+        }
+
+        .fab paper-fab:hover {
+          color: var(--google-green);
         }
 
         .fab {

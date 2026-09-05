@@ -39,6 +39,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             border-bottom-color var(--animation),
             color var(--animation);
           color: var(--primary-text-color);
+          font-family: var(--font-mono);
         }
 
         :host([transparent]) {
@@ -46,6 +47,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           background-color: transparent;
           border-bottom-color: transparent;
           color: var(--hero-font-color, '#fff');
+          text-shadow: 0 1px 18px rgb(0 0 0 / 38%);
         }
 
         :host([transparent]) .toolbar-brand {
@@ -54,6 +56,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
         app-toolbar {
           margin: 0 auto;
+          min-height: 68px;
           padding: 0 16px;
           height: auto;
           max-width: var(--max-container-width);
@@ -69,22 +72,23 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
         .toolbar-logo {
           display: block;
-          width: 42px;
-          height: 32px;
-          --lazy-image-width: 42px;
-          --lazy-image-height: 32px;
-          --lazy-image-fit: contain;
+          width: 38px;
+          height: 30px;
+          object-fit: contain;
         }
 
         .toolbar-title {
-          font-size: 14px;
-          font-weight: 600;
-          letter-spacing: 0.02em;
+          color: inherit;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          font-weight: 800;
+          letter-spacing: 0.045em;
+          text-transform: uppercase;
           white-space: nowrap;
         }
 
         .nav-items {
-          --paper-tabs-selection-bar-color: var(--default-primary-color);
+          --paper-tabs-selection-bar-color: var(--terminal-green);
           --paper-tabs: {
             height: 64px;
           };
@@ -94,7 +98,20 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         .signin-tab {
           padding: 0 14px;
           color: inherit;
+          font-family: var(--font-mono);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
+        }
+
+        .nav-item a:hover,
+        .signin-tab:hover {
+          color: var(--terminal-green);
+        }
+
+        paper-icon-button {
+          color: inherit;
         }
 
         .profile-image {
@@ -108,7 +125,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         .dropdown-panel {
           padding: 24px;
           max-width: 300px;
-          background: #fff;
+          background: var(--terminal-panel);
           font-size: 16px;
           color: var(--primary-text-color);
         }
@@ -138,7 +155,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         .profile-action {
           margin-top: 4px;
           text-transform: uppercase;
-          color: var(--default-primary-color);
+          color: var(--terminal-green);
           font-size: 14px;
           cursor: pointer;
         }
@@ -150,6 +167,16 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
         .buy-button {
           margin-top: 12px;
+          --md-filled-button-container-color: var(--google-blue);
+          --md-filled-button-hover-container-color: var(--terminal-green);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-container-height: 42px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
         }
 
         @media (min-width: 640px) {
@@ -171,11 +198,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         </div>
         <div layout horizontal center flex>
           <a class="toolbar-brand" href="/" title="[[logoTitle]]">
-            <lazy-image
-              class="toolbar-logo"
-              src="/images/logos/gdg.svg"
-              alt="Google Developer Groups"
-            ></lazy-image>
+            <img class="toolbar-logo" src="/images/logos/gdg.svg" alt="Google Developer Groups" />
             <span class="toolbar-title">GDG DevFest Warsaw 2026</span>
           </a>
         </div>

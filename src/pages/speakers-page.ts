@@ -34,9 +34,12 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         :host {
           display: block;
           height: 100%;
+          background: var(--primary-background-color);
         }
 
         .container {
+          padding-top: 32px;
+          padding-bottom: 32px;
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 16px;
@@ -52,13 +55,20 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
         .speaker {
           padding: 32px 24px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
           background: var(--primary-background-color);
           text-align: center;
-          transition: box-shadow var(--animation);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
         }
 
         .speaker:hover {
-          box-shadow: var(--box-shadow);
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-3px);
         }
 
         .photo {
@@ -69,6 +79,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
           background-color: var(--secondary-background-color);
+          border: 2px solid var(--google-blue);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
@@ -85,7 +96,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 2px solid #fff;
+          border: 2px solid var(--primary-background-color);
           transition: transform var(--animation);
         }
 
@@ -116,6 +127,9 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         }
 
         .company-logo {
+          padding: 3px 6px;
+          border-radius: 3px;
+          background: #fff;
           --lazy-image-width: 100%;
           --lazy-image-height: 16px;
           --lazy-image-fit: contain;
@@ -129,11 +143,16 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
         .name {
           margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           line-height: 1;
         }
 
         .origin {
           margin-top: 4px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.1;
         }
@@ -141,6 +160,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         .bio {
           margin-top: 16px;
           color: var(--secondary-text-color);
+          line-height: 1.6;
         }
 
         .contacts {

@@ -26,10 +26,13 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         :host {
           display: block;
           height: 100%;
+          background: var(--primary-background-color);
         }
 
         .container {
           margin: 32px auto;
+          padding-top: 0;
+          padding-bottom: 16px;
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 32px;
@@ -47,6 +50,24 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           transform: scale(0.95);
         }
 
+        .speaker {
+          min-width: 0;
+          padding: 16px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .speaker:hover {
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-2px);
+        }
+
         .photo {
           --lazy-image-width: 96px;
           --lazy-image-height: 96px;
@@ -54,7 +75,7 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
           background-color: var(--contrast-additional-background-color);
-          border: 3px solid var(--contrast-additional-background-color);
+          border: 3px solid var(--google-blue);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
@@ -66,6 +87,9 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           max-width: 88px;
           height: 16px;
           margin: 8px 0;
+          padding: 3px 6px;
+          border-radius: 3px;
+          background: #fff;
         }
 
         .details {
@@ -74,17 +98,24 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         }
 
         .name {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           font-size: 20px;
           line-height: 1;
         }
 
         .origin {
           margin-top: 4px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.1;
         }
 
         .sessions {
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
           font-size: 13px;
           line-height: 1.1;
           font-weight: bold;

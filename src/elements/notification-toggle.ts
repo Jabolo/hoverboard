@@ -40,7 +40,8 @@ export class NotificationToggle extends ReduxMixin(PolymerElement) {
         .dropdown-panel {
           padding: 24px;
           max-width: 300px;
-          background: #fff;
+          border: 1px solid var(--divider-color);
+          background: var(--terminal-panel);
           font-size: 16px;
           color: var(--primary-text-color);
         }
