@@ -57,10 +57,20 @@ export class EveneaEmbed extends PolymerElement {
         iframe {
           display: block;
           width: 100%;
-          min-height: 520px;
+          /* The remote form contains five ticket rows and a final join action. */
+          height: 1100px;
+          min-height: 1100px;
           border: 0;
           border-radius: var(--border-radius);
           background: #fff;
+          overflow: auto;
+        }
+
+        @media (min-width: 640px) {
+          iframe {
+            height: 1500px;
+            min-height: 1500px;
+          }
         }
       </style>
 
@@ -74,7 +84,7 @@ export class EveneaEmbed extends PolymerElement {
             id="ticketFrame"
             src$="[[eveneaEmbed.iframeSrc]]"
             title="Evenea registration"
-            scrolling="no"
+            scrolling="auto"
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
         </template>

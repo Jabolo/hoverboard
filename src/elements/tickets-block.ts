@@ -155,6 +155,15 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           text-transform: uppercase;
         }
 
+        /* Keep an unavailable release legible on the dark terminal surface. */
+        md-filled-button[disabled] {
+          --md-filled-button-disabled-container-color: #29456d;
+          --md-filled-button-disabled-container-opacity: 1;
+          --md-filled-button-disabled-label-text-color: var(--terminal-copy);
+          --md-filled-button-disabled-label-text-opacity: 1;
+          opacity: 1;
+        }
+
         .tickets-placeholder {
           display: grid;
           width: 100%;
