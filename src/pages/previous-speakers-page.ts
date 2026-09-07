@@ -26,18 +26,46 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         :host {
           display: block;
           height: 100%;
+          background: var(--primary-background-color);
         }
 
         .container {
           margin: 32px auto;
+          padding-top: 0;
+          padding-bottom: 16px;
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 32px;
-          min-height: 80%;
+        }
+
+        .empty-state {
+          margin: 0;
+          padding: 40px 32px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
         }
 
         .speaker:hover .photo {
           transform: scale(0.95);
+        }
+
+        .speaker {
+          min-width: 0;
+          padding: 16px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .speaker:hover {
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-2px);
         }
 
         .photo {
@@ -47,7 +75,7 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
           background-color: var(--contrast-additional-background-color);
-          border: 3px solid var(--contrast-additional-background-color);
+          border: 3px solid var(--google-blue);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
@@ -59,6 +87,9 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           max-width: 88px;
           height: 16px;
           margin: 8px 0;
+          padding: 3px 6px;
+          border-radius: 3px;
+          background: #fff;
         }
 
         .details {
@@ -67,17 +98,24 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         }
 
         .name {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           font-size: 20px;
           line-height: 1;
         }
 
         .origin {
           margin-top: 4px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.1;
         }
 
         .sessions {
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
           font-size: 13px;
           line-height: 1.1;
           font-weight: bold;
@@ -164,6 +202,12 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
             </div>
           </a>
         </template>
+
+        <template is="dom-if" if="[[empty]]">
+          <p class="empty-state">
+            The previous speaker archive is being prepared and will appear here when available.
+          </p>
+        </template>
       </div>
 
       <footer-block></footer-block>
@@ -173,6 +217,11 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
   private heroSettings = heroSettings.previousSpeakers;
   private contentLoaders = contentLoaders.previousSpeakers;
   private previousYears = speakers.previousYears;
+
+  @computed('previousSpeakers')
+  private get empty() {
+    return this.previousSpeakers instanceof Success && this.previousSpeakers.data.length === 0;
+  }
 
   override stateChanged(state: RootState) {
     this.previousSpeakers = state.previousSpeakers;

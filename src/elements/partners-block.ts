@@ -1,7 +1,7 @@
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-button';
+import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import { RootState, store } from '../store';
@@ -14,7 +14,7 @@ import {
   PotentialPartnersState,
 } from '../store/potential-partners/state';
 import { queueSnackbar } from '../store/snackbars';
-import { loading, partnersBlock, partnershipProposition } from '../utils/data';
+import { loading, partnersBlock } from '../utils/data';
 import '../utils/icons';
 import './shared-styles';
 
@@ -25,10 +25,33 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
+        .container {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--google-blue);
+          content: '> partners --network';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .block-title {
           margin: 24px 0 8px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
         }
 
         .logos-wrapper {
@@ -39,6 +62,17 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logo-item {
           padding: 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: #fff;
+          transition:
+            border-color var(--animation),
+            transform var(--animation);
+        }
+
+        .logo-item:hover {
+          border-color: var(--google-blue);
+          transform: translateY(-2px);
         }
 
         .logo-img {
@@ -65,23 +99,10 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
             grid-template-columns: repeat(5, 1fr);
           }
         }
-        .action-buttons {
-          margin: 0 -8px;
-          font-size: 14px;
-        }
-
-        .action-buttons paper-button {
-          margin: 8px;
-        }
-
-        .action-buttons iron-icon {
-          --iron-icon-fill-color: currentColor;
-          margin-right: 8px;
-        }
       </style>
 
       <div class="container">
-        <h1 class="container-title">[[partnersBlock.title]]</h1>
+        <h2 class="container-title">[[partnersBlock.title]]</h2>
 
         <template is="dom-if" if="[[pending]]">
           <p>[[loading]]</p>
@@ -114,21 +135,10 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           </div>
         </template>
 
-        <div class="action-buttons" layout horizontal wrap>
-          <paper-button class="cta-button animated icon-right" on-click="addPotentialPartner">
-            <span>[[partnersBlock.button]]</span>
-
-            <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-          </paper-button>
-          <a href="https://docs.google.com/presentation/d/e/2PACX-1vQl6OcKKKfouef-6LdAQJp0iUrHnh5_cnBRwkcukNeXTFDDYYVsoMJNuG-qh_0S_8SizhPRn9B-Otr4/pub?start=false&loop=false&delayms=60000"
-             target="_blank">
-            <paper-button class="cta-button animated icon-right"">
-              <span>Partnership Proposition</span>
-              <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-            </paper-button>
-          </a>
-          </a>
-        </div>
+        <md-text-button class="cta-button animated icon-right" on-click="addPotentialPartner">
+          <span>[[partnersBlock.button]]</span>
+          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+        </md-text-button>
       </div>
     `;
   }

@@ -1,5 +1,3 @@
-/* eslint-env node */
-
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
@@ -18,7 +16,7 @@ const config: RollupOptions[] = [
     input: 'src/firebase-messaging-sw.ts',
     treeshake: production,
     output: {
-      file: 'dist/firebase-messaging-sw.js',
+      dir: 'dist',
       sourcemap: production,
     },
     plugins: [

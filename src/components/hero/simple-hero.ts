@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { heroSettings } from '../../utils/data';
 import { ThemedElement } from '../themed-element';
@@ -7,7 +7,15 @@ import './hero-block';
 type HeroKeys = keyof typeof heroSettings;
 type SimpleHeroKeys = Extract<
   HeroKeys,
-  'coc' | 'blog' | 'faq' | 'notFound' | 'previousSpeakers' | 'schedule' | 'speakers' | 'team'
+  | 'coc'
+  | 'blog'
+  | 'faq'
+  | 'notFound'
+  | 'previousSpeakers'
+  | 'privacy'
+  | 'schedule'
+  | 'speakers'
+  | 'team'
 >;
 
 interface Description {
@@ -28,6 +36,17 @@ const hasTitle = (setting: Title | {}): setting is Title => {
 
 @customElement('simple-hero')
 export class SimpleHero extends ThemedElement {
+  static override get styles() {
+    return [
+      ...super.styles,
+      css`
+        hero-block {
+          height: auto;
+        }
+      `,
+    ];
+  }
+
   @property()
   page: SimpleHeroKeys = 'notFound';
 
@@ -55,6 +74,7 @@ export class SimpleHero extends ThemedElement {
         background-color="${heroSettings[this.page].background.color}"
         font-color="${heroSettings[this.page].fontColor}"
       >
+        <div class="hero-command">&gt; route --page=${this.page}</div>
         ${this.renderTitle()} ${this.renderDescription()}
 
         <slot></slot>

@@ -1,14 +1,23 @@
 import { Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
-import '@polymer/paper-button';
+import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { Ticket } from '../models/ticket';
-import { RootState } from '../store';
+import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
+import { fetchTickets } from '../store/tickets/actions';
 import { initialTicketsState } from '../store/tickets/state';
-import { buyTicket, contentLoaders, ticketsBlock } from '../utils/data';
+import {
+  buyTicket,
+  contentLoaders,
+  eveneaEmbed,
+  ticketingPreview,
+  ticketsBlock,
+} from '../utils/data';
 import '../utils/icons';
 import './content-loader';
+import './evenea-embed';
 import './shared-styles';
 
 @customElement('tickets-block')
@@ -18,26 +27,55 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment positioning">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
         }
 
         .tickets-wrapper {
+          position: relative;
+          padding-top: 64px;
+          padding-bottom: 48px;
           text-align: center;
+        }
+
+        .tickets-wrapper::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--google-yellow);
+          content: '> tickets --show';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .tickets {
-          margin: 32px 0 24px;
+          margin: 24px 0 18px;
         }
 
         .ticket-item {
-          margin: 16px 8px;
+          margin: 10px 6px;
+          min-height: 220px;
+          border: 1px solid var(--divider-color);
           width: 100%;
           text-align: center;
           color: var(--primary-text-color);
-          background-color: var(--default-background-color);
+          background-color: var(--secondary-background-color);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .ticket-item:hover {
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-3px);
         }
 
         .ticket-item[in-demand] {
-          transform: scale(1.05);
+          transform: scale(1.03);
           box-shadow: var(--box-shadow-primary-color);
           border-top: 2px solid var(--default-primary-color);
           z-index: 1;
@@ -54,16 +92,19 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .ticket-item[sold-out]:hover {
-          box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.07), 0 2px 2px 0 rgba(0, 0, 0, 0.15);
+          box-shadow:
+            0 0 2px 0 rgba(0, 0, 0, 0.07),
+            0 2px 2px 0 rgba(0, 0, 0, 0.15);
         }
 
         .header {
-          padding: 24px 0 0;
+          padding: 16px 0 0;
+          font-family: var(--font-mono, monospace);
           font-size: 16px;
         }
 
         .content {
-          padding: 0 24px;
+          padding: 0 16px;
         }
 
         .type-description {
@@ -72,13 +113,15 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .ticket-price-wrapper {
-          margin: 24px 0;
+          margin: 14px 0;
           white-space: nowrap;
         }
 
         .price {
           color: var(--default-primary-color);
-          font-size: 40px;
+          font-family: var(--font-mono, monospace);
+          font-weight: 800;
+          font-size: 30px;
         }
 
         .discount {
@@ -87,7 +130,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .sold-out {
-          display: none;
+          display: block;
           font-size: 14px;
           text-transform: uppercase;
           height: 32px;
@@ -95,25 +138,43 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .additional-info {
-          margin: 16px auto 0;
+          margin: 12px auto 0;
           max-width: 480px;
-          font-size: 14px;
+          font-size: 12px;
           color: var(--secondary-text-color);
+          line-height: 1.6;
         }
 
         .actions {
-          padding: 24px;
+          padding: 16px;
           position: relative;
+        }
+
+        md-filled-button {
+          --md-filled-button-container-color: var(--google-blue);
+          --md-filled-button-hover-container-color: var(--terminal-green);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-container-height: 46px;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        /* Keep an unavailable release legible on the dark terminal surface. */
+        md-filled-button[disabled] {
+          --md-filled-button-disabled-container-color: #29456d;
+          --md-filled-button-disabled-container-opacity: 1;
+          --md-filled-button-disabled-label-text-color: var(--terminal-copy);
+          --md-filled-button-disabled-label-text-opacity: 1;
+          opacity: 1;
         }
 
         .tickets-placeholder {
           display: grid;
           width: 100%;
-        }
-
-        paper-button[disabled] {
-          background-color: var(--primary-color-transparent);
-          font-size: 12px;
         }
 
         @media (min-width: 640px) {
@@ -122,17 +183,17 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           }
 
           .ticket-item {
-            max-width: 200px;
+            max-width: 180px;
           }
 
           .ticket-item[in-demand] {
-            transform: scale(1.15);
+            transform: scale(1.04);
           }
         }
       </style>
 
       <div class="tickets-wrapper container">
-        <h1 class="container-title">[[ticketsBlock.title]]</h1>
+        <h2 class="container-title">[[ticketsBlock.title]]</h2>
         <content-loader
           class="tickets-placeholder"
           card-padding="24px"
@@ -145,61 +206,69 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           load-to="130%"
           animation-time="1s"
           items-count="[[contentLoaders.itemsCount]]"
-          hidden$="[[!pending]]"
+          hidden$="[[!showTicketLoader]]"
         >
         </content-loader>
 
-        <div class="tickets" layout horizontal wrap center-justified>
-          <template is="dom-if" if="[[tickets.error]]"> Error loading tickets </template>
+        <template is="dom-if" if="[[showTicketCards]]">
+          <div class="tickets" layout horizontal wrap center-justified>
+            <template is="dom-if" if="[[tickets.error]]">
+              <div class="ticket-error" role="alert">
+                Unable to load tickets.
+                <md-outlined-button on-click="retryTickets">Try again</md-outlined-button>
+              </div>
+            </template>
 
-          <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
-            <a
-              class="ticket-item card"
-              href$="[[ticket.url]]"
-              target="_blank"
-              rel="noopener noreferrer"
-              sold-out$="[[ticket.soldOut]]"
-              in-demand$="[[ticket.inDemand]]"
-              on-click="onTicketTap"
-              layout
-              vertical
-            >
-              <div class="header">
-                <h4>[[ticket.name]]</h4>
-              </div>
-              <div class="content" layout vertical flex-auto>
-                <div class="ticket-price-wrapper">
-                  <div class="price">[[ticket.price]] [[ticket.currency]]</div>
-                  <div class="discount">[[getDiscount(ticket)]]</div>
+            <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
+              <div
+                class="ticket-item card"
+                sold-out$="[[ticket.soldOut]]"
+                in-demand$="[[ticket.inDemand]]"
+                layout
+                vertical
+              >
+                <div class="header">
+                  <h4>[[ticket.name]]</h4>
                 </div>
-                <div class="type-description" layout vertical flex-auto center-justified>
-                  <div class="ticket-dates" hidden$="[[!ticket.starts]]">
-                    [[ticket.starts]] - [[ticket.ends]]
+                <div class="content" layout vertical flex-auto>
+                  <div class="ticket-price-wrapper">
+                    <div class="price">[[ticket.currency]][[ticket.price]]</div>
+                    <div class="discount">[[getDiscount(ticket)]]</div>
                   </div>
-                  <div class="ticket-info">[[ticket.info]]</div>
+                  <div class="type-description" layout vertical flex-auto center-justified>
+                    <div class="ticket-dates" hidden$="[[!ticket.starts]]">
+                      [[ticket.starts]] - [[ticket.ends]]
+                    </div>
+                    <div class="ticket-info">[[ticket.info]]</div>
+                  </div>
+                </div>
+                <div class="actions">
+                  <template is="dom-if" if="[[ticket.soldOut]]">
+                    <div class="sold-out" block>[[ticketsBlock.soldOut]]</div>
+                  </template>
+                  <md-filled-button
+                    hidden$="[[ticket.soldOut]]"
+                    disabled$="[[!ticket.available]]"
+                    on-click="onTicketTap"
+                  >
+                    [[getButtonText(ticket.available)]]
+                  </md-filled-button>
                 </div>
               </div>
-              <div class="actions">
-                <div class="sold-out" block$="[[ticket.soldOut]]">[[ticketsBlock.soldOut]]</div>
-                <paper-button
-                  primary
-                  hidden$="[[ticket.soldOut]]"
-                  disabled$="[[!ticket.available]]"
-                >
-                  [[getButtonText(ticket.available)]]
-                </paper-button>
-              </div>
-            </a>
-          </template>
-        </div>
+            </template>
+          </div>
+        </template>
 
         <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
+        <evenea-embed id="registration-form"></evenea-embed>
       </div>
     `;
   }
 
   private ticketsBlock = ticketsBlock;
   private contentLoaders = contentLoaders.tickets;
+  private showTicketCards = Boolean(eveneaEmbed.published);
+  private availableTicketAction = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
 
   @property({ type: Object })
   tickets = initialTicketsState;
@@ -211,6 +280,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   @computed('tickets')
   private get pending() {
     return this.tickets instanceof Pending;
+  }
+
+  @computed('tickets')
+  private get showTicketLoader() {
+    return this.showTicketCards && this.pending;
   }
 
   private getDiscount(ticket: Ticket) {
@@ -229,14 +303,21 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     return this.ticketsBlock.save.replace('${discount}', discount);
   }
 
-  private onTicketTap(e: PointerEvent & { model: { ticket: Ticket } }) {
+  private onTicketTap(e: Event & { model: { ticket: Ticket } }) {
     if (e.model.ticket.soldOut || !e.model.ticket.available) {
-      e.preventDefault();
-      e.stopPropagation();
+      return;
     }
+    this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+
+  private retryTickets() {
+    store.dispatch(fetchTickets);
   }
 
   private getButtonText(available: boolean) {
-    return available ? buyTicket : this.ticketsBlock.notAvailableYet;
+    return available ? this.availableTicketAction : this.ticketsBlock.notAvailableYet;
   }
 }

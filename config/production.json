@@ -1,15 +1,5 @@
 {
   "basepath": "/",
-  "url": "warsaw.devfest.pl",
-  "firebase": {
-    "apiKey": "AIzaSyCKkwmJlE5XH6arlobsZI-R6DJ11XvVfQU",
-    "authDomain": "gdg-warsaw-devfest23-web-11997.firebaseapp.com",
-    "databaseURL": "https://gdg-warsaw-devfest23-web-11997-default-rtdb.europe-west1.firebasedatabase.app",
-    "projectId": "gdg-warsaw-devfest23-web-11997",
-    "storageBucket": "gdg-warsaw-devfest23-web-11997.appspot.com",
-    "messagingSenderId": "540994524372",
-    "appId": "1:540994524372:web:5041cb23b03a5c61e59741",
-    "measurementId": "G-026Y2DP9JM"
-  },
-  "googleMapApiKey": "AIzaSyClBFPlsjRGD_XNPEAi-dlgRTC4IeLHotQ"
+  "url": "https://gdg-warsaw-devfest26-web.web.app/",
+  "googleMapApiKey": ""
 }

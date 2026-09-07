@@ -1,10 +1,11 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { SpeakerData } from './speaker';
+import { defaultSpeakers } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('speaker', () => {
   it('matches the shape of the default data', () => {
-    const speakers: SpeakerData[] = Object.values(data['speakers']);
+    const speakers: SpeakerData[] = defaultSpeakers;
     const keys: Array<keyof SpeakerData> = [
       'badges',
       'bio',
@@ -22,6 +23,7 @@ describe('speaker', () => {
       'socials',
       'title',
     ];
+
     expect(speakers).toHaveLength(27);
     expect(allKeys(speakers)).toStrictEqual(keys);
   });

@@ -1,6 +1,6 @@
 import { getAnalytics } from 'firebase/analytics';
 import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { enableMultiTabIndexedDbPersistence, getFirestore } from 'firebase/firestore';
+import { Firestore, initializeFirestore, persistentLocalCache } from 'firebase/firestore';
 import { getPerformance, initializePerformance } from 'firebase/performance';
 
 /**
@@ -19,16 +19,30 @@ declare global {
   }
 }
 
-const firebaseConfig = window.firebaseConfig;
+const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const firebaseConfig =
+  window.firebaseConfig ??
+  (isLocalPreview
+    ? {
+        apiKey: 'local-preview',
+        authDomain: 'local-preview.firebaseapp.com',
+        projectId: 'local-preview',
+        storageBucket: 'local-preview.appspot.com',
+        messagingSenderId: 'local-preview',
+        appId: 'local-preview',
+        measurementId: 'G-LOCALPREVIEW',
+      }
+    : undefined);
 
 if (!firebaseConfig) {
   throw new Error('window.firebaseConfig is not defined');
 }
 
 export const firebaseApp = initializeApp(firebaseConfig);
-export const db = getFirestore(firebaseApp);
+export const db: Firestore = initializeFirestore(firebaseApp, {
+  localCache: persistentLocalCache(),
+});
 export const performance = getPerformance(firebaseApp);
 export const analytics = getAnalytics(firebaseApp);
 
 initializePerformance(firebaseApp);
-enableMultiTabIndexedDbPersistence(db);

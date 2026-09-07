@@ -1,13 +1,16 @@
 // https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
+
 import { DocumentData, DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
 // https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
+
 import { getMessaging, MessagingPayload } from 'firebase-admin/messaging';
 import * as functions from 'firebase-functions';
-import moment from 'moment';
-
-const FORMAT = 'HH:mm';
+import {
+  createTimeWindow,
+  filterUpcomingTimeslots,
+  getTodayDateString,
+  parseTimeAndGetFromNow,
+} from './time';
 
 const removeUserTokens = (tokensToUsers) => {
   const userTokens = Object.keys(tokensToUsers).reduce((acc, token) => {
@@ -34,7 +37,7 @@ const removeUserTokens = (tokensToUsers) => {
         }, {});
 
         transaction.set(ref, newVal);
-      })
+      }),
     );
   });
 
@@ -46,7 +49,7 @@ const sendPushNotificationToUsers = async (userIds: string[], payload: Messaging
     'sendPushNotificationToUsers user ids',
     userIds,
     'with notification',
-    payload
+    payload,
   );
 
   const tokensPromise = userIds.map((id) => {
@@ -99,27 +102,27 @@ export const scheduleNotifications = functions.pubsub
 
     const schedule = scheduleSnapshot.docs.reduce(
       (acc, doc) => ({ ...acc, [doc.id]: doc.data() }),
-      {}
+      {},
     );
-    const todayDay = moment().utcOffset(notificationsConfig.timezone).format('YYYY-MM-DD');
+    const todayDay = getTodayDateString(notificationsConfig.timezone);
 
     if (schedule[todayDay]) {
-      const beforeTime = moment().subtract(3, 'minutes');
-      const afterTime = moment().add(3, 'minutes');
+      const timeWindow = createTimeWindow(3, 3);
 
-      const upcomingTimeslot = schedule[todayDay].timeslots.filter((timeslot) => {
-        const timeslotTime = moment(
-          `${timeslot.startTime}${notificationsConfig.timezone}`,
-          `${FORMAT}Z`
-        ).subtract(10, 'minutes');
-        return timeslotTime.isBetween(beforeTime, afterTime);
-      });
+      const upcomingTimeslot = filterUpcomingTimeslots(
+        schedule[todayDay].timeslots,
+        timeWindow,
+        10, // notification offset in minutes
+        notificationsConfig.timezone,
+      );
 
-      const upcomingSessions = upcomingTimeslot.reduce((_result, timeslot) =>
-        timeslot.sessions.reduce(
-          (aggregatedSessions, current) => [...aggregatedSessions, ...current.items],
-          []
-        )
+      const upcomingSessions = upcomingTimeslot.reduce(
+        (result, timeslot) =>
+          timeslot.sessions.reduce(
+            (aggregatedSessions, current) => [...aggregatedSessions, ...current.items],
+            result,
+          ),
+        [],
       );
       const usersIdsSnapshot = await getFirestore().collection('featuredSessions').get();
 
@@ -132,22 +135,21 @@ export const scheduleNotifications = functions.pubsub
 
         const usersIds = usersIdsSnapshot.docs.reduce(
           (acc, doc) => ({ ...acc, [doc.id]: doc.data() }),
-          {}
+          {},
         );
 
         const userIdsFeaturedSession = Object.keys(usersIds).filter(
           (userId) =>
             !!Object.keys(usersIds[userId]).filter(
-              (sessionId) => sessionId.toString() === upcomingSession.toString()
-            ).length
+              (sessionId) => sessionId.toString() === upcomingSession.toString(),
+            ).length,
         );
 
         const session = sessionInfoSnapshot.data();
-        const end = moment(
-          `${upcomingTimeslot[0].startTime}${notificationsConfig.timezone}`,
-          `${FORMAT}Z`
+        const fromNow = parseTimeAndGetFromNow(
+          upcomingTimeslot[0].startTime,
+          notificationsConfig.timezone,
         );
-        const fromNow = end.fromNow();
 
         if (userIdsFeaturedSession.length) {
           const payload: MessagingPayload = {

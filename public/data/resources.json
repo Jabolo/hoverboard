@@ -1,9 +1,9 @@
 {
-  "title": "GDG DevFest Season 2023",
-  "description": "Join the community, learn new things!",
-  "image": "images/social-share.jpg",
-  "keywords": "event, gdg, gde, devfest, google, programming, chrome, polymer, developers, web, cloud, mobile",
-  "dates": "November 25, 2023",
+  "title": "GDG DevFest Warsaw 2026",
+  "description": "A community-led technology conference for Warsaw's technology community on November 21, 2026.",
+  "image": "images/backgrounds/home-2026.png",
+  "keywords": "GDG, DevFest, Warsaw, developers, technology, community, conference",
+  "dates": "November 21, 2026",
   "partnershipProposition": "",
   "share": "Share",
   "followOur": "Follow our",
@@ -11,23 +11,57 @@
   "emailUs": "Email us",
   "partnershipResources": "Partnership Resources",
   "eventResources": "Event Resources",
-  "buyTicket": "Buy ticket",
+  "buyTicket": "Register",
+  "ticketingPreview": "View registration",
+  "cfpBlock": {
+    "title": "Share what you know.",
+    "kicker": "> cfp --opening-soon",
+    "description": "DevFest Warsaw is looking for practical talks and hands-on workshops from people who build, learn, and share with the community.",
+    "openTo": "Open to everyone",
+    "formats": "Talks and workshops",
+    "platform": "Applications will open on Advocu.",
+    "cta": "Call for papers — opening soon",
+    "note": "Bring a real lesson, a useful idea, or a story worth sharing."
+  },
+  "visitBlock": {
+    "title": "Plan your visit.",
+    "kicker": "> arrival --ready",
+    "intro": "Registration opens at 09:00 at Google for Startups Campus Warsaw, Plac Konesera 10.",
+    "travelTitle": "Getting here",
+    "metro": "Take Metro M2 to Dworzec Wileński — Koneser is a short walk away.",
+    "surface": "Buses and trams also serve the Dworzec Wileński and Ząbkowska area.",
+    "parking": "On Saturday, street parking in Warsaw’s paid zone is free, subject to space and signed local restrictions. Koneser also has a 24-hour paid underground car park.",
+    "directions": "Open directions",
+    "onSiteTitle": "On site",
+    "accessibility": "The entire venue is wheelchair accessible, with step-free seating available. The Koneser complex also has ramps and lifts.",
+    "wifi": "Wi-Fi will be available for attendees.",
+    "cloakroom": "An open, self-service cloakroom will be available. It is not staffed or monitored, so please keep valuables with you.",
+    "accessibilityHelp": "Need an accessibility adjustment? Contact the organizers."
+  },
+  "scheduleBlock": {
+    "title": "Schedule",
+    "kicker": "> schedule --coming-soon",
+    "intro": "The full day is still taking shape. One timing is confirmed — and the rest will be announced here.",
+    "time": "09:00",
+    "milestone": "Registration opens",
+    "note": "Sessions, workshops, and the complete timetable are coming soon.",
+    "emptyState": "We’re confirming speakers, workshops, and room timings. Check back here for the full timetable."
+  },
   "signIn": "Sign in",
   "signOut": "Sign out",
-  "viewHighlights": "View Highlights",
+  "viewHighlights": "View highlights",
   "offlineMessage": "You can still work offline.",
-  "serviceWorkerInstalled": "App is now installed and available offline.",
+  "serviceWorkerInstalled": "The app is now installed and available offline.",
   "serviceWorkerAvailable": "A new version of this app is available.",
-  "serviceWorkerInstalling": "App being installed for offline use.",
-  "serviceWorkerError": "Error caching for offline use.",
+  "serviceWorkerInstalling": "The app is being installed for offline use.",
+  "serviceWorkerError": "There was an error caching the app for offline use.",
   "refresh": "Refresh",
   "position": "Position",
   "country": "Country",
   "time": "Time",
   "faq": "/data/faq.md",
-  "freeTickets": "/data/freeTickets.md",
   "coc": "/data/coc.md",
-  "timezoneOffset": "-180",
+  "timezoneOffset": "-60",
   "loading": "Loading...",
   "footer": {
     "blog": "Blog"
@@ -50,7 +84,7 @@
           "newTab": true
         },
         {
-          "name": "GDG",
+          "name": "Google Developer Groups",
           "url": "https://developers.google.com/groups/",
           "newTab": true
         },
@@ -62,37 +96,7 @@
         {
           "name": "Meet the Team",
           "url": "/team",
-          "newTab": true
-        },
-        {
-          "name": "WTM",
-          "url": "https://developers.google.com/womentechmakers",
-          "newTab": true
-        }
-      ]
-    },
-    {
-      "title": "Explore Past DevFests",
-      "links": [
-        {
-          "name": "DevFestWarsaw 2022",
-          "url": "https://gdg-warsaw-devfest22-website.web.app/",
-          "newTab": true
-        },
-        {
-          "name": "DevFestPoland 2019",
-          "url": "https://warrad-devfest-pl.web.app/",
-          "newTab": true
-        },
-        {
-          "name": "DevFestPoland 2018",
-          "url": "https://2018.warsaw.devfest.pl",
-          "newTab": true
-        },
-        {
-          "name": "DevFestPoland 2017",
-          "url": "https://2017.warsaw.devfest.pl",
-          "newTab": true
+          "newTab": false
         }
       ]
     },
@@ -100,35 +104,46 @@
       "title": "Event Resources",
       "links": [
         {
-          "name": "Partnership Proposition",
-          "url": "https://docs.google.com/presentation/d/e/2PACX-1vQl6OcKKKfouef-6LdAQJp0iUrHnh5_cnBRwkcukNeXTFDDYYVsoMJNuG-qh_0S_8SizhPRn9B-Otr4/pub?start=false&loop=false&delayms=60000",
-          "newTab": true
+          "name": "FAQs",
+          "url": "/faq",
+          "newTab": false
         },
         {
-          "name": "Call for Papers",
-          "url": "https://sessionize.com/warsawdevfest2023",
-          "newTab": true
+          "name": "Privacy & data",
+          "url": "/privacy",
+          "newTab": false
+        },
+        {
+          "name": "Code of Conduct",
+          "url": "/coc",
+          "newTab": false
+        },
+        {
+          "name": "Contact the organizers",
+          "url": "mailto:contact@gdgwarsaw.pl",
+          "newTab": false
         }
       ]
     }
   ],
-  "subscribeNote": "No spam, only the latest news and updates!",
+  "subscribeNote": "No spam, only important event updates.",
   "codeOfConduct": "Code of Conduct",
+  "privacyNotice": "/data/privacy.md",
   "codeOfConductBlock": {
-    "organization": "DevFest",
+    "organization": "GDG Warsaw",
     "form": "",
-    "contacts": ["Organizers , coc@gdgwarsaw.pl"]
+    "contacts": ["GDG Warsaw organizing team, [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl)"]
   },
   "aboutBlock": {
-    "title": "What you need to know, before you ask",
+    "title": "Build, learn, connect.",
     "callToAction": {
       "featuredSessions": {
-        "description": "GDG DevFest Warsaw brings together the world class experts in Android, Web and Cloud technologies to Warsaw for whole day of sessions, workshops and showcases.",
-        "label": "",
-        "link": ""
+        "description": "GDG DevFest Warsaw 2026 brings together developers, designers, engineers, researchers, students, and technology enthusiasts for one day of practical learning and meaningful connections.",
+        "label": "View schedule updates",
+        "link": "/#schedule"
       },
       "howItWas": {
-        "description": "Our team creates DevFest to be the best place for experience sharing in a phenomenal atmosphere.",
+        "description": "",
         "label": "",
         "youtubeId": ""
       }
@@ -136,26 +151,26 @@
     "statisticsBlock": {
       "attendees": {
         "label": "Attendees",
-        "number": "200+"
+        "number": "300"
       },
       "days": {
         "label": "Day",
-        "number": "Saturday"
+        "number": "1"
       },
       "sessions": {
-        "label": "Networking",
-        "number": "100%"
+        "label": "Sessions",
+        "number": "TBA"
       },
       "tracks": {
-        "label": "Sessions",
-        "number": "15+"
+        "label": "Tracks",
+        "number": "TBA"
       }
     }
   },
   "ticketsBlock": {
     "title": "Tickets",
-    "ticketsDetails": "Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.",
-    "soldOut": "You missed it!",
+    "ticketsDetails": "Secure registration via Evenea — choose your ticket below.",
+    "soldOut": "Sold out",
     "notAvailableYet": "Not available yet",
     "save": "Save ${discount}% today"
   },
@@ -163,18 +178,18 @@
     "title": "Partners",
     "button": "Become a partner",
     "form": {
-      "title": "Become a partner!",
+      "title": "Become a partner",
       "submitLabel": "Submit",
-      "fullName": "Full Name",
-      "companyName": "Company Name"
+      "fullName": "Full name",
+      "companyName": "Company name"
     },
-    "toast": "We will contact you soon!"
+    "toast": "Thank you. We will contact you soon."
   },
   "featuredVideos": {
-    "title": "GDG Warsaw featured videos",
+    "title": "GDG Warsaw highlights",
     "callToAction": {
-      "label": "See all videos",
-      "link": "https://www.youtube.com/c/GdgWarszawaPl/videos"
+      "label": "Visit the YouTube channel",
+      "link": "https://www.youtube.com/c/GdgWarszawaPl/featured"
     }
   },
   "blog": {
@@ -182,7 +197,7 @@
     "suggested": "Up next"
   },
   "latestPostsBlock": {
-    "title": "The latest news",
+    "title": "Latest news",
     "callToAction": {
       "label": "View all stories",
       "link": "/blog"
@@ -194,7 +209,7 @@
     "previousYear": "Year"
   },
   "speakersBlock": {
-    "title": "Rockstar speakers",
+    "title": "Speakers",
     "callToAction": {
       "label": "View all speakers",
       "link": "/speakers"
@@ -208,11 +223,10 @@
     }
   },
   "galleryBlock": {
-    "title": "Call4Papers",
-    "description": "If you are an amazing technologist with something awesome to share with the Warsaw tech community we want to hear from you!",
+    "title": "DevFest Warsaw 2026",
+    "description": "Event photos will be added after the conference.",
     "callToAction": {
-      "label": "Click here to submit your talk",
-      "link": "https://sessionize.com/warsawdevfest2023"
+      "label": ""
     }
   },
   "mapBlock": {
@@ -220,24 +234,24 @@
   },
   "subscribeBlock": {
     "callToAction": {
-      "description": "Get notified about the important conference updates",
+      "description": "Get notified about important conference updates.",
       "label": "Subscribe"
     },
     "yourEmail": "Your email",
-    "emailAddress": "Email Address",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "formTitle": "Get the latest updates, insights and news about GDG DevFest Warsaw sent to your inbox.",
+    "emailAddress": "Email address",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "formTitle": "Get DevFest Warsaw 2026 updates in your inbox.",
     "emailRequired": "Please enter a valid email address.",
-    "fieldRequired": "Field required.",
+    "fieldRequired": "This field is required.",
     "subscribe": "Subscribe",
     "subscribed": "Subscribed",
     "close": "Close",
-    "generalError": "An error has occurred. Please, try again later.",
-    "toast": "Successfully subscribed!"
+    "generalError": "An error has occurred. Please try again later.",
+    "toast": "Successfully subscribed."
   },
   "team": {
-    "description": "[Google Developers Group (GDG) Warsaw](https://gdg.community.dev/gdg-warszawa/) - is an open and volunteer geek community that creates exciting projects and share experience about Google technologies with a passion.<br><br>Our goal is to organize space to connect the best industry experts with an audience eager for knowledge to boost the development of IT.<br><br> Here is some info about GDG Warsaw in numbers to ensure that DevFest is going to be FANTASTIC:<br><ul><li>11 years organizing events</li><li>250+ events organized</li><li>3000+ community members</li><li>7 DevFests organized by Warsaw Team</li><li>5000+ events participants</li></ul>"
+    "description": "[GDG Warsaw](https://gdg.community.dev/gdg-warszawa/) is an open, volunteer-led community that creates space for people to learn, share experience, and connect around technology. The DevFest Warsaw team is building the 2026 event with the community, partners, and volunteers."
   },
   "schedule": {
     "saveSessionsSignedOut": "Sign in to save sessions"
@@ -297,21 +311,22 @@
     }
   },
   "aboutOrganizerBlock": {
-    "image": "/images/team.jpg",
+    "image": "/images/logos/gdg-warsaw-white.svg",
     "blocks": [
       {
         "title": "Organizer",
-        "description": "<a href='https://gdg.community.dev/gdg-warszawa/' target='_blank'>GDG Warsaw</a>, in collaboration with <a href='https://gdsc.community.dev/polish-japanese-academy-of-information-technology/' target='_blank'>PJATK GDSC</a>, <a href='https://gdsc.community.dev/university-of-warsaw/' target='_blank'>GDSC UW</a>, <a href='https://gdsc.community.dev/warsaw-university-of-technology/' target='_blank'>GDSC WUT</a>, the <a href='https://developers.google.com/womentechmakers' target='_blank'>WTM</a>, an AWESOME team, sponsors, and a host of volunteers, is the proud organizer of DevFest Warsaw.",
+        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) (GDG Warsaw) brings DevFest Warsaw 2026 to the community with volunteers and partners.",
         "callToAction": {
-          "label": "Open team page",
-          "link": "/team"
+          "label": "Meet the team",
+          "link": "/team",
+          "newTab": false
         }
       },
       {
         "title": "What is a GDG?",
-        "description": "GDG - is open and volunteer geek community who create exciting projects and share experience about Google technologies with a passion.",
+        "description": "Google Developer Groups are local communities where developers and technology enthusiasts learn, connect, and share knowledge.",
         "callToAction": {
-          "label": "Read more",
+          "label": "Learn more",
           "link": "https://developers.google.com/groups/",
           "newTab": true
         }
@@ -320,7 +335,7 @@
         "title": "What is DevFest?",
         "description": "DevFests are community-led developer events hosted by Google Developer Groups around the globe.",
         "callToAction": {
-          "label": "Read more",
+          "label": "Learn more",
           "link": "https://devfest.withgoogle.com/",
           "newTab": true
         }
@@ -344,5 +359,14 @@
   },
   "addToHomeScreen": {
     "cta": "Add to Home Screen"
+  },
+  "eveneaEmbed": {
+    "title": "Registration",
+    "description": "Choose a ticket and complete registration securely in the embedded Evenea form below.",
+    "published": true,
+    "requiresAccessCode": false,
+    "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/",
+    "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe",
+    "resizerScriptSrc": "https://app.evenea.pl/js/iframe/new/iframeResizer2.js"
   }
 }

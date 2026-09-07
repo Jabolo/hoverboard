@@ -3,6 +3,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/hero/simple-hero';
 import '../elements/footer-block';
+import '../elements/shared-styles';
 import { heroSettings } from '../utils/data';
 import { updateMetadata } from '../utils/metadata';
 
@@ -10,9 +11,12 @@ import { updateMetadata } from '../utils/metadata';
 export class NotFoundPage extends PolymerElement {
   static get template() {
     return html`
-      <style>
+      <style include="shared-styles">
         :host {
           display: block;
+          min-height: 100vh;
+          background: var(--primary-background-color);
+          color: var(--primary-text-color);
         }
 
         .not-found-image {

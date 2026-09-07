@@ -34,23 +34,41 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         :host {
           display: block;
           height: 100%;
+          background: var(--primary-background-color);
         }
 
         .container {
+          padding-top: 32px;
+          padding-bottom: 32px;
           display: grid;
           grid-template-columns: 1fr;
           grid-gap: 16px;
         }
 
+        .empty-state {
+          margin: 0;
+          padding: 40px 32px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
+        }
+
         .speaker {
           padding: 32px 24px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
           background: var(--primary-background-color);
           text-align: center;
-          transition: box-shadow var(--animation);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
         }
 
         .speaker:hover {
-          box-shadow: var(--box-shadow);
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-3px);
         }
 
         .photo {
@@ -61,6 +79,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
           background-color: var(--secondary-background-color);
+          border: 2px solid var(--google-blue);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
@@ -77,7 +96,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          border: 2px solid #fff;
+          border: 2px solid var(--primary-background-color);
           transition: transform var(--animation);
         }
 
@@ -108,8 +127,11 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         }
 
         .company-logo {
+          padding: 3px 6px;
+          border-radius: 3px;
+          background: #fff;
           --lazy-image-width: 100%;
-          --lazy-image-height: 20px;
+          --lazy-image-height: 16px;
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
@@ -121,11 +143,16 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
         .name {
           margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           line-height: 1;
         }
 
         .origin {
           margin-top: 4px;
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.1;
         }
@@ -133,6 +160,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         .bio {
           margin-top: 16px;
           color: var(--secondary-text-color);
+          line-height: 1.6;
         }
 
         .contacts {
@@ -171,49 +199,19 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
             grid-template-columns: repeat(4, 1fr);
           }
         }
-
-        .action-buttons {
-          margin: 0 -8px;
-          font-size: 14px;
-        }
-
-        .action-buttons paper-button {
-          margin: 8px;
-        }
-
-        .action-buttons iron-icon {
-          --iron-icon-fill-color: currentColor;
-          margin-right: 8px;
-        }
-
-        .cta-button {
-          margin-top: 24px;
-          color: var(--default-primary-color);
-        }
       </style>
 
-      <!--      <simple-hero page="speakers"></simple-hero>-->
-      <!--            <div class="container">-->
-      <!--              <div class="action-buttons" layout horizontal wrap>-->
-      <!--                <a href="https://sessionize.com/warsawdevfest2023"-->
-      <!--                   target="_blank">-->
-      <!--                  <paper-button class="cta-button animated icon-right"-->
-      <!--                  ">-->
-      <!--                  <span>Call4Papers</span>-->
-      <!--                  <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>-->
-      <!--                  </paper-button>-->
-      <!--                </a>-->
-      <!--                </a>-->
-      <!--              </div>-->
-      <!--            </div>-->
+      <simple-hero page="speakers"></simple-hero>
 
       <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
-      <filter-menu
-        filter-groups="[[filterGroups]]"
-        selected-filters="[[selectedFilters]]"
-        results-count="[[speakersToRender.length]]"
-      ></filter-menu>
+      <template is="dom-if" if="[[showFilters]]">
+        <filter-menu
+          filter-groups="[[filterGroups]]"
+          selected-filters="[[selectedFilters]]"
+          results-count="[[speakersToRender.length]]"
+        ></filter-menu>
+      </template>
 
       <content-loader
         class="container"
@@ -254,20 +252,19 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 </template>
               </div>
             </div>
-            <template is="dom-if" if="[[speaker.companyLogoUrl]]">
-              <lazy-image
-                class="company-logo"
-                src="[[speaker.companyLogoUrl]]"
-                alt="[[speaker.company]]"
-              ></lazy-image>
-            </template>
+
+            <lazy-image
+              class="company-logo"
+              src="[[speaker.companyLogoUrl]]"
+              alt="[[speaker.company]]"
+            ></lazy-image>
 
             <div class="description">
               <h2 class="name">[[speaker.name]]</h2>
               <div class="origin">[[speaker.country]]</div>
 
               <text-truncate lines="5">
-                <div class="shortBio">[[speaker.shortBio]]</div>
+                <div class="bio">[[speaker.bio]]</div>
               </text-truncate>
             </div>
 
@@ -277,6 +274,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                   <paper-icon-button
                     class="social-icon"
                     icon="hoverboard:{{social.icon}}"
+                    aria-label="Open [[speaker.name]] on [[social.icon]]"
                   ></paper-icon-button>
                 </a>
               </template>
@@ -284,6 +282,15 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           </a>
         </template>
       </div>
+
+      <template is="dom-if" if="[[showEmptyState]]">
+        <div class="container">
+          <p class="empty-state">
+            Speaker profiles and sessions will appear here as they are confirmed. Subscribe for
+            programme updates.
+          </p>
+        </div>
+      </template>
 
       <previous-speakers-block></previous-speakers-block>
 
@@ -324,6 +331,16 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
   @computed('speakers')
   get contentLoaderVisibility() {
     return this.speakers instanceof Success;
+  }
+
+  @computed('speakers')
+  get showEmptyState() {
+    return this.speakers instanceof Success && this.speakers.data.length === 0;
+  }
+
+  @computed('speakers')
+  get showFilters() {
+    return this.speakers instanceof Success && this.speakers.data.length > 0;
   }
 
   speakerUrl(id: string) {

@@ -1,5 +1,5 @@
-import { firestore } from '../firebase-config';
-import data from '../../docs/default-firebase-data.json';
+import { firestore } from '../firebase-config.js';
+import { data } from './data.js';
 
 export const importTeam = () => {
   const teams = data.team;
@@ -20,7 +20,7 @@ export const importTeam = () => {
       team.members.forEach((member, id) => {
         batch.set(
           firestore.collection('team').doc(`${teamId}`).collection('members').doc(`${id}`),
-          member
+          member,
         );
       });
     } else {

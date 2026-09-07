@@ -1,23 +1,26 @@
-import { customElement, property, query } from '@polymer/decorators';
+import { Success } from '@abraham/remotedata';
+import { computed, customElement, property, query } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-button';
+import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
-import '@power-elements/lazy-image';
 import '../components/about-block';
+import '../components/event-countdown';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
-import '../elements/featured-videos';
+import '../elements/cfp-block';
+import '../elements/schedule-block';
+import '../elements/visit-block';
+import '../elements/footer-block';
 import '../elements/fork-me-block';
-import '../elements/gallery-block';
-import '../elements/latest-posts-block';
 import '../elements/map-block';
 import '../elements/partners-block';
 import '../elements/speakers-block';
 import '../elements/subscribe-block';
 import '../elements/tickets-block';
 import { firebaseApp } from '../firebase';
-import { store } from '../store';
+import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { queueSnackbar } from '../store/snackbars';
 import { openVideoDialog } from '../store/ui/actions';
@@ -26,15 +29,17 @@ import {
   buyTicket,
   dates,
   description,
+  eveneaEmbed,
   heroSettings,
-  location,
   showForkMeBlockForProjectIds,
   title,
+  ticketingPreview,
   viewHighlights,
 } from '../utils/data';
 import '../utils/icons';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
+import { initialTicketsState, TicketsState } from '../store/tickets/state';
 
 @customElement('home-page')
 export class HomePage extends ReduxMixin(PolymerElement) {
@@ -51,18 +56,63 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           text-align: center;
         }
 
+        .home-content {
+          width: min(100%, 980px);
+          padding: 24px 20px 52px;
+        }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
+        .home-grid {
+          display: grid;
+          width: 100%;
+          gap: 28px;
+          align-items: center;
+        }
+
+        .home-intro {
+          min-width: 0;
+        }
+
         .hero-logo {
-          --lazy-image-width: 100%;
-          --lazy-image-height: 200px;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
-          max-width: 600px;
-          max-height: 200px;
+          display: block;
+          width: 100%;
+          height: auto;
+          max-width: 240px;
+          max-height: 76px;
+          object-fit: contain;
+        }
+
+        .community-logo {
+          display: block;
+          width: min(250px, 100%);
+          height: auto;
+          object-fit: contain;
+          margin-bottom: 20px;
         }
 
         .info-items {
           margin: 24px auto;
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
           font-size: 22px;
+          line-height: 1.35;
+        }
+
+        .info-item:first-child {
+          color: var(--terminal-green);
+          font-weight: 800;
+          letter-spacing: 0.02em;
         }
 
         .info-items > *:not(:first-of-type) {
@@ -74,12 +124,31 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           font-size: 14px;
         }
 
-        .action-buttons paper-button {
+        .action-buttons md-filled-button,
+        .action-buttons md-outlined-button {
+          min-height: 48px;
           margin: 8px;
+          border-radius: 4px;
+          font-family: var(--font-mono);
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .action-buttons md-filled-button {
+          --md-filled-button-container-color: var(--google-blue-strong);
+          --md-filled-button-hover-container-color: var(--google-blue);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #fff;
+          --md-filled-button-icon-color: #fff;
         }
 
         .action-buttons .watch-video {
           color: #fff;
+          --md-outlined-button-label-text-color: #fff;
+          --md-outlined-button-hover-label-text-color: #fff;
+          --md-outlined-button-outline-color: #fff;
         }
 
         .action-buttons iron-icon {
@@ -91,6 +160,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           margin-top: 24px;
           color: currentColor;
           user-select: none;
+          border: 0;
+          padding: 0;
+          background: transparent;
+          font: inherit;
           cursor: pointer;
         }
 
@@ -108,6 +181,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           animation: updown 2s infinite;
         }
 
+        @media (prefers-reduced-motion: reduce) {
+          .scroll-down .scroller,
+          .terminal-command .cursor {
+            animation: none;
+          }
+        }
+
         @keyframes updown {
           0% {
             transform: translate(0, 0);
@@ -120,10 +200,128 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
         }
 
+        .terminal-column {
+          display: grid;
+          width: 100%;
+          max-width: 520px;
+          gap: 12px;
+        }
+
+        .terminal-window {
+          overflow: hidden;
+          border: 1px solid var(--terminal-line);
+          border-radius: 10px;
+          background: rgb(10 21 37 / 92%);
+          box-shadow: 0 20px 48px rgb(0 0 0 / 28%);
+          text-align: left;
+        }
+
+        .terminal-bar {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          min-height: 42px;
+          padding: 0 14px;
+          border-bottom: 1px solid var(--terminal-line);
+        }
+
+        .terminal-bar i {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--google-red);
+        }
+
+        .terminal-bar i:nth-child(2) {
+          background: var(--google-yellow);
+        }
+
+        .terminal-bar i:nth-child(3) {
+          background: var(--google-green);
+        }
+
+        .terminal-bar span {
+          margin-left: 6px;
+          color: var(--terminal-muted);
+          font-family: var(--font-mono);
+          font-size: 11px;
+        }
+
+        .terminal-body {
+          padding: 18px 16px;
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
+          font-size: 12px;
+          line-height: 1.65;
+        }
+
+        .terminal-line {
+          display: grid;
+          grid-template-columns: 16px 1fr;
+          gap: 6px;
+        }
+
+        .terminal-line + .terminal-line {
+          margin-top: 8px;
+        }
+
+        .terminal-line .prompt {
+          color: var(--terminal-green);
+        }
+
+        .terminal-line .key {
+          color: var(--terminal-muted);
+        }
+
+        .terminal-line .value {
+          color: var(--terminal-copy);
+        }
+
+        .terminal-line .green {
+          color: var(--terminal-green);
+        }
+
+        .terminal-line .blue {
+          color: #8cb5ff;
+        }
+
+        .terminal-body hr {
+          margin: 14px 0;
+          border: 0;
+          border-top: 1px dashed var(--terminal-line);
+        }
+
+        .terminal-command {
+          display: flex;
+          align-items: center;
+          min-height: 40px;
+          padding: 0 10px;
+          border: 1px solid rgb(126 242 165 / 36%);
+          border-radius: 6px;
+          background: rgb(126 242 165 / 8%);
+          color: var(--terminal-green);
+          font-family: var(--font-mono);
+          font-size: 11px;
+        }
+
+        .terminal-command .cursor {
+          width: 6px;
+          height: 14px;
+          margin-left: 7px;
+          background: var(--terminal-green);
+          animation: blink 1.1s steps(2, start) infinite;
+        }
+
+        @keyframes blink {
+          50% {
+            opacity: 0;
+          }
+        }
+
         @media (min-height: 500px) {
           hero-block {
-            height: calc(120vh + 57px);
-            max-height: calc(130vh + 1px);
+            height: calc(100vh + 57px);
+            max-height: calc(100vh + 1px);
           }
 
           .home-content {
@@ -139,19 +337,57 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
         }
 
+        @media (max-width: 811px) {
+          hero-block {
+            height: auto;
+            min-height: 0;
+            max-height: none;
+          }
+
+          .home-content {
+            margin-top: 0;
+            padding-top: 24px;
+          }
+
+          .scroll-down {
+            position: static;
+            transform: none;
+          }
+        }
+
         @media (min-width: 812px) {
           hero-block {
             height: calc(100vh + 65px);
           }
 
           .hero-logo {
-            max-width: 600px;
+            max-width: 320px;
           }
 
           .info-items {
             margin: 48px auto;
             font-size: 28px;
             line-height: 1.1;
+          }
+
+          .home-grid {
+            grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.8fr);
+            gap: clamp(28px, 5vw, 72px);
+            text-align: left;
+          }
+
+          .home-intro {
+            align-items: flex-start;
+            text-align: left;
+          }
+
+          .info-items {
+            margin-right: 0;
+            margin-left: 0;
+          }
+
+          .terminal-column {
+            justify-self: end;
           }
         }
       </style>
@@ -164,21 +400,86 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         hide-logo
       >
         <div class="home-content" layout vertical center>
-          <lazy-image class="hero-logo" src="/images/logo.svg" alt="[[siteTitle]]"></lazy-image>
+          <h1 class="sr-only">[[siteTitle]]</h1>
+          <div class="home-grid">
+            <div class="home-intro" layout vertical center>
+              <div class="hero-command">&gt; devfest.init --2026</div>
+              <img
+                class="community-logo"
+                src="/images/logos/gdg-warsaw-white.svg"
+                alt="Google Developer Groups Warszawa"
+              />
+              <img class="hero-logo" src="/images/logo.svg" alt="[[siteTitle]]" />
 
-          <div class="info-items">
-            <div class="info-item">[[city]]. [[dates]]</div>
-            <div class="info-item">[[heroSettings.description]]</div>
+              <div class="info-items">
+                <div class="info-item">[[dates]]</div>
+                <div class="info-item">[[heroSettings.description]]</div>
+              </div>
+
+              <event-countdown></event-countdown>
+
+              <div class="action-buttons" layout horizontal center-justified wrap>
+                <template is="dom-if" if="[[hasHighlights]]">
+                  <md-outlined-button class="watch-video" on-click="playVideo">
+                    <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
+                    [[viewHighlights]]
+                  </md-outlined-button>
+                </template>
+                <md-filled-button on-click="scrollToTickets">
+                  <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
+                  [[ticketActionLabel]]
+                </md-filled-button>
+              </div>
+            </div>
+
+            <div class="terminal-column">
+              <div class="terminal-window" aria-label="Event status">
+                <div class="terminal-bar"><i></i><i></i><i></i><span>devfest-status.sh</span></div>
+                <div class="terminal-body">
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span>./event --status</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">status:</span>
+                      <span class="green">preview_ready</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">date:</span> <span class="blue">2026-11-21</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">format:</span> one_day / in_person</span>
+                  </div>
+                  <hr />
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span>./registration --inspect</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">channel:</span> embedded / Evenea</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">capacity:</span> 300</span>
+                  </div>
+                  <hr />
+                  <div class="terminal-command">
+                    $ ./countdown --next <span class="cursor"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="action-buttons" layout horizontal center-justified wrap>
-            <paper-button on-click="scrollToTickets" primary invert>
-              <iron-icon icon="hoverboard:ticket"></iron-icon>
-              [[buyTicket]]
-            </paper-button>
-          </div>
-
-          <div class="scroll-down" on-click="scrollNextBlock">
+          <button
+            class="scroll-down"
+            type="button"
+            aria-label="Scroll to event details"
+            on-click="scrollNextBlock"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
@@ -188,6 +489,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
               viewBox="0 0 25.166666 37.8704414"
               enable-background="new 0 0 25.166666 37.8704414"
               xml:space="preserve"
+              aria-hidden="true"
             >
               <path
                 class="stroke"
@@ -239,38 +541,61 @@ export class HomePage extends ReduxMixin(PolymerElement) {
               ></path>
             </svg>
             <i class="icon icon-arrow-down"></i>
-          </div>
+          </button>
         </div>
       </hero-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
       </template>
       <about-block></about-block>
-      <previous-speakers-block></previous-speakers-block>
-      <!-- <speakers-block></speakers-block> -->
-      <tickets-block id="tickets-block"></tickets-block>
-      <gallery-block></gallery-block>
-      <partners-block></partners-block>
-      <about-organizer-block></about-organizer-block>
+      <schedule-block></schedule-block>
+      <speakers-block></speakers-block>
+      <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
+      <tickets-block id="registration"></tickets-block>
+      <about-organizer-block></about-organizer-block>
       <map-block></map-block>
+      <visit-block></visit-block>
+      <partners-block></partners-block>
       <footer-block></footer-block>
     `;
   }
 
-  private city = location.city;
   private siteTitle = title;
   private dates = dates;
   private viewHighlights = viewHighlights;
   private buyTicket = buyTicket;
   private heroSettings = heroSettings.home;
   private aboutBlock = aboutBlock;
+  @property({ type: Boolean })
+  private hasHighlights = Boolean(aboutBlock.callToAction.howItWas.youtubeId);
+  private ticketingPreview = ticketingPreview;
+
+  @property({ type: Object })
+  tickets: TicketsState = initialTicketsState;
+
+  @computed('tickets')
+  private get hasAvailableTickets() {
+    return this.tickets instanceof Success && this.tickets.data.some((ticket) => ticket.available);
+  }
+
+  @computed('tickets')
+  private get ticketActionLabel() {
+    if (eveneaEmbed.requiresAccessCode) {
+      return this.ticketingPreview;
+    }
+    return this.hasAvailableTickets ? this.buyTicket : this.ticketingPreview;
+  }
 
   @query('#hero')
   hero!: HeroBlock;
 
   @property({ type: Boolean })
   private showForkMeBlock: boolean = false;
+
+  override stateChanged(state: RootState) {
+    this.tickets = state.tickets;
+  }
 
   private playVideo() {
     openVideoDialog({
@@ -280,7 +605,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private scrollToTickets() {
-    const element = this.$['tickets-block'];
+    const element = this.$['registration'];
     if (element) {
       scrollToElement(element);
     } else {
@@ -294,7 +619,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   private shouldShowForkMeBlock(): boolean {
     const showForkMeBlock = firebaseApp.options.appId
-      ? showForkMeBlockForProjectIds.includes(firebaseApp.options.appId)
+      ? (showForkMeBlockForProjectIds as string[]).includes(firebaseApp.options.appId)
       : false;
     if (showForkMeBlock) {
       import('../elements/fork-me-block');
@@ -306,5 +631,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     super.connectedCallback();
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
+    if (window.location.hash === '#registration') {
+      requestAnimationFrame(() => this.scrollToTickets());
+    }
   }
 }

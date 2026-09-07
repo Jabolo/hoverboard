@@ -1,12 +1,13 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { Timeslot } from './timeslot';
+import { defaultTimeslots } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('timeslot', () => {
   it('matches the shape of the default data', () => {
-    // @ts-ignore
-    const days: Timeslot[] = data['schedule']['2016-09-09']['timeslots'];
+    const days: Timeslot[] = defaultTimeslots;
     const keys: Array<keyof Timeslot> = ['endTime', 'sessions', 'startTime'];
+
     expect(days).toHaveLength(13);
     expect(allKeys(days)).toStrictEqual(keys);
   });

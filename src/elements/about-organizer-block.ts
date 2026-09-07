@@ -1,8 +1,7 @@
 import { customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-button';
+import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
-import '@power-elements/lazy-image';
 import '../components/markdown/short-markdown';
 import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
@@ -18,10 +17,38 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment positioning">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
+        .container {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--terminal-red);
+          content: '> organizer --info';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .block:not(:last-of-type) {
-          margin-bottom: 32px;
+          margin-bottom: 24px;
+          padding-bottom: 24px;
+          border-bottom: 1px solid var(--divider-color);
+        }
+
+        .block h2 {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
         }
 
         .team-icon {
@@ -32,63 +59,30 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
         }
 
         .image-link {
-          width: 95%;
-          height: 95%;
+          width: min(80%, 280px);
+          padding: 20px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--terminal-panel, var(--default-background-color));
         }
 
         .organizers-photo {
-          --lazy-image-width: 100%;
-          --lazy-image-height: 100%;
-          --lazy-image-fit: cover;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
-        }
-
-        .gdg-photo {
-          --lazy-image-width: 100%;
-          --lazy-image-height: 100%;
-          --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          display: block;
+          width: 100%;
+          height: auto;
+          object-fit: contain;
         }
 
         .description {
           color: var(--secondary-text-color);
-        }
-
-        paper-button {
-          margin: 0;
+          line-height: 1.7;
         }
       </style>
 
       <div class="container" layout horizontal>
-        <div
-          class="evenly-distributed-children"
-          layout
-          vertical
-          center-center
-          flex
-          hidden$="[[viewport.isPhone]]"
-        >
+        <div layout horizontal center-center flex hidden$="[[viewport.isPhone]]">
           <a href="/team" class="image-link">
-            <lazy-image
-              class="organizers-photo"
-              src="[[aboutOrganizerBlock.image]]"
-              alt="Organizer"
-            ></lazy-image>
-          </a>
-          <a href="/team" class="image-link">
-            <lazy-image
-              class="gdg-photo"
-              src="/images/organizer-logo.svg"
-              alt="Organizer"
-            ></lazy-image>
-          </a>
-          <a
-            href="https://gdsc.community.dev/polish-japanese-academy-of-information-technology/"
-            class="image-link"
-          >
-            <lazy-image class="gdg-photo" src="/images/GDSC-logo.svg" alt="Organizer"></lazy-image>
+            <img class="organizers-photo" src="[[aboutOrganizerBlock.image]]" alt="Organizer" />
           </a>
         </div>
 
@@ -101,18 +95,18 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
 
               <template is="dom-if" if="[[block.callToAction.newTab]]">
                 <a href="[[block.callToAction.link]]" target="_blank" rel="noopener noreferrer">
-                  <paper-button class="cta-button animated icon-right">
+                  <md-text-button class="cta-button animated icon-right">
                     <span>[[block.callToAction.label]]</span>
                     <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-                  </paper-button>
+                  </md-text-button>
                 </a>
               </template>
               <template is="dom-if" if="[[!block.callToAction.newTab]]">
                 <a href="[[block.callToAction.link]]">
-                  <paper-button class="cta-button animated icon-right">
+                  <md-text-button class="cta-button animated icon-right">
                     <span>[[block.callToAction.label]]</span>
                     <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-                  </paper-button>
+                  </md-text-button>
                 </a>
               </template>
             </div>

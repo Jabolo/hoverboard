@@ -1,5 +1,5 @@
-import { firestore } from '../firebase-config';
-import data from '../../docs/default-firebase-data.json';
+import { firestore } from '../firebase-config.js';
+import { data } from './data.js';
 
 export const importPartners = () => {
   const partners = data.partners;
@@ -25,7 +25,7 @@ export const importPartners = () => {
             .doc(`${partnerId}`)
             .collection('items')
             .doc(`${id}`.padStart(3, '0')),
-          item
+          item,
         );
       });
     } else {

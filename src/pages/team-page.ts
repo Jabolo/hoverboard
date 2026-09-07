@@ -20,29 +20,65 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment">
         :host {
           display: block;
+          background: var(--primary-background-color);
         }
 
         .description-wrapper {
+          position: relative;
+          padding-top: 24px;
           background-color: var(--secondary-background-color);
+          border-bottom: 1px solid var(--divider-color);
           width: 100%;
           overflow: hidden;
         }
 
+        .description-wrapper::before {
+          display: block;
+          max-width: var(--max-container-width);
+          margin: 0 auto;
+          padding: 0 16px;
+          color: var(--terminal-green);
+          content: '> gdg --team';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+        }
+
         .team-title {
-          font-size: 30px;
-          line-height: 2.5;
+          margin: 24px 0 12px;
+          color: var(--google-blue);
+          font-family: var(--font-mono, monospace);
+          font-size: 18px;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          line-height: 1.3;
+          text-transform: uppercase;
         }
 
         .team-block {
           display: grid;
           grid-template-columns: 1fr;
-          grid-gap: 24px;
+          grid-gap: 16px;
           margin-bottom: 32px;
         }
 
         .member {
-          padding: 16px 0;
-          min-width: 300px;
+          min-width: 0;
+          padding: 16px 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .member:hover {
+          border-color: var(--terminal-green);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-2px);
         }
 
         .photo {
@@ -52,27 +88,35 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           --lazy-image-fit: cover;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
+          aspect-ratio: 1;
           background-color: var(--contrast-additional-background-color);
           border-radius: 50%;
           overflow: hidden;
           transform: translateZ(0);
-          border-radius: 50%;
-          border: 5px solid var(--contrast-additional-background-color);
+          border: 3px solid var(--google-blue);
         }
 
         .member-details {
+          min-width: 0;
           color: var(--primary-text-color);
-          margin-left: 16px;
+          margin-left: 12px;
         }
 
         .name {
           padding-left: 6px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-size: 16px;
+          font-weight: 700;
           line-height: 1.2;
         }
 
         .activity {
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
           font-size: 16px;
           padding-left: 6px;
+          line-height: 1.35;
         }
 
         .social-icon {
@@ -96,7 +140,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           }
 
           .member {
-            padding: 32px 0;
+            padding: 20px 16px;
           }
         }
 
@@ -157,6 +201,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                         <paper-icon-button
                           class="social-icon"
                           icon="hoverboard:{{social.icon}}"
+                          aria-label="Open [[member.name]] on [[social.icon]]"
                         ></paper-icon-button>
                       </a>
                     </template>

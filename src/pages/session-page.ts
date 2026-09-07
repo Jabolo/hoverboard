@@ -47,12 +47,12 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           display: block;
           height: 100%;
           width: 100%;
-          background: #fff;
+          background: var(--primary-background-color);
           color: var(--primary-text-color);
         }
 
         app-header {
-          background-color: var(--additional-background-color);
+          background-color: var(--terminal-panel);
         }
 
         app-toolbar {
@@ -75,6 +75,9 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
         }
 
         .name {
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           line-height: 1.2;
         }
 
@@ -123,7 +126,16 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
         .section {
           margin-top: 16px;
           display: block;
+          padding: 16px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
           color: var(--primary-text-color);
+          transition: border-color var(--animation);
+        }
+
+        .section:hover {
+          border-color: var(--google-blue);
         }
 
         .section-photo {
@@ -416,7 +428,7 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
             title: 'Sign in',
             callback: () => openSigninDialog(),
           },
-        })
+        }),
       );
       return;
     }

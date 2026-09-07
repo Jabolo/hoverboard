@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="32" viewBox="0 0 536 128" role="img" aria-labelledby="title desc">
+  <title id="title">GDG DevFest Warsaw 2026</title>
+  <desc id="desc">GDG DevFest Warsaw 2026 monochrome logo</desc>
+  <g fill="#673AB7">
+    <path d="M0 0h23l37 64-37 64H0l37-64z"/>
+    <path d="M23 0h22l37 64-37 64H23l37-64z" opacity=".92"/>
+    <path d="M45 0h23l37 64-37 64H45l37-64z" opacity=".9"/>
+    <path d="M68 0h12l37 64-37 64H68l37-64z" opacity=".88"/>
+    <text x="142" y="55" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">GDG DevFest</text>
+    <text x="142" y="101" font-family="Arial, Helvetica, sans-serif" font-size="37" font-weight="600">Warsaw 2026</text>
+  </g>
+</svg>

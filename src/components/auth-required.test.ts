@@ -1,4 +1,4 @@
-import { beforeEach, describe, it, jest } from '@jest/globals';
+import { beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { fireEvent } from '@testing-library/dom';
 import { mocked } from 'jest-mock';
 import { html } from 'lit';
@@ -19,14 +19,12 @@ describe('auth-required', () => {
   let shadowRoot!: ShadowRoot;
 
   beforeAll(async () => {
-    const render = await fixture<AuthRequired>(
-      html`
-        <auth-required>
-          <p slot="prompt">Please sign in</p>
-          <div>Welcome</div>
-        </auth-required>
-      `
-    );
+    const render = await fixture<AuthRequired>(html`
+      <auth-required>
+        <p slot="prompt">Please sign in</p>
+        <div>Welcome</div>
+      </auth-required>
+    `);
 
     element = render.element;
     shadowRoot = render.shadowRoot;
@@ -41,8 +39,12 @@ describe('auth-required', () => {
   });
 
   it('shows unauthenticated prompt', () => {
-    expect(shadowRoot.querySelector<HTMLDivElement>('mwc-button')).not.toHaveAttribute('hidden');
+    expect(shadowRoot.querySelector<HTMLDivElement>('md-text-button')).not.toHaveAttribute(
+      'hidden',
+    );
+
     const slots = shadowRoot.querySelectorAll('slot');
+
     expect(slots).toHaveLength(2);
     expect(slots[0]).not.toHaveAttribute('hidden');
     expect(slots[0]).toHaveAttribute('name', 'prompt');
@@ -53,7 +55,8 @@ describe('auth-required', () => {
   });
 
   it('opens dialog on tap', () => {
-    fireEvent.click(shadowRoot.querySelector('mwc-button')!);
+    fireEvent.click(shadowRoot.querySelector('md-text-button')!);
+
     expect(mockOpenDialog).toHaveBeenCalledTimes(1);
   });
 
@@ -63,8 +66,11 @@ describe('auth-required', () => {
       payload: { uid: '1' } as User,
     });
     await element.updateComplete;
-    expect(shadowRoot.querySelector<HTMLDivElement>('mwc-button')).toHaveAttribute('hidden');
+
+    expect(shadowRoot.querySelector<HTMLDivElement>('md-text-button')).toHaveAttribute('hidden');
+
     const slots = shadowRoot.querySelectorAll('slot');
+
     expect(slots).toHaveLength(2);
     expect(slots[0]).toHaveAttribute('hidden');
     expect(slots[1]).not.toHaveAttribute('hidden');

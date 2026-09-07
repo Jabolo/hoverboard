@@ -2,56 +2,75 @@ import { css } from 'lit';
 
 export const theme = css`
   :host {
-/* Primary colors */
---dark-primary-color: #ff9800;
---default-primary-color: #f9ab00;
---focused-color: #ff9800; /* Adjusted to be closer to the dark primary color */
---light-primary-color: #ffe0b2;
---text-primary-color: #212121;
---accent-color: #f9ab00;
+    /* Neon Terminal system: keep the official Google colors as signals on a
+       dark, information-dense Hoverboard surface. */
+    --google-blue: #4285f4;
+    --google-green: #34a853;
+    --google-yellow: #fbbc04;
+    --google-red: #ea4335;
+    --terminal-background: #070c14;
+    --terminal-panel: #0d1727;
+    --terminal-panel-raised: #112039;
+    --terminal-line: #263d5e;
+    --terminal-copy: #eaf2ff;
+    --terminal-muted: #9bb0d0;
+    --terminal-green: #7ef2a5;
+    --terminal-blue: #4c8df7;
+    --terminal-yellow: #fbd776;
+    --terminal-red: #ff7b72;
+    --terminal-code: 'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', monospace;
+    --google-blue-strong: #1967d2;
+    --google-green-strong: #137333;
+    --google-yellow-strong: #a15c00;
+    --google-red-strong: #b3261e;
+    --dark-primary-color: var(--google-blue-strong);
+    --default-primary-color: var(--terminal-blue);
+    --focused-color: #174ea6;
+    --light-primary-color: #d2e3fc;
+    --md-sys-color-primary: var(--default-primary-color);
+    --md-sys-color-on-primary: #fff;
+    --md-sys-color-primary-container: var(--primary-color-white);
+    --md-sys-color-on-primary-container: var(--focused-color);
+    --text-primary-color: var(--terminal-copy);
+    --accent-color: var(--google-red);
+    --primary-background-color: var(--terminal-background);
+    --primary-text-color: var(--terminal-copy);
+    --secondary-text-color: var(--terminal-muted);
+    --disabled-text-color: #60708c;
+    --divider-color: var(--terminal-line);
+    --footer-background-color: #050910;
+    --footer-text-color: var(--terminal-muted);
+    --twitter-color: #4099ff;
+    --facebook-color: #3b5998;
+    --border-light-color: var(--terminal-line);
+    --error-color: var(--google-red-strong);
 
-/* Background colors */
---primary-background-color: #fff;
---primary-text-color: #212121; /* Adjusted to match the text primary color */
---secondary-text-color: #757575; /* Kept the same as it's a neutral shade */
---disabled-text-color: #bdbdbd; /* Kept the same as it's a neutral shade */
---divider-color: #ededed; /* Kept the same as it's a neutral shade */
---footer-background-color: #f5f5f5; /* Kept the same as it's a neutral shade */
---footer-text-color: #616161; /* Kept the same as it's a neutral shade */
-
-/* Social media colors */
---twitter-color: #4099ff; /* Kept the same as it's specific to Twitter */
---facebook-color: #3b5998; /* Kept the same as it's specific to Facebook */
---border-light-color: #e2e2e2; /* Kept the same as it's a neutral shade */
---error-color: #e64a19; /* Kept the same as it's a red shade for errors */
-
-
-/* Custom */
---default-background-color: #fff; /* Adjusted to match light primary color */
---secondary-background-color: #ffd9a1; /* Slightly darker than default background */
---additional-background-color: #ffcc8d; /* Even slightly darker for variation */
---contrast-additional-background-color: #ffb366; /* A contrasting shade */
---animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
---slide-animation: 0.4s cubic-bezier(0, 0, 0.2, 1);
---border-radius: 4px;
---box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
-  0 1px 3px 0 rgb(0 0 0 / 12%);
---box-shadow-primary-color: 0 3px 3px -2px rgb(249 171 0 / 30%), 0 3px 4px 0 rgb(249 171 0 / 30%),
-  0 1px 8px 0 rgb(249 171 0 / 30%); /* Adjusted to match default primary color */
---box-shadow-primary-color-hover: 0 1px 3px -2px rgb(249 171 0 / 40%),
-  0 4px 5px 0 rgb(249 171 0 / 40%), 0 2px 9px 0 rgb(249 171 0 / 40%); /* Adjusted to match default primary color */
---font-family: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, helvetica, arial,
-  sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
---max-container-width: 1280px;
---primary-color-transparent: rgb(249 171 0 / 10%); /* Adjusted to match default primary color */
---primary-color-light: rgb(249 171 0 / 100%); /* Adjusted to match default primary color */
---primary-color-white: #ffe0b2; /* Adjusted to match light primary color */
-
+    /* Custom */
+    --default-background-color: var(--terminal-panel);
+    --secondary-background-color: var(--terminal-panel);
+    --additional-background-color: var(--terminal-panel-raised);
+    --contrast-additional-background-color: #172a45;
+    --animation: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --slide-animation: 0.4s cubic-bezier(0, 0, 0.2, 1);
+    --border-radius: 8px;
+    --box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
+    --box-shadow-primary-color: 0 0 0 1px rgb(66 133 244 / 28%), 0 12px 30px rgb(66 133 244 / 18%);
+    --box-shadow-primary-color-hover:
+      0 0 0 1px rgb(126 242 165 / 60%), 0 16px 36px rgb(66 133 244 / 24%);
+    --font-family:
+      -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, helvetica, arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-mono: 'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', 'Liberation Mono', monospace;
+    --heading-font-family: var(--font-mono);
+    --max-container-width: 1280px;
+    --primary-color-transparent: rgb(66 133 244 / 12%);
+    --primary-color-light: #79aafa;
+    --primary-color-white: #e8f0fe;
 
     /* Labels */
-    --gde: #3d5afe;
-    --wtm: #1de9b6;
-    --gdg: #00b0ff;
+    --gde: var(--google-blue);
+    --wtm: var(--google-green);
+    --gdg: var(--google-blue);
 
     /* Tags */
     --general: #9e9e9e;
@@ -74,6 +93,7 @@ export const theme = css`
     font-family: var(--font-family);
     text-rendering: optimizelegibility;
     color: var(--primary-text-color);
+    background: var(--primary-background-color);
   }
 
   h1,
@@ -83,14 +103,16 @@ export const theme = css`
   h5,
   h6 {
     margin: 0;
-    font-weight: normal;
+    font-family: var(--heading-font-family);
+    font-weight: 700;
+    letter-spacing: -0.03em;
   }
 
   h1 {
     padding: 8px 8px 24px 14px;
     font-size: 24px;
     line-height: 30px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   a {
@@ -99,73 +121,79 @@ export const theme = css`
     transition: border-color var(--animation);
   }
 
-  mwc-button {
-    --mdc-theme-primary: var(--default-primary-color);
-    --mdc-theme-on-primary: var(--default-background-color);
+  :focus-visible {
+    outline: 2px solid var(--google-green);
+    outline-offset: 3px;
   }
 
-  paper-button {
-    padding: 0.7em;
-    border-radius: 2px;
-    font-size: 14px;
+  md-outlined-button,
+  md-filled-button,
+  md-text-button {
     color: var(--default-primary-color);
     transition: background-color var(--animation);
   }
 
-  paper-button:hover {
+  md-outlined-button:hover,
+  md-filled-button:hover,
+  md-text-button:hover {
     background-color: var(--primary-color-transparent);
   }
 
-  paper-button[disabled] {
+  md-outlined-button[disabled],
+  md-filled-button[disabled],
+  md-text-button[disabled] {
     cursor: default;
     background-color: var(--primary-color-transparent);
     opacity: 0.8;
   }
 
-  paper-button[primary] {
+  md-outlined-button[primary],
+  md-filled-button[primary],
+  md-text-button[primary] {
     background-color: var(--default-primary-color);
     color: var(--text-primary-color);
   }
 
-  paper-button[primary]:hover {
+  md-outlined-button[primary]:hover,
+  md-filled-button[primary]:hover,
+  md-text-button[primary]:hover {
     background-color: var(--primary-color-light);
   }
 
-  paper-button[primary][invert] {
+  md-outlined-button[primary][invert],
+  md-filled-button[primary][invert],
+  md-text-button[primary][invert] {
     color: var(--default-primary-color);
     background-color: var(--text-primary-color);
   }
 
-  paper-button[primary][invert]:hover {
+  md-outlined-button[primary][invert]:hover,
+  md-filled-button[primary][invert]:hover,
+  md-text-button[primary][invert]:hover {
     background-color: var(--primary-color-white);
   }
 
-  paper-button[primary-text] {
+  md-outlined-button[primary-text],
+  md-filled-button[primary-text],
+  md-text-button[primary-text] {
     color: var(--default-primary-color);
   }
 
-  paper-button iron-icon {
-    --iron-icon-height: 20px;
-    --iron-icon-width: 20px;
-  }
-
-  paper-button.icon-right iron-icon {
-    margin-left: 8px;
-  }
-
-  paper-button.icon-left iron-icon {
-    margin-right: 8px;
-  }
-
-  paper-button.animated iron-icon {
+  md-outlined-button.animated iron-icon,
+  md-filled-button.animated iron-icon,
+  md-text-button.animated iron-icon {
     transition: transform var(--animation);
   }
 
-  paper-button.animated.icon-right:hover iron-icon {
+  md-outlined-button.animated.icon-right:hover iron-icon,
+  md-filled-button.animated.icon-right:hover iron-icon,
+  md-text-button.animated.icon-right:hover iron-icon {
     transform: translateX(4px);
   }
 
-  paper-button.animated.icon-left:hover iron-icon {
+  md-outlined-button.animated.icon-left:hover iron-icon,
+  md-filled-button.animated.icon-left:hover iron-icon,
+  md-text-button.animated.icon-left:hover iron-icon {
     transform: translateX(-4px);
   }
 
@@ -184,7 +212,10 @@ export const theme = css`
     margin-bottom: 24px;
     padding: 0;
     font-size: 32px;
-    line-height: 30px;
+    line-height: 1.1;
+    font-family: var(--heading-font-family);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
   .big-icon {
@@ -217,6 +248,7 @@ export const theme = css`
 
   .card {
     background-color: var(--default-background-color);
+    border: 1px solid var(--divider-color);
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
     transition: box-shadow var(--animation);
@@ -228,14 +260,14 @@ export const theme = css`
     padding: 8px 12px;
     font-size: 12px;
     color: currentcolor;
-    background: white;
+    background: var(--terminal-panel-raised);
     border: 1px solid currentcolor;
     border-radius: 32px;
     margin: 1px;
     line-height: initial;
   }
 
-  @media (min-width: 640px) {
+  @media (width >= 640px) {
     .container,
     .container-narrow {
       padding: 32px;

@@ -1,10 +1,11 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { Ticket } from './ticket';
+import { defaultTickets } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('ticket', () => {
   it('matches the shape of the default data', () => {
-    const tickets: Ticket[] = Object.values(data['tickets']);
+    const tickets: Ticket[] = defaultTickets;
     const keys: Array<keyof Ticket> = [
       'available',
       'currency',
@@ -19,6 +20,7 @@ describe('ticket', () => {
       'starts',
       'url',
     ];
+
     expect(tickets).toHaveLength(5);
     expect(allKeys(tickets)).toStrictEqual(keys);
   });

@@ -1,10 +1,11 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { SessionData } from './session';
+import { defaultSessions } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('session', () => {
   it('matches the shape of the default data', () => {
-    const sessions: SessionData[] = Object.values(data['sessions']);
+    const sessions: SessionData[] = defaultSessions;
     const keys: Array<keyof SessionData> = [
       'complexity',
       'description',
@@ -18,6 +19,7 @@ describe('session', () => {
       'title',
       'videoId',
     ];
+
     expect(sessions).toHaveLength(40);
     expect(allKeys(sessions)).toStrictEqual(keys);
   });

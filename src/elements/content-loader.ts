@@ -10,10 +10,10 @@ export class ContentLoader extends PolymerElement {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
         :host {
-          --darkgrey: rgba(250, 250, 250, 0);
-          --darkgrey-lighter: rgba(250, 250, 250, 0.8);
-          --background-color: #fff;
-          --content-color: #e2e2e2;
+          --darkgrey: rgba(38, 61, 94, 0);
+          --darkgrey-lighter: rgba(126, 242, 165, 0.16);
+          --background-color: var(--terminal-panel);
+          --content-color: var(--terminal-line);
           --card-padding: 24px;
           --card-height: 340px;
           --card-width: auto;
@@ -84,7 +84,8 @@ export class ContentLoader extends PolymerElement {
           box-shadow: var(--card-box-shadow);
           border-radius: var(--card-border-radius);
 
-          background-image: linear-gradient(
+          background-image:
+            linear-gradient(
               90deg,
               var(--darkgrey) 0,
               var(--darkgrey-lighter) 50%,
@@ -93,14 +94,23 @@ export class ContentLoader extends PolymerElement {
             var(--title-skeleton), var(--desc-line-skeleton), var(--desc-line-skeleton),
             var(--avatar-skeleton), var(--footer-skeleton), var(--card-skeleton);
 
-          background-size: var(--blur-size), var(--title-width) var(--title-height),
+          background-size:
+            var(--blur-size),
+            var(--title-width) var(--title-height),
             var(--desc-line-1-width) var(--desc-line-height),
-            var(--desc-line-2-width) var(--desc-line-height), var(--avatar-size) var(--avatar-size),
-            100% var(--footer-height), 100% 100%;
+            var(--desc-line-2-width) var(--desc-line-height),
+            var(--avatar-size) var(--avatar-size),
+            100% var(--footer-height),
+            100% 100%;
 
-          background-position: var(--load-from) 0, var(--title-position),
-            var(--desc-line-1-position), var(--desc-line-2-position), var(--avatar-position),
-            var(--footer-position), 0 0;
+          background-position:
+            var(--load-from) 0,
+            var(--title-position),
+            var(--desc-line-1-position),
+            var(--desc-line-2-position),
+            var(--avatar-position),
+            var(--footer-position),
+            0 0;
 
           background-repeat: no-repeat;
           animation: loading var(--animation-time) infinite;
@@ -108,9 +118,14 @@ export class ContentLoader extends PolymerElement {
 
         @keyframes loading {
           to {
-            background-position: var(--load-to) 0, var(--title-position),
-              var(--desc-line-1-position), var(--desc-line-2-position), var(--avatar-position),
-              var(--footer-position), 0 0;
+            background-position:
+              var(--load-to) 0,
+              var(--title-position),
+              var(--desc-line-1-position),
+              var(--desc-line-2-position),
+              var(--avatar-position),
+              var(--footer-position),
+              0 0;
           }
         }
       </style>

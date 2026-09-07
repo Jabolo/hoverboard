@@ -4,10 +4,10 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 22
       - name: Create temp serviceAccount.json
         run: echo "{}" > serviceAccount.json
       - run: npm ci
@@ -16,5 +16,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           # See docs/tutorials/04-deploy.md for configuring these
-          projectId: gdg-warsaw-devfest23-web-11997
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GDG_WARSAW_DEVFEST23_WEB_11997 }}'
+          projectId: hoverboard-master
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOVERBOARD_MASTER }}'

@@ -21,7 +21,7 @@ import { selectFilterGroups } from '../store/sessions/selectors';
 import { initialSessionsState, SessionsState } from '../store/sessions/state';
 import { fetchSpeakers } from '../store/speakers/actions';
 import { initialSpeakersState, SpeakersState } from '../store/speakers/state';
-import { contentLoaders, heroSettings } from '../utils/data';
+import { contentLoaders, heroSettings, scheduleBlock } from '../utils/data';
 import { updateMetadata } from '../utils/metadata';
 
 @customElement('schedule-page')
@@ -32,10 +32,20 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         :host {
           display: block;
           height: 100%;
+          background: var(--primary-background-color);
         }
 
         .container {
-          min-height: 80%;
+          min-height: 0;
+        }
+
+        .empty-state {
+          margin: 48px auto;
+          padding: 40px 32px;
+          max-width: 680px;
+          color: var(--secondary-text-color);
+          background: var(--secondary-background-color);
+          text-align: center;
         }
 
         paper-progress {
@@ -52,7 +62,7 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
         @media (min-width: 640px) {
           :host {
-            background-color: #fff;
+            background-color: var(--primary-background-color);
           }
         }
       </style>
@@ -71,12 +81,14 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
       <paper-progress indeterminate hidden$="[[!pending]]"></paper-progress>
 
-      <filter-menu
-        filter-groups="[[filterGroups]]"
-        selected-filters="[[selectedFilters]]"
-      ></filter-menu>
+      <template is="dom-if" if="[[showFilters]]">
+        <filter-menu
+          filter-groups="[[filterGroups]]"
+          selected-filters="[[selectedFilters]]"
+        ></filter-menu>
+      </template>
 
-      <div class="container">
+      <div class="container" hidden$="[[showEmptyState]]">
         <content-loader
           card-padding="15px"
           card-margin="16px 0"
@@ -98,12 +110,17 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         <slot></slot>
       </div>
 
+      <template is="dom-if" if="[[showEmptyState]]">
+        <p class="empty-state" role="status">[[scheduleBlock.emptyState]]</p>
+      </template>
+
       <footer-block></footer-block>
     `;
   }
 
   private heroSettings = heroSettings.schedule;
   private contentLoaders = contentLoaders.schedule;
+  private scheduleBlock = scheduleBlock;
 
   @property({ type: Object })
   schedule = initialScheduleState;
@@ -159,5 +176,15 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
   @computed('schedule')
   get pending() {
     return this.schedule instanceof Pending;
+  }
+
+  @computed('schedule')
+  get showEmptyState() {
+    return this.schedule instanceof Success && this.schedule.data.length === 0;
+  }
+
+  @computed('schedule')
+  get showFilters() {
+    return this.schedule instanceof Success && this.schedule.data.length > 0;
   }
 }

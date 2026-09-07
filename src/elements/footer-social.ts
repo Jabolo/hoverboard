@@ -156,6 +156,7 @@ export class FooterSocial extends PolymerElement {
             <paper-icon-button
               class="share-facebook"
               icon="hoverboard:facebook"
+              aria-label="Share on Facebook"
               share="facebook"
               on-click="share"
             >
@@ -165,6 +166,7 @@ export class FooterSocial extends PolymerElement {
             <paper-icon-button
               class="share-twitter"
               icon="hoverboard:twitter"
+              aria-label="Share on X"
               share="twitter"
               on-click="share"
             >
@@ -173,13 +175,35 @@ export class FooterSocial extends PolymerElement {
         </div>
       </div>
 
+      <div class="social-group blog" hidden$="[[!organizer.blog]]">
+        <div class="title">
+          [[followOur]]
+          <template is="dom-if" if="[[blogNewTab]]">
+            <a href="[[organizer.blog]]" target="_blank" rel="noopener noreferrer">
+              [[footer.blog]]
+            </a>
+          </template>
+          <template is="dom-if" if="[[!blogNewTab]]">
+            <a href="[[organizer.blog]]"> [[footer.blog]] </a>
+          </template>
+        </div>
+      </div>
+
       <div class="social-group social-networks">
         <div class="title">[[followUs]]</div>
         <ul class="nav-inline">
           <template is="dom-repeat" items="[[socialNetwork.follow]]" as="socFollow">
             <li>
-              <a href="[[socFollow.url]]" target="_blank" rel="noopener noreferrer">
-                <paper-icon-button icon="hoverboard:[[socFollow.name]]"></paper-icon-button>
+              <a
+                aria-label="Follow GDG Warsaw on [[socFollow.name]]"
+                href="[[socFollow.url]]"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <paper-icon-button
+                  icon="hoverboard:[[socFollow.name]]"
+                  aria-label="Follow GDG Warsaw on [[socFollow.name]]"
+                ></paper-icon-button>
               </a>
             </li>
           </template>

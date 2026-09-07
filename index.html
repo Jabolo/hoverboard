@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html itemscope itemtype="http://schema.org/Event" lang="en">
   <head>
     <base href="{{ basepath }}" />
     <meta charset="utf-8" />
     <meta content="IE=edge" http-equiv="X-UA-Compatible" />
     <meta
-      content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"
+      content="width=device-width, minimum-scale=1.0, initial-scale=1.0, viewport-fit=cover"
       name="viewport"
     />
     <meta content="{{ description }}" name="description" />
@@ -55,13 +55,44 @@
     <meta content="website" property="og:type" />
     <meta content="{{ url }}" property="og:url" />
     <meta content="{{ description }}" property="og:description" />
-    <meta content="Event" property="og:type" />
     <meta content="{{ image }}" property="og:image" />
-    <meta content="image/jpeg" property="og:image:type" />
+    <meta content="image/png" property="og:image:type" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "{{ title }}",
+        "description": "{{ description }}",
+        "startDate": "{{ startDate }}",
+        "endDate": "{{ endDate }}",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "image": ["{{ url }}{{ image }}"],
+        "url": "{{ url }}",
+        "location": {
+          "@type": "Place",
+          "name": "{{ location.name }}",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ location.address }}",
+            "addressLocality": "{{ location.city }}",
+            "addressCountry": "PL"
+          }
+        },
+        "organizer": {
+          "@type": "Organization",
+          "name": "{{ organizer.name }}",
+          "url": "{{ organizer.url }}"
+        }
+      }
+    </script>
 
     <!-- Twitter meta data -->
     <meta content="summary_large_image" name="twitter:card" />
+    {% if organizer.twitter %}
     <meta content="@{{ organizer.twitter }}" name="twitter:creator" />
+    {% endif %}
     <meta content="{{ title }}" name="twitter:title" />
     <meta content="{{ description }}" name="twitter:description" />
     <meta content="{{ image }}" name="twitter:image" />
@@ -84,9 +115,6 @@
       window.Polymer = {
         rootPath: '{{ basepath }}',
       };
-
-      // prettier-ignore
-      {{ webVitalsPolyfill | safe }}
 
       // Capture the config object from /__/firebase/init.js for src/firebase.ts
       window.firebase = {
@@ -112,8 +140,9 @@
 
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-          sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         font-size: 16px;
         line-height: 1.5;
       }

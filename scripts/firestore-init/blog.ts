@@ -1,5 +1,5 @@
-import { firestore } from '../firebase-config';
-import data from '../../docs/default-firebase-data.json';
+import { firestore } from '../firebase-config.js';
+import { data } from './data.js';
 
 export const importBlog = () => {
   const blog: { [key: string]: object } = data.blog;

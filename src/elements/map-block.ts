@@ -19,13 +19,26 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           margin: 32px auto;
           display: block;
           position: relative;
+          border-bottom: 1px solid var(--divider-color);
         }
 
         .description-card {
           margin: 0 -16px;
           padding: 16px;
-          background-color: var(--default-primary-color);
-          color: var(--text-primary-color);
+          border: 1px solid var(--google-blue);
+          background: var(--terminal-panel);
+          color: var(--terminal-copy);
+        }
+
+        .description-card h2 {
+          color: var(--google-green);
+          font-family: var(--font-mono, monospace);
+          text-transform: uppercase;
+        }
+
+        .description-card p {
+          color: var(--terminal-muted);
+          line-height: 1.6;
         }
 
         .bottom-info {
@@ -37,7 +50,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
             width: 48px;
             height: 48px;
             color: var(--text-primary-color);
-          }
+          };
         }
 
         @media (min-width: 640px) {
@@ -54,8 +67,11 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
             margin: 0;
             padding: 24px;
             max-width: 320px;
-            transform: translateY(80px);
             border-radius: var(--border-radius);
+          }
+
+          :host([map-visible]) .description-card {
+            transform: translateY(80px);
           }
 
           .address {
@@ -64,7 +80,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <template is="dom-if" if="[[viewport.isTabletPlus]]">
+      <template is="dom-if" if="[[showMap]]">
         <google-map
           id="map"
           latitude="[[location.mapCenter.latitude]]"
@@ -93,6 +109,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           <div class="bottom-info" layout horizontal justified center>
             <span class="address">[[location.address]]</span>
             <a
+              aria-label="Get directions to the venue"
               href="https://www.google.com/maps/dir/?api=1&amp;destination=[[location.address]]"
               target="_blank"
               rel="noopener noreferrer"
@@ -100,6 +117,7 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
               <paper-icon-button
                 class="directions"
                 icon="hoverboard:directions"
+                aria-label="Get directions to the venue"
               ></paper-icon-button>
             </a>
           </div>
@@ -110,7 +128,10 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
 
   private location = location;
   private mapBlock = mapBlock;
-  private googleMapApiKey = getConfig(CONFIG.GOOGLE_MAPS_API_KEY);
+  private googleMapApiKey = '';
+
+  @property({ type: Boolean })
+  private showMap = false;
 
   @property({ type: Object })
   private viewport = initialUiState.viewport;
@@ -141,5 +162,18 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
 
   override stateChanged(state: RootState) {
     this.viewport = state.ui.viewport;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+
+    try {
+      this.googleMapApiKey = getConfig(CONFIG.GOOGLE_MAPS_API_KEY);
+    } catch {
+      this.googleMapApiKey = '';
+    }
+
+    this.showMap = Boolean(this.googleMapApiKey) && this.viewport.isTabletPlus;
+    this.toggleAttribute('map-visible', this.showMap);
   }
 }

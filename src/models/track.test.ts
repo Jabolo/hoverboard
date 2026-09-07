@@ -1,12 +1,13 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { Track } from './track';
+import { defaultTracks } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('track', () => {
   it('matches the shape of the default data', () => {
-    // @ts-ignore
-    const days: Track[] = data['schedule']['2016-09-09']['tracks'];
+    const days: Track[] = defaultTracks;
     const keys: Array<keyof Track> = ['title'];
+
     expect(days).toHaveLength(3);
     expect(allKeys(days)).toStrictEqual(keys);
   });

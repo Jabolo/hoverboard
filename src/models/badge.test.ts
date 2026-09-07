@@ -1,12 +1,13 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { Badge } from './badge';
+import { defaultBadges } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('badge', () => {
   it('matches the shape of the default data', () => {
-    // @ts-ignore
-    const badges: Badge[] = Object.values(data['speakers']['dmytro_danylyk']['badges']);
+    const badges: Badge[] = defaultBadges;
     const keys: Array<keyof Badge> = ['description', 'link', 'name'];
+
     expect(badges).toHaveLength(2);
     expect(allKeys(badges)).toStrictEqual(keys);
   });

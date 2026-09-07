@@ -14,7 +14,6 @@ import {
   setRemoveNestedTemplates,
   setSuppressTemplateNotifications,
 } from '@polymer/polymer/lib/utils/settings';
-import '@power-elements/lazy-image';
 import './components/snack-bar';
 import './elements/dialogs/feedback-dialog';
 import './elements/dialogs/signin-dialog';
@@ -33,15 +32,17 @@ import { OpenedChanged } from './utils/app-drawer';
 import {
   buyTicket,
   dates,
+  eveneaEmbed,
   location,
   navigation,
   offlineMessage,
   signInProviders,
-  title,
+  ticketingPreview,
 } from './utils/data';
 import './utils/icons';
 import './utils/media-query';
 import { Stickied } from './utils/stickied';
+import { scrollToElement } from './utils/scrolling';
 
 setPassiveTouchGestures(true);
 setRemoveNestedTemplates(true);
@@ -57,26 +58,65 @@ export class HoverboardApp extends PolymerElement {
           position: relative;
           min-height: 100%;
           height: 100%;
+          background: var(--terminal-background);
+          color: var(--primary-text-color);
           --paper-menu-button-dropdown-background: var(--primary-background-color);
           --app-drawer-content-container: {
             display: flex;
             flex-direction: column;
-          }
+            background: var(--terminal-panel);
+            color: var(--primary-text-color);
+          };
+        }
+
+        .skip-link {
+          position: fixed;
+          z-index: 10;
+          top: 12px;
+          left: 12px;
+          transform: translateY(-180%);
+          padding: 10px 14px;
+          border: 2px solid var(--google-yellow);
+          background: var(--terminal-background);
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
+          font-weight: 700;
+          text-decoration: none;
+          transition: transform 0.2s ease-out;
+        }
+
+        .skip-link:focus {
+          transform: translateY(0);
+        }
+
+        app-drawer {
+          background: var(--terminal-panel);
+          color: var(--primary-text-color);
         }
 
         app-drawer app-toolbar {
-          padding: 36px 24px 24px;
+          padding: 28px 24px 24px;
+          background: var(--terminal-panel);
           border-bottom: 1px solid var(--divider-color);
         }
 
+        app-drawer .toolbar-logo {
+          width: 176px;
+          height: 98px;
+          object-fit: contain;
+        }
+
         app-drawer .dates {
-          margin-top: 42px;
+          margin-top: 24px;
+          color: var(--terminal-green);
+          font-family: var(--font-mono);
           font-size: 22px;
           line-height: 0.95;
         }
 
         app-drawer .location {
           margin-top: 4px;
+          font-family: var(--font-mono);
           font-size: 15px;
           color: var(--secondary-text-color);
         }
@@ -84,20 +124,33 @@ export class HoverboardApp extends PolymerElement {
         .drawer-list {
           padding: 16px 0;
           display: block;
+          background: var(--terminal-panel);
         }
 
         .drawer-list a {
           display: block;
+          border-left: 3px solid transparent;
           color: var(--primary-text-color);
+          font-family: var(--font-mono);
+          font-size: 14px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
           outline: 0;
+          transition:
+            color var(--animation),
+            background-color var(--animation),
+            border-color var(--animation);
         }
 
         app-drawer a {
-          padding: 8px 24px;
+          padding: 12px 24px;
         }
 
         .drawer-list a.selected {
-          font-weight: 500;
+          border-left-color: var(--google-green);
+          background: rgb(126 242 165 / 8%);
+          color: var(--terminal-green);
+          font-weight: 700;
         }
 
         app-toolbar {
@@ -105,11 +158,11 @@ export class HoverboardApp extends PolymerElement {
         }
 
         .toolbar-logo {
-          --lazy-image-width: auto;
-          --lazy-image-height: 32px;
-          --lazy-image-fit: cover;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          --lazy-image-width: 240px;
+          --lazy-image-height: 40px;
+          --lazy-image-fit: contain;
+          width: min(240px, 100%);
+          height: 40px;
         }
 
         app-header-layout {
@@ -121,7 +174,7 @@ export class HoverboardApp extends PolymerElement {
         }
 
         main {
-          background-color: var(--primary-background-color);
+          background-color: var(--terminal-background);
           min-height: 100%;
           height: 100%;
         }
@@ -145,14 +198,12 @@ export class HoverboardApp extends PolymerElement {
         }
       </style>
 
+      <a class="skip-link" href="#main-content">Skip to main content</a>
+
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
         <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>
           <app-toolbar layout vertical start>
-            <lazy-image
-              class="toolbar-logo"
-              src="/images/logo.svg"
-              alt="[[alt]]"
-            ></lazy-image>
+            <img class="toolbar-logo" src="/images/logos/gdg-warsaw-white.svg" alt="GDG Warsaw" />
             <h2 class="dates">[[dates]]</h2>
             <h3 class="location">[[shortLocation]]</h3>
           </app-toolbar>
@@ -177,15 +228,14 @@ export class HoverboardApp extends PolymerElement {
 
               <a
                 class="bottom-drawer-link"
-                href$="[[ticketUrl]]"
-                target="_blank"
-                rel="noopener noreferrer"
-                on-click="closeDrawer"
+                href$="[[registrationUrl]]"
+                on-click="scrollToRegistration"
+                hidden$="[[!ticketUrl]]"
                 layout
                 horizontal
                 center
               >
-                <span>[[buyTicket]]</span>
+                <span>[[registrationActionLabel]]</span>
                 <iron-icon icon="hoverboard:open-in-new"></iron-icon>
               </a>
             </div>
@@ -197,7 +247,7 @@ export class HoverboardApp extends PolymerElement {
             <header-toolbar drawer-opened="{{drawerOpened}}"></header-toolbar>
           </app-header>
 
-          <main></main>
+          <main id="main-content" tabindex="-1"></main>
         </app-header-layout>
       </app-drawer-layout>
 
@@ -210,9 +260,9 @@ export class HoverboardApp extends PolymerElement {
     `;
   }
 
-  private alt = title;
   private dates = dates;
   private buyTicket = buyTicket;
+  private registrationActionLabel = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
   private navigation = navigation;
   private shortLocation = location.short;
 
@@ -245,6 +295,8 @@ export class HoverboardApp extends PolymerElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.scrollToRegistration = this.scrollToRegistration.bind(this);
+    this.addEventListener('registration-request', this.scrollToRegistration);
     window.addEventListener('element-sticked', (event) => this.toggleHeaderShadow(event));
     window.addEventListener('offline', () => store.dispatch(queueSnackbar(offlineMessage)));
     this.drawer.addEventListener('opened-changed', (event) => this.toggleDrawer(event));
@@ -259,6 +311,11 @@ export class HoverboardApp extends PolymerElement {
     onUser();
   }
 
+  override disconnectedCallback() {
+    this.removeEventListener('registration-request', this.scrollToRegistration);
+    super.disconnectedCallback();
+  }
+
   closeDrawer() {
     this.drawerOpened = false;
   }
@@ -271,14 +328,32 @@ export class HoverboardApp extends PolymerElement {
     this.drawerOpened = e.detail.value;
   }
 
+  private scrollToRegistration(e: Event) {
+    const homePage = this.main.querySelector('home-page') as HTMLElement | null;
+    const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration');
+
+    if (!ticketsBlock) {
+      this.closeDrawer();
+      return;
+    }
+
+    e.preventDefault();
+    this.closeDrawer();
+    scrollToElement(ticketsBlock);
+  }
+
   @computed('tickets')
   private get ticketUrl(): string {
     if (this.tickets instanceof Success && this.tickets.data.length > 0) {
       const availableTicket = this.tickets.data.find((ticket) => ticket.available);
-      const ticket = availableTicket || this.tickets.data[0];
-      return ticket?.url || '';
+      return availableTicket?.url || '';
     } else {
       return '';
     }
+  }
+
+  @computed('tickets')
+  private get registrationUrl(): string {
+    return this.ticketUrl ? '/#registration' : '';
   }
 }

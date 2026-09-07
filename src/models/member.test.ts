@@ -1,10 +1,11 @@
-import data from '../../docs/default-firebase-data.json';
+import { describe, expect, it } from '@jest/globals';
 import { MemberData } from './member';
+import { defaultMembers } from './test-fixtures';
 import { allKeys } from './utils';
 
 describe('partner', () => {
   it('matches the shape of the default data', () => {
-    const members: MemberData[] = Object.values(data['team'][0]!['members']);
+    const members: MemberData[] = defaultMembers;
     const keys: Array<keyof MemberData> = [
       'name',
       'order',
@@ -13,6 +14,7 @@ describe('partner', () => {
       'socials',
       'title',
     ];
+
     expect(members).toHaveLength(8);
     expect(allKeys(members)).toStrictEqual(keys);
   });

@@ -1,0 +1,72 @@
+# GDG DevFest Warsaw 2026 setup
+
+This project is based on the current `gdg-x/hoverboard` `main` branch. The previous DevFest Warsaw 2023 implementation is preserved separately in Git:
+
+- branch: `archive/devfest-2023`
+- tag: `devfest-2023-baseline`
+- 2026 working branch: `devfest-2026`
+- upstream remote: `https://github.com/gdg-x/hoverboard.git`
+
+## Event
+
+- Name: GDG DevFest Warsaw 2026
+- Date: November 21, 2026
+- Venue: Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa
+- Organizer: GDG Warsaw
+- Event lead: Michał Jabłoński
+- Planned capacity: 300 attendees
+
+The public copy marks speakers and programme details as pending until the organizing team confirms them. Ticket types and current prices are mirrored from the live Evenea event into Firestore for the website cards.
+
+The team seed uses the current organizer cards from the [GDG Warszawa community page](https://gdg.community.dev/gdg-warszawa/), checked on September 3, 2026. Their public Cloudinary avatars are stored locally under `public/images/team/` and displayed as square, cropped cards so the page does not depend on a third-party image request at runtime.
+
+## Firebase
+
+The application uses the Firebase project `gdg-warsaw-devfest26-web` under the Michał Tomasz Jabłoński account.
+
+- Firestore database: `(default)`
+- Firestore region: `europe-central2`
+- Hosting preview: `https://gdg-warsaw-devfest26-web.web.app/`
+- Firebase Web App ID: `1:94592063137:web:e2f2bfa581d0222a6b82e0`
+
+The local `.firebaserc` is intentionally ignored by Git and points to the 2026 project. Do not commit Firebase credentials, service-account JSON files, or API tokens.
+
+Firestore seed data is kept in `docs/default-firebase-data.json`. The import uses Application Default Credentials and requires the target project to be explicit:
+
+```bash
+GCLOUD_PROJECT=gdg-warsaw-devfest26-web npm run firestore:init
+```
+
+## Evenea
+
+The Evenea event is published and currently protected by an access code during preview:
+
+- Event ID: `376576`
+- Draft URL: `https://app.evenea.pl/event/devfestwarsaw2026/`
+- Embed source: `https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe`
+
+The website uses the official Evenea iframe source and resizer script generated in the organizer panel. The ticket cards remain visible as the catalogue, but their links stay on the website and scroll to the embedded registration form instead of opening a separate Evenea page. The public event page and the registration form were checked end-to-end on September 5, 2026. The existing 100% one-time Early Bird promotional code was accepted and reduced one Early Bird ticket from 49,00 zł to 0,00 zł in Evenea.
+
+`eveneaEmbed.published` is `true`, so the website loads the Evenea registration iframe. Because the event page is still access-code protected for preview, attendees must enter the organizer-provided access code before the ticket form appears. Do not place that code in source control or public copy.
+
+## Deployment
+
+As of September 3, 2026, the static Hosting preview and Firestore rules/indexes are deployed and verified. The preview is available at:
+
+- `https://gdg-warsaw-devfest26-web.web.app/`
+
+Deploy the static preview and Firestore configuration to the 2026 Firebase project:
+
+```bash
+npm run build
+npm exec -- firebase deploy --config firebase.preview.json --project=gdg-warsaw-devfest26-web --only hosting
+npm exec -- firebase deploy --project=gdg-warsaw-devfest26-web --only firestore
+```
+
+The repository also contains the upstream `prerender` Cloud Function configuration. Deploying Functions currently requires upgrading the Firebase project to the Blaze (pay-as-you-go) plan; no billing upgrade was performed. Once that approval is available, deploy the complete configuration with:
+
+```bash
+npm exec -- firebase deploy --project=gdg-warsaw-devfest26-web --only hosting,firestore,functions
+```
+
+Publishing the Evenea event is a separate, human-approved action and must not be performed by the deployment command.

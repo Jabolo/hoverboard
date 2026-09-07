@@ -9,13 +9,13 @@ Adjust the color scheme to your conference style.
 ```css
 :host {
   /* Primary colors */
-  --dark-primary-color: #ff9800;
-  --default-primary-color: #f9ab00;
+  --dark-primary-color: #f57c00;
+  --default-primary-color: #ff9800;
   --light-primary-color: #ffe0b2;
   --text-primary-color: #212121; /* text / icons */
 
   /* Accent colors */
-  --accent-color: #f9ab00;
+  --accent-color: #03a9f4;
 
   /* Background colors */
   --primary-background-color: #ffe0b2;

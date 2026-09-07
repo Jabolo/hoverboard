@@ -21,21 +21,16 @@ window.addEventListener('vaadin-router-location-changed', (event) => {
 export const selectRouteName = (pathname: string): string => {
   let [, part] = pathname.split('/');
   switch (part) {
-    case undefined:
-    case '':
-      part = 'home';
-      break;
-
-/*    case 'sessions':
+    case 'sessions':
       part = 'schedule';
-      break;*/
+      break;
 
     case 'previous-speakers':
       part = 'speakers';
       break;
   }
 
-  return part;
+  return part || 'home';
 };
 
 const ROUTES: Route[] = [
@@ -46,26 +41,26 @@ const ROUTES: Route[] = [
       await import('./pages/home-page.js');
     },
   },
-  // {
-  //   path: '/blog',
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: 'blog-list-page',
-  //       action: async () => {
-  //         await import('./pages/blog-list-page.js');
-  //       },
-  //     },
-  //     { path: '/posts/:id', redirect: '/blog/:id' },
-  //     {
-  //       path: '/:id',
-  //       component: 'post-page',
-  //       action: async () => {
-  //         await import('./pages/post-page.js');
-  //       },
-  //     },
-  //   ],
-  // },
+  {
+    path: '/blog',
+    children: [
+      {
+        path: '',
+        component: 'blog-list-page',
+        action: async () => {
+          await import('./pages/blog-list-page.js');
+        },
+      },
+      { path: '/posts/:id', redirect: '/blog/:id' },
+      {
+        path: '/:id',
+        component: 'post-page',
+        action: async () => {
+          await import('./pages/post-page.js');
+        },
+      },
+    ],
+  },
   {
     path: '/schedule',
     component: 'schedule-page',
@@ -150,13 +145,20 @@ const ROUTES: Route[] = [
       await import('./pages/team-page.js');
     },
   },
-  // {
-  //   path: '/faq',
-  //   component: 'faq-page',
-  //   action: async () => {
-  //     await import('./pages/faq-page.js');
-  //   },
-  // },
+  {
+    path: '/faq',
+    component: 'faq-page',
+    action: async () => {
+      await import('./pages/faq-page.js');
+    },
+  },
+  {
+    path: '/privacy',
+    component: 'privacy-page',
+    action: async () => {
+      await import('./pages/privacy-page.js');
+    },
+  },
   {
     path: '/coc',
     component: 'coc-page',

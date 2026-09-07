@@ -9,9 +9,13 @@ import { TeamsState } from '../teams/state';
 import { TeamsMembersState } from './state';
 
 const mergeMembers = (team: TeamWithoutMembers, possibleMembers: Member[]): Team => {
+  const members = possibleMembers
+    .filter((member) => member.parentId === team.id)
+    .sort((left, right) => left.order - right.order);
+
   return {
     ...team,
-    members: possibleMembers.filter((member) => member.parentId === team.id),
+    members,
   };
 };
 
@@ -31,5 +35,5 @@ export const selectTeamsAndMembers = createSelector(
     } else {
       return new Initialized();
     }
-  }
+  },
 );

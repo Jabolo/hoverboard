@@ -1,7 +1,7 @@
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-button';
+import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/text-truncate';
@@ -23,6 +23,26 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       <style include="shared-styles flex flex-alignment positioning">
         :host {
           display: block;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+        }
+
+        .container {
+          position: relative;
+          padding-top: 76px;
+          padding-bottom: 56px;
+        }
+
+        .container::before {
+          position: absolute;
+          top: 28px;
+          left: 16px;
+          color: var(--google-blue);
+          content: '> speakers --featured';
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
         }
 
         .speakers-wrapper {
@@ -33,7 +53,21 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .speaker {
+          padding: 16px 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          background: var(--secondary-background-color);
           text-align: center;
+          transition:
+            border-color var(--animation),
+            box-shadow var(--animation),
+            transform var(--animation);
+        }
+
+        .speaker:hover {
+          border-color: var(--google-blue);
+          box-shadow: var(--box-shadow-primary-color);
+          transform: translateY(-3px);
         }
 
         .photo {
@@ -45,6 +79,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           height: var(--lazy-image-height);
           background-color: var(--accent-color);
           border-radius: 50%;
+          border: 2px solid var(--google-blue);
           overflow: hidden;
           transform: translateZ(0);
         }
@@ -84,8 +119,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
 
         .company-logo {
           margin-top: 6px;
+          padding: 3px 6px;
+          border-radius: 3px;
+          background: #fff;
           --lazy-image-width: 100%;
-          --lazy-image-height: 20px;
+          --lazy-image-height: 16px;
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
@@ -97,11 +135,16 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
 
         .name {
           margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-family: var(--font-mono, monospace);
+          font-weight: 700;
           line-height: 1.1;
         }
 
         .origin {
           margin-top: 4px;
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
           font-size: 14px;
           line-height: 1.1;
         }
@@ -163,7 +206,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       </style>
 
       <div class="container">
-        <h1 class="container-title">[[speakersBlock.title]]</h1>
+        <h2 class="container-title">[[speakersBlock.title]]</h2>
 
         <div class="speakers-wrapper">
           <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">
@@ -211,10 +254,10 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         </div>
 
         <a href="[[speakersBlock.callToAction.link]]">
-          <paper-button class="cta-button animated icon-right">
+          <md-outlined-button class="cta-button animated icon-right">
             <span>[[speakersBlock.callToAction.label]]</span>
             <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-          </paper-button>
+          </md-outlined-button>
         </a>
       </div>
     `;

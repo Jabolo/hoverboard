@@ -5,11 +5,36 @@ updates:
     schedule:
       interval: monthly
   - package-ecosystem: npm
-    directory: '/'
+    directories:
+      - '/'
+      - '/functions'
     schedule:
       interval: monthly
     open-pull-requests-limit: 25
-  - package-ecosystem: npm
-    directory: '/functions'
-    schedule:
-      interval: monthly
+    groups:
+      rollup:
+        patterns:
+          - '*rollup*'
+      jest:
+        patterns:
+          - '*jest*'
+      eslint:
+        patterns:
+          - 'eslint*'
+          - '@typescript-eslint/*'
+          - '@*eslin*/*'
+      material:
+        patterns:
+          - '@material/*'
+      stylelint:
+        patterns:
+          - '*stylelint*'
+      firebase:
+        patterns:
+          - '*firebase*'
+      markdownlint:
+        patterns:
+          - 'markdownlint*'
+      typescript:
+        patterns:
+          - 'typescript'
