@@ -1,4 +1,4 @@
-import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
+import { Initialized } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
@@ -14,7 +14,7 @@ import {
   initialPreviousSpeakersState,
   PreviousSpeakersState,
 } from '../store/previous-speakers/state';
-import { loading, previousSpeakersBlock } from '../utils/data';
+import { previousSpeakersBlock } from '../utils/data';
 import '../utils/icons';
 import './shared-styles';
 
@@ -76,22 +76,10 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <div class="container">
-        <h1 class="container-title">[[previousSpeakersBlock.title]]</h1>
+      <div class="container" hidden$="[[!hasSpeakers]]">
+        <h2 class="container-title">[[previousSpeakersBlock.title]]</h2>
 
         <div class="speakers-wrapper">
-          <template is="dom-if" if="[[pending]]">
-            <p>[[loading]]</p>
-          </template>
-
-          <template is="dom-if" if="[[failure]]">
-            <p>Error loading previous speakers.</p>
-          </template>
-
-          <template is="dom-if" if="[[empty]]">
-            <p class="empty-state">The previous speaker archive will be added here.</p>
-          </template>
-
           <template is="dom-repeat" items="[[speakers]]" as="speaker">
             <a class="speaker" href$="[[previousSpeakerUrl(speaker.id)]]">
               <lazy-image
@@ -114,27 +102,10 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
   }
 
   private previousSpeakersBlock = previousSpeakersBlock;
-  private loading = loading;
-
   @property({ type: Object })
   previousSpeakers: PreviousSpeakersState = initialPreviousSpeakersState;
   @property({ type: Array })
   speakers: PreviousSpeaker[] = [];
-
-  @computed('previousSpeakers')
-  get pending() {
-    return this.previousSpeakers instanceof Pending;
-  }
-
-  @computed('previousSpeakers')
-  get failure() {
-    return this.previousSpeakers instanceof Failure;
-  }
-
-  @computed('previousSpeakers', 'speakers')
-  get empty() {
-    return this.previousSpeakers instanceof Success && this.speakers.length === 0;
-  }
 
   @computed('speakers')
   get hasSpeakers() {

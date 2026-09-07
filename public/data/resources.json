@@ -13,6 +13,40 @@
   "eventResources": "Event Resources",
   "buyTicket": "Register",
   "ticketingPreview": "View registration",
+  "cfpBlock": {
+    "title": "Share what you know.",
+    "kicker": "> cfp --opening-soon",
+    "description": "DevFest Warsaw is looking for practical talks and hands-on workshops from people who build, learn, and share with the community.",
+    "openTo": "Open to everyone",
+    "formats": "Talks and workshops",
+    "platform": "Applications will open on Advocu.",
+    "cta": "Call for papers — opening soon",
+    "note": "Bring a real lesson, a useful idea, or a story worth sharing."
+  },
+  "visitBlock": {
+    "title": "Plan your visit.",
+    "kicker": "> arrival --ready",
+    "intro": "Registration opens at 09:00 at Google for Startups Campus Warsaw, Plac Konesera 10.",
+    "travelTitle": "Getting here",
+    "metro": "Take Metro M2 to Dworzec Wileński — Koneser is a short walk away.",
+    "surface": "Buses and trams also serve the Dworzec Wileński and Ząbkowska area.",
+    "parking": "On Saturday, street parking in Warsaw’s paid zone is free, subject to space and signed local restrictions. Koneser also has a 24-hour paid underground car park.",
+    "directions": "Open directions",
+    "onSiteTitle": "On site",
+    "accessibility": "The entire venue is wheelchair accessible, with step-free seating available. The Koneser complex also has ramps and lifts.",
+    "wifi": "Wi-Fi will be available for attendees.",
+    "cloakroom": "An open, self-service cloakroom will be available. It is not staffed or monitored, so please keep valuables with you.",
+    "accessibilityHelp": "Need an accessibility adjustment? Contact the organizers."
+  },
+  "scheduleBlock": {
+    "title": "Schedule",
+    "kicker": "> schedule --coming-soon",
+    "intro": "The full day is still taking shape. One timing is confirmed — and the rest will be announced here.",
+    "time": "09:00",
+    "milestone": "Registration opens",
+    "note": "Sessions, workshops, and the complete timetable are coming soon.",
+    "emptyState": "We’re confirming speakers, workshops, and room timings. Check back here for the full timetable."
+  },
   "signIn": "Sign in",
   "signOut": "Sign out",
   "viewHighlights": "View highlights",
@@ -75,6 +109,11 @@
           "newTab": false
         },
         {
+          "name": "Privacy & data",
+          "url": "/privacy",
+          "newTab": false
+        },
+        {
           "name": "Code of Conduct",
           "url": "/coc",
           "newTab": false
@@ -89,6 +128,7 @@
   ],
   "subscribeNote": "No spam, only important event updates.",
   "codeOfConduct": "Code of Conduct",
+  "privacyNotice": "/data/privacy.md",
   "codeOfConductBlock": {
     "organization": "GDG Warsaw",
     "form": "",
@@ -99,8 +139,8 @@
     "callToAction": {
       "featuredSessions": {
         "description": "GDG DevFest Warsaw 2026 brings together developers, designers, engineers, researchers, students, and technology enthusiasts for one day of practical learning and meaningful connections.",
-        "label": "View programme updates",
-        "link": "/speakers"
+        "label": "View schedule updates",
+        "link": "/#schedule"
       },
       "howItWas": {
         "description": "",
@@ -129,7 +169,7 @@
   },
   "ticketsBlock": {
     "title": "Tickets",
-    "ticketsDetails": "Registration is handled securely through Evenea. Select a ticket in the embedded form below and apply a promotional code if you have one.",
+    "ticketsDetails": "Secure registration via Evenea — choose your ticket below.",
     "soldOut": "Sold out",
     "notAvailableYet": "Not available yet",
     "save": "Save ${discount}% today"
@@ -322,8 +362,9 @@
   },
   "eveneaEmbed": {
     "title": "Registration",
-    "description": "Choose a ticket and complete registration securely in the embedded Evenea form below. The current event page is protected by an access code during preview.",
+    "description": "Choose a ticket and complete registration securely in the embedded Evenea form below.",
     "published": true,
+    "requiresAccessCode": false,
     "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/",
     "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe",
     "resizerScriptSrc": "https://app.evenea.pl/js/iframe/new/iframeResizer2.js"

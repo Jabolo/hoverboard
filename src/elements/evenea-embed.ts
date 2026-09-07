@@ -57,9 +57,10 @@ export class EveneaEmbed extends PolymerElement {
         iframe {
           display: block;
           width: 100%;
-          /* The remote form contains five ticket rows and a final join action. */
-          height: 1100px;
-          min-height: 1100px;
+          /* Keep enough room for five ticket rows and the final join action
+             without leaving a large empty tail below the form. */
+          height: 980px;
+          min-height: 980px;
           border: 0;
           border-radius: var(--border-radius);
           background: #fff;
@@ -68,8 +69,8 @@ export class EveneaEmbed extends PolymerElement {
 
         @media (min-width: 640px) {
           iframe {
-            height: 1500px;
-            min-height: 1500px;
+            height: 820px;
+            min-height: 820px;
           }
         }
       </style>

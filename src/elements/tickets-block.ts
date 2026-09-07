@@ -1,12 +1,20 @@
 import { Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@material/web/button/filled-button.js';
+import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { Ticket } from '../models/ticket';
-import { RootState } from '../store';
+import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
+import { fetchTickets } from '../store/tickets/actions';
 import { initialTicketsState } from '../store/tickets/state';
-import { buyTicket, contentLoaders, eveneaEmbed, ticketsBlock } from '../utils/data';
+import {
+  buyTicket,
+  contentLoaders,
+  eveneaEmbed,
+  ticketingPreview,
+  ticketsBlock,
+} from '../utils/data';
 import '../utils/icons';
 import './content-loader';
 import './evenea-embed';
@@ -25,8 +33,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .tickets-wrapper {
           position: relative;
-          padding-top: 76px;
-          padding-bottom: 64px;
+          padding-top: 64px;
+          padding-bottom: 48px;
           text-align: center;
         }
 
@@ -43,12 +51,12 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .tickets {
-          margin: 32px 0 24px;
+          margin: 24px 0 18px;
         }
 
         .ticket-item {
-          margin: 16px 8px;
-          min-height: 300px;
+          margin: 10px 6px;
+          min-height: 220px;
           border: 1px solid var(--divider-color);
           width: 100%;
           text-align: center;
@@ -67,7 +75,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .ticket-item[in-demand] {
-          transform: scale(1.05);
+          transform: scale(1.03);
           box-shadow: var(--box-shadow-primary-color);
           border-top: 2px solid var(--default-primary-color);
           z-index: 1;
@@ -90,13 +98,13 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .header {
-          padding: 24px 0 0;
+          padding: 16px 0 0;
           font-family: var(--font-mono, monospace);
           font-size: 16px;
         }
 
         .content {
-          padding: 0 24px;
+          padding: 0 16px;
         }
 
         .type-description {
@@ -105,7 +113,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .ticket-price-wrapper {
-          margin: 24px 0;
+          margin: 14px 0;
           white-space: nowrap;
         }
 
@@ -113,7 +121,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           color: var(--default-primary-color);
           font-family: var(--font-mono, monospace);
           font-weight: 800;
-          font-size: 40px;
+          font-size: 30px;
         }
 
         .discount {
@@ -122,7 +130,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .sold-out {
-          display: none;
+          display: block;
           font-size: 14px;
           text-transform: uppercase;
           height: 32px;
@@ -130,15 +138,15 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .additional-info {
-          margin: 16px auto 0;
+          margin: 12px auto 0;
           max-width: 480px;
-          font-size: 14px;
+          font-size: 12px;
           color: var(--secondary-text-color);
           line-height: 1.6;
         }
 
         .actions {
-          padding: 24px;
+          padding: 16px;
           position: relative;
         }
 
@@ -175,17 +183,17 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           }
 
           .ticket-item {
-            max-width: 200px;
+            max-width: 180px;
           }
 
           .ticket-item[in-demand] {
-            transform: scale(1.15);
+            transform: scale(1.04);
           }
         }
       </style>
 
       <div class="tickets-wrapper container">
-        <h1 class="container-title">[[ticketsBlock.title]]</h1>
+        <h2 class="container-title">[[ticketsBlock.title]]</h2>
         <content-loader
           class="tickets-placeholder"
           card-padding="24px"
@@ -204,15 +212,18 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         <template is="dom-if" if="[[showTicketCards]]">
           <div class="tickets" layout horizontal wrap center-justified>
-            <template is="dom-if" if="[[tickets.error]]"> Error loading tickets </template>
+            <template is="dom-if" if="[[tickets.error]]">
+              <div class="ticket-error" role="alert">
+                Unable to load tickets.
+                <md-outlined-button on-click="retryTickets">Try again</md-outlined-button>
+              </div>
+            </template>
 
             <template is="dom-repeat" items="[[tickets.data]]" as="ticket">
-              <a
+              <div
                 class="ticket-item card"
-                href="#registration"
                 sold-out$="[[ticket.soldOut]]"
                 in-demand$="[[ticket.inDemand]]"
-                on-click="onTicketTap"
                 layout
                 vertical
               >
@@ -235,17 +246,21 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                   <template is="dom-if" if="[[ticket.soldOut]]">
                     <div class="sold-out" block>[[ticketsBlock.soldOut]]</div>
                   </template>
-                  <md-filled-button hidden$="[[ticket.soldOut]]" disabled$="[[!ticket.available]]">
+                  <md-filled-button
+                    hidden$="[[ticket.soldOut]]"
+                    disabled$="[[!ticket.available]]"
+                    on-click="onTicketTap"
+                  >
                     [[getButtonText(ticket.available)]]
                   </md-filled-button>
                 </div>
-              </a>
+              </div>
             </template>
           </div>
         </template>
 
         <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
-        <evenea-embed id="registration"></evenea-embed>
+        <evenea-embed id="registration-form"></evenea-embed>
       </div>
     `;
   }
@@ -253,6 +268,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   private ticketsBlock = ticketsBlock;
   private contentLoaders = contentLoaders.tickets;
   private showTicketCards = Boolean(eveneaEmbed.published);
+  private availableTicketAction = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
 
   @property({ type: Object })
   tickets = initialTicketsState;
@@ -287,14 +303,21 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     return this.ticketsBlock.save.replace('${discount}', discount);
   }
 
-  private onTicketTap(e: PointerEvent & { model: { ticket: Ticket } }) {
+  private onTicketTap(e: Event & { model: { ticket: Ticket } }) {
     if (e.model.ticket.soldOut || !e.model.ticket.available) {
-      e.preventDefault();
-      e.stopPropagation();
+      return;
     }
+    this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }
+
+  private retryTickets() {
+    store.dispatch(fetchTickets);
   }
 
   private getButtonText(available: boolean) {
-    return available ? buyTicket : this.ticketsBlock.notAvailableYet;
+    return available ? this.availableTicketAction : this.ticketsBlock.notAvailableYet;
   }
 }

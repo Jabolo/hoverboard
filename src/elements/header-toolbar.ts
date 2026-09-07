@@ -17,7 +17,16 @@ import { ReduxMixin } from '../store/mixin';
 import { initialTicketsState, TicketsState } from '../store/tickets/state';
 import { initialUiState } from '../store/ui/state';
 import { initialUserState } from '../store/user/state';
-import { buyTicket, navigation, signIn, signOut as signOutText, title } from '../utils/data';
+import {
+  buyTicket,
+  disabledSchedule,
+  eveneaEmbed,
+  navigation,
+  signIn,
+  signOut as signOutText,
+  ticketingPreview,
+  title,
+} from '../utils/data';
 import './notification-toggle';
 import './shared-styles';
 
@@ -153,7 +162,12 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         }
 
         .profile-action {
+          display: inline-block;
           margin-top: 4px;
+          border: 0;
+          padding: 0;
+          background: transparent;
+          font: inherit;
           text-transform: uppercase;
           color: var(--terminal-green);
           font-size: 14px;
@@ -192,7 +206,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           <paper-icon-button
             icon="hoverboard:menu"
             hidden$="[[viewport.isLaptopPlus]]"
-            aria-label="menu"
+            aria-label="Open navigation menu"
             on-click="openDrawer"
           ></paper-icon-button>
         </div>
@@ -217,21 +231,21 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             </paper-tab>
           </template>
 
-          <paper-tab class="signin-tab" on-click="signIn" link hidden$="[[signedIn]]">
+          <paper-tab
+            class="signin-tab"
+            on-click="signIn"
+            link
+            hidden$="[[shouldHideAccountEntry(signedIn, hasAttendeeAgenda)]]"
+          >
             [[signInText]]
           </paper-tab>
 
-          <a
-            href$="[[ticketUrl]]"
-            target="_blank"
-            rel="noopener noreferrer"
-            hidden$="[[!ticketUrl]]"
-          >
-            <md-filled-button class="buy-button">[[buyTicket]]</md-filled-button>
+          <a href$="[[registrationUrl]]" on-click="requestRegistration" hidden$="[[!ticketUrl]]">
+            <md-filled-button class="buy-button">[[registrationActionLabel]]</md-filled-button>
           </a>
         </paper-tabs>
 
-        <notification-toggle></notification-toggle>
+        <notification-toggle hidden$="[[!hasAttendeeAgenda]]"></notification-toggle>
 
         <paper-menu-button
           class="auth-menu"
@@ -258,7 +272,9 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             <div layout vertical center-justified>
               <span class="profile-name">[[user.data.displayName]]</span>
               <span class="profile-email">[[user.data.email]]</span>
-              <span class="profile-action" role="button" on-click="signOut">[[signOutText]]</span>
+              <button class="profile-action" type="button" on-click="signOut">
+                [[signOutText]]
+              </button>
             </div>
           </div>
         </paper-menu-button>
@@ -267,7 +283,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           icon="hoverboard:account"
           aria-label="Sign in"
           on-click="signIn"
-          hidden$="[[isAccountIconHidden(signedIn, viewport.isLaptopPlus)]]"
+          hidden$="[[isAccountIconHidden(signedIn, viewport.isLaptopPlus, hasAttendeeAgenda)]]"
         ></paper-icon-button>
       </app-toolbar>
     `;
@@ -278,6 +294,8 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
   private navigation = navigation;
   private signOutText = signOutText;
   private buyTicket = buyTicket;
+  private hasAttendeeAgenda = !disabledSchedule;
+  private registrationActionLabel = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
 
   @property({ type: Boolean, notify: true })
   drawerOpened: boolean = false;
@@ -333,6 +351,17 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
     signOutAction();
   }
 
+  private requestRegistration(e: Event) {
+    if (window.location.pathname !== '/') return;
+    e.preventDefault();
+    this.dispatchEvent(
+      new CustomEvent('registration-request', {
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   private onScroll() {
     this.transparent = document.documentElement.scrollTop === 0;
   }
@@ -344,8 +373,16 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
     }
   }
 
-  private isAccountIconHidden(signedIn: boolean, isTabletPlus: boolean) {
-    return signedIn || isTabletPlus;
+  private shouldHideAccountEntry(signedIn: boolean, hasAttendeeAgenda: boolean) {
+    return signedIn || !hasAttendeeAgenda;
+  }
+
+  private isAccountIconHidden(
+    signedIn: boolean,
+    isTabletPlus: boolean,
+    hasAttendeeAgenda: boolean,
+  ) {
+    return signedIn || isTabletPlus || !hasAttendeeAgenda;
   }
 
   @computed('tickets')
@@ -356,6 +393,11 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
     } else {
       return '';
     }
+  }
+
+  @computed('tickets')
+  private get registrationUrl() {
+    return this.ticketUrl ? '/#registration' : '';
   }
 
   @observe('heroSettings')

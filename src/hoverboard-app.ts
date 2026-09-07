@@ -32,14 +32,17 @@ import { OpenedChanged } from './utils/app-drawer';
 import {
   buyTicket,
   dates,
+  eveneaEmbed,
   location,
   navigation,
   offlineMessage,
   signInProviders,
+  ticketingPreview,
 } from './utils/data';
 import './utils/icons';
 import './utils/media-query';
 import { Stickied } from './utils/stickied';
+import { scrollToElement } from './utils/scrolling';
 
 setPassiveTouchGestures(true);
 setRemoveNestedTemplates(true);
@@ -64,6 +67,26 @@ export class HoverboardApp extends PolymerElement {
             background: var(--terminal-panel);
             color: var(--primary-text-color);
           };
+        }
+
+        .skip-link {
+          position: fixed;
+          z-index: 10;
+          top: 12px;
+          left: 12px;
+          transform: translateY(-180%);
+          padding: 10px 14px;
+          border: 2px solid var(--google-yellow);
+          background: var(--terminal-background);
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
+          font-weight: 700;
+          text-decoration: none;
+          transition: transform 0.2s ease-out;
+        }
+
+        .skip-link:focus {
+          transform: translateY(0);
         }
 
         app-drawer {
@@ -175,6 +198,8 @@ export class HoverboardApp extends PolymerElement {
         }
       </style>
 
+      <a class="skip-link" href="#main-content">Skip to main content</a>
+
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
         <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>
           <app-toolbar layout vertical start>
@@ -203,16 +228,14 @@ export class HoverboardApp extends PolymerElement {
 
               <a
                 class="bottom-drawer-link"
-                href$="[[ticketUrl]]"
-                target="_blank"
-                rel="noopener noreferrer"
-                on-click="closeDrawer"
+                href$="[[registrationUrl]]"
+                on-click="scrollToRegistration"
                 hidden$="[[!ticketUrl]]"
                 layout
                 horizontal
                 center
               >
-                <span>[[buyTicket]]</span>
+                <span>[[registrationActionLabel]]</span>
                 <iron-icon icon="hoverboard:open-in-new"></iron-icon>
               </a>
             </div>
@@ -224,7 +247,7 @@ export class HoverboardApp extends PolymerElement {
             <header-toolbar drawer-opened="{{drawerOpened}}"></header-toolbar>
           </app-header>
 
-          <main></main>
+          <main id="main-content" tabindex="-1"></main>
         </app-header-layout>
       </app-drawer-layout>
 
@@ -239,6 +262,7 @@ export class HoverboardApp extends PolymerElement {
 
   private dates = dates;
   private buyTicket = buyTicket;
+  private registrationActionLabel = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
   private navigation = navigation;
   private shortLocation = location.short;
 
@@ -271,6 +295,8 @@ export class HoverboardApp extends PolymerElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.scrollToRegistration = this.scrollToRegistration.bind(this);
+    this.addEventListener('registration-request', this.scrollToRegistration);
     window.addEventListener('element-sticked', (event) => this.toggleHeaderShadow(event));
     window.addEventListener('offline', () => store.dispatch(queueSnackbar(offlineMessage)));
     this.drawer.addEventListener('opened-changed', (event) => this.toggleDrawer(event));
@@ -285,6 +311,11 @@ export class HoverboardApp extends PolymerElement {
     onUser();
   }
 
+  override disconnectedCallback() {
+    this.removeEventListener('registration-request', this.scrollToRegistration);
+    super.disconnectedCallback();
+  }
+
   closeDrawer() {
     this.drawerOpened = false;
   }
@@ -297,6 +328,20 @@ export class HoverboardApp extends PolymerElement {
     this.drawerOpened = e.detail.value;
   }
 
+  private scrollToRegistration(e: Event) {
+    const homePage = this.main.querySelector('home-page') as HTMLElement | null;
+    const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration');
+
+    if (!ticketsBlock) {
+      this.closeDrawer();
+      return;
+    }
+
+    e.preventDefault();
+    this.closeDrawer();
+    scrollToElement(ticketsBlock);
+  }
+
   @computed('tickets')
   private get ticketUrl(): string {
     if (this.tickets instanceof Success && this.tickets.data.length > 0) {
@@ -305,5 +350,10 @@ export class HoverboardApp extends PolymerElement {
     } else {
       return '';
     }
+  }
+
+  @computed('tickets')
+  private get registrationUrl(): string {
+    return this.ticketUrl ? '/#registration' : '';
   }
 }

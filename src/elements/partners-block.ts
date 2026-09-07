@@ -102,7 +102,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
       </style>
 
       <div class="container">
-        <h1 class="container-title">[[partnersBlock.title]]</h1>
+        <h2 class="container-title">[[partnersBlock.title]]</h2>
 
         <template is="dom-if" if="[[pending]]">
           <p>[[loading]]</p>

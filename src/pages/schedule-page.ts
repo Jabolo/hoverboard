@@ -21,7 +21,7 @@ import { selectFilterGroups } from '../store/sessions/selectors';
 import { initialSessionsState, SessionsState } from '../store/sessions/state';
 import { fetchSpeakers } from '../store/speakers/actions';
 import { initialSpeakersState, SpeakersState } from '../store/speakers/state';
-import { contentLoaders, heroSettings } from '../utils/data';
+import { contentLoaders, heroSettings, scheduleBlock } from '../utils/data';
 import { updateMetadata } from '../utils/metadata';
 
 @customElement('schedule-page')
@@ -111,7 +111,7 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
       </div>
 
       <template is="dom-if" if="[[showEmptyState]]">
-        <p class="empty-state">The schedule will be published when the programme is ready.</p>
+        <p class="empty-state" role="status">[[scheduleBlock.emptyState]]</p>
       </template>
 
       <footer-block></footer-block>
@@ -120,6 +120,7 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
   private heroSettings = heroSettings.schedule;
   private contentLoaders = contentLoaders.schedule;
+  private scheduleBlock = scheduleBlock;
 
   @property({ type: Object })
   schedule = initialScheduleState;

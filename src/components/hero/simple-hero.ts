@@ -7,7 +7,15 @@ import './hero-block';
 type HeroKeys = keyof typeof heroSettings;
 type SimpleHeroKeys = Extract<
   HeroKeys,
-  'coc' | 'blog' | 'faq' | 'notFound' | 'previousSpeakers' | 'schedule' | 'speakers' | 'team'
+  | 'coc'
+  | 'blog'
+  | 'faq'
+  | 'notFound'
+  | 'previousSpeakers'
+  | 'privacy'
+  | 'schedule'
+  | 'speakers'
+  | 'team'
 >;
 
 interface Description {

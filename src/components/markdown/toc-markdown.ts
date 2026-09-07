@@ -26,10 +26,24 @@ export class TocMarkdown extends Markdown {
         }
 
         .col {
-          font-size: 32px;
-          line-height: 48px;
-          margin-bottom: 24px;
+          font-size: 20px;
+          line-height: 1.35;
+          margin-bottom: 16px;
           z-index: 2;
+        }
+
+        .col-heading {
+          color: inherit;
+          display: block;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        .col-heading:hover,
+        .col-heading:focus-visible {
+          color: var(--google-blue);
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
         }
 
         .col-content {
@@ -50,6 +64,8 @@ export class TocMarkdown extends Markdown {
           }
 
           .col {
+            font-size: 32px;
+            line-height: 48px;
             margin-right: 24px;
           }
 
@@ -117,8 +133,9 @@ export class TocMarkdown extends Markdown {
         href="${window.location.pathname}#${headerId}"
         @click="${() => this.scrollToId(headerId)}"
         router-ignore
-        >${header?.textContent ?? headerId}</a
       >
+        ${header?.textContent ?? headerId}
+      </a>
     `;
   }
 
@@ -126,7 +143,14 @@ export class TocMarkdown extends Markdown {
     const header = this.headers.find((header) => header.id === headerId);
     return html`
       <div class="col">
-        ${header?.textContent ?? headerId}
+        <a
+          class="col-heading"
+          href="${window.location.pathname}#${headerId}"
+          @click="${() => this.scrollToId(headerId)}"
+          router-ignore
+        >
+          ${header?.textContent ?? headerId}
+        </a>
         ${subheaderIds.map((subheaderId) => this.renderSubheader(subheaderId))}
       </div>
     `;

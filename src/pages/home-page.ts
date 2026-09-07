@@ -9,6 +9,9 @@ import '../components/event-countdown';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
+import '../elements/cfp-block';
+import '../elements/schedule-block';
+import '../elements/visit-block';
 import '../elements/footer-block';
 import '../elements/fork-me-block';
 import '../elements/map-block';
@@ -26,6 +29,7 @@ import {
   buyTicket,
   dates,
   description,
+  eveneaEmbed,
   heroSettings,
   showForkMeBlockForProjectIds,
   title,
@@ -55,6 +59,18 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .home-content {
           width: min(100%, 980px);
           padding: 24px 20px 52px;
+        }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
         }
 
         .home-grid {
@@ -144,6 +160,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           margin-top: 24px;
           color: currentColor;
           user-select: none;
+          border: 0;
+          padding: 0;
+          background: transparent;
+          font: inherit;
           cursor: pointer;
         }
 
@@ -159,6 +179,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .scroll-down .scroller {
           fill: currentColor;
           animation: updown 2s infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .scroll-down .scroller,
+          .terminal-command .cursor {
+            animation: none;
+          }
         }
 
         @keyframes updown {
@@ -373,6 +400,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         hide-logo
       >
         <div class="home-content" layout vertical center>
+          <h1 class="sr-only">[[siteTitle]]</h1>
           <div class="home-grid">
             <div class="home-intro" layout vertical center>
               <div class="hero-command">&gt; devfest.init --2026</div>
@@ -446,7 +474,12 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             </div>
           </div>
 
-          <div class="scroll-down" on-click="scrollNextBlock">
+          <button
+            class="scroll-down"
+            type="button"
+            aria-label="Scroll to event details"
+            on-click="scrollNextBlock"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               version="1.1"
@@ -456,6 +489,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
               viewBox="0 0 25.166666 37.8704414"
               enable-background="new 0 0 25.166666 37.8704414"
               xml:space="preserve"
+              aria-hidden="true"
             >
               <path
                 class="stroke"
@@ -507,18 +541,21 @@ export class HomePage extends ReduxMixin(PolymerElement) {
               ></path>
             </svg>
             <i class="icon icon-arrow-down"></i>
-          </div>
+          </button>
         </div>
       </hero-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
       </template>
       <about-block></about-block>
+      <schedule-block></schedule-block>
       <speakers-block></speakers-block>
+      <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
-      <tickets-block id="tickets-block"></tickets-block>
+      <tickets-block id="registration"></tickets-block>
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
+      <visit-block></visit-block>
       <partners-block></partners-block>
       <footer-block></footer-block>
     `;
@@ -544,6 +581,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   @computed('tickets')
   private get ticketActionLabel() {
+    if (eveneaEmbed.requiresAccessCode) {
+      return this.ticketingPreview;
+    }
     return this.hasAvailableTickets ? this.buyTicket : this.ticketingPreview;
   }
 
@@ -565,7 +605,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private scrollToTickets() {
-    const element = this.$['tickets-block'];
+    const element = this.$['registration'];
     if (element) {
       scrollToElement(element);
     } else {
@@ -591,5 +631,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     super.connectedCallback();
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
+    if (window.location.hash === '#registration') {
+      requestAnimationFrame(() => this.scrollToTickets());
+    }
   }
 }

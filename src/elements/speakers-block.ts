@@ -206,7 +206,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       </style>
 
       <div class="container">
-        <h1 class="container-title">[[speakersBlock.title]]</h1>
+        <h2 class="container-title">[[speakersBlock.title]]</h2>
 
         <div class="speakers-wrapper">
           <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">

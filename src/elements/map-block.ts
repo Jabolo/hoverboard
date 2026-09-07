@@ -67,8 +67,11 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
             margin: 0;
             padding: 24px;
             max-width: 320px;
-            transform: translateY(80px);
             border-radius: var(--border-radius);
+          }
+
+          :host([map-visible]) .description-card {
+            transform: translateY(80px);
           }
 
           .address {
@@ -171,5 +174,6 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
     }
 
     this.showMap = Boolean(this.googleMapApiKey) && this.viewport.isTabletPlus;
+    this.toggleAttribute('map-visible', this.showMap);
   }
 }

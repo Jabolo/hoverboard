@@ -1,12 +1,8 @@
-// TODO: enable imports
-// import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { css, html, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { openVideoDialog } from '../store/ui/actions';
 import { aboutBlock } from '../utils/data';
-// TODO: enable imports
-// import '../utils/icons';
 import { ThemedElement } from './themed-element';
 
 @customElement('about-block')
@@ -93,6 +89,13 @@ export class AboutBlock extends ThemedElement {
           letter-spacing: 0.02em;
         }
 
+        .cta-arrow {
+          margin-left: 8px;
+          color: currentColor;
+          font-size: 18px;
+          line-height: 1;
+        }
+
         @media (min-width: 640px) {
           .content {
             grid-gap: 64px;
@@ -115,16 +118,12 @@ export class AboutBlock extends ThemedElement {
     return html`
       <div class="container">
         <div>
-          <h1 class="container-title">${aboutBlock.title}</h1>
+          <h2 class="container-title">${aboutBlock.title}</h2>
           <p>${aboutBlock.callToAction.featuredSessions.description}</p>
-          <a
-            href="${aboutBlock.callToAction.featuredSessions.link}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="${aboutBlock.callToAction.featuredSessions.link}">
             <md-text-button class="animated icon-right" trailing-icon>
               <span class="cta-label">${aboutBlock.callToAction.featuredSessions.label}</span>
-              <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
+              <span class="cta-arrow" slot="icon" aria-hidden="true">→</span>
             </md-text-button>
           </a>
 
@@ -138,7 +137,7 @@ export class AboutBlock extends ThemedElement {
                     trailing-icon
                   >
                     <span>${aboutBlock.callToAction.howItWas.label}</span>
-                    <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
+                    <span class="cta-arrow" slot="icon" aria-hidden="true">→</span>
                   </md-text-button>
                 `
               : nothing

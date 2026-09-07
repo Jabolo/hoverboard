@@ -8,14 +8,10 @@
     "source": "functions"
   },
   "hosting": {
+    "site": "gdg-warsaw-devfest26-web",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "function": "prerender"
-      }
-    ],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }],
     "headers": [
       {
         "source": "**",

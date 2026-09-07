@@ -24,6 +24,11 @@
       "label": "Home"
     },
     {
+      "route": "schedule",
+      "permalink": "/schedule",
+      "label": "Schedule"
+    },
+    {
       "route": "speakers",
       "permalink": "/speakers",
       "label": "Speakers"
@@ -93,6 +98,14 @@
     "faq": {
       "title": "FAQs",
       "metaDescription": "Frequently asked questions about GDG DevFest Warsaw 2026",
+      "background": {
+        "color": "#070C14"
+      },
+      "fontColor": "#EAF2FF"
+    },
+    "privacy": {
+      "title": "Privacy & data",
+      "metaDescription": "How GDG DevFest Warsaw 2026 handles newsletter and registration data",
       "background": {
         "color": "#070C14"
       },

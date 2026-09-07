@@ -19,7 +19,20 @@ declare global {
   }
 }
 
-const firebaseConfig = window.firebaseConfig;
+const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const firebaseConfig =
+  window.firebaseConfig ??
+  (isLocalPreview
+    ? {
+        apiKey: 'local-preview',
+        authDomain: 'local-preview.firebaseapp.com',
+        projectId: 'local-preview',
+        storageBucket: 'local-preview.appspot.com',
+        messagingSenderId: 'local-preview',
+        appId: 'local-preview',
+        measurementId: 'G-LOCALPREVIEW',
+      }
+    : undefined);
 
 if (!firebaseConfig) {
   throw new Error('window.firebaseConfig is not defined');
