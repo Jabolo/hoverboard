@@ -19,6 +19,7 @@ export class CfpBlock extends ThemedElement {
         .container {
           position: relative;
           display: grid;
+          grid-template-columns: minmax(0, 1fr);
           gap: 28px;
           padding-top: 76px;
           padding-bottom: 64px;

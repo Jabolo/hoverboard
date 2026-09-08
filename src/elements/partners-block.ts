@@ -131,7 +131,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         </template>
 
         <template is="dom-repeat" items="[[partners.data]]" as="block">
-          <h4 class="block-title">[[block.title]]</h4>
+          <h3 class="block-title">[[block.title]]</h3>
           <div class="logos-wrapper">
             <template is="dom-repeat" items="[[block.items]]" as="logo">
               <a

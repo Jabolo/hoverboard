@@ -190,7 +190,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .badge-pill[tier='early-bird'] {
           background: rgba(66, 133, 244, 0.15);
-          color: var(--google-blue);
+          color: var(--terminal-blue);
           border: 1px solid rgba(66, 133, 244, 0.4);
         }
 
@@ -279,7 +279,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           font-size: 16px;
         }
 
-        .header h4 {
+        .header h3 {
           margin: 4px 0 0;
           font-size: 16px;
           font-weight: 700;
@@ -424,7 +424,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                       </div>
                     </template>
                   </div>
-                  <h4>[[ticket.name]]</h4>
+                  <h3>[[ticket.name]]</h3>
                 </div>
                 <div class="content" layout vertical flex-auto>
                   <div class="ticket-price-wrapper">

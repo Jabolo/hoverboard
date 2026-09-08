@@ -220,7 +220,7 @@ export class TocMarkdown extends Markdown {
   }
 
   private get renderToc() {
-    const topicCount = Object.keys(this.headerIds).length;
+    const topicCount = this.headers.length;
     return html`
       <nav class="content-wrapper" aria-label="On this page">
         <div class="container">

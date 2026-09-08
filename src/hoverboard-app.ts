@@ -325,6 +325,7 @@ export class HoverboardApp extends PolymerElement {
 
   closeDrawer() {
     this.drawerOpened = false;
+    this.restoreMenuFocus();
   }
 
   private toggleHeaderShadow(e: CustomEvent<Stickied>) {
@@ -332,7 +333,19 @@ export class HoverboardApp extends PolymerElement {
   }
 
   private toggleDrawer(e: CustomEvent<OpenedChanged>) {
+    const wasOpened = this.drawerOpened;
     this.drawerOpened = e.detail.value;
+    if (wasOpened && !e.detail.value) {
+      this.restoreMenuFocus();
+    }
+  }
+
+  private restoreMenuFocus() {
+    const headerToolbar = this.shadowRoot?.querySelector('header-toolbar');
+    const menuBtn = headerToolbar?.shadowRoot?.querySelector<HTMLElement>(
+      'paper-icon-button[icon="hoverboard:menu"]',
+    );
+    menuBtn?.focus();
   }
 
   private handleSkipToContent(e: Event) {

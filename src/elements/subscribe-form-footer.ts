@@ -52,7 +52,8 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
           required
           auto-validate$="[[validate]]"
           error-message="[[subscribeBlock.emailRequired]]"
-          autocomplete="off"
+          autocomplete="email"
+          name="email"
           disabled="[[subscribed.data]]"
         >
           <iron-icon
