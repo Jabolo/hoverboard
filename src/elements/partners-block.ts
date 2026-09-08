@@ -48,36 +48,43 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .block-title {
-          margin: 24px 0 8px;
-          color: var(--google-green);
+          margin: 28px 0 16px;
+          color: var(--google-yellow);
           font-family: var(--font-mono, monospace);
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
         }
 
         .logos-wrapper {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-          grid-gap: 8px;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          grid-gap: 16px;
+          max-width: 800px;
         }
 
         .logo-item {
-          padding: 12px;
+          padding: 20px 28px;
+          min-height: 96px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
-          background: var(--brand-off-white);
+          background: var(--terminal-panel);
           transition:
             border-color var(--animation),
+            box-shadow var(--animation),
             transform var(--animation);
         }
 
         .logo-item:hover {
           border-color: var(--google-blue);
+          box-shadow: 0 0 20px rgba(66, 133, 244, 0.28);
           transform: translateY(-2px);
         }
 
         .logo-img {
           --lazy-image-width: 100%;
-          --lazy-image-height: 84px;
+          --lazy-image-height: 56px;
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);

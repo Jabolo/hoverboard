@@ -180,17 +180,21 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         }
 
         .buy-button {
-          margin-top: 12px;
+          align-self: center;
+          margin: 0 0 0 16px;
           --md-filled-button-container-color: var(--google-blue);
           --md-filled-button-hover-container-color: var(--terminal-green);
           --md-filled-button-label-text-color: #fff;
           --md-filled-button-hover-label-text-color: #06101a;
-          --md-filled-button-container-height: 42px;
+          --md-filled-button-container-height: 40px;
+          --md-filled-button-container-shape: 20px;
+          border-radius: 20px;
           font-family: var(--font-mono);
           font-size: 11px;
           font-weight: 800;
-          letter-spacing: 0.04em;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
+          flex-shrink: 0;
         }
 
         @media (min-width: 640px) {
@@ -239,16 +243,16 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           >
             [[signInText]]
           </paper-tab>
-
-          <md-filled-button
-            class="buy-button"
-            href$="[[registrationUrl]]"
-            on-click="requestRegistration"
-            hidden$="[[!ticketUrl]]"
-          >
-            [[registrationActionLabel]]
-          </md-filled-button>
         </paper-tabs>
+
+        <md-filled-button
+          class="buy-button"
+          href$="[[registrationUrl]]"
+          on-click="requestRegistration"
+          hidden$="[[isBuyButtonHidden(ticketUrl, viewport.isLaptopPlus)]]"
+        >
+          [[registrationActionLabel]]
+        </md-filled-button>
 
         <notification-toggle hidden$="[[!hasAttendeeAgenda]]"></notification-toggle>
 
@@ -388,6 +392,10 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
     hasAttendeeAgenda: boolean,
   ) {
     return signedIn || isTabletPlus || !hasAttendeeAgenda;
+  }
+
+  private isBuyButtonHidden(ticketUrl: string, isLaptopPlus: boolean): boolean {
+    return !ticketUrl || !isLaptopPlus;
   }
 
   @computed('tickets')

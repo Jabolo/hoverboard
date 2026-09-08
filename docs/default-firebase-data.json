@@ -20,9 +20,20 @@
       "apikey": ""
     }
   },
-  "gallery": [],
-  "partners": [],
-  "previousSpeakers": [],
+  "partners": [
+    {
+      "title": "Venue & Community Partner",
+      "order": 1,
+      "items": [
+        {
+          "logoUrl": "/images/partners/google-for-startups-white.png",
+          "name": "Google for Startups",
+          "order": 1,
+          "url": "https://campus.co/warsaw/"
+        }
+      ]
+    }
+  ],
   "schedule": {},
   "sessions": {},
   "speakers": {},
@@ -182,7 +193,7 @@
       "available": true,
       "currency": "zł",
       "ends": "November 21, 2026",
-      "info": "For generous individuals & companies championing Warsaw tech! Directly funds speaker travel, attendee catering & open session videos. Includes guaranteed personal or company name on our opening keynote intro slide.",
+      "info": "For generous individuals & companies championing Warsaw tech! Directly funds speaker travel & full-day attendee catering. Includes guaranteed personal or company name on our opening keynote intro slide.",
       "name": "Patron",
       "price": 500,
       "soldOut": false,
