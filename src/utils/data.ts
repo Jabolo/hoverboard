@@ -29,6 +29,7 @@ export {
   mapBlock,
   mySchedule,
   notifications,
+  pastDevFestsBlock,
   offlineMessage,
   partnersBlock,
   privacyNotice,

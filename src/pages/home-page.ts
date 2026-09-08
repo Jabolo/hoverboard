@@ -16,6 +16,8 @@ import '../elements/footer-block';
 import '../elements/fork-me-block';
 import '../elements/map-block';
 import '../elements/partners-block';
+import '../elements/past-devfests-block';
+import '../elements/previous-speakers-block';
 import '../elements/speakers-block';
 import '../elements/subscribe-block';
 import '../elements/tickets-block';
@@ -568,6 +570,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <schedule-block></schedule-block>
       <speakers-block></speakers-block>
+      <previous-speakers-block></previous-speakers-block>
+      <past-devfests-block></past-devfests-block>
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
       <visit-block></visit-block>
