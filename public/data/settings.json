@@ -46,7 +46,7 @@
   ],
   "heroSettings": {
     "home": {
-      "description": "100% non-profit tech conference organized by volunteers. By the community, for the community.",
+      "description": "Real Work, Real Lessons. A community-run tech conference bringing together 300 developers, builders, and designers at Google for Startups Campus Warsaw.",
       "background": {
         "color": "#071426",
         "image": "/images/backgrounds/home-2026.png"
@@ -64,7 +64,7 @@
     "speakers": {
       "title": "Speakers",
       "metaDescription": "Speakers and sessions for GDG DevFest Warsaw 2026",
-      "description": "The speaker lineup will be announced as the programme takes shape.",
+      "description": "The speaker lineup will be announced as the programme takes shape. Got real experience or hard lessons to share? Our Call for Papers is open on Advocu!",
       "background": {
         "color": "#070C14"
       },
@@ -81,7 +81,7 @@
     "schedule": {
       "title": "Schedule",
       "metaDescription": "The GDG DevFest Warsaw 2026 schedule",
-      "description": "The schedule will be published when the programme is ready.",
+      "description": "Three stages across Google for Startups Campus Warsaw: Auditorium, Cafe, and Classroom. Full timetable publishing soon!",
       "background": {
         "color": "#070C14"
       },

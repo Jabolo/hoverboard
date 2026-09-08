@@ -512,7 +512,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   private getImpactSubtext(ticket: Ticket): string {
     const tier = this.getTicketTier(ticket);
-    if (tier === 'supporter') return 'Non-profit event backer';
+    if (tier === 'supporter') return 'Community event backer';
     if (tier === 'patron') return 'Opening slide thank-you';
     return '';
   }

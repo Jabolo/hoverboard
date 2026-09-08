@@ -1,6 +1,6 @@
 ## What is GDG DevFest Warsaw?
 
-GDG DevFest Warsaw 2026 is a 100% non-profit, community-led technology conference brought to Warsaw by Google Developer Groups Warszawa. All organizers and speakers are volunteers giving their time pro bono — organized by the community, for the community.
+GDG DevFest Warsaw 2026: Real Work, Real Lessons is a community-run day of talks, demos, and hands-on workshops on **November 21, 2026** at Google for Startups Campus Warsaw. Organized by Google Developer Groups Warszawa, it brings together 300 developers, designers, and engineers for real stories, production lessons, and practical engineering breakthroughs — without vendor sales pitches.
 
 ## When and where is it happening?
 
@@ -36,7 +36,7 @@ The programme and speaker lineup will be added as they are confirmed. Subscribe 
 
 ## How can I speak at DevFest Warsaw?
 
-The Call for Papers will be announced separately. The website will link to the Advocu submission form once the final URL is confirmed.
+The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages (Auditorium, Cafe, and Classroom). Both first-time and experienced speakers from anywhere in the community are welcome!
 
 ## How can my company support the event?
 

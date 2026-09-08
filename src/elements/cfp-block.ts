@@ -87,6 +87,23 @@ export class CfpBlock extends ThemedElement {
           background: rgb(126 242 165 / 7%);
         }
 
+        .cfp-action-link {
+          display: block;
+          text-decoration: none;
+        }
+
+        .cfp-action-link md-filled-button {
+          cursor: pointer;
+          transition:
+            transform var(--animation),
+            filter var(--animation);
+        }
+
+        .cfp-action-link:hover md-filled-button {
+          transform: translateY(-2px);
+          filter: drop-shadow(0 4px 14px rgba(52, 168, 83, 0.45));
+        }
+
         md-filled-button {
           width: 100%;
           --md-filled-button-container-color: var(--google-green);
@@ -99,19 +116,53 @@ export class CfpBlock extends ThemedElement {
           text-transform: uppercase;
         }
 
-        md-filled-button[disabled] {
-          --md-filled-button-disabled-container-color: var(--google-green);
-          --md-filled-button-disabled-container-opacity: 1;
-          --md-filled-button-disabled-label-text-color: #06101a;
-          --md-filled-button-disabled-label-text-opacity: 1;
-        }
-
         .note {
           margin: 14px 0 0;
           color: var(--secondary-text-color);
           font-size: 13px;
           line-height: 1.5;
           text-align: center;
+        }
+
+        .topics-cloud {
+          margin-top: 24px;
+        }
+
+        .topics-heading {
+          display: block;
+          margin-bottom: 10px;
+          color: var(--google-yellow);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+
+        .topics-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+
+        .topic-badge {
+          display: inline-block;
+          padding: 4px 10px;
+          border: 1px solid var(--divider-color);
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.04);
+          color: var(--terminal-copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          letter-spacing: 0.02em;
+          transition:
+            border-color var(--animation),
+            color var(--animation);
+        }
+
+        .topic-badge:hover {
+          border-color: var(--google-green);
+          color: #fff;
         }
 
         @media (min-width: 720px) {
@@ -140,10 +191,34 @@ export class CfpBlock extends ThemedElement {
             <li class="fact">${cfpBlock.formats}</li>
             <li class="fact">${cfpBlock.platform}</li>
           </ul>
+
+          <div class="topics-cloud">
+            <span class="topics-heading">Topics & Focus Areas</span>
+            <div class="topics-tags">
+              <span class="topic-badge">Practical AI & ML</span>
+              <span class="topic-badge">Google Cloud</span>
+              <span class="topic-badge">Build with AI</span>
+              <span class="topic-badge">AI Antigravity</span>
+              <span class="topic-badge">Agent Dev Kit (ADK)</span>
+              <span class="topic-badge">Gemini & Gemma</span>
+              <span class="topic-badge">Firebase</span>
+              <span class="topic-badge">Web & Performance</span>
+              <span class="topic-badge">Mobile & Android</span>
+              <span class="topic-badge">Open Source</span>
+              <span class="topic-badge">Engineering Culture</span>
+            </div>
+          </div>
         </div>
 
         <div class="action-panel">
-          <md-filled-button disabled aria-describedby="cfp-note">${cfpBlock.cta}</md-filled-button>
+          <a
+            href="${cfpBlock.link}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cfp-action-link"
+          >
+            <md-filled-button aria-describedby="cfp-note">${cfpBlock.cta}</md-filled-button>
+          </a>
           <p class="note" id="cfp-note">${cfpBlock.note}</p>
         </div>
       </section>

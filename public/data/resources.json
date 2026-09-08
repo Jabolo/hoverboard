@@ -1,6 +1,6 @@
 {
   "title": "GDG DevFest Warsaw 2026",
-  "description": "A community-led technology conference for Warsaw's technology community on November 21, 2026.",
+  "description": "GDG DevFest Warsaw 2026: Real Work, Real Lessons. A community-run tech conference on November 21, 2026 at Google for Startups Campus Warsaw.",
   "image": "images/backgrounds/home-2026.png",
   "keywords": "GDG, DevFest, Warsaw, developers, technology, community, conference",
   "dates": "November 21, 2026",
@@ -15,14 +15,15 @@
   "buyTicket": "Register",
   "ticketingPreview": "View registration",
   "cfpBlock": {
-    "title": "Share what you know.",
-    "kicker": "> cfp --opening-soon",
-    "description": "DevFest Warsaw is looking for practical talks and hands-on workshops from people who build, learn, and share with the community.",
-    "openTo": "Open to everyone",
-    "formats": "Talks and workshops",
-    "platform": "Applications will open on Advocu.",
-    "cta": "Call for papers — opening soon",
-    "note": "Bring a real lesson, a useful idea, or a story worth sharing."
+    "title": "Real Work, Real Lessons.",
+    "kicker": "> cfp --open-now",
+    "description": "Got something real to share? We’re not looking for a corporate pitch, a reheated slide deck, or a generic “AI is changing everything” talk. Bring the project that taught you a hard lesson, the experiment that surprised you, the debugging story that changed your approach, or the side project you cannot stop thinking about. First-time and experienced speakers welcome!",
+    "openTo": "All experience levels — first-time & veteran speakers welcome",
+    "formats": "15m fire talks, 30m standard sessions & 1h workshops",
+    "platform": "Auditorium (200), Cafe (50) & Classroom (40) stages",
+    "cta": "Submit a Talk or Workshop on Advocu",
+    "link": "https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0",
+    "note": "AI is welcome — AI-for-the-sake-of-AI is not. Concrete lessons and practical builds beat buzzwords."
   },
   "visitBlock": {
     "title": "Plan your visit.",
@@ -41,12 +42,12 @@
   },
   "scheduleBlock": {
     "title": "Schedule",
-    "kicker": "> schedule --coming-soon",
-    "intro": "The full day is still taking shape. One timing is confirmed — and the rest will be announced here.",
+    "kicker": "> schedule --in-preparation",
+    "intro": "A single jam-packed day across three stages: Auditorium (max 200), Cafe (around 50), and Classroom (around 40).",
     "time": "09:00",
-    "milestone": "Registration opens",
-    "note": "Sessions, workshops, and the complete timetable are coming soon.",
-    "emptyState": "We’re confirming speakers, workshops, and room timings. Check back here for the full timetable."
+    "milestone": "Registration & Morning Coffee",
+    "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
+    "emptyState": "Call for Papers is live! We’re reviewing submissions across practical AI/ML, Cloud, Web, Mobile, Firebase, Open Source, and engineering culture. Full timetable coming soon."
   },
   "signIn": "Sign in",
   "signOut": "Sign out",
@@ -136,12 +137,12 @@
     "contacts": ["GDG Warsaw organizing team, [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl)"]
   },
   "aboutBlock": {
-    "title": "Build, learn, connect.",
+    "title": "Real Work, Real Lessons.",
     "callToAction": {
       "featuredSessions": {
-        "description": "GDG DevFest Warsaw is a 100% non-profit tech conference organized entirely by passionate volunteers — all organizers and speakers donate their time pro bono. By the community, for the community, bringing together 300+ developers, engineers, and creators for a full day of practical learning.",
-        "label": "View schedule updates",
-        "link": "/#schedule"
+        "description": "DevFest Warsaw 2026 is a community-run day of talks, demos, and hands-on workshops at Google for Startups Campus Warsaw. We’re not looking for corporate pitches, reheated slide decks, or generic buzzword talks. Bring the project that taught you a hard lesson, the experiment that surprised you, the production debugging story that changed your approach, or the practical idea that deserves a roomful of curious people.",
+        "label": "Submit a talk on Advocu",
+        "link": "https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
       },
       "howItWas": {
         "description": "",
@@ -151,20 +152,20 @@
     },
     "statisticsBlock": {
       "attendees": {
-        "label": "Attendees",
+        "label": "Builders",
         "number": "300"
       },
       "days": {
-        "label": "Day",
+        "label": "Full day",
         "number": "1"
       },
       "sessions": {
-        "label": "Sessions",
-        "number": "TBA"
+        "label": "Stages",
+        "number": "3"
       },
       "tracks": {
-        "label": "Tracks",
-        "number": "TBA"
+        "label": "Formats",
+        "number": "Talks & Labs"
       }
     }
   },

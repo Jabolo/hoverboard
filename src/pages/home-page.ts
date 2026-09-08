@@ -438,36 +438,32 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span class="prompt">$</span><span>./event --status</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span
-                    ><span
-                      ><span class="key">status:</span> <span class="green">scheduled</span></span
-                    >
+                    <span></span><span><span class="key">status:</span> <span class="green">confirmed</span></span>
                   </div>
                   <div class="terminal-line">
-                    <span></span
-                    ><span><span class="key">date:</span> <span class="blue">Nov 21</span></span>
+                    <span></span><span><span class="key">date:</span> <span class="blue">Nov 21, 2026</span></span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">format:</span> one_day / in_person</span>
+                    <span></span><span><span class="key">theme:</span> real_work / real_lessons</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">model:</span> 100% non_profit</span>
+                    <span></span><span><span class="key">stages:</span> 3 (auditorium / cafe / classroom)</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">team:</span> all_volunteers</span>
+                    <span></span><span><span class="key">capacity:</span> 300_attendees</span>
                   </div>
                   <hr />
                   <div class="terminal-line">
-                    <span class="prompt">$</span><span>./registration --inspect</span>
+                    <span class="prompt">$</span><span>./cfp --status</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">channel:</span> embedded / Evenea</span>
+                    <span></span><span><span class="key">call_for_papers:</span> <span class="green">open_now</span></span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">ethos:</span> by_community / for_community</span>
+                    <span></span><span><span class="key">platform:</span> advocu</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">capacity:</span> 300</span>
+                    <span></span><span><span class="key">ethos:</span> zero_corporate_pitches</span>
                   </div>
                   <hr />
                   <div class="terminal-command">
