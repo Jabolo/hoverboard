@@ -1,4 +1,4 @@
-import { Initialized, Success } from '@abraham/remotedata';
+import { Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
@@ -53,6 +53,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .speaker {
+          position: relative;
           padding: 16px 12px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
@@ -62,6 +63,12 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
             border-color var(--animation),
             box-shadow var(--animation),
             transform var(--animation);
+        }
+
+        .speaker-link {
+          display: block;
+          color: inherit;
+          text-decoration: none;
         }
 
         .speaker:hover {
@@ -86,7 +93,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
 
         .badges {
           position: absolute;
-          top: 0;
+          top: 16px;
           left: calc(50% + 24px);
         }
 
@@ -153,6 +160,18 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           margin-top: 24px;
         }
 
+        .status-message {
+          margin: 24px 0;
+          padding: 18px 20px;
+          border: 1px solid var(--terminal-line);
+          border-radius: var(--border-radius);
+          background: var(--terminal-panel);
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 14px;
+          line-height: 1.5;
+        }
+
         @media (min-width: 640px) {
           .photo {
             --lazy-image-width: 128px;
@@ -208,50 +227,57 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       <div class="container">
         <h2 class="container-title">[[speakersBlock.title]]</h2>
 
-        <div class="speakers-wrapper">
+        <div class="speakers-wrapper" hidden$="[[!hasSpeakers]]">
           <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">
-            <a class="speaker" href$="[[speakerUrl(speaker.id)]]">
-              <div relative>
+            <div class="speaker">
+              <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
                 <lazy-image
                   class="photo"
                   src="[[speaker.photoUrl]]"
                   alt="[[speaker.name]]"
                 ></lazy-image>
-                <div class="badges" layout horizontal>
-                  <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-                    <a
-                      class$="badge [[badge.name]]-b"
-                      href$="[[badge.link]]"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title$="[[badge.description]]"
-                      layout
-                      horizontal
-                      center-center
-                    >
-                      <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
-                    </a>
-                  </template>
+                <lazy-image
+                  class="company-logo"
+                  src="[[speaker.companyLogoUrl]]"
+                  alt="[[speaker.company]]"
+                ></lazy-image>
+
+                <div class="description">
+                  <text-truncate lines="1">
+                    <h3 class="name">[[speaker.name]]</h3>
+                  </text-truncate>
+                  <text-truncate lines="1">
+                    <div class="origin">[[speaker.country]]</div>
+                  </text-truncate>
                 </div>
+              </a>
+              <div class="badges" layout horizontal>
+                <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
+                  <a
+                    class$="badge [[badge.name]]-b"
+                    href$="[[badge.link]]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title$="[[badge.description]]"
+                    aria-label="[[badge.description]]"
+                    layout
+                    horizontal
+                    center-center
+                  >
+                    <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
+                  </a>
+                </template>
               </div>
-
-              <lazy-image
-                class="company-logo"
-                src="[[speaker.companyLogoUrl]]"
-                alt="[[speaker.company]]"
-              ></lazy-image>
-
-              <div class="description">
-                <text-truncate lines="1">
-                  <h3 class="name">[[speaker.name]]</h3>
-                </text-truncate>
-                <text-truncate lines="1">
-                  <div class="origin">[[speaker.country]]</div>
-                </text-truncate>
-              </div>
-            </a>
+            </div>
           </template>
         </div>
+
+        <p class="status-message" role="status" hidden$="[[!pending]]">
+          Loading the speaker lineup…
+        </p>
+        <p class="status-message" role="status" hidden$="[[!empty]]">
+          Speaker profiles will appear here as the programme is confirmed.
+        </p>
 
         <a href="[[speakersBlock.callToAction.link]]">
           <md-outlined-button class="cta-button animated icon-right">
@@ -291,6 +317,21 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
     } else {
       return [];
     }
+  }
+
+  @computed('speakers')
+  get hasSpeakers() {
+    return this.speakers instanceof Success && this.speakers.data.length > 0;
+  }
+
+  @computed('speakers')
+  get pending() {
+    return this.speakers instanceof Pending;
+  }
+
+  @computed('speakers')
+  get empty() {
+    return this.speakers instanceof Success && this.speakers.data.length === 0;
   }
 
   speakerUrl(id: string) {

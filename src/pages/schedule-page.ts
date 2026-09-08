@@ -72,7 +72,7 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         background-color="[[heroSettings.background.color]]"
         font-color="[[heroSettings.fontColor]]"
       >
-        <div class="hero-title">[[heroSettings.title]]</div>
+        <h1 class="hero-title">[[heroSettings.title]]</h1>
         <p class="hero-description">[[heroSettings.description]]</p>
         <sticky-element slot="bottom">
           <header-bottom-toolbar location="[[location]]"></header-bottom-toolbar>

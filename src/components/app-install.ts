@@ -10,7 +10,14 @@ export class AppInstall extends ThemedElement {
       ...super.styles,
       css`
         .bottom-drawer-link {
+          display: block;
+          width: 100%;
           padding: 16px 24px;
+          border: none;
+          background: transparent;
+          color: inherit;
+          font: inherit;
+          text-align: left;
           cursor: pointer;
         }
       `,
@@ -30,9 +37,14 @@ export class AppInstall extends ThemedElement {
 
   override render() {
     return html`
-      <a class="bottom-drawer-link" @click="${this.prompt}" ?hidden=${!this.deferredPrompt}>
+      <button
+        type="button"
+        class="bottom-drawer-link"
+        @click="${this.prompt}"
+        ?hidden=${!this.deferredPrompt}
+      >
         ${addToHomeScreen.cta}
-      </a>
+      </button>
     `;
   }
 

@@ -18,6 +18,7 @@ export const theme = css`
     --terminal-blue: #4c8df7;
     --terminal-yellow: #fbd776;
     --terminal-red: #ff7b72;
+    --brand-off-white: #f0f0f0;
     --terminal-code: 'SFMono-Regular', 'Roboto Mono', 'Cascadia Code', monospace;
     --google-blue-strong: #1967d2;
     --google-green-strong: #137333;

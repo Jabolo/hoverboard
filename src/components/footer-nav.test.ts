@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { screen, within } from '@testing-library/dom';
 import { html } from 'lit';
 import { fixture } from '../../__tests__/helpers/fixtures';
-import { codeOfConduct, organizer } from '../utils/data';
+import { codeOfConduct } from '../utils/data';
 import './footer-nav';
 
 describe('footer-nav', () => {
@@ -15,12 +15,12 @@ describe('footer-nav', () => {
       html`<footer-nav data-testid="footer"></footer-nav>`,
     );
     const withinShadowRoot = within(shadowRootForWithin);
-    const logo = withinShadowRoot.getByAltText(organizer.name);
+    const logo = withinShadowRoot.getByAltText('DevFest 2026');
     const hoverboardLink = withinShadowRoot.getByText('Project Hoverboard');
 
     expect(screen.getByTestId('footer')).toBeInTheDocument();
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('src', '../../images/logos/gdg-warsaw-white.svg');
+    expect(logo).toHaveAttribute('src', '/images/logos/devfest-2026-wordmark-dark.svg');
     expect(hoverboardLink).toBeInTheDocument();
     expect(hoverboardLink).toHaveAttribute('href', 'https://github.com/gdg-x/hoverboard');
     expect(hoverboardLink).toHaveAttribute('target', '_blank');

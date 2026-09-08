@@ -69,7 +69,7 @@ export class PostPage extends ReduxMixin(PolymerElement) {
         background-color="[[post.data.primaryColor]]"
         font-color="#fff"
       >
-        <div class="hero-title">[[post.data.title]]</div>
+        <h1 class="hero-title">[[post.data.title]]</h1>
       </hero-block>
 
       <div class="container-narrow">
@@ -105,7 +105,12 @@ export class PostPage extends ReduxMixin(PolymerElement) {
   private async onPost(post: RemoteData<Error, Post>) {
     if (post instanceof Success && post.data.source) {
       try {
-        this.postContent = await fetch(post.data.source).then((response) => response.text());
+        this.postContent = await fetch(post.data.source).then((response) => {
+          if (!response.ok) {
+            throw new Error(`Unable to load post content (${response.status})`);
+          }
+          return response.text();
+        });
       } catch (error) {
         this.post = new Failure(error as Error);
       }

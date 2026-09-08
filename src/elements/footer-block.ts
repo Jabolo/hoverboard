@@ -60,7 +60,12 @@ export class FooterBlock extends PolymerElement {
 
       <div class="container">
         <div class="fab">
-          <paper-fab class="back-to-top" icon="hoverboard:up" on-click="backToTop"></paper-fab>
+          <paper-fab
+            class="back-to-top"
+            icon="hoverboard:up"
+            aria-label="Back to top"
+            on-click="backToTop"
+          ></paper-fab>
         </div>
         <footer-social layout flex flex-auto horizontal wrap></footer-social>
         <footer-rel></footer-rel>

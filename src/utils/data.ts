@@ -11,6 +11,7 @@ export {
   coc,
   codeOfConduct,
   dates,
+  eventDate,
   description,
   emailUs,
   eveneaEmbed,

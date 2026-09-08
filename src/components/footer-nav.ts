@@ -10,19 +10,16 @@ export class FooterNav extends ThemedElement {
       ...super.styles,
       css`
         :host {
+          display: block;
           margin: 0 20px;
         }
 
-        .copyright {
-          padding: 15px 0 0;
-          float: left;
-        }
-
-        .coc {
-          display: block;
-        }
-
         .nav-inline {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 16px;
           list-style: none;
           margin: 0;
           padding: 0;
@@ -30,11 +27,21 @@ export class FooterNav extends ThemedElement {
 
         .footer-logo {
           display: block;
-          width: 120px;
-          height: 54px;
+          width: 200px;
+          height: auto;
           object-fit: contain;
-          margin: 10px 30px 0 0;
-          float: left;
+          margin: 0;
+          padding: 0;
+        }
+
+        .copyright {
+          padding: 0;
+          margin: 0;
+          text-align: left;
+        }
+
+        .coc {
+          display: inline-flex;
         }
 
         a {
@@ -55,14 +62,7 @@ export class FooterNav extends ThemedElement {
 
         @media (min-width: 505px) {
           .copyright {
-            margin: 0;
-            padding: 15px 0 0 0;
-            float: right;
             text-align: right;
-          }
-
-          .coc {
-            display: inline-flex;
           }
         }
       `,
@@ -71,12 +71,12 @@ export class FooterNav extends ThemedElement {
 
   override render() {
     return html`
-      <div class="nav-inline" layout flex>
-        <a href="${this.organizer.url}" target="_blank" rel="noopener noreferrer">
+      <div class="nav-inline">
+        <a href="/" title="GDG DevFest Warsaw 2026">
           <img
             class="footer-logo"
-            src="../../images/logos/gdg-warsaw-white.svg"
-            alt="${this.organizer.name}"
+            src="/images/logos/devfest-2026-wordmark-dark.svg"
+            alt="DevFest 2026"
           />
         </a>
 

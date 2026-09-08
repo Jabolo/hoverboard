@@ -94,7 +94,7 @@ const ROUTES: Route[] = [
     redirect: '/schedule',
   },
   {
-    path: 'sessions/:id',
+    path: '/sessions/:id',
     component: 'session-page',
     action: async () => {
       await import('./pages/session-page.js');

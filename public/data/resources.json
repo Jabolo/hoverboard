@@ -4,6 +4,7 @@
   "image": "images/backgrounds/home-2026.png",
   "keywords": "GDG, DevFest, Warsaw, developers, technology, community, conference",
   "dates": "November 21, 2026",
+  "eventDate": "November 21",
   "partnershipProposition": "",
   "share": "Share",
   "followOur": "Follow our",
@@ -138,7 +139,7 @@
     "title": "Build, learn, connect.",
     "callToAction": {
       "featuredSessions": {
-        "description": "GDG DevFest Warsaw 2026 brings together developers, designers, engineers, researchers, students, and technology enthusiasts for one day of practical learning and meaningful connections.",
+        "description": "GDG DevFest Warsaw brings together developers, designers, engineers, researchers, students, and technology enthusiasts for one day of practical learning and meaningful connections.",
         "label": "View schedule updates",
         "link": "/#schedule"
       },
@@ -241,7 +242,7 @@
     "emailAddress": "Email address",
     "firstName": "First name",
     "lastName": "Last name",
-    "formTitle": "Get DevFest Warsaw 2026 updates in your inbox.",
+    "formTitle": "Get DevFest Warsaw updates in your inbox.",
     "emailRequired": "Please enter a valid email address.",
     "fieldRequired": "This field is required.",
     "subscribe": "Subscribe",
@@ -251,7 +252,7 @@
     "toast": "Successfully subscribed."
   },
   "team": {
-    "description": "[GDG Warsaw](https://gdg.community.dev/gdg-warszawa/) is an open, volunteer-led community that creates space for people to learn, share experience, and connect around technology. The DevFest Warsaw team is building the 2026 event with the community, partners, and volunteers."
+    "description": "[GDG Warsaw](https://gdg.community.dev/gdg-warszawa/) is an open, volunteer-led community that creates space for people to learn, share experience, and connect around technology. The DevFest Warsaw team is building this event with the community, partners, and volunteers."
   },
   "schedule": {
     "saveSessionsSignedOut": "Sign in to save sessions"
@@ -315,7 +316,7 @@
     "blocks": [
       {
         "title": "Organizer",
-        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) (GDG Warsaw) brings DevFest Warsaw 2026 to the community with volunteers and partners.",
+        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) (GDG Warsaw) brings DevFest Warsaw to the community with volunteers and partners.",
         "callToAction": {
           "label": "Meet the team",
           "link": "/team",

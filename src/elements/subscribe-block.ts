@@ -23,9 +23,27 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
         :host {
           display: flex;
           width: 100%;
-          background: var(--default-primary-color);
-          color: #fff;
+          position: relative;
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--terminal-panel-raised);
+          color: var(--terminal-copy);
           padding: 16px 0;
+        }
+
+        :host::before {
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          height: 4px;
+          background: linear-gradient(
+            90deg,
+            var(--google-blue) 0 25%,
+            var(--google-green) 25% 50%,
+            var(--google-yellow) 50% 75%,
+            var(--google-red) 75%
+          );
+          content: '';
         }
 
         .description {
@@ -35,14 +53,14 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
         }
 
         md-text-button {
-          color: #fff;
-          --md-text-button-label-text-color: #fff;
-          --md-text-button-hover-label-text-color: #fff;
+          color: var(--terminal-green);
+          --md-text-button-label-text-color: var(--terminal-green);
+          --md-text-button-hover-label-text-color: var(--terminal-copy);
         }
 
         md-text-button[disabled] {
-          background: var(--default-primary-color);
-          color: #fff;
+          background: var(--terminal-panel-raised);
+          color: var(--terminal-green);
         }
 
         @media (min-width: 640px) {

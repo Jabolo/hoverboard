@@ -41,9 +41,17 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         .empty-state {
           margin: 0;
           padding: 40px 32px;
+          border: 1px solid var(--terminal-line);
+          border-radius: var(--border-radius);
           color: var(--secondary-text-color);
           background: var(--secondary-background-color);
           text-align: center;
+        }
+
+        .container.empty-state-container {
+          max-width: 760px;
+          margin: 32px auto;
+          grid-template-columns: minmax(0, 1fr);
         }
 
         .speaker:hover .photo {
@@ -180,7 +188,7 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
         items-count="[[contentLoaders.itemsCount]]"
         hidden$="[[contentLoaderVisibility]]"
       ></content-loader>
-      <div class="container">
+      <div class="container" hidden$="[[empty]]">
         <template is="dom-repeat" items="[[previousSpeakers.data]]" as="speaker">
           <a class="speaker" href$="[[previousSpeakerUrl(speaker.id)]]" layout horizontal>
             <lazy-image
@@ -193,7 +201,13 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
               <h2 class="name">[[speaker.name]]</h2>
               <div class="origin">[[speaker.country]]</div>
 
-              <img class="company-logo" src$="[[speaker.companyLogo]]" />
+              <template is="dom-if" if="[[speaker.companyLogo]]">
+                <img
+                  class="company-logo"
+                  src$="[[speaker.companyLogo]]"
+                  alt="[[speaker.company]]"
+                />
+              </template>
 
               <div class="sessions">
                 <h5>[[previousYears]]:</h5>
@@ -202,13 +216,15 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
             </div>
           </a>
         </template>
+      </div>
 
-        <template is="dom-if" if="[[empty]]">
-          <p class="empty-state">
+      <template is="dom-if" if="[[empty]]">
+        <div class="container empty-state-container">
+          <p class="empty-state" role="status">
             The previous speaker archive is being prepared and will appear here when available.
           </p>
-        </template>
-      </div>
+        </div>
+      </template>
 
       <footer-block></footer-block>
     `;

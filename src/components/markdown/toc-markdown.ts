@@ -1,5 +1,5 @@
 import { css, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, state } from 'lit/decorators.js';
 import { scrollToElement } from '../../utils/scrolling';
 import { Markdown } from './base';
 
@@ -20,16 +20,97 @@ export class TocMarkdown extends Markdown {
         }
 
         .content-wrapper {
-          background-color: var(--secondary-background-color);
+          position: relative;
+          border-top: 1px solid var(--terminal-line);
+          border-bottom: 1px solid var(--terminal-line);
+          background-color: var(--terminal-panel);
           width: 100%;
           overflow: hidden;
         }
 
+        .content-wrapper::before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background: linear-gradient(
+            to right,
+            var(--google-blue) 0 25%,
+            var(--google-green) 25% 50%,
+            var(--google-yellow) 50% 75%,
+            var(--google-red) 75% 100%
+          );
+          content: '';
+        }
+
+        .toc-details {
+          width: 100%;
+        }
+
+        .toc-summary {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          cursor: pointer;
+          list-style: none;
+          padding: 18px 16px;
+        }
+
+        .toc-summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .toc-label {
+          margin: 0;
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .toc-toggle-hint {
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          text-transform: uppercase;
+          border: 1px solid var(--terminal-line);
+          padding: 4px 8px;
+          border-radius: 4px;
+        }
+
+        .content {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+          gap: 12px;
+          padding: 0 16px 28px;
+        }
+
         .col {
-          font-size: 20px;
-          line-height: 1.35;
-          margin-bottom: 16px;
+          min-width: 0;
+          margin: 0;
+          padding: 14px 16px;
+          border: 1px solid var(--terminal-line);
+          border-radius: var(--border-radius);
+          background: var(--terminal-panel-raised);
+          box-shadow: inset 0 2px 0 var(--google-blue);
+          font-size: 14px;
+          line-height: 1.4;
           z-index: 2;
+        }
+
+        .col:nth-child(4n + 2) {
+          box-shadow: inset 0 2px 0 var(--google-green);
+        }
+
+        .col:nth-child(4n + 3) {
+          box-shadow: inset 0 2px 0 var(--google-yellow);
+        }
+
+        .col:nth-child(4n + 4) {
+          box-shadow: inset 0 2px 0 var(--google-red);
         }
 
         .col-heading {
@@ -47,60 +128,42 @@ export class TocMarkdown extends Markdown {
         }
 
         .col-content {
-          line-height: 32px;
+          margin-top: 8px;
+          color: var(--terminal-muted);
+          line-height: 1.5;
           display: block;
-          font-size: 16px;
-        }
-
-        h2 {
-          line-height: 2;
+          font-size: 13px;
         }
 
         @media (min-width: 640px) {
+          .toc-summary {
+            cursor: default;
+            pointer-events: none;
+            padding: 28px 18px 12px;
+          }
+
+          .toc-toggle-hint {
+            display: none;
+          }
+
           .content,
           .markdown-text,
           .markdown-wrapper {
             padding: 0 18px;
           }
 
+          .toc-label {
+            padding-right: 18px;
+            padding-left: 18px;
+          }
+
+          .content {
+            gap: 14px;
+            padding-bottom: 32px;
+          }
+
           .col {
-            font-size: 32px;
-            line-height: 48px;
-            margin-right: 24px;
-          }
-
-          .col:last-of-type {
-            margin-right: 0;
-          }
-
-          h2 {
-            font-size: 40px;
-            width: 40%;
-            margin-bottom: 0;
-            display: inline-block;
-            transform: translateY(85%);
-            vertical-align: bottom;
-            line-height: 1;
-          }
-
-          h3 {
-            line-height: 1.5;
-          }
-
-          h3,
-          h4,
-          p,
-          ol,
-          ul {
-            margin-left: 40%;
-          }
-
-          h3::after {
-            display: none;
-          }
-
-          h3:hover::after {
-            display: inline-block;
+            padding: 16px;
           }
         }
 
@@ -157,25 +220,46 @@ export class TocMarkdown extends Markdown {
   }
 
   private get renderToc() {
+    const topicCount = Object.keys(this.headerIds).length;
     return html`
-      <div class="content-wrapper">
+      <nav class="content-wrapper" aria-label="On this page">
         <div class="container">
-          <div class="content" layout justified horizontal wrap>
-            ${Object.keys(this.headerIds).map((headerId) =>
-              this.renderHeader(headerId, this.headerIds[headerId]!),
-            )}
-          </div>
+          <details class="toc-details" ?open="${this.isDesktop}">
+            <summary class="toc-summary">
+              <span class="toc-label">// on this page (${topicCount} topics)</span>
+              <span class="toc-toggle-hint">tap to toggle</span>
+            </summary>
+            <div class="content">
+              ${Object.keys(this.headerIds).map((headerId) =>
+                this.renderHeader(headerId, this.headerIds[headerId]!),
+              )}
+            </div>
+          </details>
         </div>
-      </div>
+      </nav>
     `;
   }
 
+  @state()
+  private isDesktop = typeof window !== 'undefined' ? window.innerWidth >= 640 : true;
+
+  private handleResize = () => {
+    this.isDesktop = window.innerWidth >= 640;
+  };
+
   override connectedCallback() {
     super.connectedCallback();
+    this.isDesktop = window.innerWidth >= 640;
+    window.addEventListener('resize', this.handleResize);
     const [, id] = window.location.hash.split('#');
     if (id) {
       this.updateComplete.then(() => this.scrollToId(id));
     }
+  }
+
+  override disconnectedCallback() {
+    window.removeEventListener('resize', this.handleResize);
+    super.disconnectedCallback();
   }
 
   private get headers() {

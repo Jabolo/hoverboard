@@ -64,7 +64,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           padding: 12px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
-          background: #fff;
+          background: var(--brand-off-white);
           transition:
             border-color var(--animation),
             transform var(--animation);
@@ -86,6 +86,18 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         .cta-button {
           margin-top: 24px;
           color: var(--default-primary-color);
+        }
+
+        .empty-state {
+          margin: 24px 0;
+          padding: 18px 20px;
+          border: 1px solid var(--terminal-line);
+          border-radius: var(--border-radius);
+          background: var(--terminal-panel);
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 14px;
+          line-height: 1.5;
         }
 
         @media (min-width: 640px) {
@@ -135,6 +147,10 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           </div>
         </template>
 
+        <p class="empty-state" role="status" hidden$="[[!empty]]">
+          Partner announcements will appear here as commitments are confirmed.
+        </p>
+
         <md-text-button class="cta-button animated icon-right" on-click="addPotentialPartner">
           <span>[[partnersBlock.button]]</span>
           <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
@@ -159,6 +175,11 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
   @computed('partners')
   get failure() {
     return this.partners instanceof Failure;
+  }
+
+  @computed('partners')
+  get empty() {
+    return this.partners instanceof Success && this.partners.data.length === 0;
   }
 
   override stateChanged(state: RootState) {

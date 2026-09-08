@@ -103,6 +103,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
         }
 
         .name {
+          margin: 0;
           padding-left: 6px;
           color: var(--terminal-copy, var(--primary-text-color));
           font-family: var(--font-mono, monospace);
@@ -181,7 +182,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
         </template>
 
         <template is="dom-repeat" items="[[teamsMembers.data]]" as="team">
-          <div class="team-title">[[team.title]]</div>
+          <h2 class="team-title">[[team.title]]</h2>
 
           <div class="team-block">
             <template is="dom-repeat" items="[[team.members]]" as="member">
@@ -193,7 +194,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                 ></lazy-image>
 
                 <div class="member-details" layout vertical center-justified start>
-                  <h2 class="name">[[member.name]]</h2>
+                  <h3 class="name">[[member.name]]</h3>
                   <div class="activity">[[member.title]]</div>
                   <div class="contacts">
                     <template is="dom-repeat" items="[[member.socials]]" as="social">

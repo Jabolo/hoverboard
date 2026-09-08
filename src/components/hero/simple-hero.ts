@@ -62,7 +62,7 @@ export class SimpleHero extends ThemedElement {
 
   private renderTitle() {
     if (hasTitle(heroSettings[this.page])) {
-      return html`<div class="hero-title">${(heroSettings[this.page] as Title).title}</div>`;
+      return html`<h1 class="hero-title">${(heroSettings[this.page] as Title).title}</h1>`;
     } else {
       return nothing;
     }

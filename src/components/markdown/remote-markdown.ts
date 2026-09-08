@@ -38,7 +38,12 @@ export class RemoteMarkDown extends ThemedElement {
       if (this.path === '') {
         throw new Error('Invalid path');
       }
-      const content = await fetch(this.path).then((response) => response.text());
+      const content = await fetch(this.path).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Unable to load content (${response.status})`);
+        }
+        return response.text();
+      });
       this.state = new Success(content);
     } catch (error) {
       this.state = new Failure(error as Error);

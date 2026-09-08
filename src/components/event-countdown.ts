@@ -162,7 +162,7 @@ export class EventCountdown extends LitElement {
     const accessibleLabel = `${this.values.days} days, ${this.values.hours} hours, ${this.values.minutes} minutes, and ${this.values.seconds} seconds until ${title}`;
 
     return html`
-      <p class="countdown-kicker" id="countdown-title">Countdown to ${title}</p>
+      <p class="countdown-kicker" id="countdown-title">Countdown to next event</p>
       <div
         class="timer"
         role="timer"

@@ -172,8 +172,7 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
 
       <template is="dom-if" if="[[showEmptyState]]">
         <p class="empty-state">
-          News and event updates will be published here as the DevFest Warsaw 2026 programme
-          develops.
+          News and event updates will be published here as the programme develops.
         </p>
       </template>
 

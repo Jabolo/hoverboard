@@ -27,7 +27,7 @@ import { openVideoDialog } from '../store/ui/actions';
 import {
   aboutBlock,
   buyTicket,
-  dates,
+  eventDate,
   description,
   eveneaEmbed,
   heroSettings,
@@ -84,39 +84,50 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           min-width: 0;
         }
 
-        .hero-logo {
+        .brand-lockup {
+          width: min(100%, 560px);
+          margin: 0;
+          padding: 0;
+          background: transparent;
+        }
+
+        .devfest-lockup {
           display: block;
           width: 100%;
           height: auto;
-          max-width: 240px;
-          max-height: 76px;
-          object-fit: contain;
         }
 
-        .community-logo {
-          display: block;
-          width: min(250px, 100%);
-          height: auto;
-          object-fit: contain;
-          margin-bottom: 20px;
+        .event-details {
+          display: grid;
+          gap: 8px;
+          margin: 30px 0 0;
+          text-align: left;
         }
 
-        .info-items {
-          margin: 24px auto;
-          color: var(--terminal-copy);
-          font-family: var(--font-mono);
-          font-size: 22px;
-          line-height: 1.35;
-        }
-
-        .info-item:first-child {
+        .event-date {
           color: var(--terminal-green);
+          font-family: var(--font-mono);
+          font-size: clamp(20px, 3vw, 28px);
           font-weight: 800;
           letter-spacing: 0.02em;
         }
 
-        .info-items > *:not(:first-of-type) {
-          margin-top: 4px;
+        .event-location {
+          color: var(--terminal-muted);
+          font-family: var(--font-mono);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .event-description {
+          max-width: 38ch;
+          margin: 4px 0 0;
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
+          font-size: 18px;
+          line-height: 1.45;
         }
 
         .action-buttons {
@@ -360,18 +371,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             height: calc(100vh + 65px);
           }
 
-          .hero-logo {
-            max-width: 320px;
-          }
-
-          .info-items {
-            margin: 48px auto;
-            font-size: 28px;
-            line-height: 1.1;
-          }
-
           .home-grid {
-            grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.8fr);
+            grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
             gap: clamp(28px, 5vw, 72px);
             text-align: left;
           }
@@ -379,11 +380,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           .home-intro {
             align-items: flex-start;
             text-align: left;
-          }
-
-          .info-items {
-            margin-right: 0;
-            margin-left: 0;
           }
 
           .terminal-column {
@@ -403,17 +399,19 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <h1 class="sr-only">[[siteTitle]]</h1>
           <div class="home-grid">
             <div class="home-intro" layout vertical center>
-              <div class="hero-command">&gt; devfest.init --2026</div>
-              <img
-                class="community-logo"
-                src="/images/logos/gdg-warsaw-white.svg"
-                alt="Google Developer Groups Warszawa"
-              />
-              <img class="hero-logo" src="/images/logo.svg" alt="[[siteTitle]]" />
+              <div class="hero-command">&gt; devfest.init</div>
+              <div class="brand-lockup">
+                <img
+                  class="devfest-lockup"
+                  src="/images/logos/devfest-2026-wordmark-dark.svg"
+                  alt="DevFest 2026"
+                />
+              </div>
 
-              <div class="info-items">
-                <div class="info-item">[[dates]]</div>
-                <div class="info-item">[[heroSettings.description]]</div>
+              <div class="event-details">
+                <div class="event-date">[[eventDate]]</div>
+                <div class="event-location">Google for Startups Campus / Warsaw</div>
+                <p class="event-description">[[heroSettings.description]]</p>
               </div>
 
               <event-countdown></event-countdown>
@@ -442,15 +440,12 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   <div class="terminal-line">
                     <span></span
                     ><span
-                      ><span class="key">status:</span>
-                      <span class="green">preview_ready</span></span
+                      ><span class="key">status:</span> <span class="green">scheduled</span></span
                     >
                   </div>
                   <div class="terminal-line">
                     <span></span
-                    ><span
-                      ><span class="key">date:</span> <span class="blue">2026-11-21</span></span
-                    >
+                    ><span><span class="key">date:</span> <span class="blue">Nov 21</span></span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">format:</span> one_day / in_person</span>
@@ -548,11 +543,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         <fork-me-block></fork-me-block>
       </template>
       <about-block></about-block>
-      <schedule-block></schedule-block>
-      <speakers-block></speakers-block>
       <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
       <tickets-block id="registration"></tickets-block>
+      <schedule-block></schedule-block>
+      <speakers-block></speakers-block>
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
       <visit-block></visit-block>
@@ -562,7 +557,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private siteTitle = title;
-  private dates = dates;
+  private eventDate = eventDate;
   private viewHighlights = viewHighlights;
   private buyTicket = buyTicket;
   private heroSettings = heroSettings.home;

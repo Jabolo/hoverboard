@@ -198,12 +198,16 @@ export class HoverboardApp extends PolymerElement {
         }
       </style>
 
-      <a class="skip-link" href="#main-content">Skip to main content</a>
+      <a class="skip-link" href="#main-content" on-click="handleSkipToContent">Skip to main content</a>
 
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
         <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>
           <app-toolbar layout vertical start>
-            <img class="toolbar-logo" src="/images/logos/gdg-warsaw-white.svg" alt="GDG Warsaw" />
+            <img
+              class="toolbar-logo"
+              src="/images/logos/devfest-2026-wordmark-dark.svg"
+              alt="DevFest 2026"
+            />
             <h2 class="dates">[[dates]]</h2>
             <h3 class="location">[[shortLocation]]</h3>
           </app-toolbar>
@@ -215,6 +219,7 @@ export class HoverboardApp extends PolymerElement {
               attr-for-selected="path"
               selected-class="selected"
               role="navigation"
+              aria-label="Primary navigation"
             >
               <template is="dom-repeat" items="[[navigation]]" as="nav">
                 <a href="[[nav.permalink]]" path="[[nav.route]]" on-click="closeDrawer">
@@ -328,17 +333,29 @@ export class HoverboardApp extends PolymerElement {
     this.drawerOpened = e.detail.value;
   }
 
+  private handleSkipToContent(e: Event) {
+    e.preventDefault();
+    if (this.main) {
+      this.main.setAttribute('tabindex', '-1');
+      this.main.focus();
+      this.main.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   private scrollToRegistration(e: Event) {
     const homePage = this.main.querySelector('home-page') as HTMLElement | null;
     const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration');
 
+    this.closeDrawer();
+
     if (!ticketsBlock) {
-      this.closeDrawer();
+      if (window.location.pathname !== '/' || window.location.hash !== '#registration') {
+        window.location.href = '/#registration';
+      }
       return;
     }
 
     e.preventDefault();
-    this.closeDrawer();
     scrollToElement(ticketsBlock);
   }
 

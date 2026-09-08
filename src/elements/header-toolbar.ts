@@ -213,7 +213,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         <div layout horizontal center flex>
           <a class="toolbar-brand" href="/" title="[[logoTitle]]">
             <img class="toolbar-logo" src="/images/logos/gdg.svg" alt="Google Developer Groups" />
-            <span class="toolbar-title">GDG DevFest Warsaw 2026</span>
+            <span class="toolbar-title">GDG Warsaw</span>
           </a>
         </div>
 
@@ -226,7 +226,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           noink
         >
           <template is="dom-repeat" items="[[navigation]]" as="nav">
-            <paper-tab name="[[nav.route]]" class="nav-item" link>
+            <paper-tab name="[[nav.route]]" class="nav-item" link tabindex="-1">
               <a href="[[nav.permalink]]" layout vertical center-center>[[nav.label]]</a>
             </paper-tab>
           </template>
@@ -240,9 +240,14 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             [[signInText]]
           </paper-tab>
 
-          <a href$="[[registrationUrl]]" on-click="requestRegistration" hidden$="[[!ticketUrl]]">
-            <md-filled-button class="buy-button">[[registrationActionLabel]]</md-filled-button>
-          </a>
+          <md-filled-button
+            class="buy-button"
+            href$="[[registrationUrl]]"
+            on-click="requestRegistration"
+            hidden$="[[!ticketUrl]]"
+          >
+            [[registrationActionLabel]]
+          </md-filled-button>
         </paper-tabs>
 
         <notification-toggle hidden$="[[!hasAttendeeAgenda]]"></notification-toggle>

@@ -48,12 +48,21 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         .empty-state {
           margin: 0;
           padding: 40px 32px;
+          border: 1px solid var(--terminal-line);
+          border-radius: var(--border-radius);
           color: var(--secondary-text-color);
           background: var(--secondary-background-color);
           text-align: center;
         }
 
+        .container.empty-state-container {
+          max-width: 760px;
+          margin: 32px auto;
+          grid-template-columns: minmax(0, 1fr);
+        }
+
         .speaker {
+          position: relative;
           padding: 32px 24px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
@@ -63,6 +72,12 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
             border-color var(--animation),
             box-shadow var(--animation),
             transform var(--animation);
+        }
+
+        .speaker-link {
+          display: block;
+          color: inherit;
+          text-decoration: none;
         }
 
         .speaker:hover {
@@ -87,7 +102,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
         .badges {
           position: absolute;
-          top: 0;
+          top: 32px;
           left: calc(50% + 32px);
         }
 
@@ -226,46 +241,47 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         hidden$="[[contentLoaderVisibility]]"
       ></content-loader>
 
-      <div class="container">
+      <div class="container" hidden$="[[showEmptyState]]">
         <template is="dom-repeat" items="[[speakersToRender]]" as="speaker">
-          <a class="speaker card" href$="[[speakerUrl(speaker.id)]]">
-            <div relative>
+          <div class="speaker card">
+            <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
               <lazy-image
                 class="photo"
                 src="[[speaker.photoUrl]]"
                 alt="[[speaker.name]]"
               ></lazy-image>
-              <div class="badges" layout horizontal>
-                <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-                  <a
-                    class$="badge [[badge.name]]-b"
-                    href$="[[badge.link]]"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title$="[[badge.description]]"
-                    layout
-                    horizontal
-                    center-center
-                  >
-                    <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
-                  </a>
-                </template>
+              <lazy-image
+                class="company-logo"
+                src="[[speaker.companyLogoUrl]]"
+                alt="[[speaker.company]]"
+              ></lazy-image>
+
+              <div class="description">
+                <h2 class="name">[[speaker.name]]</h2>
+                <div class="origin">[[speaker.country]]</div>
+
+                <text-truncate lines="5">
+                  <div class="bio">[[speaker.bio]]</div>
+                </text-truncate>
               </div>
-            </div>
+            </a>
 
-            <lazy-image
-              class="company-logo"
-              src="[[speaker.companyLogoUrl]]"
-              alt="[[speaker.company]]"
-            ></lazy-image>
-
-            <div class="description">
-              <h2 class="name">[[speaker.name]]</h2>
-              <div class="origin">[[speaker.country]]</div>
-
-              <text-truncate lines="5">
-                <div class="bio">[[speaker.bio]]</div>
-              </text-truncate>
+            <div class="badges" layout horizontal>
+              <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
+                <a
+                  class$="badge [[badge.name]]-b"
+                  href$="[[badge.link]]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title$="[[badge.description]]"
+                  aria-label="[[badge.description]]"
+                  layout
+                  horizontal
+                  center-center
+                >
+                  <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
+                </a>
+              </template>
             </div>
 
             <div class="contacts">
@@ -279,12 +295,12 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 </a>
               </template>
             </div>
-          </a>
+          </div>
         </template>
       </div>
 
       <template is="dom-if" if="[[showEmptyState]]">
-        <div class="container">
+        <div class="container empty-state-container">
           <p class="empty-state">
             Speaker profiles and sessions will appear here as they are confirmed. Subscribe for
             programme updates.

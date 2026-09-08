@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="160" viewBox="0 0 180 160" role="img" aria-labelledby="title desc">
+  <title id="title">DevFest mark</title>
+  <desc id="desc">The four-colour DevFest mark.</desc>
+
+  <g transform="translate(4 4) scale(.46)" stroke="#1e1e1e" stroke-width="7" stroke-linejoin="round">
+    <rect x="182.384" y="131.818" width="157.6" height="52.2617" rx="26.1308" transform="rotate(-30 182.384 131.818)" fill="#f9ab00" />
+    <rect x="0" y="78.7997" width="157.6" height="52.2617" rx="26.1308" transform="rotate(-30 0 78.7997)" fill="#ea4335" />
+    <rect x="208.515" y="0" width="157.6" height="52.2617" rx="26.1308" transform="rotate(30 208.515 0)" fill="#34a853" />
+    <rect x="26.1467" y="53.0597" width="157.6" height="52.2617" rx="26.1308" transform="rotate(30 26.1467 53.0597)" fill="#4285f4" />
+  </g>
+</svg>
