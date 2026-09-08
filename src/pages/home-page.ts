@@ -447,7 +447,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span></span><span><span class="key">theme:</span> real_work / real_lessons</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">stages:</span> 3 (auditorium / cafe / classroom)</span>
+                    <span></span><span><span class="key">stages:</span> 3 (auditorium ~200 ppl, cafe ~50 ppl, classroom ~40 ppl)</span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">capacity:</span> 300_attendees</span>

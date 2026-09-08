@@ -460,7 +460,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             <div class="impact-text">
               <div class="impact-title">100% Non-Profit Community Event — Organized by Volunteers</div>
               <div class="impact-desc">
-                DevFest Warsaw is run by the community, for the community. All organizers and speakers donate their time pro bono, and Google generously hosts us at Campus Warsaw. Supporter and Patron tickets directly fund speaker travel & hospitality, full-day attendee catering & specialty coffee, and custom community swag.
+                DevFest Warsaw is run by the community, for the community. All organizers and speakers donate their time pro bono, and Google generously hosts us at Campus Warsaw. Supporter and Patron tickets directly fund full-day attendee catering & specialty coffee, custom community swag, and conference operations.
                 <span class="patron-promise">⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name recognition on our opening keynote intro slide!</span>
               </div>
             </div>

@@ -36,11 +36,11 @@ The programme and speaker lineup will be added as they are confirmed. Subscribe 
 
 ## How can I speak at DevFest Warsaw?
 
-The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages (Auditorium, Cafe, and Classroom). Both first-time and experienced speakers from anywhere in the community are welcome!
+The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl). Both first-time and experienced speakers from anywhere in the community are welcome!
 
 ## How can my company support the event?
 
-You can purchase a **Patron Ticket (500 zł)** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
+You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
 
 ## Where can I ask another question?
 

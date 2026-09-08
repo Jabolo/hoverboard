@@ -20,7 +20,7 @@
     "description": "Got something real to share? We’re not looking for a corporate pitch, a reheated slide deck, or a generic “AI is changing everything” talk. Bring the project that taught you a hard lesson, the experiment that surprised you, the debugging story that changed your approach, or the side project you cannot stop thinking about. First-time and experienced speakers welcome!",
     "openTo": "All experience levels — first-time & veteran speakers welcome",
     "formats": "15m fire talks, 30m standard sessions & 1h workshops",
-    "platform": "Auditorium (200), Cafe (50) & Classroom (40) stages",
+    "platform": "Auditorium (~200 ppl), Cafe (~50 ppl) & Classroom (~40 ppl) stages",
     "deadline": "October 4, 2026, 11:45 PM GMT+02:00",
     "participation": "In-person",
     "languages": "English & Polish",
@@ -46,7 +46,7 @@
   "scheduleBlock": {
     "title": "Schedule",
     "kicker": "> schedule --in-preparation",
-    "intro": "A single jam-packed day across three stages: Auditorium (max 200), Cafe (around 50), and Classroom (around 40).",
+    "intro": "A single jam-packed day across three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl).",
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",
     "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
