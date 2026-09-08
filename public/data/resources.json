@@ -28,6 +28,53 @@
     "link": "https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0",
     "note": "AI is welcome — AI-for-the-sake-of-AI is not. Concrete lessons and practical builds beat buzzwords."
   },
+  "pastDevFestsBlock": {
+    "title": "Built together over the years.",
+    "kicker": "> archive --past-devfests",
+    "description": "DevFest Warsaw is a community tradition built by organizers, speakers, partners, and attendees. Explore selected editions that brought our community together before 2026.",
+    "events": [
+      {
+        "year": "2025",
+        "name": "DevFest Warsaw 2025",
+        "url": "https://sites.google.com/view/devfest2025/home"
+      },
+      {
+        "year": "2024",
+        "name": "DevFest Warsaw 2024",
+        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-warsaw-2024/"
+      },
+      {
+        "year": "2023",
+        "name": "DevFest Warsaw 2023",
+        "url": "https://warsaw.devfest.pl/"
+      },
+      {
+        "year": "2022",
+        "name": "DevFest Warsaw 2022",
+        "url": "https://2022.warsaw.devfest.pl/"
+      },
+      {
+        "year": "2020",
+        "name": "DevFest Poland 2020",
+        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-poland-2020-with-gdg/"
+      },
+      {
+        "year": "2019",
+        "name": "DevFest Warsaw & Radzymin 2019",
+        "url": "https://warrad-devfest-pl.web.app/"
+      },
+      {
+        "year": "2018",
+        "name": "DevFest Warsaw 2018",
+        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-2018-by-gdg-warsaw/"
+      },
+      {
+        "year": "2017",
+        "name": "DevFest Poland 2017",
+        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-gdg-devfest-poland-2017/"
+      }
+    ]
+  },
   "visitBlock": {
     "title": "Plan your visit.",
     "kicker": "> arrival --ready",
@@ -127,6 +174,51 @@
           "name": "Contact the organizers",
           "url": "mailto:contact@gdgwarsaw.pl",
           "newTab": false
+        }
+      ]
+    },
+    {
+      "title": "Past DevFests",
+      "links": [
+        {
+          "name": "2025 — Warsaw",
+          "url": "https://sites.google.com/view/devfest2025/home",
+          "newTab": true
+        },
+        {
+          "name": "2024 — Warsaw",
+          "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-warsaw-2024/",
+          "newTab": true
+        },
+        {
+          "name": "2023 — Warsaw",
+          "url": "https://warsaw.devfest.pl/",
+          "newTab": true
+        },
+        {
+          "name": "2022 — Warsaw",
+          "url": "https://2022.warsaw.devfest.pl/",
+          "newTab": true
+        },
+        {
+          "name": "2020 — Poland",
+          "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-poland-2020-with-gdg/",
+          "newTab": true
+        },
+        {
+          "name": "2019 — Warsaw & Radzymin",
+          "url": "https://warrad-devfest-pl.web.app/",
+          "newTab": true
+        },
+        {
+          "name": "2018 — Warsaw",
+          "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-2018-by-gdg-warsaw/",
+          "newTab": true
+        },
+        {
+          "name": "2017 — Poland",
+          "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-gdg-devfest-poland-2017/",
+          "newTab": true
         }
       ]
     }
