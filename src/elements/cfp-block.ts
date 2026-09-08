@@ -116,6 +116,67 @@ export class CfpBlock extends ThemedElement {
           text-transform: uppercase;
         }
 
+        .deadline-card {
+          margin-bottom: 14px;
+          padding: 14px 16px;
+          border: 1px solid var(--google-yellow);
+          border-radius: 8px;
+          background: rgba(251, 188, 4, 0.08);
+        }
+
+        .deadline-label {
+          display: block;
+          color: var(--google-yellow);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        .deadline-val {
+          display: block;
+          margin-top: 4px;
+          color: #fff;
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          font-weight: 800;
+          letter-spacing: 0.02em;
+        }
+
+        .meta-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          margin-bottom: 16px;
+        }
+
+        .meta-item {
+          padding: 10px 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.03);
+        }
+
+        .meta-label {
+          display: block;
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+
+        .meta-val {
+          display: block;
+          margin-top: 2px;
+          color: var(--terminal-copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
         .note {
           margin: 14px 0 0;
           color: var(--secondary-text-color);
@@ -211,6 +272,22 @@ export class CfpBlock extends ThemedElement {
         </div>
 
         <div class="action-panel">
+          <div class="deadline-card">
+            <span class="deadline-label">Submission deadline</span>
+            <span class="deadline-val">${cfpBlock.deadline}</span>
+          </div>
+
+          <div class="meta-grid">
+            <div class="meta-item">
+              <span class="meta-label">Participation</span>
+              <span class="meta-val">${cfpBlock.participation}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Languages</span>
+              <span class="meta-val">${cfpBlock.languages}</span>
+            </div>
+          </div>
+
           <a
             href="${cfpBlock.link}"
             target="_blank"

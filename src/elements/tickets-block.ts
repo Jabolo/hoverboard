@@ -518,11 +518,20 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   }
 
   private hasTicketDates(ticket: Ticket): boolean {
-    return Boolean(ticket && (ticket.ends || ticket.starts));
+    if (!ticket) return false;
+    const tier = this.getTicketTier(ticket);
+    if (tier === 'supporter' || tier === 'patron') {
+      return false;
+    }
+    return Boolean(ticket.ends || ticket.starts);
   }
 
   private formatTicketDates(ticket: Ticket): string {
     if (!ticket) return '';
+    const tier = this.getTicketTier(ticket);
+    if (tier === 'supporter' || tier === 'patron') {
+      return '';
+    }
     // If ticket is available, omit "Available now" and only show the deadline
     if (ticket.available) {
       return ticket.ends ? `Until ${ticket.ends}` : '';

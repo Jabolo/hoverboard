@@ -181,7 +181,7 @@
     {
       "available": true,
       "currency": "zł",
-      "ends": "November 21, 2026",
+      "ends": "",
       "info": "Support our volunteer-led conference! Directly funds speaker hospitality, full-day coffee & catering, and custom event swag. Includes closing slides thank-you & custom badge.",
       "name": "Supporter",
       "price": 250,
@@ -192,7 +192,7 @@
     {
       "available": true,
       "currency": "zł",
-      "ends": "November 21, 2026",
+      "ends": "",
       "info": "For generous individuals & companies championing Warsaw tech! Directly funds speaker travel & full-day attendee catering. Includes guaranteed personal or company name on our opening keynote intro slide.",
       "name": "Patron",
       "price": 500,
