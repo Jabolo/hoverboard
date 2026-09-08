@@ -56,12 +56,14 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item {
           margin: 10px 6px;
-          min-height: 220px;
+          min-height: 250px;
           border: 1px solid var(--divider-color);
           width: 100%;
           text-align: center;
           color: var(--primary-text-color);
           background-color: var(--secondary-background-color);
+          border-radius: var(--border-radius, 8px);
+          position: relative;
           transition:
             border-color var(--animation),
             box-shadow var(--animation),
@@ -75,7 +77,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .ticket-item[in-demand] {
-          transform: scale(1.03);
+          transform: scale(1.02);
           box-shadow: var(--box-shadow-primary-color);
           border-top: 2px solid var(--default-primary-color);
           z-index: 1;
@@ -85,22 +87,158 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           box-shadow: var(--box-shadow-primary-color-hover);
         }
 
+        /* Unavailable & Sold-out: grayed out and no animation */
+        .ticket-item[unavailable],
         .ticket-item[sold-out] {
-          opacity: 0.5;
+          opacity: 0.38;
           filter: grayscale(1);
           cursor: not-allowed;
+          pointer-events: none;
+          transform: none !important;
+          box-shadow: none !important;
+          border-color: var(--divider-color) !important;
+          transition: none !important;
         }
 
+        .ticket-item[unavailable]:hover,
         .ticket-item[sold-out]:hover {
-          box-shadow:
-            0 0 2px 0 rgba(0, 0, 0, 0.07),
-            0 2px 2px 0 rgba(0, 0, 0, 0.15);
+          transform: none !important;
+          box-shadow: none !important;
+          border-color: var(--divider-color) !important;
+        }
+
+        /* Supporter Tier Styling */
+        .ticket-item[tier="supporter"] {
+          border-color: rgba(52, 168, 83, 0.45);
+          background: linear-gradient(180deg, rgba(52, 168, 83, 0.09) 0%, var(--secondary-background-color) 45%);
+        }
+
+        .ticket-item[tier="supporter"]:hover {
+          border-color: var(--google-green);
+          box-shadow: 0 0 20px rgba(52, 168, 83, 0.35);
+          transform: translateY(-4px);
+        }
+
+        .ticket-item[tier="supporter"] .price {
+          color: var(--google-green);
+        }
+
+        .ticket-item[tier="supporter"] md-filled-button {
+          --md-filled-button-container-color: var(--google-green);
+          --md-filled-button-hover-container-color: #2b8a44;
+        }
+
+        /* Patron Tier Styling */
+        .ticket-item[tier="patron"] {
+          border-color: rgba(251, 188, 4, 0.55);
+          background: linear-gradient(180deg, rgba(251, 188, 4, 0.12) 0%, var(--secondary-background-color) 45%);
+        }
+
+        .ticket-item[tier="patron"]:hover {
+          border-color: var(--google-yellow);
+          box-shadow: 0 0 24px rgba(251, 188, 4, 0.45);
+          transform: translateY(-4px);
+        }
+
+        .ticket-item[tier="patron"] .price {
+          color: var(--google-yellow);
+        }
+
+        .ticket-item[tier="patron"] md-filled-button {
+          --md-filled-button-container-color: #e3a600;
+          --md-filled-button-hover-container-color: #c99300;
+        }
+
+        .badge-slot {
+          min-height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 4px;
+        }
+
+        .badge-pill {
+          display: inline-block;
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 2px 8px;
+          border-radius: 12px;
+        }
+
+        .badge-pill[tier="supporter"] {
+          background: rgba(52, 168, 83, 0.15);
+          color: var(--google-green);
+          border: 1px solid rgba(52, 168, 83, 0.4);
+        }
+
+        .badge-pill[tier="patron"] {
+          background: rgba(251, 188, 4, 0.15);
+          color: var(--google-yellow);
+          border: 1px solid rgba(251, 188, 4, 0.5);
+        }
+
+        .badge-pill[tier="early-bird"] {
+          background: rgba(66, 133, 244, 0.15);
+          color: var(--google-blue);
+          border: 1px solid rgba(66, 133, 244, 0.4);
+        }
+
+        .subtext-slot {
+          min-height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 4px;
+        }
+
+        .impact-subtext {
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .impact-subtext[tier="supporter"] {
+          color: var(--google-green);
+        }
+
+        .impact-subtext[tier="patron"] {
+          color: var(--google-yellow);
+        }
+
+        .community-impact-note {
+          max-width: 720px;
+          margin: 24px auto 8px;
+          padding: 14px 20px;
+          background: rgba(52, 168, 83, 0.07);
+          border: 1px solid rgba(52, 168, 83, 0.25);
+          border-radius: 8px;
+          font-size: 13px;
+          line-height: 1.5;
+          color: var(--secondary-text-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          text-align: left;
+        }
+
+        .community-impact-note strong {
+          color: var(--google-green);
         }
 
         .header {
-          padding: 16px 0 0;
+          padding: 16px 8px 0;
           font-family: var(--font-mono, monospace);
           font-size: 16px;
+        }
+
+        .header h4 {
+          margin: 4px 0 0;
+          font-size: 16px;
+          font-weight: 700;
         }
 
         .content {
@@ -112,8 +250,21 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           color: var(--secondary-text-color);
         }
 
+        .ticket-dates {
+          font-weight: 600;
+          color: var(--primary-text-color);
+          font-size: 11px;
+          letter-spacing: 0.02em;
+          margin-bottom: 4px;
+        }
+
+        .ticket-info {
+          line-height: 1.45;
+          margin-top: 4px;
+        }
+
         .ticket-price-wrapper {
-          margin: 14px 0;
+          margin: 12px 0;
           white-space: nowrap;
         }
 
@@ -137,14 +288,6 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           color: var(--secondary-text-color);
         }
 
-        .additional-info {
-          margin: 12px auto 0;
-          max-width: 480px;
-          font-size: 12px;
-          color: var(--secondary-text-color);
-          line-height: 1.6;
-        }
-
         .actions {
           padding: 16px;
           position: relative;
@@ -163,13 +306,13 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           text-transform: uppercase;
         }
 
-        /* Keep an unavailable release legible on the dark terminal surface. */
         md-filled-button[disabled] {
-          --md-filled-button-disabled-container-color: #29456d;
+          --md-filled-button-disabled-container-color: rgba(255, 255, 255, 0.08);
           --md-filled-button-disabled-container-opacity: 1;
-          --md-filled-button-disabled-label-text-color: var(--terminal-copy);
+          --md-filled-button-disabled-label-text-color: rgba(255, 255, 255, 0.4);
           --md-filled-button-disabled-label-text-opacity: 1;
-          opacity: 1;
+          opacity: 0.8;
+          pointer-events: none;
         }
 
         .tickets-placeholder {
@@ -183,11 +326,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           }
 
           .ticket-item {
-            max-width: 180px;
+            max-width: 200px;
           }
 
           .ticket-item[in-demand] {
-            transform: scale(1.04);
+            transform: scale(1.02);
           }
         }
       </style>
@@ -223,21 +366,39 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
               <div
                 class="ticket-item card"
                 sold-out$="[[ticket.soldOut]]"
+                unavailable$="[[!ticket.available]]"
                 in-demand$="[[ticket.inDemand]]"
+                tier$="[[getTicketTier(ticket)]]"
                 layout
                 vertical
               >
                 <div class="header">
+                  <div class="badge-slot">
+                    <template is="dom-if" if="[[getBadgeText(ticket)]]">
+                      <div class="badge-pill" tier$="[[getTicketTier(ticket)]]">
+                        [[getBadgeText(ticket)]]
+                      </div>
+                    </template>
+                  </div>
                   <h4>[[ticket.name]]</h4>
                 </div>
                 <div class="content" layout vertical flex-auto>
                   <div class="ticket-price-wrapper">
                     <div class="price">[[ticket.currency]][[ticket.price]]</div>
-                    <div class="discount">[[getDiscount(ticket)]]</div>
+                    <div class="subtext-slot">
+                      <template is="dom-if" if="[[getDiscount(ticket)]]">
+                        <div class="discount">[[getDiscount(ticket)]]</div>
+                      </template>
+                      <template is="dom-if" if="[[getImpactSubtext(ticket)]]">
+                        <div class="impact-subtext" tier$="[[getTicketTier(ticket)]]">
+                          [[getImpactSubtext(ticket)]]
+                        </div>
+                      </template>
+                    </div>
                   </div>
                   <div class="type-description" layout vertical flex-auto center-justified>
-                    <div class="ticket-dates" hidden$="[[!ticket.starts]]">
-                      [[ticket.starts]] - [[ticket.ends]]
+                    <div class="ticket-dates" hidden$="[[!hasTicketDates(ticket)]]">
+                      [[formatTicketDates(ticket)]]
                     </div>
                     <div class="ticket-info">[[ticket.info]]</div>
                   </div>
@@ -257,9 +418,13 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
               </div>
             </template>
           </div>
+
+          <div class="community-impact-note">
+            <span>💛</span>
+            <span><strong>Support Our Community:</strong> Supporter and Patron tickets directly fund diversity scholarships, free student passes, and non-profit community operations.</span>
+          </div>
         </template>
 
-        <div class="additional-info">*[[ticketsBlock.ticketsDetails]]</div>
         <evenea-embed id="registration-form"></evenea-embed>
       </div>
     `;
@@ -285,6 +450,46 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   @computed('tickets')
   private get showTicketLoader() {
     return this.showTicketCards && this.pending;
+  }
+
+  private getTicketTier(ticket: Ticket): string {
+    const name = (ticket?.name || '').toLowerCase();
+    if (name.includes('patron')) return 'patron';
+    if (name.includes('supporter')) return 'supporter';
+    if (name.includes('early')) return 'early-bird';
+    return 'regular';
+  }
+
+  private getBadgeText(ticket: Ticket): string {
+    const tier = this.getTicketTier(ticket);
+    if (tier === 'patron') return '⭐ Community Patron';
+    if (tier === 'supporter') return '💛 Pay It Forward';
+    if (tier === 'early-bird') return '⚡ Early Bird';
+    return '';
+  }
+
+  private getImpactSubtext(ticket: Ticket): string {
+    const tier = this.getTicketTier(ticket);
+    if (tier === 'supporter') return 'Funds 1 student pass';
+    if (tier === 'patron') return 'Funds 3 student passes';
+    return '';
+  }
+
+  private hasTicketDates(ticket: Ticket): boolean {
+    return Boolean(ticket && (ticket.ends || ticket.starts));
+  }
+
+  private formatTicketDates(ticket: Ticket): string {
+    if (!ticket) return '';
+    // If ticket is available, omit "Available now" and only show the deadline
+    if (ticket.available) {
+      return ticket.ends ? `Until ${ticket.ends}` : '';
+    }
+    // If ticket is not available yet and has a future start date
+    if (ticket.starts && ticket.starts !== 'Available now') {
+      return ticket.ends ? `${ticket.starts} – ${ticket.ends}` : `Opens ${ticket.starts}`;
+    }
+    return ticket.ends ? `Until ${ticket.ends}` : '';
   }
 
   private getDiscount(ticket: Ticket) {

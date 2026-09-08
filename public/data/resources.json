@@ -170,9 +170,9 @@
   },
   "ticketsBlock": {
     "title": "Tickets",
-    "ticketsDetails": "Secure registration via Evenea — choose your ticket below.",
+    "ticketsDetails": "",
     "soldOut": "Sold out",
-    "notAvailableYet": "Not available yet",
+    "notAvailableYet": "Coming soon",
     "save": "Save ${discount}% today"
   },
   "partnersBlock": {
