@@ -146,6 +146,24 @@ const localPhotoFor = (name, sourceUrl) => {
   );
 };
 
+// These six portraits were matched against named speaker/event sources after the
+// original image URLs had expired. Keep the source pages in the importer so a
+// future refresh cannot silently regress to the placeholder asset.
+const verifiedPhotoSources = new Map(
+  [
+    ['Anton Morev', 2019, 'https://sessionize.com/amorev94/'],
+    ['Kamila Syska', 2019, 'https://www.linkedin.com/in/kamilasyska/'],
+    [
+      'Mateusz Łędzewicz',
+      2023,
+      'https://drive.google.com/file/d/15XhD1eDiXX74FqL3gUoVVvYZDRd7jiaY/view?usp=drivesdk',
+    ],
+    ['Michal Zylinski', 2022, 'https://pl.linkedin.com/in/mzylinski'],
+    ['Santosh Yadav', 2022, 'https://js-poland.pl/speaker/2022/santosh-yadav'],
+    ['Stanislaw Smyl', 2023, 'https://airflowsummit.org/speakers/stanislaw-smyl/'],
+  ].map(([name, year, url]) => [normalize(name), { name, year, url }]),
+);
+
 const socialsFromLinks = (links = []) => {
   const seen = new Set();
   return links
@@ -639,6 +657,22 @@ for (const [id, previous] of existing) {
     photoSources: [],
     sourceYears: Object.keys(previous.sessions || {}).map(Number),
   });
+}
+
+for (const [normalizedName, verification] of verifiedPhotoSources) {
+  const id = idForName(verification.name);
+  const current = byId.get(id);
+  if (!current)
+    throw new Error(`Verified photo has no matching speaker record: ${verification.name}`);
+  const localPhoto =
+    localAsset(`previous-speakers/people/${assetSlug(verification.name)}.jpg`) ||
+    localAsset(`previous-speakers/people/${assetSlug(verification.name)}.webp`);
+  if (!localPhoto) throw new Error(`Verified portrait asset is missing: ${verification.name}`);
+  current.photoUrl = localPhoto;
+  current.photoSources.push({ year: verification.year, url: verification.url });
+  byId.set(id, current);
+  if (normalizedName !== normalize(verification.name))
+    throw new Error(`Photo source normalization mismatch: ${verification.name}`);
 }
 
 for (const [id, current] of byId) {
