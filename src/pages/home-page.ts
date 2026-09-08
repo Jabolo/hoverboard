@@ -438,16 +438,27 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span class="prompt">$</span><span>./event --status</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">status:</span> <span class="green">confirmed</span></span>
+                    <span></span
+                    ><span
+                      ><span class="key">status:</span> <span class="green">confirmed</span></span
+                    >
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">date:</span> <span class="blue">Nov 21, 2026</span></span>
+                    <span></span
+                    ><span
+                      ><span class="key">date:</span> <span class="blue">Nov 21, 2026</span></span
+                    >
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">theme:</span> real_work / real_lessons</span>
+                    <span></span
+                    ><span><span class="key">theme:</span> real_work / real_lessons</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">stages:</span> 3 (auditorium ~200 ppl, cafe ~50 ppl, classroom ~40 ppl)</span>
+                    <span></span
+                    ><span
+                      ><span class="key">stages:</span> 3 (auditorium ~200 ppl, cafe ~50 ppl,
+                      classroom ~40 ppl)</span
+                    >
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">capacity:</span> 300_attendees</span>
@@ -457,7 +468,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span class="prompt">$</span><span>./cfp --status</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">call_for_papers:</span> <span class="green">open_now</span></span>
+                    <span></span
+                    ><span
+                      ><span class="key">call_for_papers:</span>
+                      <span class="green">open_now</span></span
+                    >
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">platform:</span> advocu</span>

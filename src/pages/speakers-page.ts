@@ -302,8 +302,8 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="container empty-state-container">
           <p class="empty-state">
-            Speaker profiles and sessions will appear here as the programme is confirmed.
-            Got a project, hard lesson, or experiment to share?
+            Speaker profiles and sessions will appear here as the programme is confirmed. Got a
+            project, hard lesson, or experiment to share?
             <a
               href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
               target="_blank"

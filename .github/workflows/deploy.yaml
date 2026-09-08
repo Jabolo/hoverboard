@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,10 +20,11 @@ jobs:
         run: echo "{}" > serviceAccount.json
       - run: npm ci
       - run: npm run build
-      - uses: w9jds/firebase-action@v15.24.0
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
         with:
-          args: deploy
-        env:
-          # See docs/tutorials/04-deploy.md for configuring these
-          PROJECT_ID: hoverboard-master
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOVERBOARD_MASTER }}
+          project_id: gdg-warsaw-devfest26-web
+          workload_identity_provider: projects/94592063137/locations/global/workloadIdentityPools/github-actions/providers/hoverboard
+          service_account: github-actions-hosting@gdg-warsaw-devfest26-web.iam.gserviceaccount.com
+      - name: Deploy Firebase Hosting
+        run: npx --no-install firebase deploy --only hosting:gdg-warsaw-devfest26-web --project gdg-warsaw-devfest26-web

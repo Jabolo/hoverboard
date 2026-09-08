@@ -35,8 +35,6 @@ export class HeroBlock extends ThemedElement {
           color: inherit;
         }
 
-
-
         .hero-block::before {
           position: absolute;
           inset: 0;

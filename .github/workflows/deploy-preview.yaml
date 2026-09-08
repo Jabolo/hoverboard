@@ -1,7 +1,13 @@
 name: Deploy Preview
 on: pull_request
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   build_and_preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -12,9 +18,11 @@ jobs:
         run: echo "{}" > serviceAccount.json
       - run: npm ci
       - run: npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          # See docs/tutorials/04-deploy.md for configuring these
-          projectId: hoverboard-master
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOVERBOARD_MASTER }}'
+          project_id: gdg-warsaw-devfest26-web
+          workload_identity_provider: projects/94592063137/locations/global/workloadIdentityPools/github-actions/providers/hoverboard
+          service_account: github-actions-hosting@gdg-warsaw-devfest26-web.iam.gserviceaccount.com
+      - name: Deploy Firebase Hosting preview
+        run: npx --no-install firebase hosting:channel:deploy "pr-${{ github.event.number }}" --project gdg-warsaw-devfest26-web --expires 7d

@@ -198,7 +198,9 @@ export class HoverboardApp extends PolymerElement {
         }
       </style>
 
-      <a class="skip-link" href="#main-content" on-click="handleSkipToContent">Skip to main content</a>
+      <a class="skip-link" href="#main-content" on-click="handleSkipToContent"
+        >Skip to main content</a
+      >
 
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
         <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>

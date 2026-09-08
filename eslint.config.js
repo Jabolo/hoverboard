@@ -20,6 +20,7 @@ export default [
       'node_modules/**',
       'functions/dist/**',
       'public/**',
+      '.planning/**', // Planning sketches are not production source files
       '**/package-lock.json', // Auto-generated lockfiles
       '**/yarn.lock', // Auto-generated lockfiles
       '**/.vscode/**', // VS Code settings (often contain comments)
@@ -277,13 +278,6 @@ export default [
     files: ['**/*.css'],
     language: 'css/css',
     ...css.configs.recommended,
-    rules: {
-      // CSS formatting and quality rules
-      'css/no-duplicate-properties': 'error',
-      'css/no-empty-blocks': 'error',
-      'css/no-invalid-properties': 'error',
-      'css/prefer-single-line-selectors': 'warn',
-    },
   },
 
   // CSS-in-JS within TypeScript files (for styled components, etc.)

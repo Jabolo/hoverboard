@@ -108,43 +108,51 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         /* Supporter Tier Styling */
-        .ticket-item[tier="supporter"] {
+        .ticket-item[tier='supporter'] {
           border-color: rgba(52, 168, 83, 0.45);
-          background: linear-gradient(180deg, rgba(52, 168, 83, 0.09) 0%, var(--secondary-background-color) 45%);
+          background: linear-gradient(
+            180deg,
+            rgba(52, 168, 83, 0.09) 0%,
+            var(--secondary-background-color) 45%
+          );
         }
 
-        .ticket-item[tier="supporter"]:hover {
+        .ticket-item[tier='supporter']:hover {
           border-color: var(--google-green);
           box-shadow: 0 0 20px rgba(52, 168, 83, 0.35);
           transform: translateY(-4px);
         }
 
-        .ticket-item[tier="supporter"] .price {
+        .ticket-item[tier='supporter'] .price {
           color: var(--google-green);
         }
 
-        .ticket-item[tier="supporter"] md-filled-button {
+        .ticket-item[tier='supporter'] md-filled-button {
           --md-filled-button-container-color: var(--google-green);
           --md-filled-button-hover-container-color: #2b8a44;
         }
 
         /* Patron Tier Styling */
-        .ticket-item[tier="patron"] {
+        .ticket-item[tier='patron'] {
           border-color: rgba(251, 188, 4, 0.55);
-          background: linear-gradient(180deg, rgba(251, 188, 4, 0.12) 0%, var(--secondary-background-color) 45%);
+          background: linear-gradient(
+            180deg,
+            rgba(251, 188, 4, 0.12) 0%,
+            var(--secondary-background-color) 45%
+          );
         }
 
-        .ticket-item[tier="patron"]:hover {
+        .ticket-item[tier='patron']:hover {
           border-color: var(--google-yellow);
           box-shadow: 0 0 24px rgba(251, 188, 4, 0.45);
           transform: translateY(-4px);
         }
 
-        .ticket-item[tier="patron"] .price {
+        .ticket-item[tier='patron'] .price {
           color: var(--google-yellow);
         }
 
-        .ticket-item[tier="patron"] md-filled-button {
+        .ticket-item[tier='patron'] md-filled-button {
           --md-filled-button-container-color: #e3a600;
           --md-filled-button-hover-container-color: #c99300;
         }
@@ -168,19 +176,19 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           border-radius: 12px;
         }
 
-        .badge-pill[tier="supporter"] {
+        .badge-pill[tier='supporter'] {
           background: rgba(52, 168, 83, 0.15);
           color: var(--google-green);
           border: 1px solid rgba(52, 168, 83, 0.4);
         }
 
-        .badge-pill[tier="patron"] {
+        .badge-pill[tier='patron'] {
           background: rgba(251, 188, 4, 0.15);
           color: var(--google-yellow);
           border: 1px solid rgba(251, 188, 4, 0.5);
         }
 
-        .badge-pill[tier="early-bird"] {
+        .badge-pill[tier='early-bird'] {
           background: rgba(66, 133, 244, 0.15);
           color: var(--google-blue);
           border: 1px solid rgba(66, 133, 244, 0.4);
@@ -200,11 +208,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           font-weight: 700;
         }
 
-        .impact-subtext[tier="supporter"] {
+        .impact-subtext[tier='supporter'] {
           color: var(--google-green);
         }
 
-        .impact-subtext[tier="patron"] {
+        .impact-subtext[tier='patron'] {
           color: var(--google-yellow);
         }
 
@@ -458,10 +466,18 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           <div class="community-impact-note">
             <span class="impact-icon">💛</span>
             <div class="impact-text">
-              <div class="impact-title">100% Non-Profit Community Event — Organized by Volunteers</div>
+              <div class="impact-title">
+                100% Non-Profit Community Event — Organized by Volunteers
+              </div>
               <div class="impact-desc">
-                DevFest Warsaw is run by the community, for the community. All organizers and speakers donate their time pro bono, and Google generously hosts us at Campus Warsaw. Supporter and Patron tickets directly fund full-day attendee catering & specialty coffee, custom community swag, and conference operations.
-                <span class="patron-promise">⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name recognition on our opening keynote intro slide!</span>
+                DevFest Warsaw is run by the community, for the community. All organizers and
+                speakers donate their time pro bono, and Google generously hosts us at Campus
+                Warsaw. Supporter and Patron tickets directly fund full-day attendee catering &
+                specialty coffee, custom community swag, and conference operations.
+                <span class="patron-promise"
+                  >⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name
+                  recognition on our opening keynote intro slide!</span
+                >
               </div>
             </div>
           </div>
