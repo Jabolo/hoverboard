@@ -56,7 +56,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item {
           margin: 10px 6px;
-          min-height: 250px;
+          min-height: 280px;
           border: 1px solid var(--divider-color);
           width: 100%;
           text-align: center;
@@ -209,24 +209,60 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .community-impact-note {
-          max-width: 720px;
-          margin: 24px auto 8px;
-          padding: 14px 20px;
-          background: rgba(52, 168, 83, 0.07);
-          border: 1px solid rgba(52, 168, 83, 0.25);
+          max-width: 780px;
+          margin: 28px auto 12px;
+          padding: 16px 20px;
+          background: rgba(251, 188, 4, 0.07);
+          border: 1px solid rgba(251, 188, 4, 0.35);
           border-radius: 8px;
           font-size: 13px;
-          line-height: 1.5;
-          color: var(--secondary-text-color);
+          line-height: 1.55;
+          color: var(--primary-text-color);
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
-          gap: 12px;
+          gap: 14px;
           text-align: left;
         }
 
-        .community-impact-note strong {
-          color: var(--google-green);
+        .community-impact-note .impact-icon {
+          font-size: 22px;
+          line-height: 1.2;
+          flex-shrink: 0;
+        }
+
+        .community-impact-note .impact-text {
+          flex: 1;
+        }
+
+        .community-impact-note .impact-title {
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          font-weight: 800;
+          color: var(--google-yellow);
+          margin-bottom: 6px;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+
+        .community-impact-note .impact-desc {
+          color: var(--secondary-text-color);
+          font-size: 13px;
+        }
+
+        .community-impact-note .patron-promise {
+          display: block;
+          margin-top: 8px;
+          padding-top: 8px;
+          border-top: 1px dashed rgba(251, 188, 4, 0.25);
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .community-impact-note .patron-promise strong {
+          color: var(--google-yellow);
         }
 
         .header {
@@ -420,8 +456,14 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="community-impact-note">
-            <span>💛</span>
-            <span><strong>Support Our Community:</strong> Supporter and Patron tickets directly fund diversity scholarships, free student passes, and non-profit community operations.</span>
+            <span class="impact-icon">💛</span>
+            <div class="impact-text">
+              <div class="impact-title">100% Non-Profit Community Event — Organized by Volunteers</div>
+              <div class="impact-desc">
+                DevFest Warsaw is run by the community, for the community. All organizers and speakers donate their time pro bono. Supporter (250 zł) and Patron (500 zł) tickets directly fund venue, stage production, and tech workshop gear.
+                <span class="patron-promise">⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name recognition on our opening keynote intro slide!</span>
+              </div>
+            </div>
           </div>
         </template>
 
@@ -462,16 +504,16 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   private getBadgeText(ticket: Ticket): string {
     const tier = this.getTicketTier(ticket);
-    if (tier === 'patron') return '⭐ Community Patron';
-    if (tier === 'supporter') return '💛 Pay It Forward';
+    if (tier === 'patron') return '⭐ Keynote Slide Sponsor';
+    if (tier === 'supporter') return '💛 Community Supporter';
     if (tier === 'early-bird') return '⚡ Early Bird';
     return '';
   }
 
   private getImpactSubtext(ticket: Ticket): string {
     const tier = this.getTicketTier(ticket);
-    if (tier === 'supporter') return 'Funds 1 student pass';
-    if (tier === 'patron') return 'Funds 3 student passes';
+    if (tier === 'supporter') return 'Non-profit event backer';
+    if (tier === 'patron') return 'Opening slide thank-you';
     return '';
   }
 

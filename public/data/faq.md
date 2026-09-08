@@ -1,6 +1,6 @@
 ## What is GDG DevFest Warsaw?
 
-GDG DevFest Warsaw 2026 is a community-led technology conference brought to Warsaw by Google Developer Groups Warszawa.
+GDG DevFest Warsaw 2026 is a 100% non-profit, community-led technology conference brought to Warsaw by Google Developer Groups Warszawa. All organizers and speakers are volunteers giving their time pro bono — organized by the community, for the community.
 
 ## When and where is it happening?
 
@@ -40,7 +40,7 @@ The Call for Papers will be announced separately. The website will link to the A
 
 ## How can my company support the event?
 
-Use the **Become a partner** contact form on this website or email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl). Sponsorship details are shared directly with interested partners.
+You can purchase a **Patron Ticket (500 zł)** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
 
 ## Where can I ask another question?
 

@@ -450,12 +450,21 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   <div class="terminal-line">
                     <span></span><span><span class="key">format:</span> one_day / in_person</span>
                   </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">model:</span> 100% non_profit</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">team:</span> all_volunteers</span>
+                  </div>
                   <hr />
                   <div class="terminal-line">
                     <span class="prompt">$</span><span>./registration --inspect</span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">channel:</span> embedded / Evenea</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">ethos:</span> by_community / for_community</span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">capacity:</span> 300</span>
