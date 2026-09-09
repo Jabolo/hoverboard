@@ -4,6 +4,7 @@ export interface Ticket {
   ends?: string;
   inDemand?: boolean;
   info: string;
+  eveneaTicketId?: string;
   name: string;
   price: number;
   primary?: boolean;

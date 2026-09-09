@@ -73,6 +73,7 @@
     "previousSpeakers": {
       "title": "Previous Speakers",
       "metaDescription": "Previous DevFest speakers",
+      "description": "Over 85 tech leaders, engineers, and community speakers across past DevFest Warsaw editions: 14 in 2025 · 13 in 2024 · 20 in 2023 · 25 in 2022 · 38 in 2019.",
       "background": {
         "color": "#070C14"
       },
@@ -162,16 +163,6 @@
       {
         "name": "youtube",
         "url": "https://www.youtube.com/c/GdgWarszawaPl/featured"
-      }
-    ],
-    "share": [
-      {
-        "name": "facebook",
-        "url": "https://www.facebook.com/sharer.php?u="
-      },
-      {
-        "name": "twitter",
-        "url": "https://twitter.com/intent/tweet?text="
       }
     ]
   },

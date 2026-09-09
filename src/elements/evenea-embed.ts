@@ -1,4 +1,4 @@
-import { customElement, property } from '@polymer/decorators';
+import { computed, customElement, property } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import { eveneaEmbed } from '../utils/data';
 
@@ -13,6 +13,7 @@ export class EveneaEmbed extends PolymerElement {
           padding-top: 32px;
           border-top: 1px solid var(--divider-color);
           max-width: 960px;
+          scroll-margin-top: 96px;
         }
 
         .header {
@@ -30,6 +31,75 @@ export class EveneaEmbed extends PolymerElement {
           margin: 0 auto;
           max-width: 680px;
           color: var(--secondary-text-color);
+        }
+
+        .registration-guide {
+          box-sizing: border-box;
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          max-width: 760px;
+          margin: 20px auto 24px;
+          padding: 14px 16px;
+          border: 1px solid rgba(66, 133, 244, 0.55);
+          border-left: 4px solid var(--google-blue);
+          border-radius: var(--border-radius);
+          background: rgba(66, 133, 244, 0.08);
+          text-align: left;
+        }
+
+        .registration-guide .step-number {
+          display: grid;
+          flex: 0 0 30px;
+          width: 30px;
+          height: 30px;
+          place-items: center;
+          border-radius: 50%;
+          background: var(--google-blue);
+          color: #fff;
+          font-family: var(--font-mono, monospace);
+          font-size: 14px;
+          font-weight: 800;
+        }
+
+        .registration-guide .guide-copy {
+          min-width: 0;
+        }
+
+        .registration-guide .guide-kicker {
+          margin-bottom: 3px;
+          color: var(--google-blue);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        .registration-guide .guide-title {
+          color: var(--primary-text-color);
+          font-size: 16px;
+          font-weight: 800;
+          line-height: 1.35;
+        }
+
+        .registration-guide .guide-title strong {
+          color: var(--google-blue);
+        }
+
+        .registration-guide .guide-copy p {
+          margin: 4px 0 0;
+          color: var(--secondary-text-color);
+          font-size: 14px;
+          line-height: 1.45;
+        }
+
+        .registration-guide .join-label {
+          color: var(--primary-text-color);
+          font-family: var(--font-mono, monospace);
+          font-size: 0.95em;
+          font-weight: 800;
+          white-space: nowrap;
         }
 
         .preview-card {
@@ -57,10 +127,10 @@ export class EveneaEmbed extends PolymerElement {
         iframe {
           display: block;
           width: 100%;
-          /* Keep enough room for five ticket rows and the final join action
-             without leaving a large empty tail below the form. */
-          height: 980px;
-          min-height: 980px;
+          /* Fallback height: the official Evenea resizer replaces this with
+             the exact content height after the iframe finishes loading. */
+          height: 1180px;
+          min-height: 0;
           border: 0;
           border-radius: var(--border-radius);
           background: #fff;
@@ -69,8 +139,23 @@ export class EveneaEmbed extends PolymerElement {
 
         @media (min-width: 640px) {
           iframe {
-            height: 820px;
-            min-height: 820px;
+            height: 1000px;
+          }
+        }
+
+        @media (max-width: 639px) {
+          .registration-guide {
+            margin-top: 16px;
+            margin-bottom: 18px;
+            padding: 13px 14px;
+          }
+
+          .registration-guide .guide-title {
+            font-size: 15px;
+          }
+
+          .registration-guide .guide-copy p {
+            font-size: 13px;
           }
         }
       </style>
@@ -80,14 +165,38 @@ export class EveneaEmbed extends PolymerElement {
           <h2>[[eveneaEmbed.title]]</h2>
           <p class="description">[[eveneaEmbed.description]]</p>
         </div>
+        <div class="registration-guide" role="status" aria-live="polite">
+          <template is="dom-if" if="[[selectedTicketId]]">
+            <div class="step-number">2</div>
+            <div class="guide-copy">
+              <div class="guide-kicker">Next step</div>
+              <div class="guide-title">
+                Your <strong>[[selectedTicketName]]</strong> ticket is ready below.
+              </div>
+              <p>Complete your details and continue in the Evenea form.</p>
+            </div>
+          </template>
+          <template is="dom-if" if="[[!selectedTicketId]]">
+            <div class="step-number">1</div>
+            <div class="guide-copy">
+              <div class="guide-kicker">Start here</div>
+              <div class="guide-title">Choose your ticket in the Evenea form below.</div>
+              <p>
+                Set the quantity, then click
+                <span class="join-label">JOIN / DOŁĄCZAM!</span> to continue.
+              </p>
+            </div>
+          </template>
+        </div>
         <template is="dom-if" if="[[published]]">
           <iframe
             id="ticketFrame"
-            src$="[[eveneaEmbed.iframeSrc]]"
+            src$="[[registrationSrc]]"
             title="Evenea registration"
             scrolling="auto"
             loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
+            on-load="handleFrameLoad"
           ></iframe>
         </template>
         <template is="dom-if" if="[[!published]]">
@@ -118,6 +227,23 @@ export class EveneaEmbed extends PolymerElement {
   @property({ type: Boolean })
   private published = Boolean(eveneaEmbed.published);
 
+  @property({ type: String })
+  private selectedTicketName = '';
+
+  @property({ type: String })
+  selectedTicketId = '';
+
+  @computed('selectedTicketId')
+  private get registrationSrc() {
+    if (!this.selectedTicketId) {
+      return eveneaEmbed.iframeSrc;
+    }
+
+    const registrationUrl = new URL(eveneaEmbed.iframeSrc);
+    registrationUrl.searchParams.set(`ticket[${this.selectedTicketId}]`, '1');
+    return registrationUrl.toString();
+  }
+
   override connectedCallback() {
     super.connectedCallback();
     if (this.enabled && this.published && eveneaEmbed.resizerScriptSrc) {
@@ -127,13 +253,41 @@ export class EveneaEmbed extends PolymerElement {
 
   private loadResizerScript() {
     const scriptSelector = `script[src="${eveneaEmbed.resizerScriptSrc}"]`;
-    if (document.querySelector(scriptSelector)) {
+    const existingScript = document.querySelector<HTMLScriptElement>(scriptSelector);
+    if (existingScript) {
+      existingScript.addEventListener('load', this.initializeResizer, { once: true });
+      window.setTimeout(this.initializeResizer, 0);
       return;
     }
 
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = eveneaEmbed.resizerScriptSrc;
+    script.addEventListener('load', this.initializeResizer, { once: true });
     document.head.appendChild(script);
   }
+
+  private handleFrameLoad() {
+    this.initializeResizer();
+  }
+
+  private initializeResizer = () => {
+    const frame = this.shadowRoot?.querySelector<HTMLIFrameElement>('#ticketFrame');
+    const resizerWindow = window as Window & {
+      iFrameResize?: (options: Record<string, unknown>, element?: HTMLIFrameElement) => void;
+    };
+
+    if (!frame || typeof resizerWindow.iFrameResize !== 'function') {
+      return;
+    }
+
+    resizerWindow.iFrameResize(
+      {
+        checkOrigin: false,
+        heightCalculationMethod: 'bodyOffset',
+        scrolling: false,
+      },
+      frame,
+    );
+  };
 }

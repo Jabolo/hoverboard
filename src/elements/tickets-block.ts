@@ -483,7 +483,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           </div>
         </template>
 
-        <evenea-embed id="registration-form"></evenea-embed>
+        <evenea-embed
+          id="registration-form"
+          selected-ticket-name="[[selectedTicketName]]"
+          selected-ticket-id="[[selectedTicketId]]"
+        ></evenea-embed>
       </div>
     `;
   }
@@ -495,6 +499,12 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   @property({ type: Object })
   tickets = initialTicketsState;
+
+  @property({ type: String })
+  private selectedTicketName = '';
+
+  @property({ type: String })
+  private selectedTicketId = '';
 
   override stateChanged(state: RootState) {
     this.tickets = state.tickets;
@@ -579,6 +589,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     if (e.model.ticket.soldOut || !e.model.ticket.available) {
       return;
     }
+    this.selectedTicketName = e.model.ticket.name;
+    this.selectedTicketId = e.model.ticket.eveneaTicketId || '';
     this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',

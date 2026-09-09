@@ -39,15 +39,19 @@ GCLOUD_PROJECT=gdg-warsaw-devfest26-web npm run firestore:init
 
 ## Evenea
 
-The Evenea event is published and currently protected by an access code during preview:
+The Evenea event is published and public:
 
 - Event ID: `376576`
 - Draft URL: `https://app.evenea.pl/event/devfestwarsaw2026/`
 - Embed source: `https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe`
 
-The website uses the official Evenea iframe source and resizer script generated in the organizer panel. The ticket cards remain visible as the catalogue, but their links stay on the website and scroll to the embedded registration form instead of opening a separate Evenea page. The public event page and the registration form were checked end-to-end on September 5, 2026. The existing 100% one-time Early Bird promotional code was accepted and reduced one Early Bird ticket from 49,00 zł to 0,00 zł in Evenea.
+The website uses the official Evenea iframe source and resizer script generated in the organizer panel. The ticket cards remain visible as the catalogue, but their links stay on the website and scroll to the embedded registration form instead of opening a separate Evenea page. The public event page and the registration form were checked end-to-end on September 8, 2026. The existing 100% one-time Early Bird promotional code was accepted and reduced one Early Bird ticket from 49,00 zł to 0,00 zł in Evenea.
 
-`eveneaEmbed.published` is `true`, so the website loads the Evenea registration iframe. Because the event page is still access-code protected for preview, attendees must enter the organizer-provided access code before the ticket form appears. Do not place that code in source control or public copy.
+When a visitor clicks an available ticket card, the website passes Evenea's official `ticket[ID]=1` query parameter into the iframe. This opens the buyer-details step with the selected ticket and quantity 1 already prepared, while keeping the visitor on the DevFest page. The Evenea ticket IDs are mirrored in `docs/default-firebase-data.json` and the live Firestore `tickets` documents as `eveneaTicketId`. If an ID is missing, the embed falls back to the normal ticket selector and displays the manual next-step instructions. Later checkout and payment navigation remain controlled by Evenea.
+
+The current sale-window handoff is deliberately non-overlapping: Regular tickets are sold through 6 November 2026 at 23:59, and LastBird tickets open on 7 November 2026 at 00:00 and run through the event start on 21 November 2026 at 09:00. This makes LastBird the final two calendar weeks before DevFest. Early Bird remains unchanged and ends on 30 September 2026 at 23:59.
+
+`eveneaEmbed.published` is `true`, so the website loads the public Evenea registration iframe. Do not place organizer credentials or private access details in source control or public copy.
 
 ## Deployment
 

@@ -1,4 +1,4 @@
-import { css, html } from 'lit';
+import { css, html, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { pastDevFestsBlock } from '../utils/data';
 import { ThemedElement } from '../components/themed-element';
@@ -71,12 +71,27 @@ export class PastDevFestsBlock extends ThemedElement {
           transform: translateY(-2px);
         }
 
+        .card-meta {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          gap: 8px;
+        }
+
         .year {
           color: var(--google-yellow);
           font-family: var(--font-mono, monospace);
           font-size: 28px;
           font-weight: 800;
           line-height: 1;
+        }
+
+        .speakers-badge {
+          color: var(--secondary-text-color);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.02em;
         }
 
         .name {
@@ -124,7 +139,12 @@ export class PastDevFestsBlock extends ThemedElement {
           ${pastDevFestsBlock.events.map(
             (event) => html`
               <a class="archive-card" href="${event.url}" target="_blank" rel="noopener noreferrer">
-                <span class="year">${event.year}</span>
+                <div class="card-meta">
+                  <span class="year">${event.year}</span>
+                  ${'speakers' in event && event.speakers
+                    ? html`<span class="speakers-badge">${event.speakers} speakers</span>`
+                    : nothing}
+                </div>
                 <span class="name">${event.name}</span>
                 <span class="link-label">Open event ↗</span>
               </a>

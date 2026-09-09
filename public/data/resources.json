@@ -36,22 +36,26 @@
       {
         "year": "2025",
         "name": "DevFest Warsaw 2025",
-        "url": "https://sites.google.com/view/devfest2025/home"
+        "url": "https://sites.google.com/view/devfest2025/home",
+        "speakers": 14
       },
       {
         "year": "2024",
         "name": "DevFest Warsaw 2024",
-        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-warsaw-2024/"
+        "url": "https://gdg.community.dev/events/details/google-gdg-warszawa-presents-devfest-warsaw-2024/",
+        "speakers": 13
       },
       {
         "year": "2023",
         "name": "DevFest Warsaw 2023",
-        "url": "https://warsaw.devfest.pl/"
+        "url": "https://gdg-warsaw-devfest23-web-11997.web.app",
+        "speakers": 20
       },
       {
         "year": "2022",
         "name": "DevFest Warsaw 2022",
-        "url": "https://2022.warsaw.devfest.pl/"
+        "url": "https://2022.warsaw.devfest.pl/",
+        "speakers": 25
       },
       {
         "year": "2020",
@@ -61,7 +65,8 @@
       {
         "year": "2019",
         "name": "DevFest Warsaw & Radzymin 2019",
-        "url": "https://warrad-devfest-pl.web.app/"
+        "url": "https://warrad-devfest-pl.web.app/",
+        "speakers": 38
       },
       {
         "year": "2018",
@@ -192,7 +197,7 @@
         },
         {
           "name": "2023 — Warsaw",
-          "url": "https://warsaw.devfest.pl/",
+          "url": "https://gdg-warsaw-devfest23-web-11997.web.app",
           "newTab": true
         },
         {
@@ -314,6 +319,29 @@
   },
   "previousSpeakersBlock": {
     "title": "Previous speakers",
+    "description": "Over 85 tech leaders and community speakers have joined us across past DevFest Warsaw editions.",
+    "stats": [
+      {
+        "year": "2025",
+        "count": 14
+      },
+      {
+        "year": "2024",
+        "count": 13
+      },
+      {
+        "year": "2023",
+        "count": 20
+      },
+      {
+        "year": "2022",
+        "count": 25
+      },
+      {
+        "year": "2019",
+        "count": 38
+      }
+    ],
     "callToAction": {
       "label": "View all",
       "link": "/previous-speakers"

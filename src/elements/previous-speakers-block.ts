@@ -29,8 +29,49 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
           text-align: center;
         }
 
+        .description {
+          margin: 12px auto 0;
+          max-width: 640px;
+          color: var(--secondary-text-color);
+          font-size: 16px;
+          line-height: 1.6;
+        }
+
+        .stats-pills {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px 12px;
+          margin: 20px auto 0;
+          padding: 0 16px;
+          max-width: 720px;
+        }
+
+        .stat-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: 14px;
+          background: var(--secondary-background-color);
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          letter-spacing: 0.02em;
+        }
+
+        .stat-year {
+          color: var(--secondary-text-color);
+          font-weight: 500;
+        }
+
+        .stat-count {
+          color: var(--google-yellow);
+          font-weight: 700;
+        }
+
         .speakers-wrapper {
-          margin: 40px -8px 32px;
+          margin: 32px -8px 32px;
           position: relative;
           display: flex;
           flex-wrap: wrap;
@@ -78,6 +119,21 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
 
       <div class="container" hidden$="[[!hasSpeakers]]">
         <h2 class="container-title">[[previousSpeakersBlock.title]]</h2>
+
+        <template is="dom-if" if="[[previousSpeakersBlock.description]]">
+          <p class="description">[[previousSpeakersBlock.description]]</p>
+        </template>
+
+        <template is="dom-if" if="[[previousSpeakersBlock.stats]]">
+          <div class="stats-pills">
+            <template is="dom-repeat" items="[[previousSpeakersBlock.stats]]" as="stat">
+              <span class="stat-pill">
+                <span class="stat-year">[[stat.year]]:</span>
+                <span class="stat-count">[[stat.count]] speakers</span>
+              </span>
+            </template>
+          </div>
+        </template>
 
         <div class="speakers-wrapper">
           <template is="dom-repeat" items="[[speakers]]" as="speaker">
