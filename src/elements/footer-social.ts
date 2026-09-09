@@ -109,6 +109,29 @@ export class FooterSocial extends PolymerElement {
           list-style-type: disc;
         }
 
+        .social-networks .social-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          color: var(--footer-text-color);
+          transition:
+            background-color var(--animation),
+            color var(--animation);
+        }
+
+        .social-networks .social-link:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+        }
+
+        .social-networks .social-link iron-icon {
+          --iron-icon-width: 24px;
+          --iron-icon-height: 24px;
+        }
+
         .blog .title {
           padding-right: 55px;
         }
@@ -195,15 +218,13 @@ export class FooterSocial extends PolymerElement {
           <template is="dom-repeat" items="[[socialNetwork.follow]]" as="socFollow">
             <li>
               <a
+                class="social-link"
                 aria-label="Follow GDG Warsaw on [[socFollow.name]]"
                 href="[[socFollow.url]]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <paper-icon-button
-                  icon="hoverboard:[[socFollow.name]]"
-                  aria-label="Follow GDG Warsaw on [[socFollow.name]]"
-                ></paper-icon-button>
+                <iron-icon icon="hoverboard:[[socFollow.name]]"></iron-icon>
               </a>
             </li>
           </template>

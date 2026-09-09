@@ -199,7 +199,11 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
       title: this.partnersBlock.form.title,
       submitLabel: this.partnersBlock.form.submitLabel,
       firstFieldLabel: this.partnersBlock.form.fullName,
+      firstFieldName: 'fullName',
+      firstFieldAutocomplete: 'name',
       secondFieldLabel: this.partnersBlock.form.companyName,
+      secondFieldName: 'companyName',
+      secondFieldAutocomplete: 'organization',
       submit: (data) => store.dispatch(addPotentialPartner(data)),
     });
   }

@@ -9,8 +9,10 @@ Key facts: the event is organised by Google Developer Groups Warsaw, is intended
 ## Official event pages
 
 - [Home](https://warsaw.devfest.pl/): Event overview, registration, call for papers, venue, archive, and public updates.
+- [Blog](https://warsaw.devfest.pl/blog): News and stories from GDG Warsaw and the DevFest Warsaw community.
 - [Schedule](https://warsaw.devfest.pl/schedule): The programme will be published as sessions are confirmed.
 - [Speakers](https://warsaw.devfest.pl/speakers): Current and previous speaker information published by the organisers.
+- [Previous speakers](https://warsaw.devfest.pl/previous-speakers): Previous DevFest speakers from Warsaw community events.
 - [FAQ](https://warsaw.devfest.pl/faq): Answers about the date, venue, audience, programme, and participation.
 - [Team](https://warsaw.devfest.pl/team): GDG Warsaw volunteer organisers.
 - [Privacy and data](https://warsaw.devfest.pl/privacy): Public privacy information for the website and registration/newsletter flows.

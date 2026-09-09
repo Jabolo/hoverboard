@@ -1,0 +1,84 @@
+{
+  "/": {
+    "title": "GDG DevFest Warsaw 2026 | Warsaw developer conference",
+    "description": "Join GDG DevFest Warsaw 2026 on 21 November 2026 at Google for Startups Campus Warsaw for talks, workshops, practical learning, and networking.",
+    "structuredData": "event",
+    "fallbackHeading": "GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Real Work, Real Lessons. A one-day, community-led technology conference for developers, designers, entrepreneurs, engineers, researchers, and students.",
+      "21 November 2026, 09:00–21:00 Europe/Warsaw · Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland."
+    ]
+  },
+  "/blog": {
+    "title": "Blog | GDG DevFest Warsaw 2026",
+    "description": "News and stories from GDG Warsaw and the DevFest Warsaw community.",
+    "structuredData": null,
+    "fallbackHeading": "Blog | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": ["News and stories from GDG Warsaw and the DevFest Warsaw community."]
+  },
+  "/previous-speakers": {
+    "title": "Previous Speakers | GDG DevFest Warsaw 2026",
+    "description": "Explore previous DevFest speakers from Warsaw community events.",
+    "structuredData": null,
+    "fallbackHeading": "Previous Speakers | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": ["Explore previous DevFest speakers from Warsaw community events."]
+  },
+  "/schedule": {
+    "title": "Schedule | GDG DevFest Warsaw 2026",
+    "description": "Explore the GDG DevFest Warsaw 2026 programme in Warsaw: talks, demos, practical sessions, and hands-on workshops published as they are confirmed.",
+    "structuredData": "event",
+    "fallbackHeading": "Schedule | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Explore the GDG DevFest Warsaw 2026 programme in Warsaw. Talks, demos, practical sessions, and hands-on workshops will be published as they are confirmed.",
+      "The event takes place on 21 November 2026 from 09:00 to 21:00 Europe/Warsaw at Google for Startups Campus Warsaw."
+    ]
+  },
+  "/speakers": {
+    "title": "Speakers | GDG DevFest Warsaw 2026",
+    "description": "Meet the speakers and explore the speaker archive for GDG DevFest Warsaw, a community-led technology conference in Warsaw.",
+    "structuredData": "event",
+    "fallbackHeading": "Speakers | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Meet the speakers and explore the speaker archive for GDG DevFest Warsaw, a community-led technology conference in Warsaw.",
+      "The 2026 speaker lineup is published as confirmations are made."
+    ]
+  },
+  "/team": {
+    "title": "Organisers | GDG DevFest Warsaw 2026",
+    "description": "Meet the GDG Warsaw volunteers organising DevFest Warsaw 2026 for the local developer and technology community.",
+    "structuredData": "event",
+    "fallbackHeading": "Organisers | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Meet the GDG Warsaw volunteers organising DevFest Warsaw 2026 for the local developer and technology community.",
+      "GDG DevFest Warsaw is a community-led, in-person technology conference."
+    ]
+  },
+  "/faq": {
+    "title": "FAQ | GDG DevFest Warsaw 2026",
+    "description": "Find answers about the date, venue, audience, programme, participation, and Call for Papers for GDG DevFest Warsaw 2026.",
+    "structuredData": "faq",
+    "fallbackHeading": "FAQ | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Find answers about the date, venue, audience, programme, participation, and Call for Papers for GDG DevFest Warsaw 2026.",
+      "The event takes place on 21 November 2026 at Google for Startups Campus Warsaw. Registration opens at 09:00 and the official event ends at 21:00 Europe/Warsaw."
+    ]
+  },
+  "/privacy": {
+    "title": "Privacy and data | GDG DevFest Warsaw 2026",
+    "description": "Read how the DevFest Warsaw website, registration, and newsletter flows handle personal data.",
+    "structuredData": null,
+    "fallbackHeading": "Privacy and data | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Read how the DevFest Warsaw website, registration, and newsletter flows handle personal data."
+    ]
+  },
+  "/coc": {
+    "title": "Code of Conduct | GDG DevFest Warsaw 2026",
+    "description": "Read the Code of Conduct for GDG DevFest Warsaw 2026 and help keep the community welcoming, inclusive, and respectful.",
+    "structuredData": null,
+    "fallbackHeading": "Code of Conduct | GDG DevFest Warsaw 2026",
+    "fallbackParagraphs": [
+      "Read the Code of Conduct for GDG DevFest Warsaw 2026 and help keep the community welcoming, inclusive, and respectful."
+    ]
+  }
+}

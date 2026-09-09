@@ -120,16 +120,16 @@ export class AboutBlock extends ThemedElement {
         <div>
           <h2 class="container-title">${aboutBlock.title}</h2>
           <p>${aboutBlock.callToAction.featuredSessions.description}</p>
-          <a
+          <md-text-button
             href="${aboutBlock.callToAction.featuredSessions.link}"
             target="${aboutBlock.callToAction.featuredSessions.link.startsWith('http') ? '_blank' : nothing}"
             rel="${aboutBlock.callToAction.featuredSessions.link.startsWith('http') ? 'noopener noreferrer' : nothing}"
+            class="animated icon-right"
+            trailing-icon
           >
-            <md-text-button class="animated icon-right" trailing-icon>
-              <span class="cta-label">${aboutBlock.callToAction.featuredSessions.label}</span>
-              <span class="cta-arrow" slot="icon" aria-hidden="true">→</span>
-            </md-text-button>
-          </a>
+            <span class="cta-label">${aboutBlock.callToAction.featuredSessions.label}</span>
+            <span class="cta-arrow" slot="icon" aria-hidden="true">→</span>
+          </md-text-button>
 
           ${
             aboutBlock.callToAction.howItWas.youtubeId

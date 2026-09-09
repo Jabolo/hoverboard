@@ -225,7 +225,12 @@ export class HoverboardApp extends PolymerElement {
               aria-label="Primary navigation"
             >
               <template is="dom-repeat" items="[[navigation]]" as="nav">
-                <a href="[[nav.permalink]]" path="[[nav.route]]" on-click="closeDrawer">
+                <a
+                  href="[[nav.permalink]]"
+                  path="[[nav.route]]"
+                  on-click="closeDrawer"
+                  aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                >
                   [[nav.label]]
                 </a>
               </template>
@@ -390,5 +395,9 @@ export class HoverboardApp extends PolymerElement {
   @computed('tickets')
   private get registrationUrl(): string {
     return this.ticketUrl ? '/#registration' : '';
+  }
+
+  private getAriaCurrent(routeName: string, navRoute: string): string | undefined {
+    return routeName === navRoute ? 'page' : undefined;
   }
 }

@@ -106,17 +106,38 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           box-shadow: 0 0 24px rgba(251, 188, 4, 0.55) !important;
         }
 
-        /* Unavailable & Sold-out: grayed out and no animation */
+        /* Unavailable & Sold-out: accessible disabled state with preserved contrast */
         .ticket-item[unavailable],
         .ticket-item[sold-out] {
-          opacity: 0.38;
-          filter: grayscale(1);
           cursor: not-allowed;
           pointer-events: none;
           transform: none !important;
           box-shadow: none !important;
           border-color: var(--divider-color) !important;
+          background: rgba(255, 255, 255, 0.02) !important;
           transition: none !important;
+        }
+
+        .ticket-item[unavailable] .header h3,
+        .ticket-item[sold-out] .header h3 {
+          color: var(--secondary-text-color);
+        }
+
+        .ticket-item[unavailable] .price,
+        .ticket-item[sold-out] .price {
+          color: var(--terminal-muted) !important;
+        }
+
+        .ticket-item[unavailable] .currency,
+        .ticket-item[sold-out] .currency {
+          color: var(--terminal-muted) !important;
+        }
+
+        .ticket-item[unavailable] .ticket-dates,
+        .ticket-item[sold-out] .ticket-dates,
+        .ticket-item[unavailable] .ticket-info,
+        .ticket-item[sold-out] .ticket-info {
+          color: var(--secondary-text-color) !important;
         }
 
         .ticket-item[unavailable]:hover,

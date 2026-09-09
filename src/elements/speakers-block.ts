@@ -288,12 +288,13 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           </a>
         </p>
 
-        <a href="[[speakersBlock.callToAction.link]]">
-          <md-outlined-button class="cta-button animated icon-right">
-            <span>[[speakersBlock.callToAction.label]]</span>
-            <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-          </md-outlined-button>
-        </a>
+        <md-outlined-button
+          href="[[speakersBlock.callToAction.link]]"
+          class="cta-button animated icon-right"
+        >
+          <span>[[speakersBlock.callToAction.label]]</span>
+          <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+        </md-outlined-button>
       </div>
     `;
   }

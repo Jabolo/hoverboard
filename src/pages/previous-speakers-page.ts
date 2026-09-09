@@ -129,7 +129,7 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
           font-weight: bold;
         }
 
-        .sessions h5 {
+        .sessions .sessions-label {
           margin-right: 4px;
           font-weight: normal;
         }
@@ -210,7 +210,7 @@ export class PreviousSpeakersPage extends ReduxMixin(PolymerElement) {
               </template>
 
               <div class="sessions">
-                <h5>[[previousYears]]:</h5>
+                <span class="sessions-label">[[previousYears]]:</span>
                 [[getYears(speaker.sessions)]]
               </div>
             </div>

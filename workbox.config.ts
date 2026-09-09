@@ -15,7 +15,7 @@ export const workboxConfig: GenerateSWOptions = {
   swDest: 'dist/service-worker.js',
   navigateFallback: '/index.html',
   navigateFallbackDenylist: [FIREBASE_RESERVED_URLS],
-  skipWaiting: true,
+  skipWaiting: false,
   clientsClaim: true,
   offlineGoogleAnalytics: true,
   globDirectory: 'dist',

@@ -1,3 +1,4 @@
+import '@material/web/button/outlined-button.js';
 import { computed, customElement, property } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import { eveneaEmbed } from '../utils/data';
@@ -174,7 +175,8 @@ export class EveneaEmbed extends PolymerElement {
           white-space: nowrap;
         }
 
-        .preview-card {
+        .preview-card,
+        .offline-card {
           box-sizing: border-box;
           max-width: 680px;
           margin: 0 auto;
@@ -185,7 +187,8 @@ export class EveneaEmbed extends PolymerElement {
           text-align: center;
         }
 
-        .preview-card p {
+        .preview-card p,
+        .offline-card p {
           margin: 0 0 16px;
           color: var(--secondary-text-color);
         }
@@ -283,32 +286,40 @@ export class EveneaEmbed extends PolymerElement {
           </template>
         </div>
         <template is="dom-if" if="[[hasBeenOpened]]">
-          <template is="dom-if" if="[[published]]">
-            <iframe
-              id="ticketFrame"
-              src$="[[registrationSrc]]"
-              title="Evenea registration"
-              scrolling="auto"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              on-load="handleFrameLoad"
-            ></iframe>
-          </template>
-          <template is="dom-if" if="[[!published]]">
-            <div class="preview-card">
-              <p>
-                This registration form is prepared in Evenea and is currently available only as a
-                private organizer preview.
-              </p>
-              <a
-                class="draft-link"
-                href$="[[eveneaEmbed.draftUrl]]"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open the private Evenea draft
-              </a>
+          <template is="dom-if" if="[[isOffline]]">
+            <div class="offline-card">
+              <p>Ticketing registration requires an active internet connection.</p>
+              <md-outlined-button on-click="retryConnection">Retry connection</md-outlined-button>
             </div>
+          </template>
+          <template is="dom-if" if="[[!isOffline]]">
+            <template is="dom-if" if="[[published]]">
+              <iframe
+                id="ticketFrame"
+                src$="[[registrationSrc]]"
+                title="Evenea registration"
+                scrolling="auto"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                on-load="handleFrameLoad"
+              ></iframe>
+            </template>
+            <template is="dom-if" if="[[!published]]">
+              <div class="preview-card">
+                <p>
+                  This registration form is prepared in Evenea and is currently available only as a
+                  private organizer preview.
+                </p>
+                <a
+                  class="draft-link"
+                  href$="[[eveneaEmbed.draftUrl]]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open the private Evenea draft
+                </a>
+              </div>
+            </template>
           </template>
         </template>
       </section>
@@ -328,6 +339,9 @@ export class EveneaEmbed extends PolymerElement {
 
   @property({ type: Boolean })
   private hasBeenOpened = false;
+
+  @property({ type: Boolean })
+  private isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
 
   @property({ type: String })
   selectedTicketName = '';
@@ -356,6 +370,28 @@ export class EveneaEmbed extends PolymerElement {
     super.connectedCallback();
     if (this.opened && this.enabled && this.published && eveneaEmbed.resizerScriptSrc) {
       this.loadResizerScript();
+    }
+    window.addEventListener('online', this.updateNetworkStatus);
+    window.addEventListener('offline', this.updateNetworkStatus);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('online', this.updateNetworkStatus);
+    window.removeEventListener('offline', this.updateNetworkStatus);
+  }
+
+  private updateNetworkStatus = () => {
+    this.isOffline = typeof navigator !== 'undefined' && navigator.onLine === false;
+  };
+
+  private retryConnection() {
+    this.updateNetworkStatus();
+    if (!this.isOffline) {
+      const frame = this.shadowRoot?.querySelector<HTMLIFrameElement>('#ticketFrame');
+      if (frame) {
+        frame.src = this.registrationSrc;
+      }
     }
   }
 
@@ -412,7 +448,7 @@ export class EveneaEmbed extends PolymerElement {
 
     resizerWindow.iFrameResize(
       {
-        checkOrigin: false,
+        checkOrigin: ['https://app.evenea.pl', 'https://evenea.pl'],
         heightCalculationMethod: 'bodyOffset',
         scrolling: false,
       },

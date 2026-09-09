@@ -64,7 +64,8 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           required
           auto-validate$="[[validate]]"
           error-message="[[subscribeBlock.fieldRequired]]"
-          autocomplete="off"
+          name$="[[firstFieldName]]"
+          autocomplete$="[[firstFieldAutocomplete]]"
         >
         </paper-input>
         <paper-input
@@ -75,18 +76,21 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           required
           auto-validate$="[[validate]]"
           error-message="[[subscribeBlock.fieldRequired]]"
-          autocomplete="off"
+          name$="[[secondFieldName]]"
+          autocomplete$="[[secondFieldAutocomplete]]"
         >
         </paper-input>
         <paper-input
           id="emailInput"
           on-touchend="triggerFocus"
+          type="email"
           label="[[subscribeBlock.emailAddress]] *"
           value="{{email}}"
           required
           auto-validate$="[[validate]]"
           error-message="[[subscribeBlock.emailRequired]]"
-          autocomplete="off"
+          name="email"
+          autocomplete="email"
         >
         </paper-input>
 
@@ -128,7 +132,15 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
   @property({ type: String })
   private firstFieldLabel = '';
   @property({ type: String })
+  private firstFieldName = 'firstName';
+  @property({ type: String })
+  private firstFieldAutocomplete = 'given-name';
+  @property({ type: String })
   private secondFieldLabel = '';
+  @property({ type: String })
+  private secondFieldName = 'lastName';
+  @property({ type: String })
+  private secondFieldAutocomplete = 'family-name';
   @property({ type: String })
   private email = '';
   @property({ type: Number })
@@ -189,6 +201,10 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
       this.submitLabel = data.submitLabel || this.subscribeBlock.subscribe;
       this.firstFieldLabel = data.firstFieldLabel || this.subscribeBlock.firstName;
       this.secondFieldLabel = data.secondFieldLabel || this.subscribeBlock.lastName;
+      this.firstFieldName = data.firstFieldName || 'firstName';
+      this.firstFieldAutocomplete = data.firstFieldAutocomplete || 'given-name';
+      this.secondFieldName = data.secondFieldName || 'lastName';
+      this.secondFieldAutocomplete = data.secondFieldAutocomplete || 'family-name';
       this.prefillFields(data);
     }
   }

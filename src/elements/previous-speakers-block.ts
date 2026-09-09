@@ -151,12 +151,15 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
           </template>
         </div>
 
-        <a href="[[previousSpeakersBlock.callToAction.link]]" hidden$="[[!hasSpeakers]]">
-          <md-text-button class="animated icon-right" trailing-icon>
-            [[previousSpeakersBlock.callToAction.label]]
-            <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
-          </md-text-button>
-        </a>
+        <md-text-button
+          href="[[previousSpeakersBlock.callToAction.link]]"
+          hidden$="[[!hasSpeakers]]"
+          class="animated icon-right"
+          trailing-icon
+        >
+          [[previousSpeakersBlock.callToAction.label]]
+          <iron-icon slot="icon" icon="hoverboard:arrow-right-circle"></iron-icon>
+        </md-text-button>
       </div>
     `;
   }

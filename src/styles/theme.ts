@@ -42,7 +42,7 @@ export const theme = css`
     --footer-background-color: #050910;
     --footer-text-color: var(--terminal-muted);
     --twitter-color: #4099ff;
-    --facebook-color: #3b5998;
+    --facebook-color: #527ac9;
     --border-light-color: var(--terminal-line);
     --error-color: var(--google-red-strong);
 

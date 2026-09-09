@@ -93,14 +93,14 @@ export class CfpBlock extends ThemedElement {
           text-decoration: none;
         }
 
-        .cfp-action-link md-filled-button {
+        .cfp-action-button {
           cursor: pointer;
           transition:
             transform var(--animation),
             filter var(--animation);
         }
 
-        .cfp-action-link:hover md-filled-button {
+        .cfp-action-button:hover {
           transform: translateY(-2px);
           filter: drop-shadow(0 4px 14px rgba(52, 168, 83, 0.45));
         }
@@ -289,14 +289,14 @@ export class CfpBlock extends ThemedElement {
             </div>
           </div>
 
-          <a
+          <md-filled-button
+            class="cfp-action-button"
             href="${cfpBlock.link}"
             target="_blank"
             rel="noopener noreferrer"
-            class="cfp-action-link"
+            aria-describedby="cfp-note"
+            >${cfpBlock.cta}</md-filled-button
           >
-            <md-filled-button aria-describedby="cfp-note">${cfpBlock.cta}</md-filled-button>
-          </a>
           <p class="note" id="cfp-note">${cfpBlock.note}</p>
         </div>
       </section>

@@ -94,20 +94,26 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
               <short-markdown class="description" content="[[block.description]]"></short-markdown>
 
               <template is="dom-if" if="[[block.callToAction.newTab]]">
-                <a href="[[block.callToAction.link]]" target="_blank" rel="noopener noreferrer">
-                  <md-text-button class="cta-button animated icon-right">
-                    <span>[[block.callToAction.label]]</span>
-                    <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-                  </md-text-button>
-                </a>
+                <md-text-button
+                  href="[[block.callToAction.link]]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="cta-button animated icon-right"
+                  aria-label$="[[block.callToAction.label]] - [[block.title]]"
+                >
+                  <span>[[block.callToAction.label]]</span>
+                  <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+                </md-text-button>
               </template>
               <template is="dom-if" if="[[!block.callToAction.newTab]]">
-                <a href="[[block.callToAction.link]]">
-                  <md-text-button class="cta-button animated icon-right">
-                    <span>[[block.callToAction.label]]</span>
-                    <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
-                  </md-text-button>
-                </a>
+                <md-text-button
+                  href="[[block.callToAction.link]]"
+                  class="cta-button animated icon-right"
+                  aria-label$="[[block.callToAction.label]] - [[block.title]]"
+                >
+                  <span>[[block.callToAction.label]]</span>
+                  <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
+                </md-text-button>
               </template>
             </div>
           </template>

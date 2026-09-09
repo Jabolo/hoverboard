@@ -26,7 +26,12 @@ class VideoDialog extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <mwc-dialog id="dialog" open="[[video.open]]" heading="[[video.title]]">
+      <mwc-dialog
+        id="dialog"
+        open="[[video.open]]"
+        heading="[[video.title]]"
+        aria-label$="[[video.title]]"
+      >
         <div class="video-wrapper">
           <template is="dom-if" if="[[video.youtubeId]]">
             <lite-youtube

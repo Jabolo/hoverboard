@@ -45,12 +45,28 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           margin-top: 24px;
         }
 
-        .directions {
-          --paper-icon-button: {
-            width: 48px;
-            height: 48px;
-            color: var(--text-primary-color);
-          };
+        .directions-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          color: var(--text-primary-color);
+          text-decoration: none;
+          transition:
+            background-color var(--animation),
+            color var(--animation);
+        }
+
+        .directions-link:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+          color: var(--google-blue);
+        }
+
+        .directions-link iron-icon {
+          --iron-icon-width: 24px;
+          --iron-icon-height: 24px;
         }
 
         @media (min-width: 640px) {
@@ -109,16 +125,13 @@ export class MapBlock extends ReduxMixin(PolymerElement) {
           <div class="bottom-info" layout horizontal justified center>
             <span class="address">[[location.address]]</span>
             <a
+              class="directions-link"
               aria-label="Get directions to the venue"
               href="https://www.google.com/maps/dir/?api=1&amp;destination=[[location.address]]"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <paper-icon-button
-                class="directions"
-                icon="hoverboard:directions"
-                aria-label="Get directions to the venue"
-              ></paper-icon-button>
+              <iron-icon icon="hoverboard:directions"></iron-icon>
             </a>
           </div>
         </div>

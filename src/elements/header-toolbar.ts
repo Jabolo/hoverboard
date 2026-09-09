@@ -231,7 +231,14 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         >
           <template is="dom-repeat" items="[[navigation]]" as="nav">
             <paper-tab name="[[nav.route]]" class="nav-item" link tabindex="-1">
-              <a href="[[nav.permalink]]" layout vertical center-center>[[nav.label]]</a>
+              <a
+                href="[[nav.permalink]]"
+                layout
+                vertical
+                center-center
+                aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                >[[nav.label]]</a
+              >
             </paper-tab>
           </template>
 
@@ -421,5 +428,9 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
       '--hero-logo-opacity': settings.hideLogo ? '0' : '1',
       '--hero-logo-color': settings.backgroundImage ? '#fff' : 'var(--default-primary-color)',
     });
+  }
+
+  private getAriaCurrent(routeName: string, navRoute: string): string | undefined {
+    return routeName === navRoute ? 'page' : undefined;
   }
 }

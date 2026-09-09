@@ -21,15 +21,18 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
 register('service-worker.js', {
   registrationOptions: { scope: getConfig(CONFIG.BASEPATH) },
   updated(registration) {
-    if (registration?.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-    }
     store.dispatch(
       queueComplexSnackbar({
         label: serviceWorkerAvailable,
         action: {
           title: refresh,
-          callback: () => window.location.reload(),
+          callback: () => {
+            if (registration?.waiting) {
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+              window.location.reload();
+            }
+          },
         },
       }),
     );

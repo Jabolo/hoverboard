@@ -47,6 +47,7 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         <paper-input
           id="emailInput"
           on-touchend="_focus"
+          type="email"
           label="[[subscribeBlock.yourEmail]]"
           value="{{email}}"
           required

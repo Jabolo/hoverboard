@@ -72,6 +72,7 @@ export class FeedbackBlock extends ReduxMixin(PolymerElement) {
           id="commentInput"
           hidden$="[[!hasRated]]"
           label="Comment"
+          aria-label="Comment"
           value="{{comment}}"
           maxlength="256"
         ></paper-textarea>
