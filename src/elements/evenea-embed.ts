@@ -75,7 +75,10 @@ export class EveneaEmbed extends PolymerElement {
           font-family: var(--font-mono, monospace);
           font-size: 12px;
           font-weight: 600;
-          transition: background 0.2s, color 0.2s, border-color 0.2s;
+          transition:
+            background 0.2s,
+            color 0.2s,
+            border-color 0.2s;
         }
 
         .close-embed-btn:hover {
@@ -248,9 +251,7 @@ export class EveneaEmbed extends PolymerElement {
               <span>🎟️ <strong>All tickets</strong> available in form</span>
             </template>
           </div>
-          <button type="button" class="close-embed-btn" on-click="handleClose">
-            ▲ Close form
-          </button>
+          <button type="button" class="close-embed-btn" on-click="handleClose">▲ Close form</button>
         </div>
 
         <div class="header">
@@ -365,9 +366,7 @@ export class EveneaEmbed extends PolymerElement {
 
   private handleClose() {
     this.opened = false;
-    this.dispatchEvent(
-      new CustomEvent('close-registration', { bubbles: true, composed: true }),
-    );
+    this.dispatchEvent(new CustomEvent('close-registration', { bubbles: true, composed: true }));
   }
 
   private loadResizerScript() {

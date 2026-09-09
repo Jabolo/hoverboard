@@ -580,10 +580,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             </div>
           </div>
 
-          <div
-            class="registration-drawer-bar"
-            opened$="[[registrationOpened]]"
-          >
+          <div class="registration-drawer-bar" opened$="[[registrationOpened]]">
             <div class="drawer-hint">
               <template is="dom-if" if="[[!registrationOpened]]">
                 <span class="drawer-icon">🎟️</span>
@@ -595,7 +592,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 <span class="drawer-icon">✅</span>
                 <span>
                   <template is="dom-if" if="[[selectedTicketName]]">
-                    Selected: <strong>[[selectedTicketName]]</strong>. Registration form is open below.
+                    Selected: <strong>[[selectedTicketName]]</strong>. Registration form is open
+                    below.
                   </template>
                   <template is="dom-if" if="[[!selectedTicketName]]">
                     Registration form is open below.
@@ -613,9 +611,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
               <template is="dom-if" if="[[!registrationOpened]]">
                 ▼ Open registration form
               </template>
-              <template is="dom-if" if="[[registrationOpened]]">
-                ▲ Collapse form
-              </template>
+              <template is="dom-if" if="[[registrationOpened]]"> ▲ Collapse form </template>
             </button>
           </div>
         </template>

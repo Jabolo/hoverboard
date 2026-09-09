@@ -141,9 +141,11 @@ export class PastDevFestsBlock extends ThemedElement {
               <a class="archive-card" href="${event.url}" target="_blank" rel="noopener noreferrer">
                 <div class="card-meta">
                   <span class="year">${event.year}</span>
-                  ${'speakers' in event && event.speakers
-                    ? html`<span class="speakers-badge">${event.speakers} speakers</span>`
-                    : nothing}
+                  ${
+                    'speakers' in event && event.speakers
+                      ? html`<span class="speakers-badge">${event.speakers} speakers</span>`
+                      : nothing
+                  }
                 </div>
                 <span class="name">${event.name}</span>
                 <span class="link-label">Open event ↗</span>
