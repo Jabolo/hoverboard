@@ -8,6 +8,7 @@ import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { fetchTickets } from '../store/tickets/actions';
 import { initialTicketsState } from '../store/tickets/state';
+import { logAnalyticsEvent } from '../utils/analytics';
 import {
   buyTicket,
   contentLoaders,
@@ -412,11 +413,6 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           box-sizing: border-box;
         }
 
-        .registration-drawer-bar[opened] {
-          border-color: rgba(66, 133, 244, 0.4);
-          background: rgba(66, 133, 244, 0.05);
-        }
-
         .registration-drawer-bar strong {
           color: var(--primary-text-color);
         }
@@ -580,40 +576,25 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             </div>
           </div>
 
-          <div class="registration-drawer-bar" opened$="[[registrationOpened]]">
-            <div class="drawer-hint">
-              <template is="dom-if" if="[[!registrationOpened]]">
+          <template is="dom-if" if="[[!registrationOpened]]">
+            <div class="registration-drawer-bar">
+              <div class="drawer-hint">
                 <span class="drawer-icon">🎟️</span>
                 <span>
                   Click <strong>REGISTER</strong> on any ticket above, or open the form directly.
                 </span>
-              </template>
-              <template is="dom-if" if="[[registrationOpened]]">
-                <span class="drawer-icon">✅</span>
-                <span>
-                  <template is="dom-if" if="[[selectedTicketName]]">
-                    Selected: <strong>[[selectedTicketName]]</strong>. Registration form is open
-                    below.
-                  </template>
-                  <template is="dom-if" if="[[!selectedTicketName]]">
-                    Registration form is open below.
-                  </template>
-                </span>
-              </template>
-            </div>
+              </div>
 
-            <button
-              type="button"
-              class="drawer-toggle-btn"
-              on-click="toggleRegistration"
-              aria-expanded$="[[registrationOpened]]"
-            >
-              <template is="dom-if" if="[[!registrationOpened]]">
+              <button
+                type="button"
+                class="drawer-toggle-btn"
+                on-click="toggleRegistration"
+                aria-expanded="false"
+              >
                 ▼ Open registration form
-              </template>
-              <template is="dom-if" if="[[registrationOpened]]"> ▲ Collapse form </template>
-            </button>
-          </div>
+              </button>
+            </div>
+          </template>
         </template>
 
         <evenea-embed
@@ -727,13 +708,38 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     return Boolean(opened && selectedTicketId && ticket?.eveneaTicketId === selectedTicketId);
   }
 
+  private getTicketAnalyticsParams(ticket: Ticket) {
+    const itemId = ticket.eveneaTicketId || ticket.name;
+
+    return {
+      ticket_id: itemId,
+      ticket_name: ticket.name,
+      ticket_tier: this.getTicketTier(ticket),
+      ticket_price: ticket.price,
+      ticket_currency: ticket.currency,
+      items: [
+        {
+          item_id: itemId,
+          item_name: ticket.name,
+          item_category: this.getTicketTier(ticket),
+          price: ticket.price,
+        },
+      ],
+    };
+  }
+
   private onTicketTap(e: Event & { model: { ticket: Ticket } }) {
     if (e.model.ticket.soldOut || !e.model.ticket.available) {
       return;
     }
+    const wasRegistrationOpened = this.registrationOpened;
     this.selectedTicketName = e.model.ticket.name;
     this.selectedTicketId = e.model.ticket.eveneaTicketId || '';
     this.registrationOpened = true;
+    void logAnalyticsEvent(wasRegistrationOpened ? 'select_item' : 'begin_checkout', {
+      entry_point: 'ticket_card',
+      ...this.getTicketAnalyticsParams(e.model.ticket),
+    });
 
     window.setTimeout(() => {
       this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
@@ -744,8 +750,12 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   }
 
   private toggleRegistration() {
-    this.registrationOpened = !this.registrationOpened;
-    if (this.registrationOpened) {
+    const opening = !this.registrationOpened;
+    this.registrationOpened = opening;
+    if (opening) {
+      void logAnalyticsEvent('begin_checkout', {
+        entry_point: 'registration_drawer',
+      });
       window.setTimeout(() => {
         this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
           behavior: 'smooth',

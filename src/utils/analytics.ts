@@ -109,9 +109,16 @@ export async function logPageView() {
   });
 }
 
-export async function logLogin() {
+export async function logAnalyticsEvent(
+  eventName: string,
+  parameters: Record<string, unknown> = {},
+) {
   if (analyticsConsent !== 'granted') return;
 
   await loadAnalytics();
-  window.gtag?.('event', 'login');
+  window.gtag?.('event', eventName, parameters);
+}
+
+export async function logLogin() {
+  await logAnalyticsEvent('login');
 }
