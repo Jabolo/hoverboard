@@ -9,11 +9,79 @@ export class EveneaEmbed extends PolymerElement {
       <style>
         :host {
           display: block;
-          margin: 56px auto 0;
-          padding-top: 32px;
-          border-top: 1px solid var(--divider-color);
+          margin: 0 auto;
           max-width: 960px;
           scroll-margin-top: 96px;
+        }
+
+        :host(:not([opened])) {
+          display: none;
+        }
+
+        :host([opened]) {
+          margin-top: 36px;
+          padding-top: 28px;
+          border-top: 1px dashed var(--divider-color);
+          animation: slideDownFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideDownFade {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .embed-top-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 20px;
+          padding: 10px 16px;
+          background: var(--secondary-background-color);
+          border: 1px solid var(--divider-color);
+          border-radius: var(--border-radius);
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+        }
+
+        .active-selection {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: var(--google-blue);
+        }
+
+        .active-selection strong {
+          color: var(--primary-text-color);
+          font-weight: 800;
+        }
+
+        .close-embed-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: transparent;
+          border: 1px solid var(--divider-color);
+          color: var(--secondary-text-color);
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 600;
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .close-embed-btn:hover {
+          background: rgba(255, 255, 255, 0.08);
+          color: var(--primary-text-color);
+          border-color: var(--google-yellow);
         }
 
         .header {
@@ -144,6 +212,16 @@ export class EveneaEmbed extends PolymerElement {
         }
 
         @media (max-width: 639px) {
+          .embed-top-bar {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .close-embed-btn {
+            width: 100%;
+            justify-content: center;
+          }
+
           .registration-guide {
             margin-top: 16px;
             margin-bottom: 18px;
@@ -161,6 +239,20 @@ export class EveneaEmbed extends PolymerElement {
       </style>
 
       <section hidden$="[[!enabled]]">
+        <div class="embed-top-bar">
+          <div class="active-selection">
+            <template is="dom-if" if="[[selectedTicketName]]">
+              <span>🎟️ Selected ticket: <strong>[[selectedTicketName]]</strong></span>
+            </template>
+            <template is="dom-if" if="[[!selectedTicketName]]">
+              <span>🎟️ <strong>All tickets</strong> available in form</span>
+            </template>
+          </div>
+          <button type="button" class="close-embed-btn" on-click="handleClose">
+            ▲ Close form
+          </button>
+        </div>
+
         <div class="header">
           <h2>[[eveneaEmbed.title]]</h2>
           <p class="description">[[eveneaEmbed.description]]</p>
@@ -188,32 +280,34 @@ export class EveneaEmbed extends PolymerElement {
             </div>
           </template>
         </div>
-        <template is="dom-if" if="[[published]]">
-          <iframe
-            id="ticketFrame"
-            src$="[[registrationSrc]]"
-            title="Evenea registration"
-            scrolling="auto"
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-            on-load="handleFrameLoad"
-          ></iframe>
-        </template>
-        <template is="dom-if" if="[[!published]]">
-          <div class="preview-card">
-            <p>
-              This registration form is prepared in Evenea and is currently available only as a
-              private organizer preview.
-            </p>
-            <a
-              class="draft-link"
-              href$="[[eveneaEmbed.draftUrl]]"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Open the private Evenea draft
-            </a>
-          </div>
+        <template is="dom-if" if="[[hasBeenOpened]]">
+          <template is="dom-if" if="[[published]]">
+            <iframe
+              id="ticketFrame"
+              src$="[[registrationSrc]]"
+              title="Evenea registration"
+              scrolling="auto"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              on-load="handleFrameLoad"
+            ></iframe>
+          </template>
+          <template is="dom-if" if="[[!published]]">
+            <div class="preview-card">
+              <p>
+                This registration form is prepared in Evenea and is currently available only as a
+                private organizer preview.
+              </p>
+              <a
+                class="draft-link"
+                href$="[[eveneaEmbed.draftUrl]]"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open the private Evenea draft
+              </a>
+            </div>
+          </template>
         </template>
       </section>
     `;
@@ -227,8 +321,14 @@ export class EveneaEmbed extends PolymerElement {
   @property({ type: Boolean })
   private published = Boolean(eveneaEmbed.published);
 
+  @property({ type: Boolean, reflectToAttribute: true, observer: 'openedChanged' })
+  opened = false;
+
+  @property({ type: Boolean })
+  private hasBeenOpened = false;
+
   @property({ type: String })
-  private selectedTicketName = '';
+  selectedTicketName = '';
 
   @property({ type: String })
   selectedTicketId = '';
@@ -246,9 +346,28 @@ export class EveneaEmbed extends PolymerElement {
 
   override connectedCallback() {
     super.connectedCallback();
-    if (this.enabled && this.published && eveneaEmbed.resizerScriptSrc) {
+    if (this.opened && this.enabled && this.published && eveneaEmbed.resizerScriptSrc) {
       this.loadResizerScript();
     }
+  }
+
+  private openedChanged(opened: boolean) {
+    if (opened) {
+      this.hasBeenOpened = true;
+      if (this.enabled && this.published && eveneaEmbed.resizerScriptSrc) {
+        this.loadResizerScript();
+      }
+      window.setTimeout(() => {
+        this.initializeResizer();
+      }, 100);
+    }
+  }
+
+  private handleClose() {
+    this.opened = false;
+    this.dispatchEvent(
+      new CustomEvent('close-registration', { bubbles: true, composed: true }),
+    );
   }
 
   private loadResizerScript() {

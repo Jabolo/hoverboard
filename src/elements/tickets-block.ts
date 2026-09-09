@@ -87,6 +87,24 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           box-shadow: var(--box-shadow-primary-color-hover);
         }
 
+        /* Active / Selected Ticket Highlight */
+        .ticket-item[selected] {
+          border-color: var(--google-blue) !important;
+          box-shadow: 0 0 20px rgba(66, 133, 244, 0.45) !important;
+          transform: translateY(-4px) scale(1.02) !important;
+          z-index: 2;
+        }
+
+        .ticket-item[tier='supporter'][selected] {
+          border-color: var(--google-green) !important;
+          box-shadow: 0 0 24px rgba(52, 168, 83, 0.5) !important;
+        }
+
+        .ticket-item[tier='patron'][selected] {
+          border-color: var(--google-yellow) !important;
+          box-shadow: 0 0 24px rgba(251, 188, 4, 0.55) !important;
+        }
+
         /* Unavailable & Sold-out: grayed out and no animation */
         .ticket-item[unavailable],
         .ticket-item[sold-out] {
@@ -376,6 +394,85 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           .ticket-item[in-demand] {
             transform: scale(1.02);
           }
+        .registration-drawer-bar {
+          max-width: 780px;
+          margin: 24px auto 0;
+          padding: 12px 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          background: var(--secondary-background-color);
+          border: 1px dashed var(--divider-color);
+          border-radius: 8px;
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          color: var(--secondary-text-color);
+          text-align: left;
+          box-sizing: border-box;
+        }
+
+        .registration-drawer-bar[opened] {
+          border-color: rgba(66, 133, 244, 0.4);
+          background: rgba(66, 133, 244, 0.05);
+        }
+
+        .registration-drawer-bar strong {
+          color: var(--primary-text-color);
+        }
+
+        .drawer-hint {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          line-height: 1.4;
+        }
+
+        .drawer-icon {
+          font-size: 18px;
+          flex-shrink: 0;
+        }
+
+        .drawer-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(66, 133, 244, 0.12);
+          border: 1px solid var(--google-blue);
+          color: var(--primary-text-color);
+          padding: 8px 16px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.03em;
+          white-space: nowrap;
+          transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .drawer-toggle-btn:hover {
+          background: var(--google-blue);
+          color: #fff;
+        }
+
+        @media (max-width: 639px) {
+          .registration-drawer-bar {
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+          }
+
+          .drawer-hint {
+            flex-direction: column;
+            gap: 6px;
+          }
+
+          .drawer-toggle-btn {
+            width: 100%;
+          }
         }
       </style>
 
@@ -412,6 +509,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 sold-out$="[[ticket.soldOut]]"
                 unavailable$="[[!ticket.available]]"
                 in-demand$="[[ticket.inDemand]]"
+                selected$="[[isTicketSelected(ticket, selectedTicketId, registrationOpened)]]"
                 tier$="[[getTicketTier(ticket)]]"
                 layout
                 vertical
@@ -456,7 +554,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                     disabled$="[[!ticket.available]]"
                     on-click="onTicketTap"
                   >
-                    [[getButtonText(ticket.available)]]
+                    [[getButtonText(ticket, selectedTicketId, registrationOpened)]]
                   </md-filled-button>
                 </div>
               </div>
@@ -481,12 +579,53 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
               </div>
             </div>
           </div>
+
+          <div
+            class="registration-drawer-bar"
+            opened$="[[registrationOpened]]"
+          >
+            <div class="drawer-hint">
+              <template is="dom-if" if="[[!registrationOpened]]">
+                <span class="drawer-icon">🎟️</span>
+                <span>
+                  Click <strong>REGISTER</strong> on any ticket above, or open the form directly.
+                </span>
+              </template>
+              <template is="dom-if" if="[[registrationOpened]]">
+                <span class="drawer-icon">✅</span>
+                <span>
+                  <template is="dom-if" if="[[selectedTicketName]]">
+                    Selected: <strong>[[selectedTicketName]]</strong>. Registration form is open below.
+                  </template>
+                  <template is="dom-if" if="[[!selectedTicketName]]">
+                    Registration form is open below.
+                  </template>
+                </span>
+              </template>
+            </div>
+
+            <button
+              type="button"
+              class="drawer-toggle-btn"
+              on-click="toggleRegistration"
+              aria-expanded$="[[registrationOpened]]"
+            >
+              <template is="dom-if" if="[[!registrationOpened]]">
+                ▼ Open registration form
+              </template>
+              <template is="dom-if" if="[[registrationOpened]]">
+                ▲ Collapse form
+              </template>
+            </button>
+          </div>
         </template>
 
         <evenea-embed
           id="registration-form"
           selected-ticket-name="[[selectedTicketName]]"
           selected-ticket-id="[[selectedTicketId]]"
+          opened="[[registrationOpened]]"
+          on-close-registration="handleCloseRegistration"
         ></evenea-embed>
       </div>
     `;
@@ -505,6 +644,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   @property({ type: String })
   private selectedTicketId = '';
+
+  @property({ type: Boolean })
+  private registrationOpened = false;
 
   override stateChanged(state: RootState) {
     this.tickets = state.tickets;
@@ -585,23 +727,53 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     return this.ticketsBlock.save.replace('${discount}', discount);
   }
 
+  private isTicketSelected(ticket: Ticket, selectedTicketId: string, opened: boolean): boolean {
+    return Boolean(opened && selectedTicketId && ticket?.eveneaTicketId === selectedTicketId);
+  }
+
   private onTicketTap(e: Event & { model: { ticket: Ticket } }) {
     if (e.model.ticket.soldOut || !e.model.ticket.available) {
       return;
     }
     this.selectedTicketName = e.model.ticket.name;
     this.selectedTicketId = e.model.ticket.eveneaTicketId || '';
-    this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    this.registrationOpened = true;
+
+    window.setTimeout(() => {
+      this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 120);
+  }
+
+  private toggleRegistration() {
+    this.registrationOpened = !this.registrationOpened;
+    if (this.registrationOpened) {
+      window.setTimeout(() => {
+        this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 120);
+    }
+  }
+
+  private handleCloseRegistration() {
+    this.registrationOpened = false;
   }
 
   private retryTickets() {
     store.dispatch(fetchTickets);
   }
 
-  private getButtonText(available: boolean) {
-    return available ? this.availableTicketAction : this.ticketsBlock.notAvailableYet;
+  private getButtonText(ticket: Ticket, selectedTicketId: string, opened: boolean) {
+    if (!ticket?.available) {
+      return this.ticketsBlock.notAvailableYet;
+    }
+    if (opened && ticket.eveneaTicketId && ticket.eveneaTicketId === selectedTicketId) {
+      return 'Selected ✓';
+    }
+    return this.availableTicketAction;
   }
 }
