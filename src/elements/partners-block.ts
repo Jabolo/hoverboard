@@ -65,7 +65,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .logo-item {
-          padding: 20px 28px;
+          padding: 8px 12px;
           min-height: 96px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
@@ -84,7 +84,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logo-img {
           --lazy-image-width: 100%;
-          --lazy-image-height: 56px;
+          --lazy-image-height: 72px;
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);

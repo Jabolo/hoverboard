@@ -1,7 +1,7 @@
 import { customElement, property } from '@polymer/decorators';
 import '@polymer/paper-icon-button';
 import { html, PolymerElement } from '@polymer/polymer';
-import { share } from '../utils/share';
+import { share as shareUtil } from '../utils/share';
 import {
   emailUs,
   followOur,
@@ -236,6 +236,6 @@ export class FooterSocial extends PolymerElement {
   private blogNewTab = organizer.blog.startsWith('http');
 
   share(e: PointerEvent) {
-    return share(e);
+    return shareUtil(e);
   }
 }
