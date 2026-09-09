@@ -11,6 +11,7 @@ const STATIC_EXPIRATION = {
 
 export const workboxConfig: GenerateSWOptions = {
   mode: 'production',
+  disableDevLogs: true,
   swDest: 'dist/service-worker.js',
   navigateFallback: '/index.html',
   navigateFallbackDenylist: [FIREBASE_RESERVED_URLS],

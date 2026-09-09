@@ -45,7 +45,11 @@ function loadAnalytics(): Promise<void> {
 
   analyticsReady = new Promise((resolve, reject) => {
     window.dataLayer = window.dataLayer || [];
-    window.gtag = (...args: unknown[]) => window.dataLayer?.push(args);
+    // Keep the queue shape used by Google's official gtag snippet. The
+    // library reads array-like `arguments` entries from dataLayer.
+    window.gtag = function gtag() {
+      window.dataLayer?.push(arguments);
+    };
     window.gtag('js', new Date());
     window.gtag('consent', 'default', {
       analytics_storage: 'denied',
