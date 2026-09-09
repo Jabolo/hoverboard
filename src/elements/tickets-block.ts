@@ -395,6 +395,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           .ticket-item[in-demand] {
             transform: scale(1.02);
           }
+        }
+
         .registration-drawer-bar {
           max-width: 780px;
           margin: 24px auto 0;
@@ -444,7 +446,10 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           font-weight: 700;
           letter-spacing: 0.03em;
           white-space: nowrap;
-          transition: background 0.2s, color 0.2s, border-color 0.2s;
+          transition:
+            background 0.2s,
+            color 0.2s,
+            border-color 0.2s;
         }
 
         .drawer-toggle-btn:hover {
@@ -736,7 +741,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     this.selectedTicketName = e.model.ticket.name;
     this.selectedTicketId = e.model.ticket.eveneaTicketId || '';
     this.registrationOpened = true;
-    void logAnalyticsEvent(wasRegistrationOpened ? 'select_item' : 'begin_checkout', {
+    void logAnalyticsEvent(wasRegistrationOpened ? 'ticket_selected' : 'registration_start', {
       entry_point: 'ticket_card',
       ...this.getTicketAnalyticsParams(e.model.ticket),
     });
@@ -753,7 +758,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     const opening = !this.registrationOpened;
     this.registrationOpened = opening;
     if (opening) {
-      void logAnalyticsEvent('begin_checkout', {
+      void logAnalyticsEvent('registration_start', {
         entry_point: 'registration_drawer',
       });
       window.setTimeout(() => {
