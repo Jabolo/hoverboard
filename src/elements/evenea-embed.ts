@@ -335,6 +335,8 @@ export class EveneaEmbed extends PolymerElement {
   @property({ type: String })
   selectedTicketId = '';
 
+  private resizerFrame: HTMLIFrameElement | null = null;
+
   @computed('selectedTicketId')
   private get registrationSrc() {
     const registrationUrl = new URL(eveneaEmbed.iframeSrc);
@@ -404,6 +406,10 @@ export class EveneaEmbed extends PolymerElement {
       return;
     }
 
+    if (this.resizerFrame === frame) {
+      return;
+    }
+
     resizerWindow.iFrameResize(
       {
         checkOrigin: false,
@@ -412,5 +418,6 @@ export class EveneaEmbed extends PolymerElement {
       },
       frame,
     );
+    this.resizerFrame = frame;
   };
 }

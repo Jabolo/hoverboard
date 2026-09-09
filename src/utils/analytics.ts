@@ -1,4 +1,4 @@
-const MEASUREMENT_ID = 'G-4ZBKB8TTXJ';
+const MEASUREMENT_ID = 'G-6H09QP1YCQ';
 const CONSENT_STORAGE_KEY = 'devfest-analytics-consent';
 const GOOGLE_ANALYTICS_SCRIPT = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
 
