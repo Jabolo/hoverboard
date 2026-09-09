@@ -15,6 +15,7 @@ import {
   setSuppressTemplateNotifications,
 } from '@polymer/polymer/lib/utils/settings';
 import './components/snack-bar';
+import './components/cookie-consent';
 import './elements/dialogs/feedback-dialog';
 import './elements/dialogs/signin-dialog';
 import './elements/dialogs/subscribe-dialog';
@@ -262,6 +263,8 @@ export class HoverboardApp extends PolymerElement {
       <signin-dialog></signin-dialog>
       <subscribe-dialog></subscribe-dialog>
       <video-dialog></video-dialog>
+
+      <cookie-consent></cookie-consent>
 
       <snack-bar></snack-bar>
     `;

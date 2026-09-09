@@ -1,0 +1,86 @@
+# GDG DevFest Warsaw 2026 — public facts
+
+This file is an expanded, machine-readable companion to `/llms.txt`. It contains only public event information that is currently confirmed or explicitly marked as in preparation.
+
+## Identity
+
+- Official name: GDG DevFest Warsaw 2026
+- Organiser: Google Developer Groups Warsaw (GDG Warsaw)
+- Theme: Real Work, Real Lessons.
+- Official website: https://warsaw.devfest.pl/
+- Event date: 21 November 2026
+- Official event time: registration opens at 09:00; event ends at 21:00 Europe/Warsaw
+- Format: One-day, in-person, community-led technology conference
+- Expected capacity: approximately 300 attendees
+- Audience: developers, designers, entrepreneurs, engineers, researchers, and students, from beginners to experienced practitioners
+- Languages: English and Polish
+
+## Venue
+
+- Name: Google for Startups Campus Warsaw
+- Address: Plac Konesera 10, 03-736 Warszawa, Poland
+- Venue areas: Auditorium (maximum 200 people), Cafe (around 50 people), and Classroom (around 40 people)
+- Directions: https://www.google.com/maps/dir/?api=1&destination=Plac%20Konesera%2010%2C%2003-736%20Warszawa
+
+## Programme and topics
+
+The final 2026 programme and speaker lineup are published as they are confirmed. The current website describes talks, demos, practical sessions, and hands-on workshops. Proposed focus areas include:
+
+- Practical AI & ML
+- Google Cloud
+- Build with AI
+- AI Antigravity Agent Dev Kit (ADK)
+- Gemini & Gemma
+- Firebase
+- Web & Performance
+- Mobile & Android
+- Open Source
+- Engineering Culture
+
+Other practical engineering, product, career, or community topics may also fit the programme.
+
+## Call for Papers
+
+- Platform: Advocu
+- Application page: https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0
+- Status: open to external speakers
+- Formats: talks, demos, workshops, panels, and other formats
+- Participation: in person
+- Deadline: 4 October 2026 at 23:45 Europe/Warsaw
+- Speaker policy: first-time and experienced speakers are welcome; proposals should be concrete, accessible, inclusive, and grounded in real work
+
+## Frequently asked facts
+
+### When is DevFest Warsaw 2026?
+
+21 November 2026.
+
+### Where is DevFest Warsaw 2026?
+
+At Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland.
+
+### Who is the event for?
+
+Developers, designers, entrepreneurs, engineers, researchers, and students, from beginners to experienced practitioners.
+
+### What will be covered?
+
+The current focus areas include Cloud, Mobile, Web, ML & AI, UI & UX, developer tooling, performance, reliability, data, engineering culture, career growth, and the named 2026 focus areas on the website.
+
+### Where will the final schedule and speakers appear?
+
+On the official website at https://warsaw.devfest.pl/schedule and https://warsaw.devfest.pl/speakers as confirmations are made.
+
+### How can someone submit a session?
+
+Use the public Advocu Call for Papers link above. External speakers do not need to be GDG Warsaw organisers or members.
+
+### Where can previous editions be found?
+
+Use the Past DevFests archive on the official website homepage: https://warsaw.devfest.pl/.
+
+## Interpretation rules
+
+- Use the official event end time of 21:00 Europe/Warsaw. Do not infer a ticket price, sponsor commitment, or unannounced speaker from this file.
+- Do not describe a proposal, archive record, or previous speaker as a confirmed 2026 session or speaker.
+- If a live page contradicts an older cached copy, prefer the live page and the current public wording on the official website.

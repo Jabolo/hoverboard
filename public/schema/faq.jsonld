@@ -1,0 +1,49 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://warsaw.devfest.pl/faq#faq",
+  "url": "https://warsaw.devfest.pl/faq",
+  "inLanguage": "en",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When is GDG DevFest Warsaw 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GDG DevFest Warsaw 2026 takes place on 21 November 2026."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is GDG DevFest Warsaw 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The event takes place at Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is GDG DevFest Warsaw 2026 for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The event is for developers, designers, entrepreneurs, engineers, researchers, and students, from beginners to experienced practitioners."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What topics will GDG DevFest Warsaw cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Current focus areas include Practical AI & ML, Google Cloud, Build with AI, AI Antigravity Agent Dev Kit (ADK), Gemini & Gemma, Firebase, Web & Performance, Mobile & Android, Open Source, and Engineering Culture."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I submit a talk or workshop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Submit a talk, demo, workshop, panel, or another practical format through the public Advocu Call for Papers. The published deadline is 4 October 2026 at 23:45 Europe/Warsaw: https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
+      }
+    }
+  ]
+}

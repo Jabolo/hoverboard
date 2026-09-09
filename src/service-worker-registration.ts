@@ -5,7 +5,13 @@ import { CONFIG, getConfig } from './utils/config';
 import { refresh, serviceWorkerAvailable, serviceWorkerError } from './utils/data';
 
 let isRefreshing = false;
+let hadController = Boolean(navigator.serviceWorker?.controller);
 navigator.serviceWorker?.addEventListener('controllerchange', () => {
+  if (!hadController) {
+    hadController = true;
+    return;
+  }
+
   if (!isRefreshing) {
     isRefreshing = true;
     window.location.reload();

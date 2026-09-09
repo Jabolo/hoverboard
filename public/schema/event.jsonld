@@ -1,0 +1,55 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://warsaw.devfest.pl/#website",
+      "url": "https://warsaw.devfest.pl/",
+      "name": "GDG DevFest Warsaw 2026",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://warsaw.devfest.pl/#organization",
+      "name": "Google Developer Groups Warsaw",
+      "url": "https://gdg.community.dev/gdg-warszawa/",
+      "sameAs": [
+        "https://gdg.community.dev/gdg-warszawa/",
+        "https://www.meetup.com/GDG-Warszawa/",
+        "https://www.facebook.com/gdgwarszawa",
+        "https://www.instagram.com/gdgwarszawa/",
+        "https://www.youtube.com/c/GdgWarszawaPl/featured"
+      ]
+    },
+    {
+      "@type": "Event",
+      "@id": "https://warsaw.devfest.pl/#event",
+      "name": "GDG DevFest Warsaw 2026",
+      "description": "A one-day, community-led technology conference bringing developers, designers, entrepreneurs, engineers, researchers, and students together at Google for Startups Campus Warsaw. Theme: Real Work, Real Lessons.",
+      "startDate": "2026-11-21T09:00:00+01:00",
+      "endDate": "2026-11-21T21:00:00+01:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "image": [
+        "https://warsaw.devfest.pl/images/backgrounds/home-2026.png"
+      ],
+      "url": "https://warsaw.devfest.pl/",
+      "inLanguage": "en",
+      "location": {
+        "@type": "Place",
+        "name": "Google for Startups Campus Warsaw",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Plac Konesera 10",
+          "postalCode": "03-736",
+          "addressLocality": "Warszawa",
+          "addressCountry": "PL"
+        }
+      },
+      "organizer": {
+        "@id": "https://warsaw.devfest.pl/#organization"
+      },
+      "keywords": "GDG DevFest Warsaw, developer conference Warsaw, technology conference Poland, Google Cloud, AI, machine learning, Firebase, Android, web performance, open source"
+    }
+  ]
+}

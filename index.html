@@ -8,12 +8,19 @@
       content="width=device-width, minimum-scale=1.0, initial-scale=1.0, viewport-fit=cover"
       name="viewport"
     />
-    <meta content="{{ description }}" name="description" />
+    <meta
+      content="Join GDG DevFest Warsaw 2026 on 21 November 2026 at Google for Startups Campus Warsaw for talks, workshops, practical learning, and networking."
+      name="description"
+    />
     <meta content="{{ keywords }}" name="keywords" />
+    <meta
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      name="robots"
+    />
     <meta content="{{ organizer.name }}" name="author" />
     <meta content="Project Hoverboard" name="generator" />
 
-    <title>{{ title }}</title>
+    <title>GDG DevFest Warsaw 2026 | Warsaw developer conference</title>
 
     <!-- Config from compilation step -->
     <meta content="{{ url }}" name="config-url" />
@@ -21,6 +28,7 @@
     <meta content="{{ googleMapApiKey }}" name="config-google-maps-api-key" />
 
     <link href="{{ url }}" rel="canonical" />
+    <link href="{{ url }}llms.txt" rel="describedby" />
 
     <link href="images/favicon.ico" rel="icon" />
 
@@ -30,12 +38,12 @@
     <!-- Add to homescreen for Chrome on Android -->
     <meta content="yes" name="mobile-web-app-capable" />
     <!-- fallback for manifest.json -->
-    <meta content="{{ title }}" name="application-name" />
+    <meta content="GDG DevFest Warsaw 2026 | Warsaw developer conference" name="application-name" />
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" />
-    <meta content="{{ title }}" name="apple-mobile-web-app-title" />
+    <meta content="GDG DevFest Warsaw 2026" name="apple-mobile-web-app-title" />
 
     <!-- Homescreen icons. -->
     <link href="images/manifest/icon-48.png" rel="apple-touch-icon" />
@@ -50,41 +58,70 @@
     <meta content="no" name="msapplication-tap-highlight" />
 
     <!-- Facebook sharing meta data -->
-    <meta content="{{ title }}" property="og:title" />
+    <meta content="GDG DevFest Warsaw 2026 | Warsaw developer conference" property="og:title" />
     <meta content="{{ title }}" property="og:site_name" />
     <meta content="website" property="og:type" />
     <meta content="{{ url }}" property="og:url" />
-    <meta content="{{ description }}" property="og:description" />
+    <meta
+      content="Join GDG DevFest Warsaw 2026 on 21 November 2026 at Google for Startups Campus Warsaw for talks, workshops, practical learning, and networking."
+      property="og:description"
+    />
     <meta content="{{ image }}" property="og:image" />
     <meta content="image/png" property="og:image:type" />
 
-    <script type="application/ld+json">
+    <script id="structured-data" type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Event",
-        "name": "{{ title }}",
-        "description": "{{ description }}",
-        "startDate": "{{ startDate }}",
-        "endDate": "{{ endDate }}",
-        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "image": ["{{ url }}{{ image }}"],
-        "url": "{{ url }}",
-        "location": {
-          "@type": "Place",
-          "name": "{{ location.name }}",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "{{ location.address }}",
-            "addressLocality": "{{ location.city }}",
-            "addressCountry": "PL"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://warsaw.devfest.pl/#website",
+            "url": "https://warsaw.devfest.pl/",
+            "name": "GDG DevFest Warsaw 2026",
+            "inLanguage": "en"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://warsaw.devfest.pl/#organization",
+            "name": "Google Developer Groups Warsaw",
+            "url": "https://gdg.community.dev/gdg-warszawa/",
+            "sameAs": [
+              "https://gdg.community.dev/gdg-warszawa/",
+              "https://www.meetup.com/GDG-Warszawa/",
+              "https://www.facebook.com/gdgwarszawa",
+              "https://www.instagram.com/gdgwarszawa/",
+              "https://www.youtube.com/c/GdgWarszawaPl/featured"
+            ]
+          },
+          {
+            "@type": "Event",
+            "@id": "https://warsaw.devfest.pl/#event",
+            "name": "GDG DevFest Warsaw 2026",
+            "description": "A one-day, community-led technology conference bringing developers, designers, entrepreneurs, engineers, researchers, and students together at Google for Startups Campus Warsaw. Theme: Real Work, Real Lessons.",
+            "startDate": "2026-11-21T09:00:00+01:00",
+            "endDate": "2026-11-21T21:00:00+01:00",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "image": ["https://warsaw.devfest.pl/images/backgrounds/home-2026.png"],
+            "url": "https://warsaw.devfest.pl/",
+            "inLanguage": "en",
+            "location": {
+              "@type": "Place",
+              "name": "Google for Startups Campus Warsaw",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Plac Konesera 10",
+                "postalCode": "03-736",
+                "addressLocality": "Warszawa",
+                "addressCountry": "PL"
+              }
+            },
+            "organizer": {
+              "@id": "https://warsaw.devfest.pl/#organization"
+            },
+            "keywords": "GDG DevFest Warsaw, developer conference Warsaw, technology conference Poland, Google Cloud, AI, machine learning, Firebase, Android, web performance, open source"
           }
-        },
-        "organizer": {
-          "@type": "Organization",
-          "name": "{{ organizer.name }}",
-          "url": "{{ organizer.url }}"
-        }
+        ]
       }
     </script>
 
@@ -93,9 +130,13 @@
     {% if organizer.twitter %}
     <meta content="@{{ organizer.twitter }}" name="twitter:creator" />
     {% endif %}
-    <meta content="{{ title }}" name="twitter:title" />
-    <meta content="{{ description }}" name="twitter:description" />
+    <meta content="GDG DevFest Warsaw 2026 | Warsaw developer conference" name="twitter:title" />
+    <meta
+      content="Join GDG DevFest Warsaw 2026 on 21 November 2026 at Google for Startups Campus Warsaw for talks, workshops, practical learning, and networking."
+      name="twitter:description"
+    />
     <meta content="{{ image }}" name="twitter:image" />
+    <meta content="GDG DevFest Warsaw 2026 — Real Work, Real Lessons." name="twitter:image:alt" />
     <meta name="twitter:label1" value="{{ location.label }}" />
     <meta name="twitter:data1" value="{{ location.name }}" />
     <meta name="twitter:label2" />
@@ -172,6 +213,35 @@
   <body>
     <hoverboard-app unresolved>{{ title }}</hoverboard-app>
 
-    <noscript>Please enable JavaScript to view this website.</noscript>
+    <noscript>
+      <main id="main-content">
+        <h1>GDG DevFest Warsaw 2026</h1>
+        <p>
+          Real Work, Real Lessons. A one-day, community-led technology conference for developers,
+          designers, entrepreneurs, engineers, researchers, and students.
+        </p>
+        <p>
+          <strong>21 November 2026, 09:00–21:00 Europe/Warsaw</strong> · Google for Startups Campus
+          Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland.
+        </p>
+        <p>
+          Expect talks, demos, practical sessions, hands-on workshops, and networking across
+          Practical AI &amp; ML, Google Cloud, Build with AI, ADK, Gemini &amp; Gemma, Firebase, Web
+          &amp; Performance, Mobile &amp; Android, Open Source, and Engineering Culture.
+        </p>
+        <p>
+          The programme and 2026 speaker lineup are published as confirmations are made. The event
+          is planned as in-person participation in English and Polish.
+        </p>
+        <nav aria-label="DevFest Warsaw pages">
+          <a href="/schedule">Schedule</a>
+          <a href="/speakers">Speakers</a>
+          <a href="/faq">FAQ</a>
+          <a href="/team">Team</a>
+          <a href="/privacy">Privacy and data</a>
+          <a href="/coc">Code of Conduct</a>
+        </nav>
+      </main>
+    </noscript>
   </body>
 </html>

@@ -26,6 +26,10 @@ Wi-Fi will be available for attendees. An open, self-service cloakroom will also
 
 Developers, designers, engineers, researchers, students, entrepreneurs, and anyone interested in learning and sharing around technology.
 
+## What topics will GDG DevFest Warsaw cover?
+
+Current focus areas include Practical AI & ML, Google Cloud, Build with AI, AI Antigravity Agent Dev Kit (ADK), Gemini & Gemma, Firebase, Web & Performance, Mobile & Android, Open Source, and Engineering Culture.
+
 ## Where can I register?
 
 Registration is available through the [embedded form on our home page](/#registration) or directly via the Evenea ticket portal. Ticket types, prices, and availability are shown in the form.
@@ -36,7 +40,7 @@ The programme and speaker lineup will be added as they are confirmed. Subscribe 
 
 ## How can I speak at DevFest Warsaw?
 
-The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl). Both first-time and experienced speakers from anywhere in the community are welcome!
+The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. The published deadline is **October 4, 2026 at 23:45 Europe/Warsaw**. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl). Both first-time and experienced speakers from anywhere in the community are welcome!
 
 ## How can my company support the event?
 
