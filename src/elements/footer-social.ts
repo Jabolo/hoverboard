@@ -1,7 +1,6 @@
 import { customElement, property } from '@polymer/decorators';
 import '@polymer/paper-icon-button';
 import { html, PolymerElement } from '@polymer/polymer';
-import { share as shareUtil } from '../utils/share';
 import {
   emailUs,
   followOur,
@@ -46,26 +45,6 @@ export class FooterSocial extends PolymerElement {
 
         .nav-inline li {
           display: inline-block;
-        }
-
-        .social-group.share-block {
-          margin-bottom: 17px;
-        }
-
-        .share {
-          height: 30px;
-          padding: 8px;
-          width: 35px;
-          display: inline-block;
-          margin: 0;
-        }
-
-        .share-twitter {
-          color: var(--twitter-color);
-        }
-
-        .share-facebook {
-          color: var(--facebook-color);
         }
 
         a {
@@ -172,32 +151,6 @@ export class FooterSocial extends PolymerElement {
         }
       </style>
 
-      <div class="social-group share-block">
-        <div class="title">[[resources.share]]</div>
-        <div class="nav-inline">
-          <div class="share">
-            <paper-icon-button
-              class="share-facebook"
-              icon="hoverboard:facebook"
-              aria-label="Share on Facebook"
-              share="facebook"
-              on-click="share"
-            >
-            </paper-icon-button>
-          </div>
-          <div class="share">
-            <paper-icon-button
-              class="share-twitter"
-              icon="hoverboard:twitter"
-              aria-label="Share on X"
-              share="twitter"
-              on-click="share"
-            >
-            </paper-icon-button>
-          </div>
-        </div>
-      </div>
-
       <div class="social-group blog" hidden$="[[!organizer.blog]]">
         <div class="title">
           [[followOur]]
@@ -255,8 +208,4 @@ export class FooterSocial extends PolymerElement {
   private footer = footer;
   @property({ type: Boolean })
   private blogNewTab = organizer.blog.startsWith('http');
-
-  share(e: PointerEvent) {
-    return shareUtil(e);
-  }
 }
