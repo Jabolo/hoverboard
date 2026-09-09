@@ -741,10 +741,18 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     this.selectedTicketName = e.model.ticket.name;
     this.selectedTicketId = e.model.ticket.eveneaTicketId || '';
     this.registrationOpened = true;
-    void logAnalyticsEvent(wasRegistrationOpened ? 'ticket_selected' : 'registration_start', {
+    const analyticsParams = {
       entry_point: 'ticket_card',
       ...this.getTicketAnalyticsParams(e.model.ticket),
-    });
+    };
+
+    // A direct ticket click both starts registration and selects a ticket.
+    // Keep both funnel stages observable; subsequent ticket changes only
+    // emit ticket_selected.
+    if (!wasRegistrationOpened) {
+      void logAnalyticsEvent('registration_start', analyticsParams);
+    }
+    void logAnalyticsEvent('ticket_selected', analyticsParams);
 
     window.setTimeout(() => {
       this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
