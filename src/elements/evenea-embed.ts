@@ -1,6 +1,7 @@
 import { computed, customElement, property } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import { eveneaEmbed } from '../utils/data';
+import { getAttributionParams } from '../utils/attribution';
 
 @customElement('evenea-embed')
 export class EveneaEmbed extends PolymerElement {
@@ -336,12 +337,16 @@ export class EveneaEmbed extends PolymerElement {
 
   @computed('selectedTicketId')
   private get registrationSrc() {
-    if (!this.selectedTicketId) {
-      return eveneaEmbed.iframeSrc;
+    const registrationUrl = new URL(eveneaEmbed.iframeSrc);
+
+    Object.entries(getAttributionParams()).forEach(([key, value]) => {
+      if (value) registrationUrl.searchParams.set(key, value);
+    });
+
+    if (this.selectedTicketId) {
+      registrationUrl.searchParams.set(`ticket[${this.selectedTicketId}]`, '1');
     }
 
-    const registrationUrl = new URL(eveneaEmbed.iframeSrc);
-    registrationUrl.searchParams.set(`ticket[${this.selectedTicketId}]`, '1');
     return registrationUrl.toString();
   }
 
