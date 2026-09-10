@@ -29,9 +29,10 @@ Object.defineProperty(window, 'PointerEvent', {
 
 // JSDOM exposes ElementInternals but does not implement setFormValue yet.
 // Material Web 2.5 calls it synchronously for form-associated buttons.
+// eslint-disable-next-line @typescript-eslint/unbound-method, jest/unbound-method
 const attachInternals = HTMLElement.prototype.attachInternals;
 HTMLElement.prototype.attachInternals = function () {
-  const elementInternals = attachInternals.call(this);
+  const elementInternals = Reflect.apply(attachInternals, this, []);
   if (typeof elementInternals.setFormValue !== 'function') {
     elementInternals.setFormValue = jest.fn();
   }
