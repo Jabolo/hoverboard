@@ -87,7 +87,8 @@ export class FooterNav extends ThemedElement {
           <a href="https://github.com/gdg-x/hoverboard" target="_blank" rel="noopener noreferrer"
             >Project Hoverboard</a
           >
-          · <a class="coc" href="/coc">${this.codeOfConduct}</a>
+          · <a class="coc" href="/coc">${this.codeOfConduct}</a> ·
+          <a class="coc" href="/privacy">Privacy &amp; newsletter</a>
         </div>
       </div>
     `;

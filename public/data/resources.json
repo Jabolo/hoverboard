@@ -27,6 +27,7 @@
   "time": "Time",
   "faq": "/data/faq.md",
   "coc": "/data/coc.md",
+  "privacy": "/data/privacy.md",
   "timezoneOffset": "-60",
   "loading": "Loading...",
   "footer": {
@@ -81,18 +82,18 @@
         },
         {
           "name": "Contact the organizers",
-          "url": "mailto:contact@gdgwarsaw.pl",
+          "url": "mailto:hello@gdgwarsaw.pl",
           "newTab": false
         }
       ]
     }
   ],
-  "subscribeNote": "No spam, only important event updates.",
+  "subscribeNote": "GDG Warsaw and GDG Poland updates about DevFest, meetups, workshops, hackathons and related community initiatives. You can unsubscribe at any time.",
   "codeOfConduct": "Code of Conduct",
   "codeOfConductBlock": {
     "organization": "GDG Warsaw",
     "form": "",
-    "contacts": ["GDG Warsaw organizing team, [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl)"]
+    "contacts": ["GDG Warsaw organizing team, [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl)"]
   },
   "aboutBlock": {
     "title": "Build, learn, connect.",
@@ -204,6 +205,8 @@
     "formTitle": "Get DevFest Warsaw 2026 updates in your inbox.",
     "emailRequired": "Please enter a valid email address.",
     "fieldRequired": "This field is required.",
+    "consentLabel": "I agree to receive community communications from GDG Warsaw and GDG Poland about DevFest, meetups, workshops, hackathons and related initiatives. Contact: hello@gdgwarsaw.pl.",
+    "consentRequired": "Please confirm that you want to receive these communications.",
     "subscribe": "Subscribe",
     "subscribed": "Subscribed",
     "close": "Close",

@@ -2,6 +2,7 @@ export interface DialogData {
   email: string;
   firstFieldValue?: string;
   secondFieldValue?: string;
+  consentGiven?: boolean;
 }
 
 export interface DialogForm {

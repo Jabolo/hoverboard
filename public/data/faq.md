@@ -24,8 +24,8 @@ The Call for Papers will be announced separately. The website will link to the A
 
 ## How can my company support the event?
 
-Use the **Become a partner** contact form on this website or email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl). Sponsorship details are shared directly with interested partners.
+Use the **Become a partner** contact form on this website or email [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl). Sponsorship details are shared directly with interested partners.
 
 ## Where can I ask another question?
 
-Contact the organizing team at [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
+Contact the organizing team at [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).

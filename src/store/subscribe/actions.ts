@@ -1,7 +1,7 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
 import { Dispatch } from 'redux';
 import { store } from '../';
-import { db } from '../../firebase';
+import { firebaseFunctions } from '../../firebase';
 import { DialogData } from '../../models/dialog-form';
 import { subscribeBlock } from '../../utils/data';
 import { queueSnackbar } from '../snackbars';
@@ -13,15 +13,39 @@ import {
   SUBSCRIBE_SUCCESS,
 } from './types';
 
+type NewsletterConsentRequest = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  consentGiven: boolean;
+  consentSource: 'devfest_website';
+  consentVersion: '2026-09-10';
+};
+
+type NewsletterConsentResponse = { ok: boolean };
+
+const registerNewsletterConsent = httpsCallable<
+  NewsletterConsentRequest,
+  NewsletterConsentResponse
+>(firebaseFunctions, 'registerNewsletterConsent');
+
 const setSubscribe = async (data: DialogData): Promise<true> => {
-  const id = data.email.replace(/[^\w\s]/gi, '');
-  const subscriber = {
+  if (!data.consentGiven) {
+    throw new Error('Newsletter consent is required.');
+  }
+
+  const response = await registerNewsletterConsent({
     email: data.email,
     firstName: data.firstFieldValue || '',
     lastName: data.secondFieldValue || '',
-  };
+    consentGiven: true,
+    consentSource: 'devfest_website',
+    consentVersion: '2026-09-10',
+  });
 
-  await setDoc(doc(db, 'subscribers', id), subscriber);
+  if (!response.data.ok) {
+    throw new Error('Newsletter registration was not accepted.');
+  }
 
   return true;
 };

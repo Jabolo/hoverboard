@@ -116,19 +116,15 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
       };
     }
 
-    if (this.user instanceof Success && this.user.data.email) {
-      this.subscribeAction({ ...userData, email: this.user.data.email });
-    } else {
-      openSubscribeDialog({
-        title: this.subscribeBlock.formTitle,
-        submitLabel: this.subscribeBlock.subscribe,
-        firstFieldLabel: this.subscribeBlock.firstName,
-        secondFieldLabel: this.subscribeBlock.lastName,
-        firstFieldValue: userData.firstFieldValue,
-        secondFieldValue: userData.secondFieldValue,
-        submit: (data) => this.subscribeAction(data),
-      });
-    }
+    openSubscribeDialog({
+      title: this.subscribeBlock.formTitle,
+      submitLabel: this.subscribeBlock.subscribe,
+      firstFieldLabel: this.subscribeBlock.firstName,
+      secondFieldLabel: this.subscribeBlock.lastName,
+      firstFieldValue: userData.firstFieldValue,
+      secondFieldValue: userData.secondFieldValue,
+      submit: (data) => this.subscribeAction(data),
+    });
   }
 
   private subscribeAction(data: DialogData) {

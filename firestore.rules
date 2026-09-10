@@ -180,14 +180,12 @@ service cloud.firestore {
     }
 
     match /subscribers/{subscriberId} {
-      allow delete: if false;
+      allow read, write: if false;
+    }
 
-      allow get;
-      allow list: if false;
-
-      // Applies to document create requests
-      //allow create;
-      allow write;
+    match /newsletterContacts/{contactId} {
+      // Consent records are written only by the server-side callable function.
+      allow read, write: if false;
     }
 
     match /team/{teamId} {

@@ -1,6 +1,7 @@
 import { Failure, Success } from '@abraham/remotedata';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
+import '@material/web/checkbox/checkbox.js';
 import '@material/mwc-dialog';
 import { Dialog } from '@material/mwc-dialog';
 import { observe, property, query } from '@polymer/decorators';
@@ -50,6 +51,27 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           margin: 0 32px;
           color: var(--error-color);
         }
+
+        .consent {
+          display: flex;
+          gap: 8px;
+          align-items: flex-start;
+          margin: 20px 32px 0;
+          color: var(--secondary-text-color);
+          font-size: 13px;
+          line-height: 1.45;
+        }
+
+        .consent md-checkbox {
+          flex: 0 0 auto;
+          margin-top: -8px;
+        }
+
+        .consent-error {
+          margin: 6px 32px 0;
+          color: var(--error-color);
+          font-size: 12px;
+        }
       </style>
 
       <mwc-dialog id="dialog" open="[[open]]" heading="[[title]]">
@@ -89,6 +111,19 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           autocomplete="off"
         >
         </paper-input>
+
+        <label class="consent">
+          <md-checkbox
+            id="consentInput"
+            checked="{{marketingConsent}}"
+            aria-label="[[subscribeBlock.consentLabel]]"
+            on-change="consentChanged"
+          ></md-checkbox>
+          <span>[[subscribeBlock.consentLabel]]</span>
+        </label>
+        <div class="consent-error" hidden$="[[!consentError]]">
+          [[subscribeBlock.consentRequired]]
+        </div>
 
         <md-filled-button on-click="subscribe" slot="primaryAction">
           [[submitLabel]]
@@ -131,6 +166,10 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
   private secondFieldLabel = '';
   @property({ type: String })
   private email = '';
+  @property({ type: Boolean })
+  private marketingConsent = false;
+  @property({ type: Boolean })
+  private consentError = false;
   @property({ type: Number })
   private initialHeight = 0;
 
@@ -189,6 +228,8 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
       this.submitLabel = data.submitLabel || this.subscribeBlock.subscribe;
       this.firstFieldLabel = data.firstFieldLabel || this.subscribeBlock.firstName;
       this.secondFieldLabel = data.secondFieldLabel || this.subscribeBlock.lastName;
+      this.marketingConsent = false;
+      this.consentError = false;
       this.prefillFields(data);
     }
   }
@@ -214,11 +255,23 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
         return;
       }
 
+      if (!this.marketingConsent) {
+        this.consentError = true;
+        return;
+      }
+
       this.dialog.data.data.submit({
         email: this.email,
         firstFieldValue: this.firstFieldValue,
         secondFieldValue: this.secondFieldValue,
+        consentGiven: true,
       });
+    }
+  }
+
+  private consentChanged() {
+    if (this.marketingConsent) {
+      this.consentError = false;
     }
   }
 

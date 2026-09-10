@@ -28,6 +28,7 @@ export {
   offlineMessage,
   partnersBlock,
   previousSpeakersBlock,
+  privacy,
   refresh,
   schedule,
   serviceWorkerAvailable,

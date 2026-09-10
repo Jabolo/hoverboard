@@ -160,6 +160,13 @@ const ROUTES: Route[] = [
     },
   },
   {
+    path: '/privacy',
+    component: 'privacy-page',
+    action: async () => {
+      await import('./pages/privacy-page.js');
+    },
+  },
+  {
     path: '(.*)',
     component: 'not-found-page',
     action: async () => {
