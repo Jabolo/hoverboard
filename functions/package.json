@@ -19,17 +19,17 @@
     "start:src": "npm run build:src -- --watch"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.21.0",
+    "@google-cloud/storage": "^7.22.0",
     "express": "^5.2.1",
     "firebase-admin": "^12.7.0",
     "firebase-functions": "^5.1.1",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
-    "@jest/globals": "^30.4.1",
-    "@tsconfig/node22": "^22.0.5",
-    "concurrently": "^10.0.4",
-    "cpx2": "^9.0.0",
+    "@jest/globals": "^30.5.1",
+    "@tsconfig/node22": "^22.0.6",
+    "concurrently": "^10.0.5",
+    "cpx2": "^9.0.3",
     "typescript": "^5.9.3"
   }
 }
