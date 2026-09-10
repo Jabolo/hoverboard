@@ -3,8 +3,8 @@
 import { getFirestore } from 'firebase-admin/firestore';
 // https://github.com/import-js/eslint-plugin-import/issues/1810
 
-import { getMessaging, MessagingPayload } from 'firebase-admin/messaging';
-import * as functions from 'firebase-functions';
+import { getMessaging } from 'firebase-admin/messaging';
+import * as functions from 'firebase-functions/v1';
 
 const REMOVE_TOKEN_ERROR = [
   'messaging/invalid-registration-token',
@@ -43,21 +43,25 @@ export const sendGeneralNotification = functions.firestore
     }
     functions.logger.log(`There are ${tokens.length} tokens to send notifications to.`);
 
-    const payload: MessagingPayload = {
-      data: {
-        title: message.title,
-        body: message.body,
-        icon: message.icon || notificationsConfig.icon,
-      },
+    const data: Record<string, string> = {
+      title: String(message.title || ''),
+      body: String(message.body || ''),
+      icon: String(message.icon || notificationsConfig.icon || ''),
     };
 
     if (message.path) {
-      payload.data.path = message.path;
+      data.path = String(message.path);
     }
 
+    const messagingResponse = await getMessaging().sendEachForMulticast({
+      tokens,
+      data: {
+        ...data,
+      },
+    });
+
     const tokensToRemove = [];
-    const messagingResponse = await getMessaging().sendToDevice(tokens, payload);
-    messagingResponse.results.forEach((result, index) => {
+    messagingResponse.responses.forEach((result, index) => {
       const error = result.error;
       if (error) {
         functions.logger.error(`Failure sending notification to ${tokens[index]}`, error);

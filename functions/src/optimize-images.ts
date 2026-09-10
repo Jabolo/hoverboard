@@ -1,7 +1,7 @@
 import { Storage, UploadOptions } from '@google-cloud/storage';
 import { spawnSync } from 'child_process';
-import * as functions from 'firebase-functions';
-import { storage } from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
+import { storage } from 'firebase-functions/v1';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';

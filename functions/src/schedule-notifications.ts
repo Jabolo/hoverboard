@@ -3,8 +3,8 @@
 import { DocumentData, DocumentSnapshot, getFirestore } from 'firebase-admin/firestore';
 // https://github.com/import-js/eslint-plugin-import/issues/1810
 
-import { getMessaging, MessagingPayload } from 'firebase-admin/messaging';
-import * as functions from 'firebase-functions';
+import { getMessaging } from 'firebase-admin/messaging';
+import * as functions from 'firebase-functions/v1';
 import {
   createTimeWindow,
   filterUpcomingTimeslots,
@@ -44,7 +44,10 @@ const removeUserTokens = (tokensToUsers) => {
   return Promise.all(promises);
 };
 
-const sendPushNotificationToUsers = async (userIds: string[], payload: MessagingPayload) => {
+const sendPushNotificationToUsers = async (
+  userIds: string[],
+  payload: { data: Record<string, string> },
+) => {
   functions.logger.log(
     'sendPushNotificationToUsers user ids',
     userIds,
@@ -65,8 +68,11 @@ const sendPushNotificationToUsers = async (userIds: string[], payload: Messaging
   const tokens = Object.keys(tokensToUsers);
 
   const tokensToRemove = {};
-  const messagingResponse = await getMessaging().sendToDevice(tokens, payload);
-  messagingResponse.results.forEach((result, index) => {
+  const messagingResponse = await getMessaging().sendEachForMulticast({
+    tokens,
+    ...payload,
+  });
+  messagingResponse.responses.forEach((result, index) => {
     const error = result.error;
     if (error) {
       functions.logger.error('Failure sending notification to', tokens[index], error);
@@ -152,11 +158,11 @@ export const scheduleNotifications = functions.pubsub
         );
 
         if (userIdsFeaturedSession.length) {
-          const payload: MessagingPayload = {
+          const payload = {
             data: {
-              title: session.title,
+              title: String(session.title || ''),
               body: `Starts ${fromNow}`,
-              icon: notificationsConfig.icon,
+              icon: String(notificationsConfig.icon || ''),
               path: `/sessions/${upcomingSessions[sessionIndex]}`,
             },
           };

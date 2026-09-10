@@ -1,7 +1,7 @@
 // https://github.com/import-js/eslint-plugin-import/issues/1810
 
 import { getFirestore } from 'firebase-admin/firestore';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import { sessionsSpeakersMap } from './schedule-generator/speakers-sessions-map.js';
 import { sessionsSpeakersScheduleMap } from './schedule-generator/speakers-sessions-schedule-map.js';
 import { isEmpty, ScheduleMap, SessionMap, snapshotToObject, SpeakerMap } from './utils.js';

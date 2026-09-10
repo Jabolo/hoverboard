@@ -1,6 +1,6 @@
 import express from 'express';
 import { getFirestore } from 'firebase-admin/firestore';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import fetch from 'node-fetch';
 import url, { URL } from 'url';
 

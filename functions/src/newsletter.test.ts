@@ -11,7 +11,7 @@ import {
   NEWSLETTER_CONSENT_SOURCE,
   NEWSLETTER_CONSENT_VERSION,
   normalizeEmail,
-} from './newsletter';
+} from './newsletter-contract';
 
 describe('newsletter consent contract', () => {
   it('normalizes email addresses before they are persisted', () => {

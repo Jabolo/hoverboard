@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import { combineTags, pickMainTag, SessionMap, SpeakerMap } from '../utils.js';
 
 export function sessionsSpeakersMap(sessionsRaw: SessionMap, speakersRaw: SpeakerMap) {
