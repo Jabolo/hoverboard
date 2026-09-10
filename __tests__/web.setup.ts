@@ -27,6 +27,17 @@ Object.defineProperty(window, 'PointerEvent', {
   value: MockPointerEvent,
 });
 
+// JSDOM exposes ElementInternals but does not implement setFormValue yet.
+// Material Web 2.5 calls it synchronously for form-associated buttons.
+const attachInternals = HTMLElement.prototype.attachInternals;
+HTMLElement.prototype.attachInternals = function () {
+  const elementInternals = attachInternals.call(this);
+  if (typeof elementInternals.setFormValue !== 'function') {
+    elementInternals.setFormValue = jest.fn();
+  }
+  return elementInternals;
+};
+
 Object.defineProperty(Element.prototype, 'animate', {
   writable: true,
   value: jest.fn().mockReturnValue({
