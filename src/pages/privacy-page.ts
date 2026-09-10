@@ -3,7 +3,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '../components/hero/simple-hero';
 import '../components/markdown/remote-markdown';
 import '../elements/footer-block';
-import { heroSettings, privacyNotice } from '../utils/data';
+import { heroSettings, privacy } from '../utils/data';
 import { updateMetadata } from '../utils/metadata';
 
 @customElement('privacy-page')
@@ -27,7 +27,7 @@ export class PrivacyPage extends PolymerElement {
   private heroSettings = heroSettings.privacy;
 
   @property({ type: String })
-  source = privacyNotice;
+  source = privacy;
 
   override connectedCallback() {
     super.connectedCallback();

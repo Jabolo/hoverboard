@@ -2,6 +2,7 @@ import { Failure, Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/filled-button.js';
+import '@material/web/checkbox/checkbox.js';
 import '@polymer/paper-input/paper-input';
 import { PaperInputElement } from '@polymer/paper-input/paper-input';
 import { html, PolymerElement } from '@polymer/polymer';
@@ -31,6 +32,28 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         paper-input,
         .form-content {
           width: 100%;
+        }
+
+        .consent {
+          display: flex;
+          gap: 8px;
+          align-items: flex-start;
+          width: 100%;
+          margin: 10px 0;
+          color: var(--footer-text-color);
+          font-size: 12px;
+          line-height: 1.45;
+        }
+
+        .consent md-checkbox {
+          flex: 0 0 auto;
+          margin-top: -8px;
+        }
+
+        .consent-error {
+          width: 100%;
+          color: var(--google-yellow);
+          font-size: 12px;
         }
 
         paper-input-container input,
@@ -63,6 +86,17 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
             hidden$="[[!subscribed.data]]"
           ></iron-icon>
         </paper-input>
+        <label class="consent">
+          <md-checkbox
+            checked="{{consentGiven}}"
+            aria-label="[[subscribeBlock.consentLabel]]"
+            on-change="consentChanged"
+          ></md-checkbox>
+          <span>[[subscribeBlock.consentLabel]]</span>
+        </label>
+        <div class="consent-error" hidden$="[[!consentError]]">
+          [[subscribeBlock.consentRequired]]
+        </div>
         <md-filled-button on-click="subscribe" disabled$="[[disabled]]" layout self-end>
           [[ctaLabel]]
         </md-filled-button>
@@ -76,6 +110,10 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
   subscribed: SubscribeState = initialSubscribeState;
   @property({ type: String })
   email = '';
+  @property({ type: Boolean })
+  consentGiven = false;
+  @property({ type: Boolean })
+  private consentError = false;
 
   @property({ type: Boolean })
   private validate = false;
@@ -88,8 +126,19 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
     this.validate = true;
     const emailInput = this.shadowRoot!.querySelector<PaperInputElement>('#emailInput');
 
+    if (!this.consentGiven) {
+      this.consentError = true;
+      return;
+    }
+
     if ((this.initialized || this.failure) && emailInput?.validate()) {
-      store.dispatch(subscribe({ email: this.email }));
+      store.dispatch(subscribe({ email: this.email, consentGiven: true }));
+    }
+  }
+
+  private consentChanged() {
+    if (this.consentGiven) {
+      this.consentError = false;
     }
   }
 
@@ -100,9 +149,9 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
       : this.subscribeBlock.subscribe;
   }
 
-  @computed('email', 'subscribed')
+  @computed('email', 'consentGiven', 'subscribed')
   private get disabled() {
-    return !this.email || this.subscribed instanceof Success;
+    return !this.email || !this.consentGiven || this.subscribed instanceof Success;
   }
 
   @computed('subscribed')

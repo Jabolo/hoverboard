@@ -34,6 +34,7 @@ export {
   partnersBlock,
   privacyNotice,
   previousSpeakersBlock,
+  privacy,
   refresh,
   schedule,
   serviceWorkerAvailable,

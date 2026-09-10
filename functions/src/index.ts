@@ -7,6 +7,7 @@ import {
   speakersWrite,
 } from './generate-sessions-speakers-schedule.js';
 import { mailchimpSubscribe } from './mailchimp-subscribe.js';
+import { registerNewsletterConsent } from './newsletter.js';
 import { sendGeneralNotification } from './notifications.js';
 import { optimizeImages } from './optimize-images.js';
 import { prerender } from './prerender.js';
@@ -23,6 +24,7 @@ export {
   scheduleNotifications,
   optimizeImages,
   mailchimpSubscribe,
+  registerNewsletterConsent,
   prerender,
   scheduleWrite,
   sessionsWrite,

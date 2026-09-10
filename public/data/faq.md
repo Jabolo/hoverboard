@@ -44,8 +44,8 @@ The Call for Papers is officially open! Visit our [Advocu CFP submission page](h
 
 ## How can my company support the event?
 
-You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
+You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).
 
 ## Where can I ask another question?
 
-Contact the organizing team at [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
+Contact the organizing team at [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).

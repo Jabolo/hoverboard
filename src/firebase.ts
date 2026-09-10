@@ -1,5 +1,8 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
 import { Firestore, initializeFirestore, persistentLocalCache } from 'firebase/firestore';
+import { getFunctions, Functions } from 'firebase/functions';
+import { getPerformance, initializePerformance } from 'firebase/performance';
 
 /**
  * Load Firebase config in index.html with /__/firebase/init.js. It stubs out
@@ -40,3 +43,8 @@ export const firebaseApp = initializeApp(firebaseConfig);
 export const db: Firestore = initializeFirestore(firebaseApp, {
   localCache: persistentLocalCache(),
 });
+export const firebaseFunctions: Functions = getFunctions(firebaseApp);
+export const performance = getPerformance(firebaseApp);
+export const analytics = getAnalytics(firebaseApp);
+
+initializePerformance(firebaseApp);
