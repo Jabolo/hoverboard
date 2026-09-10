@@ -3,8 +3,8 @@ import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 import fetch from 'node-fetch';
 
-const CONSENT_SOURCE = 'devfest_website';
-const CONSENT_VERSION = '2026-09-10';
+export const NEWSLETTER_CONSENT_SOURCE = 'devfest_website';
+export const NEWSLETTER_CONSENT_VERSION = '2026-09-10';
 const RESEND_CONTACTS_URL = 'https://api.resend.com/contacts';
 
 export const normalizeEmail = (value: string) => value.trim().toLowerCase();
@@ -12,9 +12,10 @@ export const normalizeEmail = (value: string) => value.trim().toLowerCase();
 export const hashEmail = (email: string) =>
   crypto.createHash('sha256').update(normalizeEmail(email)).digest('hex');
 
-const validEmail = (email: string) => /^[^@\s]+@[^@\s.]+\.[^@.\s]+$/.test(email);
+export const isValidNewsletterEmail = (email: string) =>
+  /^[^@\s]+@[^@\s.]+(?:\.[^@\s.]+)+$/.test(email);
 
-type NewsletterConsentInput = {
+export type NewsletterConsentInput = {
   email?: unknown;
   firstName?: unknown;
   lastName?: unknown;
@@ -22,6 +23,11 @@ type NewsletterConsentInput = {
   consentSource?: unknown;
   consentVersion?: unknown;
 };
+
+export const hasValidNewsletterConsent = (data?: NewsletterConsentInput) =>
+  data?.consentGiven === true &&
+  data?.consentSource === NEWSLETTER_CONSENT_SOURCE &&
+  data?.consentVersion === NEWSLETTER_CONSENT_VERSION;
 
 type ResendSyncResult = {
   status: 'synced' | 'suppressed' | 'pending' | 'failed';
@@ -97,17 +103,13 @@ export const registerNewsletterConsent = functions
     const firstName = typeof data?.firstName === 'string' ? data.firstName.trim() : '';
     const lastName = typeof data?.lastName === 'string' ? data.lastName.trim() : '';
 
-    if (!validEmail(email) || email.length > 320) {
+    if (!isValidNewsletterEmail(email) || email.length > 320) {
       throw new functions.https.HttpsError('invalid-argument', 'A valid email is required.');
     }
     if (firstName.length > 120 || lastName.length > 120) {
       throw new functions.https.HttpsError('invalid-argument', 'Name is too long.');
     }
-    if (
-      data?.consentGiven !== true ||
-      data?.consentSource !== CONSENT_SOURCE ||
-      data?.consentVersion !== CONSENT_VERSION
-    ) {
+    if (!hasValidNewsletterConsent(data)) {
       throw new functions.https.HttpsError(
         'invalid-argument',
         'Valid newsletter consent is required.',
@@ -117,9 +119,9 @@ export const registerNewsletterConsent = functions
     const now = Timestamp.now();
     const contactRef = getFirestore().collection('newsletterContacts').doc(hashEmail(email));
     const sourceTrace = {
-      [CONSENT_SOURCE]: {
+      [NEWSLETTER_CONSENT_SOURCE]: {
         status: 'granted',
-        version: CONSENT_VERSION,
+        version: NEWSLETTER_CONSENT_VERSION,
         consentAt: now,
       },
     };
@@ -131,8 +133,8 @@ export const registerNewsletterConsent = functions
         lastName,
         status: 'subscribed',
         purpose: 'gdg_community_marketing',
-        consentSource: CONSENT_SOURCE,
-        consentVersion: CONSENT_VERSION,
+        consentSource: NEWSLETTER_CONSENT_SOURCE,
+        consentVersion: NEWSLETTER_CONSENT_VERSION,
         consentAt: now,
         sourceTrace,
         updatedAt: now,
