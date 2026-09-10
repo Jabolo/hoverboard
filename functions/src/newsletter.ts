@@ -150,6 +150,7 @@ export const registerNewsletterConsent = functions.https.onCall(
           detail: syncResult.detail || null,
           updatedAt: Timestamp.now(),
         },
+        ...(syncResult.status === 'suppressed' ? { status: 'suppressed' } : {}),
       },
       { merge: true },
     );
