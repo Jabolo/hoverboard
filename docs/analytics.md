@@ -36,6 +36,12 @@ The current convention is:
 
 When the registration form opens, the website forwards the stored `utm_*` values and the Evenea `source` value into the official Evenea iframe. This keeps the visitor on `warsaw.devfest.pl` while preserving the attribution needed by Evenea. Do not add personal data to UTM values, and do not hand-edit final URLs outside the shared sheet.
 
+### Evenea embed status
+
+The live smoke test on 2026-09-10 confirmed that the campaign parameters reach the embedded Evenea URL. The embedded `out=1` template also currently logs `ReferenceError: gtag is not defined` when it executes Evenea's own `gtag('config', 'G-4ZBKB8TTXJ')` call. The failing URL is on `app.evenea.pl`, not on `warsaw.devfest.pl`; the cross-origin iframe cannot be patched by the website. Keep the Evenea GA4 identifier configured and report this template issue to Evenea support rather than removing tracking or proxying the checkout page.
+
+Our website GA4 tag remains separate (`G-6H09QP1YCQ`) and the website-side UTM forwarding is healthy. Until Evenea fixes the embedded template or provides a supported embed configuration, use Evenea's participant/revenue reports as the purchase source of truth and treat the website funnel as pre-checkout intent.
+
 ## GA4 reporting
 
 The property contains a saved Exploration named `DevFest — campaign to registration`. It uses a rolling `Last 30 days` range and the filter `Session campaign exactly matches devfest_warsaw_2026`, so the funnel is limited to traffic created by the campaign registry. Its steps are:
