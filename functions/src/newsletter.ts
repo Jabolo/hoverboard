@@ -28,7 +28,7 @@ type ResendSyncResult = {
   detail?: string;
 };
 
-const getResendApiKey = () => process.env.RESEND_API_KEY || '';
+const getResendApiKey = () => (process.env.RESEND_API_KEY || '').trim();
 
 const resendHeaders = (apiKey: string) => ({
   Authorization: `Bearer ${apiKey}`,
