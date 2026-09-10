@@ -85,8 +85,9 @@ const syncToResend = async (
   return { status: 'synced' };
 };
 
-export const registerNewsletterConsent = functions.https.onCall(
-  async (data: NewsletterConsentInput) => {
+export const registerNewsletterConsent = functions
+  .runWith({ secrets: ['RESEND_API_KEY'] })
+  .https.onCall(async (data: NewsletterConsentInput) => {
     const email = typeof data?.email === 'string' ? normalizeEmail(data.email) : '';
     const firstName = typeof data?.firstName === 'string' ? data.firstName.trim() : '';
     const lastName = typeof data?.lastName === 'string' ? data.lastName.trim() : '';
@@ -156,5 +157,4 @@ export const registerNewsletterConsent = functions.https.onCall(
     );
 
     return { ok: true };
-  },
-);
+  });
