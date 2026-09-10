@@ -20,6 +20,8 @@ The public copy marks speakers and programme details as pending until the organi
 
 The team seed uses the current organizer cards from the [GDG Warszawa community page](https://gdg.community.dev/gdg-warszawa/), checked on September 3, 2026. Their public Cloudinary avatars are stored locally under `public/images/team/` and displayed as square, cropped cards so the page does not depend on a third-party image request at runtime.
 
+Campaign links are maintained in the shared [DevFest 2026 — UTM Campaign Links sheet](https://docs.google.com/spreadsheets/d/1rMFm3rLuqhTXvtpie_DsxE4Y2eJcJvRr8HQvh0qsUoA/edit?gid=0#gid=0). Use its ready-made links for LinkedIn, Instagram, newsletters, Bevy, and partner placements; do not create parallel UTM conventions in source code.
+
 ## Firebase
 
 The application uses the Firebase project `gdg-warsaw-devfest26-web` under the Michał Tomasz Jabłoński account.

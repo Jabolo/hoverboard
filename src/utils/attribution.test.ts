@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from '@jest/globals';
-import { getAttributionParams } from './attribution';
+import { buildAttributedUrl, getAttributionParams } from './attribution';
 
 describe('attribution', () => {
   afterEach(() => {
@@ -47,5 +47,25 @@ describe('attribution', () => {
       utm_source: 'linkedin',
       utm_medium: 'social',
     });
+  });
+
+  it('forwards campaign and Evenea source params to the registration destination', () => {
+    window.history.replaceState(
+      {},
+      '',
+      '/?utm_source=bevy&utm_medium=partner&utm_campaign=devfest_warsaw_2026&source=Bevy-GDG-Community',
+    );
+
+    const destination = new URL(
+      buildAttributedUrl(
+        'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+      ),
+    );
+
+    expect(destination.searchParams.get('utm_source')).toBe('bevy');
+    expect(destination.searchParams.get('utm_medium')).toBe('partner');
+    expect(destination.searchParams.get('utm_campaign')).toBe('devfest_warsaw_2026');
+    expect(destination.searchParams.get('source')).toBe('Bevy-GDG-Community');
+    expect(destination.searchParams.get('out')).toBe('1');
   });
 });

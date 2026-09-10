@@ -65,3 +65,17 @@ export function getAttributionParams(): AttributionParams {
   if (hasNewCampaign) persistAttribution(merged);
   return merged;
 }
+
+/**
+ * Adds the current campaign attribution to a third-party destination, such
+ * as the Evenea registration iframe, without copying unrelated query params.
+ */
+export function buildAttributedUrl(url: string): string {
+  const destination = new URL(url);
+
+  Object.entries(getAttributionParams()).forEach(([key, value]) => {
+    destination.searchParams.set(key, value);
+  });
+
+  return destination.toString();
+}

@@ -2,7 +2,7 @@ import '@material/web/button/outlined-button.js';
 import { computed, customElement, property } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import { eveneaEmbed } from '../utils/data';
-import { getAttributionParams } from '../utils/attribution';
+import { buildAttributedUrl } from '../utils/attribution';
 
 @customElement('evenea-embed')
 export class EveneaEmbed extends PolymerElement {
@@ -353,11 +353,7 @@ export class EveneaEmbed extends PolymerElement {
 
   @computed('selectedTicketId')
   private get registrationSrc() {
-    const registrationUrl = new URL(eveneaEmbed.iframeSrc);
-
-    Object.entries(getAttributionParams()).forEach(([key, value]) => {
-      if (value) registrationUrl.searchParams.set(key, value);
-    });
+    const registrationUrl = new URL(buildAttributedUrl(eveneaEmbed.iframeSrc));
 
     if (this.selectedTicketId) {
       registrationUrl.searchParams.set(`ticket[${this.selectedTicketId}]`, '1');

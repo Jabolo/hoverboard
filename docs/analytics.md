@@ -22,7 +22,29 @@ The website intentionally does not emit a fake `purchase` event. Completed purch
 
 ## Attribution
 
-The website reads UTM parameters and preserves them for the session in `src/utils/attribution.ts`. Campaign links should point to `https://warsaw.devfest.pl/` and use the campaign registry maintained for DevFest 2026. Do not add personal data to UTM values.
+The website reads UTM parameters and preserves them for the session in `src/utils/attribution.ts`. Campaign links should point to `https://warsaw.devfest.pl/` and use the canonical [DevFest 2026 — UTM Campaign Links sheet](https://docs.google.com/spreadsheets/d/1rMFm3rLuqhTXvtpie_DsxE4Y2eJcJvRr8HQvh0qsUoA/edit?gid=0#gid=0). The sheet's `UTM links` tab contains ready-to-use links; its `Naming guide` tab is the naming authority.
+
+The current convention is:
+
+| Parameter      | Meaning                          | Examples                                                 |
+| -------------- | -------------------------------- | -------------------------------------------------------- |
+| `utm_source`   | Platform or partner slug         | `linkedin`, `instagram`, `newsletter`, `bevy`            |
+| `utm_medium`   | Distribution type                | `social`, `email`, `partner`                             |
+| `utm_campaign` | Event campaign                   | `devfest_warsaw_2026`                                    |
+| `utm_content`  | Placement or creative variant    | `organic_post_01`, `profile_bio`, `story_01`, `issue_01` |
+| `source`       | Evenea partner attribution label | `Bevy-GDG-Community`                                     |
+
+When the registration form opens, the website forwards the stored `utm_*` values and the Evenea `source` value into the official Evenea iframe. This keeps the visitor on `warsaw.devfest.pl` while preserving the attribution needed by Evenea. Do not add personal data to UTM values, and do not hand-edit final URLs outside the shared sheet.
+
+## GA4 reporting
+
+The property contains a saved Exploration named `DevFest — campaign to registration`. It uses a rolling `Last 30 days` range and the filter `Session campaign exactly matches devfest_warsaw_2026`, so the funnel is limited to traffic created by the campaign registry. Its steps are:
+
+```text
+session_start → page_view → registration_start → ticket_selected → purchase (Evenea checkpoint)
+```
+
+The final step is a reconciliation checkpoint, not a website purchase event. Treat Evenea's participant and revenue records as the source of truth for completed purchases, and compare them with the website funnel by campaign/source. The exploration should be reviewed after real campaign traffic arrives; the current small counts include verification visits.
 
 ## Newsletter consent
 
