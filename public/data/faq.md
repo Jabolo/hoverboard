@@ -16,7 +16,7 @@ Take Metro M2 to **Dworzec Wileński**; Koneser is a short walk away. Buses and 
 
 ## Is the venue accessible?
 
-Yes. The entire venue is wheelchair accessible, with step-free seating available. The Koneser complex also has ramps and lifts. If you need an accessibility adjustment, contact the organizers at [contact@gdgwarsaw.pl](mailto:contact@gdgwarsaw.pl).
+Yes. The entire venue is wheelchair accessible, with step-free seating available. The Koneser complex also has ramps and lifts. If you need an accessibility adjustment, contact the organizers at [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).
 
 ## Will Wi-Fi and a cloakroom be available?
 
@@ -32,7 +32,7 @@ Current focus areas include Practical AI & ML, Google Cloud, Build with AI, AI A
 
 ## Where can I register?
 
-Registration is available through the [embedded form on our home page](/#registration) or directly via the Evenea ticket portal. Ticket types, prices, and availability are shown in the form.
+Registration is available through the [embedded form on our home page](/#registration) or directly via the Evenea ticket portal. Ticket types, prices, and availability are shown in the form. For registration or ticket questions, contact [tickets@gdgwarsaw.pl](mailto:tickets@gdgwarsaw.pl).
 
 ## When will the programme and speakers be announced?
 
@@ -44,7 +44,7 @@ The Call for Papers is officially open! Visit our [Advocu CFP submission page](h
 
 ## How can my company support the event?
 
-You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. You can also email [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).
+You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. For partnership enquiries, email [partnership@gdgwarsaw.pl](mailto:partnership@gdgwarsaw.pl).
 
 ## Where can I ask another question?
 

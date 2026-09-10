@@ -181,7 +181,7 @@ export class VisitBlock extends ThemedElement {
               <li>${visitBlock.wifi}</li>
               <li>${visitBlock.cloakroom}</li>
             </ul>
-            <a class="help" href="mailto:contact@gdgwarsaw.pl">${visitBlock.accessibilityHelp}</a>
+            <a class="help" href="mailto:hello@gdgwarsaw.pl">${visitBlock.accessibilityHelp}</a>
           </section>
         </div>
       </section>
