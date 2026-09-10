@@ -58,7 +58,7 @@ const syncToResend = async (
     const updateResponse = await fetch(contactUrl, {
       method: 'PATCH',
       headers,
-      body: JSON.stringify({ firstName, lastName }),
+      body: JSON.stringify({ first_name: firstName, last_name: lastName }),
     });
 
     if (!updateResponse.ok) {
@@ -75,7 +75,12 @@ const syncToResend = async (
   const createResponse = await fetch(RESEND_CONTACTS_URL, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ email, firstName, lastName, unsubscribed: false }),
+    body: JSON.stringify({
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      unsubscribed: false,
+    }),
   });
 
   if (!createResponse.ok && createResponse.status !== 409) {
