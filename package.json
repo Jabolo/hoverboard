@@ -63,7 +63,7 @@
     "register-service-worker": "^1.7.2"
   },
   "devDependencies": {
-    "@eslint/css": "^1.4.0",
+    "@eslint/css": "^2.0.0",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^2.1.0",
     "@eslint/markdown": "^8.0.3",
@@ -116,7 +116,7 @@
     "Abraham Williams, GDG Madison"
   ],
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.44.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.63.1"
   },
   "overrides": {
     "protobufjs": "7.6.5"
