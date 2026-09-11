@@ -31,7 +31,7 @@
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "eventStatus": "https://schema.org/EventScheduled",
       "image": [
-        "https://warsaw.devfest.pl/images/backgrounds/home-2026.png"
+        "https://warsaw.devfest.pl/images/backgrounds/home-2026-social.jpg"
       ],
       "url": "https://warsaw.devfest.pl/",
       "inLanguage": "en",

@@ -51,6 +51,25 @@ const toAbsoluteUrl = (value: string) => {
   }
 };
 
+const getImageMimeType = (imageUrl: string) => {
+  const pathname = (imageUrl.split(/[?#]/, 1)[0] ?? '').toLowerCase();
+  const extension = pathname.slice(pathname.lastIndexOf('.') + 1);
+
+  switch (extension) {
+    case 'avif':
+      return 'image/avif';
+    case 'gif':
+      return 'image/gif';
+    case 'jpg':
+    case 'jpeg':
+      return 'image/jpeg';
+    case 'webp':
+      return 'image/webp';
+    default:
+      return 'image/png';
+  }
+};
+
 const setMeta = (attribute: 'name' | 'property', key: string, content: string) => {
   let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
   if (!element) {
@@ -121,7 +140,7 @@ const updateSeoMetadata = (
   setMeta('property', 'og:site_name', siteTitle);
   setMeta('property', 'og:image', absoluteImageUrl);
   setMeta('property', 'og:image:alt', pageTitle);
-  setMeta('property', 'og:image:type', 'image/png');
+  setMeta('property', 'og:image:type', getImageMimeType(absoluteImageUrl));
   setMeta('name', 'twitter:card', 'summary_large_image');
   setMeta('name', 'twitter:title', pageTitle);
   setMeta('name', 'twitter:description', pageDescription);

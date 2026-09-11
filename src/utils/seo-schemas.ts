@@ -31,7 +31,7 @@ export const EVENT_SCHEMA = {
       endDate: '2026-11-21T21:00:00+01:00',
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
-      image: ['https://warsaw.devfest.pl/images/backgrounds/home-2026.png'],
+      image: ['https://warsaw.devfest.pl/images/backgrounds/home-2026-social.jpg'],
       url: 'https://warsaw.devfest.pl/',
       inLanguage: 'en',
       location: {

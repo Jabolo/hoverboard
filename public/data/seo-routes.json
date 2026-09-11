@@ -44,12 +44,12 @@
     ]
   },
   "/team": {
-    "title": "Organisers | GDG DevFest Warsaw 2026",
-    "description": "Meet the GDG Warsaw volunteers organising DevFest Warsaw 2026 for the local developer and technology community.",
+    "title": "Team | GDG DevFest Warsaw 2026",
+    "description": "Meet the GDG Warsaw volunteers organizing DevFest Warsaw 2026 for the local developer and technology community.",
     "structuredData": "event",
-    "fallbackHeading": "Organisers | GDG DevFest Warsaw 2026",
+    "fallbackHeading": "Team | GDG DevFest Warsaw 2026",
     "fallbackParagraphs": [
-      "Meet the GDG Warsaw volunteers organising DevFest Warsaw 2026 for the local developer and technology community.",
+      "Meet the GDG Warsaw volunteers organizing DevFest Warsaw 2026 for the local developer and technology community.",
       "GDG DevFest Warsaw is a community-led, in-person technology conference."
     ]
   },
