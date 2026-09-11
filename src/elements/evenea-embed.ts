@@ -301,6 +301,7 @@ export class EveneaEmbed extends PolymerElement {
                 scrolling="auto"
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
+                sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-top-navigation-by-user-activation"
                 on-load="handleFrameLoad"
               ></iframe>
             </template>
