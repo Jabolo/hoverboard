@@ -4,9 +4,9 @@ GDG DevFest Warsaw 2026 is a community-led event organized by Google Developer G
 
 ## Who to contact
 
-The current operational administrator contact for this website and its newsletter registration is **GDG Warsaw organizers team**. For privacy requests, consent questions, or communication matters, contact [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).
+The public/community organizer and operational contact for this website and its newsletter registration is **GDG Warsaw organizers team**. GDG Warszawa is the independent, informal community behind the event. For privacy requests, consent questions, or community communication matters, contact [hello@gdgwarsaw.pl](mailto:hello@gdgwarsaw.pl).
 
-The formal legal name, address, and the relationship between GDG Warsaw and GDG Poland are maintained in the organizers' privacy documentation and may be updated as the operating model develops.
+Paid ticketing is a separate operational layer. KOL.SKI sp. z o.o. handles ticket sales and settlement, including payment processing, invoices, refunds, and ticket-related complaints. KOL.SKI is not the public/community organizer; the event is publicly organized by GDG Warszawa. Ticket-specific legal details are shown in the Evenea registration flow.
 
 ## Newsletter registration
 
@@ -26,7 +26,7 @@ This website does not automatically subscribe a person to Bevy, Meetup, or Evene
 
 ## Registration through Evenea
 
-Ticket registration is provided in an embedded Evenea form. Information entered in that form is handled by Evenea under its own terms and privacy information. Review the information shown in Evenea before submitting your registration.
+Ticket registration is provided in an embedded Evenea form. The public organizer is GDG Warszawa. KOL.SKI sp. z o.o. is the ticketing/sales entity used for paid registrations and handles payment, invoice, refund, and ticket-complaint operations. Evenea/EventLabs provides the registration platform and has its own privacy information. Review the seller details, ticket terms, refund/invoice information, and privacy notices shown in Evenea before submitting your registration.
 
 ## Analytics and cookies
 

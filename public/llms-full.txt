@@ -6,6 +6,7 @@ This file is an expanded, machine-readable companion to `/llms.txt`. It contains
 
 - Official name: GDG DevFest Warsaw 2026
 - Organiser: Google Developer Groups Warsaw (GDG Warsaw)
+- Ticketing and settlement: KOL.SKI sp. z o.o. handles paid ticket sales, payments, invoices, refunds, and ticket-related complaints; it is not the community organizer.
 - Theme: Real Work, Real Lessons.
 - Official website: https://warsaw.devfest.pl/
 - Event date: 21 November 2026

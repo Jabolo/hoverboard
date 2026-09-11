@@ -12,7 +12,8 @@ This project is based on the current `gdg-x/hoverboard` `main` branch. The previ
 - Name: GDG DevFest Warsaw 2026
 - Date: November 21, 2026
 - Venue: Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa
-- Organizer: GDG Warsaw
+- Public organizer: GDG Warsaw / GDG Warszawa
+- Ticketing and settlement: KOL.SKI sp. z o.o. (ticket sales, payments, invoices, refunds, and ticket-related complaints only)
 - Event lead: Michał Jabłoński
 - Planned capacity: 300 attendees
 
@@ -48,6 +49,8 @@ The Evenea event is published and public:
 - Embed source: `https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe`
 
 The website uses the official Evenea iframe source and resizer script generated in the organizer panel. The ticket cards remain visible as the catalogue, but their links stay on the website and scroll to the embedded registration form instead of opening a separate Evenea page. The public event page and the registration form were checked end-to-end on September 8, 2026. The existing 100% one-time Early Bird promotional code was accepted and reduced one Early Bird ticket from 49,00 zł to 0,00 zł in Evenea.
+
+Public role split: GDG Warszawa is the public/community organizer of DevFest Warsaw 2026. KOL.SKI sp. z o.o. is used for ticketing and settlement only; keep it in the ticket-sales, payment, invoice, refund, complaint, and seller-information context, not in the public organizer or community description.
 
 When a visitor clicks an available ticket card, the website passes Evenea's official `ticket[ID]=1` query parameter into the iframe. This opens the buyer-details step with the selected ticket and quantity 1 already prepared, while keeping the visitor on the DevFest page. The Evenea ticket IDs are mirrored in `docs/default-firebase-data.json` and the live Firestore `tickets` documents as `eveneaTicketId`. If an ID is missing, the embed falls back to the normal ticket selector and displays the manual next-step instructions. Later checkout and payment navigation remain controlled by Evenea.
 

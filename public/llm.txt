@@ -4,7 +4,7 @@
 
 Use this file as a concise orientation to the official website. Treat confirmed pages as the source for public facts. The 2026 schedule and speaker lineup are still being prepared; do not invent sessions, speakers, sponsors, or prices.
 
-Key facts: the event is organised by Google Developer Groups Warsaw, is intended for developers, designers, entrepreneurs, engineers, researchers, and students, and expects approximately 300 attendees. The theme is “Real Work, Real Lessons.” The venue is Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland. Registration opens at 09:00 and the official event end time is 21:00 Europe/Warsaw. Participation is in person, with English and Polish content planned.
+Key facts: the event is organised by Google Developer Groups Warsaw, is intended for developers, designers, entrepreneurs, engineers, researchers, and students, and expects approximately 300 attendees. The theme is “Real Work, Real Lessons.” The venue is Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland. Registration opens at 09:00 and the official event end time is 21:00 Europe/Warsaw. Participation is in person, with English and Polish content planned. KOL.SKI sp. z o.o. handles ticket sales and settlement only; it is not the public/community organizer.
 
 ## Official event pages
 
