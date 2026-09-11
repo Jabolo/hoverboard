@@ -178,8 +178,8 @@
         },
         {
           "name": "Contact the organizers",
-          "url": "mailto:hello@gdgwarsaw.pl",
-          "newTab": false
+          "url": "https://mail.google.com/mail/?view=cm&fs=1&to=hello%40gdgwarsaw.pl",
+          "newTab": true
         }
       ]
     },
