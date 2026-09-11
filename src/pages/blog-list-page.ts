@@ -1,5 +1,6 @@
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
+import '@material/web/button/filled-button.js';
 import '@polymer/paper-progress';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
@@ -46,6 +47,14 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
           color: var(--secondary-text-color);
           background: var(--secondary-background-color);
           text-align: center;
+          border-radius: var(--border-radius, 8px);
+          border: 1px solid var(--divider-color);
+        }
+
+        .empty-state p {
+          margin: 0 0 20px;
+          font-size: 15px;
+          line-height: 1.5;
         }
 
         .featured-post {
@@ -171,9 +180,12 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
       </div>
 
       <template is="dom-if" if="[[showEmptyState]]">
-        <p class="empty-state">
-          News and event updates will be published here as the programme develops.
-        </p>
+        <div class="empty-state">
+          <p>News and event updates will be published here as the programme develops.</p>
+          <md-filled-button href="/#registration">
+            Explore Tickets &amp; Registration
+          </md-filled-button>
+        </div>
       </template>
 
       <footer-block></footer-block>
@@ -237,7 +249,10 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
 
   @computed('posts')
   get showEmptyState() {
-    return this.posts instanceof Success && this.posts.data.length === 0;
+    return (
+      (this.posts instanceof Success && this.posts.data.length === 0) ||
+      this.posts instanceof Failure
+    );
   }
 
   addIfNotPhone(base: number, additional: number) {

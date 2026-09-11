@@ -204,15 +204,21 @@ export class HoverboardApp extends PolymerElement {
       >
 
       <app-drawer-layout drawer-width="300px" force-narrow fullbleed>
-        <app-drawer id="drawer" slot="drawer" opened="{{drawerOpened}}" swipe-open>
+        <app-drawer
+          id="drawer"
+          slot="drawer"
+          opened="{{drawerOpened}}"
+          swipe-open
+          on-opened-changed="toggleDrawer"
+        >
           <app-toolbar layout vertical start>
             <img
               class="toolbar-logo"
               src="/images/logos/devfest-2026-wordmark-dark.svg"
               alt="DevFest 2026"
             />
-            <h2 class="dates">[[dates]]</h2>
-            <h3 class="location">[[shortLocation]]</h3>
+            <div class="dates">[[dates]]</div>
+            <div class="location">[[shortLocation]]</div>
           </app-toolbar>
 
           <div class="drawer-content" layout vertical justified flex>
@@ -349,11 +355,13 @@ export class HoverboardApp extends PolymerElement {
   }
 
   private restoreMenuFocus() {
-    const headerToolbar = this.shadowRoot?.querySelector('header-toolbar');
-    const menuBtn = headerToolbar?.shadowRoot?.querySelector<HTMLElement>(
-      'paper-icon-button[icon="hoverboard:menu"]',
-    );
-    menuBtn?.focus();
+    requestAnimationFrame(() => {
+      const headerToolbar = this.shadowRoot?.querySelector('header-toolbar');
+      const menuBtn = headerToolbar?.shadowRoot?.querySelector<HTMLElement>(
+        'paper-icon-button[icon="hoverboard:menu"]',
+      );
+      menuBtn?.focus();
+    });
   }
 
   private handleSkipToContent(e: Event) {
@@ -367,7 +375,8 @@ export class HoverboardApp extends PolymerElement {
 
   private scrollToRegistration(e: Event) {
     const homePage = this.main.querySelector('home-page') as HTMLElement | null;
-    const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration');
+    const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration') as
+      (HTMLElement & { openRegistration?: () => void }) | null;
 
     this.closeDrawer();
 
@@ -379,6 +388,9 @@ export class HoverboardApp extends PolymerElement {
     }
 
     e.preventDefault();
+    if (typeof ticketsBlock.openRegistration === 'function') {
+      ticketsBlock.openRegistration();
+    }
     scrollToElement(ticketsBlock);
   }
 

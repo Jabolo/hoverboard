@@ -112,6 +112,26 @@ export class FeedbackBlock extends ReduxMixin(PolymerElement) {
     this.feedback = selectFeedbackById(state, this.sessionId);
   }
 
+  override connectedCallback() {
+    super.connectedCallback();
+    this.patchStarAriaLabels();
+  }
+
+  private patchStarAriaLabels() {
+    const applyLabels = () => {
+      const starRatings = this.shadowRoot?.querySelectorAll('star-rating');
+      starRatings?.forEach((sr, blockIdx) => {
+        const category = blockIdx === 0 ? 'content' : 'presentation style';
+        const buttons = sr.shadowRoot?.querySelectorAll('paper-icon-button');
+        buttons?.forEach((btn, idx) => {
+          btn.setAttribute('aria-label', `Rate ${idx + 1} of 5 stars for ${category}`);
+        });
+      });
+    };
+    requestAnimationFrame(applyLabels);
+    window.setTimeout(applyLabels, 150);
+  }
+
   private resetFeedback() {
     this.contentRating = 0;
     this.styleRating = 0;

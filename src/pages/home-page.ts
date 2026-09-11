@@ -624,8 +624,12 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private scrollToTickets() {
-    const element = this.$['registration'];
+    const element = this.$['registration'] as
+      (HTMLElement & { openRegistration?: () => void }) | undefined;
     if (element) {
+      if (typeof element.openRegistration === 'function') {
+        element.openRegistration();
+      }
       scrollToElement(element);
     } else {
       store.dispatch(queueSnackbar('Error scrolling to section.'));

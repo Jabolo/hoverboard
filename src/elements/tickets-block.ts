@@ -30,6 +30,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           display: block;
           border-bottom: 1px solid var(--divider-color);
           background: var(--primary-background-color);
+          scroll-margin-top: 88px;
         }
 
         .tickets-wrapper {
@@ -53,10 +54,14 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .tickets {
           margin: 24px 0 18px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 12px;
         }
 
         .ticket-item {
-          margin: 10px 6px;
+          margin: 0;
           min-height: 290px;
           border: 1px solid var(--divider-color);
           width: 100%;
@@ -410,7 +415,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           }
 
           .ticket-item {
-            max-width: 200px;
+            flex: 1 1 180px;
+            max-width: 220px;
           }
 
           .ticket-item[in-demand] {
@@ -548,7 +554,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 </div>
                 <div class="content" layout vertical flex-auto>
                   <div class="ticket-price-wrapper">
-                    <div class="price">[[ticket.currency]][[ticket.price]]</div>
+                    <div class="price">[[formatPrice(ticket.price, ticket.currency)]]</div>
                     <div class="subtext-slot">
                       <template is="dom-if" if="[[getDiscount(ticket)]]">
                         <div class="discount">[[getDiscount(ticket)]]</div>
@@ -653,6 +659,50 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   override stateChanged(state: RootState) {
     this.tickets = state.tickets;
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    this.checkHashAndOpen();
+    window.addEventListener('hashchange', this.onHashChange);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('hashchange', this.onHashChange);
+  }
+
+  private onHashChange = () => {
+    this.checkHashAndOpen();
+  };
+
+  private checkHashAndOpen() {
+    if (window.location.hash === '#registration') {
+      this.openRegistration();
+    }
+  }
+
+  public openRegistration() {
+    if (!this.registrationOpened) {
+      this.registrationOpened = true;
+      void logAnalyticsEvent('registration_start', {
+        entry_point: 'hash_or_cta',
+      });
+      window.setTimeout(() => {
+        this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 120);
+    }
+  }
+
+  private formatPrice(price: number, currency: string): string {
+    if (!currency) return String(price);
+    if (['$', '€', '£'].includes(currency)) {
+      return `${currency}${price}`;
+    }
+    return `${price} ${currency}`;
   }
 
   @computed('tickets')

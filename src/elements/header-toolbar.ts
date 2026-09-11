@@ -226,7 +226,8 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           selected="[[routeName]]"
           attr-for-selected="name"
           hidden$="[[!viewport.isLaptopPlus]]"
-          role="navigation"
+          role="tablist"
+          aria-label="Main navigation"
           noink
         >
           <template is="dom-repeat" items="[[navigation]]" as="nav">
