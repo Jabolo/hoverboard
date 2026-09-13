@@ -173,6 +173,22 @@ export class AboutBlock extends ThemedElement {
     `;
   }
 
+  override firstUpdated() {
+    const btn = this.shadowRoot?.querySelector('md-text-button[target="_blank"]');
+    if (btn) {
+      const patchAnchor = () => {
+        const link = btn.shadowRoot?.querySelector<HTMLAnchorElement>('a#link');
+        if (link) {
+          link.setAttribute('rel', 'noopener noreferrer');
+        }
+      };
+      patchAnchor();
+      customElements.whenDefined('md-text-button').then(() => {
+        requestAnimationFrame(patchAnchor);
+      });
+    }
+  }
+
   private playVideo() {
     openVideoDialog({
       title: aboutBlock.callToAction.howItWas.label,
