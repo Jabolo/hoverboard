@@ -409,18 +409,41 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           width: 100%;
         }
 
+        @media (max-width: 639px) {
+          .ticket-item {
+            width: 100%;
+            max-width: 340px;
+          }
+        }
+
         @media (min-width: 640px) {
           .tickets-placeholder {
             grid-template-columns: repeat(auto-fill, 200px);
           }
 
-          .ticket-item {
-            flex: 1 1 180px;
-            max-width: 220px;
-          }
-
           .ticket-item[in-demand] {
             transform: scale(1.02);
+          }
+        }
+
+        @media (min-width: 640px) and (max-width: 959px) {
+          .ticket-item {
+            flex: 1 1 calc(50% - 16px);
+            max-width: 320px;
+          }
+        }
+
+        @media (min-width: 960px) and (max-width: 1199px) {
+          .ticket-item {
+            flex: 1 1 calc(33.333% - 16px);
+            max-width: 310px;
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .ticket-item {
+            flex: 1 1 200px;
+            max-width: 230px;
           }
         }
 

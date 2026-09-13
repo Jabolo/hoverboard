@@ -302,6 +302,22 @@ export class CfpBlock extends ThemedElement {
       </section>
     `;
   }
+
+  override firstUpdated() {
+    const btn = this.shadowRoot?.querySelector('md-filled-button');
+    if (btn) {
+      const patchAnchor = () => {
+        const link = btn.shadowRoot?.querySelector<HTMLAnchorElement>('a#link');
+        if (link) {
+          link.setAttribute('rel', 'noopener noreferrer');
+        }
+      };
+      patchAnchor();
+      customElements.whenDefined('md-filled-button').then(() => {
+        requestAnimationFrame(patchAnchor);
+      });
+    }
+  }
 }
 
 declare global {

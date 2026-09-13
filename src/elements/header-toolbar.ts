@@ -120,6 +120,10 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         }
 
         paper-icon-button {
+          width: 48px;
+          height: 48px;
+          min-width: 48px;
+          min-height: 48px;
           color: inherit;
         }
 

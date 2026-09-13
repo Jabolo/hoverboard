@@ -16,13 +16,19 @@ import {
 } from '@polymer/polymer/lib/utils/settings';
 import './components/snack-bar';
 import './components/cookie-consent';
-import './elements/dialogs/feedback-dialog';
-import './elements/dialogs/signin-dialog';
-import './elements/dialogs/subscribe-dialog';
-import './elements/dialogs/video-dialog';
 import './elements/footer-block';
 import './elements/header-toolbar';
 import './elements/shared-styles';
+
+let dialogsLoaded = false;
+export const loadDialogs = () => {
+  if (dialogsLoaded) return;
+  dialogsLoaded = true;
+  import('./elements/dialogs/feedback-dialog');
+  import('./elements/dialogs/signin-dialog');
+  import('./elements/dialogs/subscribe-dialog');
+  import('./elements/dialogs/video-dialog');
+};
 import { selectRouteName, startRouter } from './router';
 import { RootState, store } from './store';
 import { onUser } from './store/auth/actions';
@@ -210,6 +216,10 @@ export class HoverboardApp extends PolymerElement {
           opened="{{drawerOpened}}"
           swipe-open
           on-opened-changed="toggleDrawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          aria-hidden$="[[getDrawerAriaHidden(drawerOpened)]]"
         >
           <app-toolbar layout vertical start>
             <img
@@ -307,6 +317,12 @@ export class HoverboardApp extends PolymerElement {
   stateChanged(state: RootState) {
     this.tickets = state.tickets;
     this.routeName = selectRouteName(window.location.pathname);
+    if (
+      state.dialogs instanceof Success ||
+      (state.ui && state.ui.videoDialog && state.ui.videoDialog.open)
+    ) {
+      loadDialogs();
+    }
   }
 
   constructor() {
@@ -317,9 +333,11 @@ export class HoverboardApp extends PolymerElement {
   override connectedCallback() {
     super.connectedCallback();
     this.scrollToRegistration = this.scrollToRegistration.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
     this.addEventListener('registration-request', this.scrollToRegistration);
     window.addEventListener('element-sticked', (event) => this.toggleHeaderShadow(event));
     window.addEventListener('offline', () => store.dispatch(queueSnackbar(offlineMessage)));
+    window.addEventListener('keydown', this.handleKeydown);
     this.drawer.addEventListener('opened-changed', (event) => this.toggleDrawer(event));
     store.dispatch(fetchTickets);
   }
@@ -330,10 +348,20 @@ export class HoverboardApp extends PolymerElement {
     this.removeAttribute('unresolved');
     startRouter(this.main);
     onUser();
+    if ('requestIdleCallback' in window) {
+      (
+        window as Window & {
+          requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void;
+        }
+      ).requestIdleCallback(loadDialogs, { timeout: 3000 });
+    } else {
+      setTimeout(loadDialogs, 1500);
+    }
   }
 
   override disconnectedCallback() {
     this.removeEventListener('registration-request', this.scrollToRegistration);
+    window.removeEventListener('keydown', this.handleKeydown);
     super.disconnectedCallback();
   }
 
@@ -351,7 +379,56 @@ export class HoverboardApp extends PolymerElement {
     this.drawerOpened = e.detail.value;
     if (wasOpened && !e.detail.value) {
       this.restoreMenuFocus();
+    } else if (!wasOpened && e.detail.value) {
+      requestAnimationFrame(() => {
+        const firstLink = this.drawer?.querySelector<HTMLElement>('.drawer-list a');
+        firstLink?.focus();
+      });
     }
+  }
+
+  private handleKeydown(e: KeyboardEvent) {
+    if (this.drawerOpened) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        this.closeDrawer();
+        return;
+      }
+      if (e.key === 'Tab') {
+        this.trapDrawerFocus(e);
+      }
+    }
+  }
+
+  private trapDrawerFocus(e: KeyboardEvent) {
+    const drawer = this.drawer;
+    if (!drawer) return;
+    const focusable = Array.from(
+      drawer.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    const active = (this.shadowRoot?.activeElement || document.activeElement) as HTMLElement;
+    if (e.shiftKey) {
+      if (active === first || !focusable.includes(active)) {
+        e.preventDefault();
+        last?.focus();
+      }
+    } else {
+      if (active === last || !focusable.includes(active)) {
+        e.preventDefault();
+        first?.focus();
+      }
+    }
+  }
+
+  private getDrawerAriaHidden(opened: boolean): string {
+    return opened ? 'false' : 'true';
   }
 
   private restoreMenuFocus() {

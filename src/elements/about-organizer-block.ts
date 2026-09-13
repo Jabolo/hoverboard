@@ -127,6 +127,28 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
   @property({ type: Object })
   private viewport = initialUiState.viewport;
 
+  override ready() {
+    super.ready();
+    this.patchAnchors();
+  }
+
+  private patchAnchors() {
+    const patch = () => {
+      const buttons = this.shadowRoot?.querySelectorAll('md-text-button[target="_blank"]');
+      buttons?.forEach((btn) => {
+        const anchor = btn.shadowRoot?.querySelector<HTMLAnchorElement>('a#link');
+        if (anchor) {
+          anchor.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+    };
+    patch();
+    customElements.whenDefined('md-text-button').then(() => {
+      requestAnimationFrame(patch);
+      setTimeout(patch, 250);
+    });
+  }
+
   override stateChanged(state: RootState) {
     this.viewport = state.ui.viewport;
   }

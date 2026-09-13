@@ -34,6 +34,13 @@ export class FooterBlock extends PolymerElement {
           background: var(--primary-background-color);
           color: inherit;
           pointer-events: all;
+          cursor: pointer;
+          min-width: 56px;
+          min-height: 56px;
+          transition:
+            transform var(--animation),
+            color var(--animation),
+            box-shadow var(--animation);
           box-shadow:
             0 0 8px 0 rgba(0, 0, 0, 0.12),
             0 8px 8px 0 rgba(0, 0, 0, 0.24);
@@ -41,6 +48,15 @@ export class FooterBlock extends PolymerElement {
 
         .fab paper-fab:hover {
           color: var(--google-green);
+          transform: translateY(-2px);
+          box-shadow:
+            0 0 12px 0 rgba(52, 168, 83, 0.35),
+            0 8px 12px 0 rgba(0, 0, 0, 0.35);
+        }
+
+        .fab paper-fab:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
         }
 
         .fab {
@@ -64,6 +80,8 @@ export class FooterBlock extends PolymerElement {
             class="back-to-top"
             icon="hoverboard:up"
             aria-label="Back to top"
+            role="button"
+            tabindex="0"
             on-click="backToTop"
           ></paper-fab>
         </div>

@@ -15,7 +15,7 @@ export const workboxConfig: GenerateSWOptions = {
   swDest: 'dist/service-worker.js',
   navigateFallback: '/index.html',
   navigateFallbackDenylist: [FIREBASE_RESERVED_URLS],
-  skipWaiting: false,
+  skipWaiting: true,
   clientsClaim: true,
   offlineGoogleAnalytics: true,
   globDirectory: 'dist',
@@ -23,7 +23,7 @@ export const workboxConfig: GenerateSWOptions = {
   runtimeCaching: [
     {
       urlPattern: /\/images\/.*/,
-      handler: 'NetworkFirst',
+      handler: 'StaleWhileRevalidate',
       options: {
         cacheName: 'images-cache',
         expiration: STATIC_EXPIRATION,

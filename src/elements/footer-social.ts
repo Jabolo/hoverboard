@@ -92,8 +92,8 @@ export class FooterSocial extends PolymerElement {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           color: var(--footer-text-color);
           transition:

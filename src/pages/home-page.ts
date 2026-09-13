@@ -170,11 +170,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
 
         .scroll-down {
-          margin-top: 24px;
+          margin-top: 14px;
           color: currentColor;
           user-select: none;
           border: 0;
-          padding: 0;
+          padding: 10px;
+          min-width: 44px;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           background: transparent;
           font: inherit;
           cursor: pointer;

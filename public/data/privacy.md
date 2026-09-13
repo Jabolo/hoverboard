@@ -1,4 +1,4 @@
-# Privacy and newsletter communications
+## Privacy and newsletter communications
 
 GDG DevFest Warsaw 2026 is a community-led event organized by Google Developer Groups Warsaw. This page explains the data handled directly through this event website.
 

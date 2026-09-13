@@ -44,7 +44,9 @@ export const theme = css`
     --twitter-color: #4099ff;
     --facebook-color: #527ac9;
     --border-light-color: var(--terminal-line);
-    --error-color: var(--google-red-strong);
+    --error-color: #f2b8b5;
+    --paper-input-container-invalid-color: var(--error-color);
+    --mdc-theme-error: var(--error-color);
 
     /* Custom */
     --default-background-color: var(--terminal-panel);
