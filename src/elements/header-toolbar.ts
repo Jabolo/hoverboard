@@ -422,7 +422,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
   @computed('tickets')
   private get registrationUrl() {
-    return this.ticketUrl ? '/#registration' : '';
+    return this.ticketUrl ? '/#tickets' : '';
   }
 
   @observe('heroSettings')

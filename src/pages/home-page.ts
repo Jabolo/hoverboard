@@ -572,6 +572,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <about-block></about-block>
       <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
+      <div id="tickets" style="scroll-margin-top: 80px;"></div>
       <tickets-block id="registration"></tickets-block>
       <schedule-block></schedule-block>
       <speakers-block></speakers-block>
@@ -629,12 +630,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private scrollToTickets() {
-    const element = this.$['registration'] as
-      (HTMLElement & { openRegistration?: () => void }) | undefined;
+    const element = (this.$['registration'] || this.shadowRoot?.querySelector('#tickets')) as
+      HTMLElement | undefined;
     if (element) {
-      if (typeof element.openRegistration === 'function') {
-        element.openRegistration();
-      }
       scrollToElement(element);
     } else {
       store.dispatch(queueSnackbar('Error scrolling to section.'));
@@ -659,8 +657,22 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     super.connectedCallback();
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
-    if (window.location.hash === '#registration') {
-      requestAnimationFrame(() => this.scrollToTickets());
+    this.checkHashAndScroll();
+    window.addEventListener('hashchange', this.onHashChange);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('hashchange', this.onHashChange);
+  }
+
+  private onHashChange = () => {
+    this.checkHashAndScroll();
+  };
+
+  private checkHashAndScroll() {
+    if (window.location.hash === '#tickets' || window.location.hash === '#registration') {
+      window.setTimeout(() => this.scrollToTickets(), 50);
     }
   }
 }

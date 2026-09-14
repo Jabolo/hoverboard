@@ -182,9 +182,7 @@ export class BlogListPage extends ReduxMixin(PolymerElement) {
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="empty-state">
           <p>News and event updates will be published here as the programme develops.</p>
-          <md-filled-button href="/#registration">
-            Explore Tickets &amp; Registration
-          </md-filled-button>
+          <md-filled-button href="/#tickets"> Explore Tickets &amp; Registration </md-filled-button>
         </div>
       </template>
 

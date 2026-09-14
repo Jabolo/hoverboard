@@ -452,22 +452,22 @@ export class HoverboardApp extends PolymerElement {
 
   private scrollToRegistration(e: Event) {
     const homePage = this.main.querySelector('home-page') as HTMLElement | null;
-    const ticketsBlock = homePage?.shadowRoot?.querySelector('#registration') as
-      (HTMLElement & { openRegistration?: () => void }) | null;
+    const ticketsBlock = (homePage?.shadowRoot?.querySelector('#tickets') ||
+      homePage?.shadowRoot?.querySelector('#registration')) as HTMLElement | null;
 
     this.closeDrawer();
 
     if (!ticketsBlock) {
-      if (window.location.pathname !== '/' || window.location.hash !== '#registration') {
-        window.location.href = '/#registration';
+      if (
+        window.location.pathname !== '/' ||
+        (window.location.hash !== '#tickets' && window.location.hash !== '#registration')
+      ) {
+        window.location.href = '/#tickets';
       }
       return;
     }
 
     e.preventDefault();
-    if (typeof ticketsBlock.openRegistration === 'function') {
-      ticketsBlock.openRegistration();
-    }
     scrollToElement(ticketsBlock);
   }
 
@@ -483,7 +483,7 @@ export class HoverboardApp extends PolymerElement {
 
   @computed('tickets')
   private get registrationUrl(): string {
-    return this.ticketUrl ? '/#registration' : '';
+    return this.ticketUrl ? '/#tickets' : '';
   }
 
   private getAriaCurrent(routeName: string, navRoute: string): string | undefined {

@@ -76,6 +76,10 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             transform var(--animation);
         }
 
+        .ticket-item:not([unavailable]):not([sold-out]) {
+          cursor: pointer;
+        }
+
         .ticket-item:hover {
           border-color: var(--google-blue);
           box-shadow: var(--box-shadow-primary-color);
@@ -564,6 +568,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 tier$="[[getTicketTier(ticket)]]"
                 layout
                 vertical
+                on-click="onTicketTap"
               >
                 <div class="header">
                   <div class="badge-slot">
@@ -700,7 +705,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   };
 
   private checkHashAndOpen() {
-    if (window.location.hash === '#registration') {
+    if (window.location.hash === '#registration-form') {
       this.openRegistration();
     }
   }
@@ -828,7 +833,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   }
 
   private onTicketTap(e: Event & { model: { ticket: Ticket } }) {
-    if (e.model.ticket.soldOut || !e.model.ticket.available) {
+    e.stopPropagation();
+    if (!e.model?.ticket || e.model.ticket.soldOut || !e.model.ticket.available) {
       return;
     }
     const wasRegistrationOpened = this.registrationOpened;
@@ -849,11 +855,14 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
     void logAnalyticsEvent('ticket_selected', analyticsParams);
 
     window.setTimeout(() => {
-      this.shadowRoot?.querySelector('#registration-form')?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }, 120);
+      const form = this.shadowRoot?.querySelector('#registration-form');
+      if (form) {
+        form.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }, 150);
   }
 
   private toggleRegistration() {
