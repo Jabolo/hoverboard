@@ -1,5 +1,10 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app';
-import { Firestore, initializeFirestore, persistentLocalCache } from 'firebase/firestore';
+import {
+  Firestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 import { getFunctions, Functions } from 'firebase/functions';
 import { getPerformance, initializePerformance } from 'firebase/performance';
 
@@ -24,13 +29,12 @@ const firebaseConfig =
   window.firebaseConfig ??
   (isLocalPreview
     ? {
-        apiKey: 'local-preview',
-        authDomain: 'local-preview.firebaseapp.com',
-        projectId: 'local-preview',
-        storageBucket: 'local-preview.appspot.com',
-        messagingSenderId: 'local-preview',
-        appId: 'local-preview',
-        measurementId: 'G-LOCALPREVIEW',
+        apiKey: 'AIzaSyBYDCE-M_SS2bXqtLWCYUOpZ38T_RJMEVM',
+        authDomain: 'gdg-warsaw-devfest26-web.firebaseapp.com',
+        projectId: 'gdg-warsaw-devfest26-web',
+        storageBucket: 'gdg-warsaw-devfest26-web.firebasestorage.app',
+        messagingSenderId: '94592063137',
+        appId: '1:94592063137:web:e2f2bfa581d0222a6b82e0',
       }
     : undefined);
 
@@ -40,7 +44,9 @@ if (!firebaseConfig) {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 export const db: Firestore = initializeFirestore(firebaseApp, {
-  localCache: persistentLocalCache(),
+  localCache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager(),
+  }),
 });
 export const firebaseFunctions: Functions = getFunctions(firebaseApp);
 export const performance = getPerformance(firebaseApp);

@@ -13,10 +13,10 @@ export const ticketsReducer = (
 ): TicketsState => {
   switch (action.type) {
     case FETCH_TICKETS:
-      return new Pending();
+      return state instanceof Success ? state : new Pending();
 
     case FETCH_TICKETS_FAILURE:
-      return new Failure(action.payload);
+      return state instanceof Success ? state : new Failure(action.payload);
 
     case FETCH_TICKETS_SUCCESS:
       return new Success(action.payload);
