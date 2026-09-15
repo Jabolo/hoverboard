@@ -37,14 +37,19 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    function validSubscriberToken(token) {
+      return token.size() >= 10 && token.size() <= 256
+        && request.resource.data.keys().hasAll(['value', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['value', 'updatedAt'])
+        && request.resource.data.value is bool
+        && request.resource.data.updatedAt is timestamp;
+    }
+
     match /notificationsSubscribers/{token} {
       allow list: if false;
-
-      // Applies to document create requests
-      allow create;
-      allow update;
-      allow delete;
       allow get;
+      allow create, update: if validSubscriberToken(token);
+      allow delete: if token.size() >= 10 && token.size() <= 256;
     }
 
     match /notificationsUsers/{userId} {
@@ -84,11 +89,16 @@ service cloud.firestore {
 
       // Allow public submission with strict schema validation
       allow create: if request.resource.data.keys().hasAll(['email', 'fullName', 'companyName'])
+                    && request.resource.data.keys().hasOnly(['email', 'fullName', 'companyName'])
                     && request.resource.data.email is string
+                    && request.resource.data.email.size() > 3
                     && request.resource.data.email.size() <= 320
+                    && request.resource.data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
                     && request.resource.data.fullName is string
+                    && request.resource.data.fullName.size() > 0
                     && request.resource.data.fullName.size() <= 120
                     && request.resource.data.companyName is string
+                    && request.resource.data.companyName.size() > 0
                     && request.resource.data.companyName.size() <= 120;
     }
 
