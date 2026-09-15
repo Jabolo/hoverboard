@@ -27,7 +27,7 @@ const replaceTagContent = (html, selector, value) =>
   );
 
 const setMetadata = (html, route, metadata) => {
-  const canonical = `https://warsaw.devfest.pl${route === '/' ? '/' : route}`;
+  const canonical = `https://warsaw.devfest.pl${route === '/' ? '/' : `${route}/`}`;
   let output = html.replace(
     /<title>[^<]*<\/title>/i,
     `<title>${escapeHtml(metadata.title)}</title>`,

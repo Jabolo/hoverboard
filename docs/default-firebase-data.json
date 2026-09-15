@@ -9,7 +9,7 @@
       "server": ""
     },
     "site": {
-      "domain": "gdg-warsaw-devfest26-web.web.app"
+      "domain": "warsaw.devfest.pl"
     },
     "schedule": {
       "enabled": false
@@ -20,6 +20,8 @@
       "apikey": ""
     }
   },
+  "gallery": [],
+  "previousSpeakers": {},
   "partners": [
     {
       "title": "Venue & Community Partner",
@@ -142,16 +144,16 @@
   ],
   "tickets": [
     {
-      "available": true,
+      "available": false,
       "currency": "zł",
       "ends": "September 30, 2026",
-      "inDemand": true,
+      "inDemand": false,
       "info": "Full conference pass at best price. First come, first served.",
       "eveneaTicketId": "452215",
       "name": "Early Bird",
       "price": 49,
       "regular": true,
-      "soldOut": false,
+      "soldOut": true,
       "starts": "",
       "primary": false,
       "url": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe"

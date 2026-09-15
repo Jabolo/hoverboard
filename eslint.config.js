@@ -20,6 +20,7 @@ export default [
       'node_modules/**',
       'functions/dist/**',
       'public/**',
+      'coverage/**',
       '.planning/**', // Planning sketches are not production source files
       '**/package-lock.json', // Auto-generated lockfiles
       '**/yarn.lock', // Auto-generated lockfiles
