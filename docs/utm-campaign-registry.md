@@ -8,15 +8,16 @@ This document is the canonical local source of truth for marketing campaign link
 
 All official campaign links point to `https://warsaw.devfest.pl/` and adhere to the following schema:
 
-| Parameter | Type | Required | Allowed Values / Examples | Description |
-| :--- | :--- | :---: | :--- | :--- |
-| `utm_source` | string | **Yes** | `linkedin`, `instagram`, `facebook`, `newsletter`, `bevy`, `partner` | Platform or channel identifier. |
-| `utm_medium` | string | **Yes** | `social`, `email`, `community`, `partner`, `cpc` | Marketing or distribution medium. |
-| `utm_campaign` | string | **Yes** | `devfest_warsaw_2026` | Event campaign name. Must remain constant across all 2026 links. |
-| `utm_content` | string | No | `profile_bio`, `organic_post_01`, `story_01`, `speaker_wave_1`, `ticket_launch` | Specific placement, creative, or edition. |
-| `source` | string | No | `Bevy-GDG-Community`, `<PartnerName>-Referral` | Forwarded directly into Evenea registration iframe. |
+| Parameter      | Type   | Required | Allowed Values / Examples                                                       | Description                                                      |
+| :------------- | :----- | :------: | :------------------------------------------------------------------------------ | :--------------------------------------------------------------- |
+| `utm_source`   | string | **Yes**  | `linkedin`, `instagram`, `facebook`, `newsletter`, `bevy`, `partner`            | Platform or channel identifier.                                  |
+| `utm_medium`   | string | **Yes**  | `social`, `email`, `community`, `partner`, `cpc`                                | Marketing or distribution medium.                                |
+| `utm_campaign` | string | **Yes**  | `devfest_warsaw_2026`                                                           | Event campaign name. Must remain constant across all 2026 links. |
+| `utm_content`  | string |    No    | `profile_bio`, `organic_post_01`, `story_01`, `speaker_wave_1`, `ticket_launch` | Specific placement, creative, or edition.                        |
+| `source`       | string |    No    | `Bevy-GDG-Community`, `<PartnerName>-Referral`                                  | Forwarded directly into Evenea registration iframe.              |
 
 > [!IMPORTANT]
+>
 > - Never include personal identifiable information (PII) such as personal names or email addresses in UTM parameters.
 > - All parameters must be lowercase and use snake_case or hyphens for multi-word values.
 
@@ -26,33 +27,33 @@ All official campaign links point to `https://warsaw.devfest.pl/` and adhere to 
 
 ### Community & Social Media Channels
 
-* **LinkedIn Bio / About:**  
+- **LinkedIn Bio / About:**  
   `https://warsaw.devfest.pl/?utm_source=linkedin&utm_medium=social&utm_campaign=devfest_warsaw_2026&utm_content=profile_bio`
 
-* **LinkedIn Organic Posts:**  
+- **LinkedIn Organic Posts:**  
   `https://warsaw.devfest.pl/?utm_source=linkedin&utm_medium=social&utm_campaign=devfest_warsaw_2026&utm_content=organic_post`
 
-* **Instagram Bio (Link in bio):**  
+- **Instagram Bio (Link in bio):**  
   `https://warsaw.devfest.pl/?utm_source=instagram&utm_medium=social&utm_campaign=devfest_warsaw_2026&utm_content=profile_bio`
 
-* **Instagram Stories:**  
+- **Instagram Stories:**  
   `https://warsaw.devfest.pl/?utm_source=instagram&utm_medium=social&utm_campaign=devfest_warsaw_2026&utm_content=story`
 
-* **Facebook Posts & Events:**  
+- **Facebook Posts & Events:**  
   `https://warsaw.devfest.pl/?utm_source=facebook&utm_medium=social&utm_campaign=devfest_warsaw_2026&utm_content=organic_post`
 
-* **GDG Community Platform (Bevy):**  
+- **GDG Community Platform (Bevy):**  
   `https://warsaw.devfest.pl/?utm_source=bevy&utm_medium=community&utm_campaign=devfest_warsaw_2026&utm_content=event_page&source=Bevy-GDG-Community`
 
 ### Direct Marketing & Newsletters
 
-* **GDG Warsaw Newsletter — Launch Announcement:**  
+- **GDG Warsaw Newsletter — Launch Announcement:**  
   `https://warsaw.devfest.pl/?utm_source=newsletter&utm_medium=email&utm_campaign=devfest_warsaw_2026&utm_content=launch_announcement`
 
-* **GDG Warsaw Newsletter — Speaker Wave 1:**  
+- **GDG Warsaw Newsletter — Speaker Wave 1:**  
   `https://warsaw.devfest.pl/?utm_source=newsletter&utm_medium=email&utm_campaign=devfest_warsaw_2026&utm_content=speaker_wave_1`
 
-* **GDG Warsaw Newsletter — Last Call / Agenda:**  
+- **GDG Warsaw Newsletter — Last Call / Agenda:**  
   `https://warsaw.devfest.pl/?utm_source=newsletter&utm_medium=email&utm_campaign=devfest_warsaw_2026&utm_content=agenda_announcement`
 
 ---
@@ -66,9 +67,10 @@ https://warsaw.devfest.pl/?utm_source={partner_slug}&utm_medium=partner&utm_camp
 ```
 
 ### Examples:
-* **Google Campus Warsaw:**  
+
+- **Google Campus Warsaw:**  
   `https://warsaw.devfest.pl/?utm_source=google_campus&utm_medium=partner&utm_campaign=devfest_warsaw_2026&utm_content=campus_newsletter&source=Campus-Warsaw`
-* **Community Partner:**  
+- **Community Partner:**  
   `https://warsaw.devfest.pl/?utm_source=women_techmakers&utm_medium=partner&utm_campaign=devfest_warsaw_2026&utm_content=wtm_social&source=WTM-Warsaw`
 
 ---
