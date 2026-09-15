@@ -10,8 +10,9 @@ This project is based on the current `gdg-x/hoverboard` `main` branch. The previ
 ## Event
 
 - Name: GDG DevFest Warsaw 2026
-- Date: November 21, 2026
+- Date: November 21, 2026 (09:00–21:00 Europe/Warsaw)
 - Venue: Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa
+- Website: https://warsaw.devfest.pl/
 - Public organizer: GDG Warsaw / GDG Warszawa
 - Ticketing and settlement: KOL.SKI sp. z o.o. (ticket sales, payments, invoices, refunds, and ticket-related complaints only)
 - Event lead: Michał Jabłoński
@@ -27,6 +28,7 @@ Campaign links are maintained in the canonical [DevFest 2026 — UTM Campaign Re
 
 The application uses the Firebase project `gdg-warsaw-devfest26-web` under the Michał Tomasz Jabłoński account.
 
+- Production URL: `https://warsaw.devfest.pl/`
 - Firestore database: `(default)`
 - Firestore region: `europe-central2`
 - Hosting preview: `https://gdg-warsaw-devfest26-web.web.app/`
