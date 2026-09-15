@@ -1,16 +1,19 @@
 name: Main
-on: push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-  test:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-    name: ${{ matrix.script-name }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        script-name: [lint, test, build]
-
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v7
@@ -31,8 +34,95 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Create temp serviceAccount.json
-        run: echo "{}" > serviceAccount.json
+      - name: Running lint
+        run: npm run lint
 
-      - name: Running ${{ matrix.script-name }}
-        run: npm run ${{ matrix.script-name }}
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v7
+
+      - name: Cache node modules
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Running tests
+        run: npm run test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v7
+
+      - name: Cache node modules
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Running build
+        run: npm run build
+
+  deploy:
+    name: Deploy to Firebase Hosting
+    needs: [lint, test, build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v7
+
+      - name: Cache node modules
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: gdg-warsaw-devfest26-web
+          workload_identity_provider: projects/94592063137/locations/global/workloadIdentityPools/github-actions/providers/hoverboard
+          service_account: github-actions-hosting@gdg-warsaw-devfest26-web.iam.gserviceaccount.com
+
+      - name: Deploy Firebase Hosting
+        run: npx --no-install firebase deploy --only hosting:gdg-warsaw-devfest26-web --project gdg-warsaw-devfest26-web
