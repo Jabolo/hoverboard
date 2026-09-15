@@ -10,6 +10,7 @@ import {
   normalizeEmail,
   type NewsletterConsentInput,
 } from './newsletter-contract.js';
+import { checkRateLimit, getClientIp } from './rate-limiter.js';
 
 export {
   NEWSLETTER_CONSENT_SOURCE,
@@ -91,7 +92,14 @@ const syncToResend = async (
 
 export const registerNewsletterConsent = functions
   .runWith({ secrets: ['RESEND_API_KEY'] })
-  .https.onCall(async (data: NewsletterConsentInput) => {
+  .https.onCall(async (data: NewsletterConsentInput, context: functions.https.CallableContext) => {
+    if (process.env.ENFORCE_APP_CHECK === 'true' && !context.app) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'App Check verification is required.',
+      );
+    }
+
     const email = typeof data?.email === 'string' ? normalizeEmail(data.email) : '';
     const firstName = typeof data?.firstName === 'string' ? data.firstName.trim() : '';
     const lastName = typeof data?.lastName === 'string' ? data.lastName.trim() : '';
@@ -106,6 +114,43 @@ export const registerNewsletterConsent = functions
       throw new functions.https.HttpsError(
         'invalid-argument',
         'Valid newsletter consent is required.',
+      );
+    }
+
+    const db = getFirestore();
+    const clientIp = getClientIp(context?.rawRequest);
+
+    // Rate limit: max 5 requests per 10 minutes per IP
+    const ipLimit = await checkRateLimit({
+      db,
+      prefix: 'newsletter_ip',
+      key: clientIp,
+      maxAttempts: 5,
+      windowSeconds: 600,
+    });
+
+    if (!ipLimit.allowed) {
+      functions.logger.warn(`Rate limit exceeded for IP: ${clientIp}`);
+      throw new functions.https.HttpsError(
+        'resource-exhausted',
+        'Too many newsletter registration attempts. Please try again in a few minutes.',
+      );
+    }
+
+    // Rate limit: max 3 requests per 10 minutes for the same email
+    const emailLimit = await checkRateLimit({
+      db,
+      prefix: 'newsletter_email',
+      key: email,
+      maxAttempts: 3,
+      windowSeconds: 600,
+    });
+
+    if (!emailLimit.allowed) {
+      functions.logger.warn(`Rate limit exceeded for email: ${hashEmail(email)}`);
+      throw new functions.https.HttpsError(
+        'resource-exhausted',
+        'Too many attempts for this email address. Please try again later.',
       );
     }
 

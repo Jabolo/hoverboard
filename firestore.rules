@@ -22,6 +22,10 @@ service cloud.firestore {
       allow read, write: if false; // allow each section separately
     }
 
+    match /functionsRateLimits/{docId} {
+      allow read, write: if false;
+    }
+
     match /featuredSessions/{userId} {
       allow read, write: if request.auth.uid == userId;
     }
