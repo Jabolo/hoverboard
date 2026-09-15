@@ -767,7 +767,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   }
 
   private hasTicketDates(ticket: Ticket): boolean {
-    if (!ticket) return false;
+    if (!ticket || ticket.soldOut) return false;
     const tier = this.getTicketTier(ticket);
     if (tier === 'supporter' || tier === 'patron') {
       return false;
@@ -776,7 +776,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
   }
 
   private formatTicketDates(ticket: Ticket): string {
-    if (!ticket) return '';
+    if (!ticket || ticket.soldOut) return '';
     const tier = this.getTicketTier(ticket);
     if (tier === 'supporter' || tier === 'patron') {
       return '';
