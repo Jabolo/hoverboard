@@ -14,6 +14,7 @@
     "deploy": "npm run build && NODE_ENV=production firebase deploy",
     "firestore:copy": "ts-node-script ./scripts/firestore-copy",
     "firestore:init": "node --loader ts-node/esm ./scripts/firestore-init/index.ts",
+    "firestore:tickets": "node --loader ts-node/esm ./scripts/firestore-sync-tickets.ts",
     "fix": "concurrently npm:fix:*",
     "fix:eslint": "eslint . --fix",
     "fix:prettier": "prettier . --write",
@@ -29,7 +30,8 @@
     "start:emulators": "firebase emulators:start",
     "start:functions": "npm --prefix functions start",
     "start:rollup": "mkdir -p dist && rollup --config rollup.config.ts --configPlugin typescript --watch",
-    "test": "jest"
+    "test": "jest",
+    "verify:live": "node ./scripts/verify-live-status.mjs"
   },
   "dependencies": {
     "@abraham/remotedata": "1.4.0",
