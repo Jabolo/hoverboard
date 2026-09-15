@@ -22,7 +22,7 @@ The website intentionally does not emit a fake `purchase` event. Completed purch
 
 ## Attribution
 
-The website reads UTM parameters and preserves them for the session in `src/utils/attribution.ts`. Campaign links should point to `https://warsaw.devfest.pl/` and use the canonical [DevFest 2026 — UTM Campaign Links sheet](https://docs.google.com/spreadsheets/d/1rMFm3rLuqhTXvtpie_DsxE4Y2eJcJvRr8HQvh0qsUoA/edit?gid=0#gid=0). The sheet's `UTM links` tab contains ready-to-use links; its `Naming guide` tab is the naming authority.
+The website reads UTM parameters and preserves them for the session in `src/utils/attribution.ts`. Campaign links should point to `https://warsaw.devfest.pl/` and use the canonical [DevFest 2026 — UTM Campaign Registry](./utm-campaign-registry.md). That document contains ready-to-use links and is the naming authority.
 
 The current convention is:
 

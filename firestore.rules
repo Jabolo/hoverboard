@@ -80,14 +80,16 @@ service cloud.firestore {
     }
 
     match /potentialPartners/{partnerId} {
-      allow delete: if false;
+      allow read, update, delete: if false;
 
-      allow get;
-      allow list: if false;
-
-      // Applies to document create requests
-      //allow create;
-      allow write;
+      // Allow public submission with strict schema validation
+      allow create: if request.resource.data.keys().hasAll(['email', 'fullName', 'companyName'])
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() <= 320
+                    && request.resource.data.fullName is string
+                    && request.resource.data.fullName.size() <= 120
+                    && request.resource.data.companyName is string
+                    && request.resource.data.companyName.size() <= 120;
     }
 
     match /previousSpeakers/{speaker} {
