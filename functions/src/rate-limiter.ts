@@ -19,6 +19,10 @@ export const getClientIp = (rawRequest?: {
 }): string => {
   if (!rawRequest) return 'unknown';
 
+  if (typeof rawRequest.ip === 'string' && rawRequest.ip.trim().length > 0) {
+    return rawRequest.ip.trim();
+  }
+
   const fastlyIp = rawRequest.headers?.['fastly-client-ip'];
   if (typeof fastlyIp === 'string' && fastlyIp.trim().length > 0) {
     return fastlyIp.trim();
@@ -32,7 +36,7 @@ export const getClientIp = (rawRequest?: {
     return forwarded[0].trim();
   }
 
-  return rawRequest.ip || rawRequest.connection?.remoteAddress || 'unknown';
+  return rawRequest.connection?.remoteAddress || 'unknown';
 };
 
 export type RateLimitOptions = {

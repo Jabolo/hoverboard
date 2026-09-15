@@ -12,33 +12,36 @@ import {
   parseTimeAndGetFromNow,
 } from './time.js';
 
-const removeUserTokens = (tokensToUsers) => {
-  const userTokens = Object.keys(tokensToUsers).reduce((acc, token) => {
+const removeUserTokens = async (tokensToUsers: Record<string, string>) => {
+  const tokensByUser: Record<string, string[]> = {};
+  Object.keys(tokensToUsers).forEach((token) => {
     const userId = tokensToUsers[token];
-    const userTokens = acc[userId] || [];
+    if (userId) {
+      tokensByUser[userId] = tokensByUser[userId] || [];
+      tokensByUser[userId].push(token);
+    }
+  });
 
-    return { ...acc, [userId]: [...userTokens, token] };
-  }, {});
-
-  const promises = Object.keys(userTokens).map((userId) => {
+  const promises = Object.keys(tokensByUser).map(async (userId) => {
     const ref = getFirestore().collection('notificationsUsers').doc(userId);
+    const tokensToDelete = tokensByUser[userId];
 
-    return getFirestore().runTransaction((transaction) =>
-      transaction.get(ref).then((doc) => {
-        if (!doc.exists) {
-          return;
+    await getFirestore().runTransaction(async (transaction) => {
+      const doc = await transaction.get(ref);
+      if (!doc.exists) return;
+
+      const data = doc.data();
+      const existingTokens = (data?.tokens || {}) as Record<string, boolean>;
+      const remainingTokens: Record<string, boolean> = {};
+
+      Object.keys(existingTokens).forEach((t) => {
+        if (!tokensToDelete.includes(t)) {
+          remainingTokens[t] = true;
         }
+      });
 
-        const val = doc.data();
-        const newVal = Object.keys(val).reduce((acc, token) => {
-          if (tokensToUsers[token]) return acc;
-
-          return { ...acc, [token]: true };
-        }, {});
-
-        transaction.set(ref, newVal);
-      }),
-    );
+      transaction.set(ref, { tokens: remainingTokens }, { merge: true });
+    });
   });
 
   return Promise.all(promises);
@@ -60,31 +63,54 @@ const sendPushNotificationToUsers = async (
   });
 
   const usersTokens: DocumentSnapshot<DocumentData>[] = await Promise.all(tokensPromise);
-  const tokensToUsers = usersTokens.reduce((aggregator, userTokens) => {
-    if (!userTokens.exists) return aggregator;
-    const { tokens } = userTokens.data();
-    return { ...aggregator, tokens };
-  }, {});
-  const tokens = Object.keys(tokensToUsers);
+  const tokensToUsers: Record<string, string> = {};
 
-  const tokensToRemove = {};
-  const messagingResponse = await getMessaging().sendEachForMulticast({
-    tokens,
-    ...payload,
+  usersTokens.forEach((userSnap) => {
+    if (!userSnap.exists) return;
+    const data = userSnap.data();
+    const tokensMap = (data?.tokens || {}) as Record<string, boolean>;
+    Object.keys(tokensMap).forEach((token) => {
+      tokensToUsers[token] = userSnap.id;
+    });
   });
-  messagingResponse.responses.forEach((result, index) => {
-    const error = result.error;
-    if (error) {
-      functions.logger.error('Failure sending notification to', tokens[index], error);
-      if (
-        error.code === 'messaging/invalid-registration-token' ||
-        error.code === 'messaging/registration-token-not-registered'
-      ) {
-        const token = tokens[index];
-        tokensToRemove[token] = tokensToUsers[token];
-      }
+
+  const tokens = Object.keys(tokensToUsers);
+  if (!tokens.length) {
+    return;
+  }
+
+  const CHUNK_SIZE = 500;
+  const tokenBatches: string[][] = [];
+  for (let i = 0; i < tokens.length; i += CHUNK_SIZE) {
+    tokenBatches.push(tokens.slice(i, i + CHUNK_SIZE));
+  }
+
+  const tokensToRemove: Record<string, string> = {};
+
+  for (const batch of tokenBatches) {
+    try {
+      const messagingResponse = await getMessaging().sendEachForMulticast({
+        tokens: batch,
+        ...payload,
+      });
+
+      messagingResponse.responses.forEach((result, index) => {
+        const error = result.error;
+        if (error) {
+          const token = batch[index];
+          functions.logger.error('Failure sending notification to', token, error);
+          if (
+            error.code === 'messaging/invalid-registration-token' ||
+            error.code === 'messaging/registration-token-not-registered'
+          ) {
+            tokensToRemove[token] = tokensToUsers[token];
+          }
+        }
+      });
+    } catch (err) {
+      functions.logger.error('FCM multicast batch failed', err);
     }
-  });
+  }
 
   return removeUserTokens(tokensToRemove);
 };
@@ -132,52 +158,54 @@ export const scheduleNotifications = functions.pubsub
       );
       const usersIdsSnapshot = await getFirestore().collection('featuredSessions').get();
 
-      upcomingSessions.forEach(async (upcomingSession, sessionIndex) => {
-        const sessionInfoSnapshot = await getFirestore()
-          .collection('sessions')
-          .doc(upcomingSession)
-          .get();
-        if (!sessionInfoSnapshot.exists) return undefined;
+      await Promise.all(
+        upcomingSessions.map(async (upcomingSession, sessionIndex) => {
+          const sessionInfoSnapshot = await getFirestore()
+            .collection('sessions')
+            .doc(upcomingSession)
+            .get();
+          if (!sessionInfoSnapshot.exists) return undefined;
 
-        const usersIds = usersIdsSnapshot.docs.reduce(
-          (acc, doc) => ({ ...acc, [doc.id]: doc.data() }),
-          {},
-        );
+          const usersIds = usersIdsSnapshot.docs.reduce(
+            (acc, doc) => ({ ...acc, [doc.id]: doc.data() }),
+            {},
+          );
 
-        const userIdsFeaturedSession = Object.keys(usersIds).filter(
-          (userId) =>
-            !!Object.keys(usersIds[userId]).filter(
-              (sessionId) => sessionId.toString() === upcomingSession.toString(),
-            ).length,
-        );
+          const userIdsFeaturedSession = Object.keys(usersIds).filter(
+            (userId) =>
+              !!Object.keys(usersIds[userId]).filter(
+                (sessionId) => sessionId.toString() === upcomingSession.toString(),
+              ).length,
+          );
 
-        const session = sessionInfoSnapshot.data();
-        const fromNow = parseTimeAndGetFromNow(
-          upcomingTimeslot[0].startTime,
-          notificationsConfig.timezone,
-        );
+          const session = sessionInfoSnapshot.data();
+          const fromNow = parseTimeAndGetFromNow(
+            upcomingTimeslot[0].startTime,
+            notificationsConfig.timezone,
+          );
 
-        if (userIdsFeaturedSession.length) {
-          const payload = {
-            data: {
-              title: String(session.title || ''),
-              body: `Starts ${fromNow}`,
-              icon: String(notificationsConfig.icon || ''),
-              path: `/sessions/${upcomingSessions[sessionIndex]}`,
-            },
-          };
+          if (userIdsFeaturedSession.length) {
+            const payload = {
+              data: {
+                title: String(session.title || ''),
+                body: `Starts ${fromNow}`,
+                icon: String(notificationsConfig.icon || ''),
+                path: `/sessions/${upcomingSessions[sessionIndex]}`,
+              },
+            };
 
-          return sendPushNotificationToUsers(userIdsFeaturedSession, payload);
-        }
+            return sendPushNotificationToUsers(userIdsFeaturedSession, payload);
+          }
 
-        if (upcomingSessions.length) {
-          functions.logger.log('Upcoming sessions', upcomingSessions);
-        } else {
-          functions.logger.log('There is no sessions right now');
-        }
+          if (upcomingSessions.length) {
+            functions.logger.log('Upcoming sessions', upcomingSessions);
+          } else {
+            functions.logger.log('There is no sessions right now');
+          }
 
-        return undefined;
-      });
+          return undefined;
+        }),
+      );
     } else {
       functions.logger.log(todayDay, 'was not found in the schedule');
     }

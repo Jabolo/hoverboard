@@ -1,50 +1,58 @@
-rules_version = '2';
+rules_version = "2";
 service cloud.firestore {
   match /databases/{database}/documents {
-    function validRating() {
-      return request.resource.data.contentRating >= 0 && request.resource.data.contentRating <= 5 &&
-        request.resource.data.styleRating >= 0 && request.resource.data.styleRating <= 5
-        && request.resource.data.comment.size() <= 256;
+
+    function validRating(userId) {
+      return request.resource.data.keys().hasAll(["contentRating", "styleRating", "comment", "userId"])
+        && request.resource.data.keys().hasOnly(["contentRating", "styleRating", "comment", "userId"])
+        && request.resource.data.contentRating >= 0
+        && request.resource.data.contentRating <= 5
+        && request.resource.data.styleRating >= 0
+        && request.resource.data.styleRating <= 5
+        && request.resource.data.comment is string
+        && request.resource.data.comment.size() <= 256
+        && request.resource.data.userId is string
+        && request.resource.data.userId == userId
+        && request.resource.data.userId == request.auth.uid;
     }
 
     match /blog/{post} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /config/{config} {
-      allow read, write: if false; // allow each section separately
+      allow read, write: if false;
     }
 
     match /functionsRateLimits/{docId} {
       allow read, write: if false;
     }
 
+    match /notifications/{notificationId} {
+      allow read, write: if false;
+    }
+
+    function validFeaturedSessions() {
+      return request.resource.data is map && request.resource.data.size() <= 200;
+    }
+
     match /featuredSessions/{userId} {
-      allow read, write: if request.auth.uid == userId;
+      allow get: if request.auth.uid == userId;
+      allow list: if false;
+      allow create, update: if request.auth.uid == userId && validFeaturedSessions();
+      allow delete: if request.auth.uid == userId;
     }
 
     match /gallery/{photo} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     function validSubscriberToken(token) {
       return token.size() >= 10 && token.size() <= 256
-        && request.resource.data.keys().hasAll(['value', 'updatedAt'])
-        && request.resource.data.keys().hasOnly(['value', 'updatedAt'])
+        && request.resource.data.keys().hasAll(["value", "updatedAt"])
+        && request.resource.data.keys().hasOnly(["value", "updatedAt"])
         && request.resource.data.value is bool
         && request.resource.data.updatedAt is timestamp;
     }
@@ -56,48 +64,44 @@ service cloud.firestore {
       allow delete: if token.size() >= 10 && token.size() <= 256;
     }
 
+    function validNotificationsUsers() {
+      return request.resource.data.keys().hasOnly(["tokens"])
+        && request.resource.data.tokens is map
+        && request.resource.data.tokens.size() <= 20;
+    }
+
     match /notificationsUsers/{userId} {
-      allow read, write: if request.auth.uid == userId;
+      allow get: if request.auth.uid == userId;
+      allow list: if false;
+      allow create, update: if request.auth.uid == userId && validNotificationsUsers();
+      allow delete: if request.auth.uid == userId;
     }
 
     match /partners/{groupId} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
 
-      // TODO: Remove
       match /items/{itemId} {
-        // Applies to single document read requests
-        allow get;
-
-        // Applies to queries and collection read requests
-        allow list;
-
-        // Disallow writes
+        allow get, list;
         allow write: if false;
       }
     }
 
+    // Scoped collectionGroup rule for partners items
     match /{path=**}/items/{itemId} {
-      allow read;
+      allow get, list: if path[0] == "partners";
       allow write: if false;
     }
 
     match /potentialPartners/{partnerId} {
       allow read, update, delete: if false;
 
-      // Allow public submission with strict schema validation
-      allow create: if request.resource.data.keys().hasAll(['email', 'fullName', 'companyName'])
-                    && request.resource.data.keys().hasOnly(['email', 'fullName', 'companyName'])
+      allow create: if request.resource.data.keys().hasAll(["email", "fullName", "companyName"])
+                    && request.resource.data.keys().hasOnly(["email", "fullName", "companyName"])
                     && request.resource.data.email is string
                     && request.resource.data.email.size() > 3
                     && request.resource.data.email.size() <= 320
-                    && request.resource.data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
+                    && request.resource.data.email.matches("^[^@]+@[^@]+\\.[^@]+$")
                     && request.resource.data.fullName is string
                     && request.resource.data.fullName.size() > 0
                     && request.resource.data.fullName.size() <= 120
@@ -107,91 +111,47 @@ service cloud.firestore {
     }
 
     match /previousSpeakers/{speaker} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /schedule/{day} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /generatedSchedule/{day} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /sessions/{session} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
-
-      // TODO: remove
-      match /feedback/{userId} {
-        allow read, delete: if request.auth.uid == userId;
-        allow write: if request.auth.uid == userId && validRating();
-      }
     }
 
+    // Unified, unshadowed collection group & document rules for feedback
     match /{path=**}/feedback/{userId} {
-      allow read, delete: if request.auth.uid == userId;
+      allow get, delete: if request.auth.uid == userId;
       allow list: if request.auth.uid == resource.data.userId;
-      allow write: if request.auth.uid == userId && resource.data.userId == userId && validRating();
+      allow create: if request.auth.uid == userId && validRating(userId);
+      allow update: if request.auth.uid == userId
+                    && resource.data.userId == userId
+                    && validRating(userId);
     }
 
     match /generatedSessions/{session} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /speakers/{speaker} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
     match /generatedSpeakers/{speaker} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
@@ -200,73 +160,38 @@ service cloud.firestore {
     }
 
     match /newsletterContacts/{contactId} {
-      // Consent records are written only by the server-side callable function.
       allow read, write: if false;
     }
 
     match /team/{teamId} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
 
-      // TODO: remove
       match /members/{memberId} {
-        // Applies to single document read requests
-        allow get;
-
-        // Applies to queries and collection read requests
-        allow list;
-
-        // Disallow writes
+        allow get, list;
         allow write: if false;
       }
     }
 
+    // Scoped collectionGroup rule for team members
     match /{path=**}/members/{memberId} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list: if path[0] == "team";
       allow write: if false;
     }
 
     match /tickets/{ticket} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
 
-    // TODO: Remove along with data
     match /users/{userId} {
       allow list: if false;
-
       allow get: if request.auth.uid == userId;
-
-      allow create, delete: if false;
-      allow update: if request.auth.uid == userId;
+      allow write: if false;
     }
 
     match /videos/{video} {
-      // Applies to single document read requests
-      allow get;
-
-      // Applies to queries and collection read requests
-      allow list;
-
-      // Disallow writes
+      allow get, list;
       allow write: if false;
     }
   }

@@ -80,8 +80,13 @@ const ROUTES: Route[] = [
         component: 'schedule-day',
         action: async (context, commands) => {
           const searchParams = new URLSearchParams(context.search);
-          if (searchParams.get('sessionId')) {
-            commands.redirect(`/sessions/${searchParams.get('sessionId')}`);
+          const sessionId = searchParams.get('sessionId');
+          if (sessionId) {
+            if (/^[a-zA-Z0-9_-]{1,64}$/.test(sessionId)) {
+              commands.redirect(`/sessions/${encodeURIComponent(sessionId)}`);
+            } else {
+              commands.redirect('/schedule');
+            }
           } else {
             await import('./elements/schedule-day.js');
           }

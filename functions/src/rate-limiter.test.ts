@@ -17,7 +17,7 @@ describe('rate-limiter utilities', () => {
   });
 
   describe('getClientIp', () => {
-    it('prioritizes fastly-client-ip header', () => {
+    it('prioritizes trusted rawRequest.ip over forwarded headers', () => {
       const req = {
         headers: {
           'fastly-client-ip': '203.0.113.195',
@@ -25,15 +25,14 @@ describe('rate-limiter utilities', () => {
         },
         ip: '10.0.0.1',
       };
-      expect(getClientIp(req)).toBe('203.0.113.195');
+      expect(getClientIp(req)).toBe('10.0.0.1');
     });
 
-    it('extracts client IP from x-forwarded-for header', () => {
+    it('extracts client IP from x-forwarded-for header when rawRequest.ip is missing', () => {
       const req = {
         headers: {
           'x-forwarded-for': ' 198.51.100.42 , 192.0.2.1 ',
         },
-        ip: '10.0.0.1',
       };
       expect(getClientIp(req)).toBe('198.51.100.42');
     });

@@ -74,21 +74,35 @@ async function generateAndSaveData(changedSpeaker?) {
     generatedData.speakers[changedSpeaker.id] = changedSpeaker;
   }
 
-  saveGeneratedData(generatedData.sessions, 'generatedSessions');
-  saveGeneratedData(generatedData.speakers, 'generatedSpeakers');
-  saveGeneratedData(generatedData.schedule, 'generatedSchedule');
+  await Promise.all([
+    saveGeneratedData(generatedData.sessions, 'generatedSessions'),
+    saveGeneratedData(generatedData.speakers, 'generatedSpeakers'),
+    saveGeneratedData(generatedData.schedule, 'generatedSchedule'),
+  ]);
 }
 
-function saveGeneratedData(data: SessionMap | SpeakerMap | ScheduleMap, collectionName: string) {
-  if (isEmpty(data)) {
+async function saveGeneratedData(
+  data: SessionMap | SpeakerMap | ScheduleMap | undefined,
+  collectionName: string,
+): Promise<void> {
+  if (!data || isEmpty(data)) {
     functions.logger.error(
       `Attempting to write empty data to Firestore collection: "${collectionName}".`,
     );
     return;
   }
 
-  for (let index = 0; index < Object.keys(data).length; index++) {
-    const key = Object.keys(data)[index];
-    getFirestore().collection(collectionName).doc(key).set(data[key]);
+  const db = getFirestore();
+  const keys = Object.keys(data);
+  const BATCH_SIZE = 500;
+
+  for (let i = 0; i < keys.length; i += BATCH_SIZE) {
+    const batch = db.batch();
+    const slice = keys.slice(i, i + BATCH_SIZE);
+    slice.forEach((key) => {
+      const docRef = db.collection(collectionName).doc(key);
+      batch.set(docRef, data[key]);
+    });
+    await batch.commit();
   }
 }

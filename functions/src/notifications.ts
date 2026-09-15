@@ -53,24 +53,48 @@ export const sendGeneralNotification = functions.firestore
       data.path = String(message.path);
     }
 
-    const messagingResponse = await getMessaging().sendEachForMulticast({
-      tokens,
-      data: {
-        ...data,
-      },
-    });
+    const CHUNK_SIZE = 500;
+    const tokenBatches: string[][] = [];
+    for (let i = 0; i < tokens.length; i += CHUNK_SIZE) {
+      tokenBatches.push(tokens.slice(i, i + CHUNK_SIZE));
+    }
 
-    const tokensToRemove = [];
-    messagingResponse.responses.forEach((result, index) => {
-      const error = result.error;
-      if (error) {
-        functions.logger.error(`Failure sending notification to ${tokens[index]}`, error);
-        if (REMOVE_TOKEN_ERROR.includes(error.code)) {
-          const tokenRef = getFirestore().collection('notificationsSubscribers').doc(tokens[index]);
-          tokensToRemove.push(tokenRef.delete());
-        }
+    const tokensToRemove: string[] = [];
+
+    for (const batch of tokenBatches) {
+      try {
+        const messagingResponse = await getMessaging().sendEachForMulticast({
+          tokens: batch,
+          data: {
+            ...data,
+          },
+        });
+
+        messagingResponse.responses.forEach((result, index) => {
+          const error = result.error;
+          if (error) {
+            functions.logger.error(`Failure sending notification to ${batch[index]}`, error);
+            if (REMOVE_TOKEN_ERROR.includes(error.code)) {
+              tokensToRemove.push(batch[index]);
+            }
+          }
+        });
+      } catch (err) {
+        functions.logger.error('FCM multicast batch transmission failed', err);
       }
-    });
+    }
 
-    return Promise.all(tokensToRemove);
+    if (!tokensToRemove.length) return undefined;
+
+    const firestoreBatchLimit = 500;
+    for (let i = 0; i < tokensToRemove.length; i += firestoreBatchLimit) {
+      const deleteBatch = getFirestore().batch();
+      const slice = tokensToRemove.slice(i, i + firestoreBatchLimit);
+      slice.forEach((token) => {
+        deleteBatch.delete(getFirestore().collection('notificationsSubscribers').doc(token));
+      });
+      await deleteBatch.commit();
+    }
+
+    return undefined;
   });

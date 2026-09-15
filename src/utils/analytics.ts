@@ -32,10 +32,17 @@ function persistAnalyticsConsent(consent: AnalyticsConsent) {
 }
 
 function clearAnalyticsCookies() {
+  const hostname = window.location.hostname;
+  const parts = hostname.split('.');
+  const apexDomain = parts.length >= 2 ? `.${parts.slice(-2).join('.')}` : hostname;
+  const domainCandidates = ['', `; domain=${hostname}`, `; domain=${apexDomain}`];
+
   document.cookie.split(';').forEach((cookie) => {
     const name = cookie.split('=')[0]?.trim();
     if (name?.startsWith('_ga')) {
-      document.cookie = `${name}=; Max-Age=0; path=/`;
+      domainCandidates.forEach((dom) => {
+        document.cookie = `${name}=; Max-Age=0; path=/${dom}`;
+      });
     }
   });
 }

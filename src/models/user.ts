@@ -5,5 +5,12 @@ export type { FirebaseUser };
 export type User = UserInfo;
 
 export const toUser = (user: FirebaseUser): User => {
-  return user.toJSON() as User;
+  return {
+    displayName: user.displayName,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    photoURL: user.photoURL,
+    providerId: user.providerId,
+    uid: user.uid,
+  };
 };
