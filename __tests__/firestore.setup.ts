@@ -6,6 +6,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import { afterAll, beforeAll } from '@jest/globals';
 import { doc, setDoc } from 'firebase/firestore';
+import fs from 'fs';
 import { setup, teardown } from 'jest-dev-server';
 import { SpawndChildProcess } from 'spawnd';
 
@@ -17,11 +18,14 @@ beforeAll(async () => {
     command: 'npx firebase emulators:start --only firestore',
     launchTimeout: 30000,
     port: 8080,
-    usedPortAction: 'error',
+    usedPortAction: 'ignore',
   });
 }, 30000);
 
 afterAll(async () => {
+  if (testEnv) {
+    await testEnv.cleanup();
+  }
   await teardown(servers);
 });
 
@@ -32,20 +36,22 @@ interface SetupApp {
 
 export const setupApp = async ({ userId, data }: SetupApp = {}) => {
   const projectId = `rules-spec-${Date.now()}`;
+  const rules = fs.readFileSync('firestore.rules', 'utf8');
   const config: TestEnvironmentConfig = {
     projectId,
     firestore: {
       port: 8080,
       host: 'localhost',
+      rules,
     },
   };
   testEnv = await initializeTestEnvironment(config);
 
   if (data) {
-    testEnv.withSecurityRulesDisabled(async (context: RulesTestContext) => {
+    await testEnv.withSecurityRulesDisabled(async (context: RulesTestContext) => {
       for (const key in data) {
         if ({}.hasOwnProperty.call(data, key)) {
-          await setDoc(doc(context.firestore(), key), data);
+          await setDoc(doc(context.firestore(), key), data[key]);
         }
       }
     });
@@ -59,6 +65,8 @@ export const setupApp = async ({ userId, data }: SetupApp = {}) => {
 };
 
 export const teardownApp = async () => {
-  await testEnv.clearFirestore();
-  await testEnv.cleanup();
+  if (testEnv) {
+    await testEnv.clearFirestore();
+    await testEnv.cleanup();
+  }
 };

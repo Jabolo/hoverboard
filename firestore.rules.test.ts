@@ -16,8 +16,8 @@ import { expect } from './__tests__/helpers';
 
 jest.retryTimes(3, { logErrorsBeforeRetry: true });
 
-// TODO: This test is flaky. It should be fixed.
-
+// Note: Running the local Firestore emulator via firebase-tools 15+ requires JDK 21+.
+// System currently has JDK 17. Use `describe.skip` until JDK 21 is installed.
 describe.skip('firestore', () => {
   let testEnv: RulesTestContext;
 

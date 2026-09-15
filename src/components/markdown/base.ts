@@ -1,5 +1,6 @@
 import { css, html } from 'lit';
 import { property } from 'lit/decorators.js';
+import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { hasUnsupportedTags, unsupportedHtmlTags } from '../../utils/markdown';
@@ -129,8 +130,8 @@ export class Markdown extends ThemedElement {
 
   get document(): DocumentFragment {
     const template = document.createElement('template');
-    // Override type as no async extensions are in use
-    template.innerHTML = marked.parse(this.content) as string;
+    const rawHtml = marked.parse(this.content) as string;
+    template.innerHTML = typeof window !== 'undefined' ? DOMPurify.sanitize(rawHtml) : rawHtml;
     if (hasUnsupportedTags(template.content)) {
       console.warn(`Invalid Markedown contains some of the following tags ${unsupportedHtmlTags}`);
       // TODO: Enable

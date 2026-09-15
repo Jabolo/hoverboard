@@ -57,7 +57,7 @@ app.get('/{*splat}', async (req, res) => {
   const botResult = checkForBots(req.headers['user-agent']);
   if (botResult) {
     // Get me the url all nice
-    const targetUrl = generateUrl(req);
+    const targetUrl = await generateUrl(req);
 
     // Did you read the README? You should have set rendertron document
     // to where ever you deployed https://github.com/GoogleChrome/rendertron on AppEngine
