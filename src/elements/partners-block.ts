@@ -155,20 +155,33 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         .contact-person-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 8px;
+          gap: 16px;
           margin-bottom: 20px;
         }
 
         .contact-person-header h3 {
           margin: 0;
-          font-size: 17px;
+          font-size: 21px;
+          line-height: 1.3;
         }
 
         .contact-chapter {
-          font-size: 12px;
+          display: block;
+          margin-top: 6px;
+          font-size: 13px;
           color: var(--primary-text-color);
+        }
+
+        .contact-photo {
+          flex: none;
+          width: 64px;
+          height: 64px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        .contact-person-details {
+          min-width: 0;
         }
 
         .contact-action {
@@ -182,8 +195,40 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           text-decoration: none;
         }
 
-        .contact-action + .contact-action {
+        .contact-action + .contact-action,
+        .email-contact {
           margin-top: 12px;
+        }
+
+        .email-contact {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 8px;
+        }
+
+        .copy-email {
+          padding: 0 12px;
+          min-width: 60px;
+          border: 1px solid var(--divider-color);
+          border-radius: 8px;
+          color: var(--primary-text-color);
+          background: var(--terminal-panel);
+          cursor: pointer;
+          font: inherit;
+          font-size: 13px;
+        }
+
+        .contact-help {
+          margin: 16px 0 0;
+          font-size: 12px;
+          line-height: 1.5;
+        }
+
+        .copy-status {
+          min-height: 18px;
+          margin: 8px 0 0;
+          font-size: 12px;
+          line-height: 1.5;
         }
 
         .contact-action.primary {
@@ -201,6 +246,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .contact-action:hover,
         .contact-action:focus-visible,
+        .copy-email:focus-visible,
         .dialog-close:focus-visible {
           outline: 2px solid var(--google-blue);
           outline-offset: 3px;
@@ -217,6 +263,14 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
           .contact-person {
             padding: 16px;
+          }
+
+          .email-contact {
+            grid-template-columns: 1fr;
+          }
+
+          .copy-email {
+            min-height: 44px;
           }
         }
 
@@ -309,29 +363,71 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           </button>
         </div>
         <p id="partnerContactIntro" class="dialog-intro">
-          Discuss sponsorship, prizes or community collaboration with our team. Choose a contact
-          below to start the conversation.
+          Discuss sponsorship, prizes or community collaboration with Michał, your organizer contact
+          for DevFest Warsaw 2026.
         </p>
         <div class="contact-person">
           <div class="contact-person-header">
-            <h3>Michał Jabłoński</h3>
-            <span class="contact-chapter">GDG Warsaw</span>
+            <img
+              class="contact-photo"
+              src="/images/team/michal-jablonski.jpg"
+              alt=""
+              width="64"
+              height="64"
+            />
+            <div class="contact-person-details">
+              <h3>Michał Jabłoński</h3>
+              <span class="contact-chapter">GDG Warszawa Organizer</span>
+            </div>
           </div>
           <a
             class="contact-action primary"
-            href="mailto:partnership@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+            href="https://www.linkedin.com/in/m-jab/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <strong>Email the partnership team ↗</strong>
-            <span>partnership@gdgwarsaw.pl</span>
+            <strong>Connect with Michał on LinkedIn ↗</strong>
+            <span>View profile and send a message</span>
           </a>
-          <a
-            class="contact-action"
-            href="mailto:michal@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
-          >
-            <strong>Contact Michał directly ↗</strong>
-            <span>michal@gdgwarsaw.pl</span>
-          </a>
+          <div class="email-contact">
+            <a
+              class="contact-action"
+              href="mailto:michal@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+            >
+              <strong>Email Michał directly ↗</strong>
+              <span>michal@gdgwarsaw.pl</span>
+            </a>
+            <button
+              class="copy-email"
+              type="button"
+              aria-label="Copy Michał's email address"
+              data-email="michal@gdgwarsaw.pl"
+              on-click="copyEmail"
+            >
+              Copy
+            </button>
+          </div>
+          <div class="email-contact">
+            <a
+              class="contact-action"
+              href="mailto:partnership@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+            >
+              <strong>Partnership enquiries ↗</strong>
+              <span>partnership@gdgwarsaw.pl</span>
+            </a>
+            <button
+              class="copy-email"
+              type="button"
+              aria-label="Copy partnership email address"
+              data-email="partnership@gdgwarsaw.pl"
+              on-click="copyEmail"
+            >
+              Copy
+            </button>
+          </div>
         </div>
+        <p class="contact-help">No email app configured? Copy an address into your webmail.</p>
+        <p class="copy-status" role="status" aria-live="polite">[[copyStatus]]</p>
       </dialog>
     `;
   }
@@ -342,8 +438,23 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
   @query('#partnerContact')
   private partnerContact!: HTMLDialogElement;
 
+  @property({ type: String })
+  private copyStatus = '';
+
   private openPartnerContact() {
+    this.copyStatus = '';
     this.partnerContact.showModal();
+  }
+
+  private async copyEmail(event: Event) {
+    const email = (event.currentTarget as HTMLElement).dataset['email'];
+    if (!email) return;
+    try {
+      await navigator.clipboard.writeText(email);
+      this.copyStatus = `Copied ${email} to clipboard.`;
+    } catch {
+      this.copyStatus = 'Select and copy the email address above into your webmail.';
+    }
   }
 
   private closePartnerContact() {
