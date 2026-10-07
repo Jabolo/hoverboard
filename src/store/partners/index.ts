@@ -1,13 +1,6 @@
 import { Failure, Initialized, Pending, RemoteData, Success } from '@abraham/remotedata';
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  collection,
-  collectionGroup,
-  onSnapshot,
-  orderBy,
-  query,
-  Unsubscribe,
-} from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, Unsubscribe } from 'firebase/firestore';
 import { RootState, store } from '..';
 import { db } from '../../firebase';
 import { Partner } from '../../models/partner';
@@ -31,13 +24,49 @@ export const initialState = {
 } as PartnersState;
 
 const subscribeToPartners = () => {
-  return onSnapshot(
-    query(collectionGroup(db, 'items'), orderBy('order')),
+  const subscriptions = new Map<string, Unsubscribe>();
+  const items = new Map<string, Partner[]>();
+  const publish = () => {
+    store.dispatch(
+      setPartnersSuccess([...items.values()].flat().sort((a, b) => a.order - b.order)),
+    );
+  };
+  // A collectionGroup query spans unrelated items collections and is denied by
+  // the scoped security rules. Subscribe only beneath known partner groups.
+  const unsubscribeGroups = onSnapshot(
+    query(collection(db, 'partners'), orderBy('order')),
     (snapshot) => {
-      store.dispatch(setPartnersSuccess(snapshot.docs.map<Partner>(dataWithParentId)));
+      const groupIds = new Set(snapshot.docs.map((group) => group.id));
+      for (const [id, unsubscribe] of subscriptions) {
+        if (!groupIds.has(id)) {
+          unsubscribe();
+          subscriptions.delete(id);
+          items.delete(id);
+        }
+      }
+      for (const id of groupIds) {
+        if (!subscriptions.has(id)) {
+          subscriptions.set(
+            id,
+            onSnapshot(
+              query(collection(db, 'partners', id, 'items'), orderBy('order')),
+              (partners) => {
+                items.set(id, partners.docs.map<Partner>(dataWithParentId));
+                publish();
+              },
+              (error) => store.dispatch(setPartnersFailure(error as Error)),
+            ),
+          );
+        }
+      }
+      publish();
     },
     (error) => store.dispatch(setPartnersFailure(error as Error)),
   );
+  return () => {
+    unsubscribeGroups();
+    subscriptions.forEach((unsubscribe) => unsubscribe());
+  };
 };
 
 const subscribeToGroups = () => {

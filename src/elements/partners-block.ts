@@ -15,6 +15,7 @@ import {
 } from '../store/potential-partners/state';
 import { queueSnackbar } from '../store/snackbars';
 import { loading, partnersBlock } from '../utils/data';
+import { visiblePartnerGroups } from '../utils/partner-groups';
 import '../utils/icons';
 import './shared-styles';
 
@@ -59,14 +60,18 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logos-wrapper {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
           grid-gap: 16px;
           max-width: 800px;
         }
 
         .logo-item {
-          padding: 8px 12px;
-          min-height: 96px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 24px;
+          padding: 28px;
+          min-height: 160px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
           background: var(--terminal-panel);
@@ -76,15 +81,16 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
             transform var(--animation);
         }
 
-        .logo-item:hover {
+        .logo-item:hover,
+        .logo-item:focus-visible {
           border-color: var(--google-blue);
-          box-shadow: 0 0 20px rgba(66, 133, 244, 0.28);
-          transform: translateY(-2px);
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
         }
 
         .logo-img {
           --lazy-image-width: 100%;
-          --lazy-image-height: 72px;
+          --lazy-image-height: 88px;
           --lazy-image-fit: contain;
           width: var(--lazy-image-width);
           height: var(--lazy-image-height);
@@ -107,16 +113,19 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           line-height: 1.5;
         }
 
-        @media (min-width: 640px) {
-          .logos-wrapper {
-            grid-template-columns: repeat(4, 1fr);
-          }
+        .partner-description {
+          margin: 0;
+          color: var(--primary-text-color);
+          font-size: 15px;
+          line-height: 1.6;
         }
 
-        @media (min-width: 812px) {
-          .logos-wrapper {
-            grid-template-columns: repeat(5, 1fr);
-          }
+        .brand-credit {
+          max-width: 800px;
+          margin: 24px 0 0;
+          color: var(--primary-text-color);
+          font-size: 12px;
+          line-height: 1.6;
         }
       </style>
 
@@ -130,7 +139,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           <p>Error loading partners.</p>
         </template>
 
-        <template is="dom-repeat" items="[[partners.data]]" as="block">
+        <template is="dom-repeat" items="[[visibleGroups]]" as="block">
           <h3 class="block-title">[[block.title]]</h3>
           <div class="logos-wrapper">
             <template is="dom-repeat" items="[[block.items]]" as="logo">
@@ -140,19 +149,24 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
                 title$="[[logo.name]]"
                 target="_blank"
                 rel="noopener noreferrer"
-                layout
-                horizontal
-                center-center
               >
                 <lazy-image
                   class="logo-img"
                   src="[[logo.logoUrl]]"
                   alt="[[logo.name]]"
                 ></lazy-image>
+                <template is="dom-if" if="[[logo.description]]">
+                  <p class="partner-description">[[logo.description]]</p>
+                </template>
               </a>
             </template>
           </div>
         </template>
+
+        <p class="brand-credit">
+          Copyright © 2026 JetBrains s.r.o. JetBrains and the JetBrains logo are trademarks of
+          JetBrains s.r.o.
+        </p>
 
         <p class="empty-state" role="status" hidden$="[[!empty]]">
           Partner announcements will appear here as commitments are confirmed.
@@ -184,9 +198,14 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
     return this.partners instanceof Failure;
   }
 
-  @computed('partners')
+  @computed('visibleGroups')
   get empty() {
-    return this.partners instanceof Success && this.partners.data.length === 0;
+    return this.visibleGroups?.length === 0;
+  }
+
+  @computed('partners')
+  get visibleGroups() {
+    return visiblePartnerGroups(this.partners instanceof Success ? this.partners.data : []);
   }
 
   override stateChanged(state: RootState) {

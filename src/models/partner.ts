@@ -1,6 +1,7 @@
 import { Id, ParentId } from './types';
 
 export interface PartnerData {
+  description?: string;
   logoUrl: string;
   name: string;
   order: number;

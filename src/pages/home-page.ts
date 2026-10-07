@@ -581,7 +581,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
       <visit-block></visit-block>
-      <partners-block></partners-block>
+      <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <footer-block></footer-block>
     `;
   }
@@ -659,18 +659,40 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     this.showForkMeBlock = this.shouldShowForkMeBlock();
     this.checkHashAndScroll();
     window.addEventListener('hashchange', this.onHashChange);
+    window.addEventListener('click', this.onPartnerLinkClick);
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('hashchange', this.onHashChange);
+    window.removeEventListener('click', this.onPartnerLinkClick);
   }
 
   private onHashChange = () => {
     this.checkHashAndScroll();
   };
 
+  private onPartnerLinkClick = (event: MouseEvent) => {
+    // A repeated click on the same fragment does not emit hashchange. The
+    // target is inside a shadow root, so native fragment scrolling cannot help.
+    if (
+      event
+        .composedPath()
+        .some(
+          (node) => node instanceof HTMLAnchorElement && node.getAttribute('href') === '/#partners',
+        )
+    ) {
+      this.checkHashAndScroll();
+    }
+  };
+
   private checkHashAndScroll() {
+    if (window.location.hash === '#partners') {
+      window.setTimeout(() => {
+        const partners = this.shadowRoot?.querySelector<HTMLElement>('#partners');
+        if (partners) scrollToElement(partners);
+      }, 50);
+    }
     if (window.location.hash === '#tickets' || window.location.hash === '#registration') {
       window.setTimeout(() => this.scrollToTickets(), 50);
     }

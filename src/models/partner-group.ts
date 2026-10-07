@@ -14,6 +14,6 @@ export interface PartnerGroupData {
 }
 
 export type PartnerGroup = Id &
-  PartnerGroupData & {
+  Omit<PartnerGroupData, 'items'> & {
     items: Partner[];
   };

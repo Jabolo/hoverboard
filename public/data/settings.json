@@ -39,6 +39,11 @@
       "label": "Team"
     },
     {
+      "route": "partners",
+      "permalink": "/#partners",
+      "label": "Partners"
+    },
+    {
       "route": "faq",
       "permalink": "/faq",
       "label": "FAQ"
