@@ -161,7 +161,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .contact-person-header h3 {
           margin: 0;
-          font-size: 21px;
+          font-size: 17px;
           line-height: 1.3;
         }
 
@@ -170,14 +170,6 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           margin-top: 6px;
           font-size: 13px;
           color: var(--primary-text-color);
-        }
-
-        .contact-photo {
-          flex: none;
-          width: 64px;
-          height: 64px;
-          object-fit: cover;
-          border-radius: 50%;
         }
 
         .contact-person-details {
@@ -258,7 +250,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           }
 
           .dialog-header h2 {
-            font-size: 21px;
+            font-size: 17px;
           }
 
           .contact-person {
@@ -363,31 +355,23 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           </button>
         </div>
         <p id="partnerContactIntro" class="dialog-intro">
-          Discuss sponsorship, prizes or community collaboration with Michał, your organizer contact
-          for DevFest Warsaw 2026.
+          Discuss sponsorship, prizes or community collaboration with our team.
         </p>
         <div class="contact-person">
           <div class="contact-person-header">
-            <img
-              class="contact-photo"
-              src="/images/team/michal-jablonski.jpg"
-              alt=""
-              width="64"
-              height="64"
-            />
             <div class="contact-person-details">
               <h3>Michał Jabłoński</h3>
               <span class="contact-chapter">GDG Warszawa Organizer</span>
             </div>
           </div>
           <a
-            class="contact-action primary"
+            class="contact-action"
             href="https://www.linkedin.com/in/m-jab/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <strong>Connect with Michał on LinkedIn ↗</strong>
-            <span>View profile and send a message</span>
+            <strong>LinkedIn profile ↗</strong>
+            <span>Michał Jabłoński</span>
           </a>
           <div class="email-contact">
             <a
