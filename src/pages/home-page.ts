@@ -574,6 +574,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <subscribe-block></subscribe-block>
       <div id="tickets" style="scroll-margin-top: 80px;"></div>
       <tickets-block id="registration"></tickets-block>
+      <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
       <speakers-block></speakers-block>
       <previous-speakers-block></previous-speakers-block>
@@ -581,7 +582,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
       <visit-block></visit-block>
-      <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <footer-block></footer-block>
     `;
   }

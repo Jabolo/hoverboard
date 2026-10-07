@@ -119,14 +119,6 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           font-size: 15px;
           line-height: 1.6;
         }
-
-        .brand-credit {
-          max-width: 800px;
-          margin: 24px 0 0;
-          color: var(--primary-text-color);
-          font-size: 12px;
-          line-height: 1.6;
-        }
       </style>
 
       <div class="container">
@@ -162,11 +154,6 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
             </template>
           </div>
         </template>
-
-        <p class="brand-credit">
-          Copyright © 2026 JetBrains s.r.o. JetBrains and the JetBrains logo are trademarks of
-          JetBrains s.r.o.
-        </p>
 
         <p class="empty-state" role="status" hidden$="[[!empty]]">
           Partner announcements will appear here as commitments are confirmed.
