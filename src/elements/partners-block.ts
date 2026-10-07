@@ -1,5 +1,5 @@
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
-import { computed, customElement, property } from '@polymer/decorators';
+import { computed, customElement, property, query } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
@@ -94,18 +94,130 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           color: var(--default-primary-color);
         }
 
-        .partner-contact {
-          max-width: 800px;
-          margin: 12px 0 0;
+        .contact-dialog {
+          box-sizing: border-box;
+          width: min(580px, calc(100vw - 32px));
+          max-height: calc(100dvh - 32px);
+          padding: 32px;
+          border: 1px solid var(--divider-color);
+          border-radius: 16px;
+          background: var(--primary-background-color);
           color: var(--primary-text-color);
+          overflow: auto;
+        }
+
+        .contact-dialog::backdrop {
+          background: rgba(0, 0, 0, 0.72);
+          backdrop-filter: blur(6px);
+        }
+
+        .dialog-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
+        .dialog-header h2 {
+          margin: 0;
+          font-size: 24px;
+          line-height: 1.3;
+        }
+
+        .dialog-close {
+          flex: none;
+          display: grid;
+          place-items: center;
+          width: 44px;
+          height: 44px;
+          padding: 0;
+          border: 1px solid var(--divider-color);
+          border-radius: 8px;
+          color: var(--primary-text-color);
+          background: var(--terminal-panel);
+          cursor: pointer;
+          font-size: 26px;
+        }
+
+        .dialog-intro {
+          margin: 16px 0 24px;
           font-size: 15px;
           line-height: 1.6;
         }
 
-        .partner-contact a {
+        .contact-person {
+          padding: 20px;
+          border: 1px solid var(--divider-color);
+          border-radius: 12px;
+          background: var(--terminal-panel);
+        }
+
+        .contact-person-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 20px;
+        }
+
+        .contact-person-header h3 {
+          margin: 0;
+          font-size: 17px;
+        }
+
+        .contact-chapter {
+          font-size: 12px;
+          color: var(--primary-text-color);
+        }
+
+        .contact-action {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          padding: 16px;
+          border: 1px solid var(--divider-color);
+          border-radius: 8px;
+          color: var(--primary-text-color);
+          text-decoration: none;
+        }
+
+        .contact-action + .contact-action {
+          margin-top: 12px;
+        }
+
+        .contact-action.primary {
+          border-color: var(--google-blue);
+        }
+
+        .contact-action strong {
+          font-size: 14px;
+        }
+
+        .contact-action span {
+          font-size: 14px;
           overflow-wrap: anywhere;
-          text-decoration: underline;
-          text-underline-offset: 3px;
+        }
+
+        .contact-action:hover,
+        .contact-action:focus-visible,
+        .dialog-close:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
+        }
+
+        @media (max-width: 480px) {
+          .contact-dialog {
+            padding: 20px;
+          }
+
+          .dialog-header h2 {
+            font-size: 21px;
+          }
+
+          .contact-person {
+            padding: 16px;
+          }
         }
 
         .empty-state {
@@ -168,23 +280,88 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         <md-text-button
           class="cta-button animated icon-right"
-          href="mailto:partnership@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+          on-click="openPartnerContact"
+          aria-haspopup="dialog"
+          aria-controls="partnerContact"
         >
           <span>[[partnersBlock.button]]</span>
           <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
         </md-text-button>
-        <p class="partner-contact">
-          Interested in partnering with DevFest Warsaw 2026? Email
-          <a href="mailto:partnership@gdgwarsaw.pl">partnership@gdgwarsaw.pl</a>
-          or contact Michał directly at
-          <a href="mailto:michal@gdgwarsaw.pl">michal@gdgwarsaw.pl</a>.
-        </p>
       </div>
+
+      <dialog
+        id="partnerContact"
+        class="contact-dialog"
+        aria-labelledby="partnerContactTitle"
+        aria-describedby="partnerContactIntro"
+        on-click="dismissPartnerBackdrop"
+      >
+        <div class="dialog-header">
+          <h2 id="partnerContactTitle">Partner with DevFest Warsaw 2026</h2>
+          <button
+            class="dialog-close"
+            type="button"
+            aria-label="Close partnership contact"
+            on-click="closePartnerContact"
+            autofocus
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <p id="partnerContactIntro" class="dialog-intro">
+          Discuss sponsorship, prizes or community collaboration with our team. Choose a contact
+          below to start the conversation.
+        </p>
+        <div class="contact-person">
+          <div class="contact-person-header">
+            <h3>Michał Jabłoński</h3>
+            <span class="contact-chapter">GDG Warsaw</span>
+          </div>
+          <a
+            class="contact-action primary"
+            href="mailto:partnership@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+          >
+            <strong>Email the partnership team ↗</strong>
+            <span>partnership@gdgwarsaw.pl</span>
+          </a>
+          <a
+            class="contact-action"
+            href="mailto:michal@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+          >
+            <strong>Contact Michał directly ↗</strong>
+            <span>michal@gdgwarsaw.pl</span>
+          </a>
+        </div>
+      </dialog>
     `;
   }
 
   private loading = loading;
   private partnersBlock = partnersBlock;
+
+  @query('#partnerContact')
+  private partnerContact!: HTMLDialogElement;
+
+  private openPartnerContact() {
+    this.partnerContact.showModal();
+  }
+
+  private closePartnerContact() {
+    this.partnerContact.close();
+  }
+
+  private dismissPartnerBackdrop(event: MouseEvent) {
+    if (event.target !== this.partnerContact) return;
+    const bounds = this.partnerContact.getBoundingClientRect();
+    if (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    ) {
+      this.closePartnerContact();
+    }
+  }
 
   @property({ type: Object })
   partners: PartnerGroupsState = new Initialized();
