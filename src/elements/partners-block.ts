@@ -1,19 +1,12 @@
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
-import { computed, customElement, observe, property } from '@polymer/decorators';
+import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
-import { RootState, store } from '../store';
-import { closeDialog, openSubscribeDialog } from '../store/dialogs/actions';
+import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { PartnerGroupsState, selectPartnerGroups } from '../store/partners';
-import { addPotentialPartner } from '../store/potential-partners/actions';
-import {
-  initialPotentialPartnersState,
-  PotentialPartnersState,
-} from '../store/potential-partners/state';
-import { queueSnackbar } from '../store/snackbars';
 import { loading, partnersBlock } from '../utils/data';
 import { visiblePartnerGroups } from '../utils/partner-groups';
 import '../utils/icons';
@@ -101,6 +94,20 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           color: var(--default-primary-color);
         }
 
+        .partner-contact {
+          max-width: 800px;
+          margin: 12px 0 0;
+          color: var(--primary-text-color);
+          font-size: 15px;
+          line-height: 1.6;
+        }
+
+        .partner-contact a {
+          overflow-wrap: anywhere;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+
         .empty-state {
           margin: 24px 0;
           padding: 18px 20px;
@@ -159,10 +166,19 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           Partner announcements will appear here as commitments are confirmed.
         </p>
 
-        <md-text-button class="cta-button animated icon-right" on-click="addPotentialPartner">
+        <md-text-button
+          class="cta-button animated icon-right"
+          href="mailto:partnership@gdgwarsaw.pl?subject=DevFest%20Warsaw%202026%20partnership"
+        >
           <span>[[partnersBlock.button]]</span>
           <iron-icon icon="hoverboard:arrow-right-circle"></iron-icon>
         </md-text-button>
+        <p class="partner-contact">
+          Interested in partnering with DevFest Warsaw 2026? Email
+          <a href="mailto:partnership@gdgwarsaw.pl">partnership@gdgwarsaw.pl</a>
+          or contact Michał directly at
+          <a href="mailto:michal@gdgwarsaw.pl">michal@gdgwarsaw.pl</a>.
+        </p>
       </div>
     `;
   }
@@ -170,8 +186,6 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
   private loading = loading;
   private partnersBlock = partnersBlock;
 
-  @property({ type: Object })
-  potentialPartners = initialPotentialPartnersState;
   @property({ type: Object })
   partners: PartnerGroupsState = new Initialized();
 
@@ -197,28 +211,5 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
   override stateChanged(state: RootState) {
     this.partners = selectPartnerGroups(state);
-    this.potentialPartners = state.potentialPartners;
-  }
-
-  private addPotentialPartner() {
-    openSubscribeDialog({
-      title: this.partnersBlock.form.title,
-      submitLabel: this.partnersBlock.form.submitLabel,
-      firstFieldLabel: this.partnersBlock.form.fullName,
-      firstFieldName: 'fullName',
-      firstFieldAutocomplete: 'name',
-      secondFieldLabel: this.partnersBlock.form.companyName,
-      secondFieldName: 'companyName',
-      secondFieldAutocomplete: 'organization',
-      submit: (data) => store.dispatch(addPotentialPartner(data)),
-    });
-  }
-
-  @observe('potentialPartners')
-  private onPotentialPartners(potentialPartners: PotentialPartnersState) {
-    if (potentialPartners instanceof Success) {
-      closeDialog();
-      store.dispatch(queueSnackbar(this.partnersBlock.toast));
-    }
   }
 }
