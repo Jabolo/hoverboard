@@ -29,6 +29,23 @@ export const communityPartners: PartnerGroup = {
   ],
 };
 
+export const goldSponsors: PartnerGroup = {
+  id: 'gold-sponsors',
+  title: 'Gold Sponsors',
+  order: 20,
+  items: [
+    {
+      id: 'mongodb',
+      parentId: 'gold-sponsors',
+      name: 'MongoDB',
+      order: 1,
+      url: 'https://www.mongodb.com/',
+      logoUrl: '/images/partners/mongodb.svg',
+      description: 'MongoDB is a Gold Sponsor of DevFest Warsaw 2026.',
+    },
+  ],
+};
+
 const categoryOrder = [
   'Platinum Sponsors',
   'Gold Sponsors',
@@ -38,24 +55,31 @@ const categoryOrder = [
 ];
 
 export function visiblePartnerGroups(groups: PartnerGroup[]): PartnerGroup[] {
-  const community = groups.find((group) => group.title === communityPartners.title);
+  const approvedGroups = [goldSponsors, communityPartners];
   const approvedNames = new Set(
-    communityPartners.items.map((partner) => partner.name.toLowerCase()),
+    approvedGroups.flatMap((group) => group.items.map((partner) => partner.name.toLowerCase())),
   );
-  const mergedCommunity = {
-    ...communityPartners,
-    items: [
-      ...(community?.items ?? []).filter(
-        (partner) => !approvedNames.has(partner.name.toLowerCase()),
-      ),
-      ...communityPartners.items,
-    ].sort((a, b) => a.order - b.order),
-  };
+  const existing = groups.map((group) => ({
+    ...group,
+    items: group.items.filter((partner) => !approvedNames.has(partner.name.toLowerCase())),
+  }));
+  const merged = approvedGroups.map((approved) => {
+    const group = existing.find((candidate) => candidate.title === approved.title);
+    return {
+      ...approved,
+      items: [...(group?.items ?? []), ...approved.items].sort((a, b) => a.order - b.order),
+    };
+  });
   const rank = (group: PartnerGroup) => {
     const category = categoryOrder.indexOf(group.title);
     return category === -1 ? group.order : (category + 1) * 10;
   };
-  return [...groups.filter((group) => group.title !== communityPartners.title), mergedCommunity]
+  return [
+    ...existing.filter(
+      (group) => !approvedGroups.some((approved) => approved.title === group.title),
+    ),
+    ...merged,
+  ]
     .filter((group) => group.items.length > 0)
     .sort((a, b) => rank(a) - rank(b));
 }
