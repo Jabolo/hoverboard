@@ -58,6 +58,38 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           max-width: 800px;
         }
 
+        /* Tier proportions remain distinct even when every group becomes a single column. */
+        .logos-wrapper[data-tier='Platinum Sponsors'] {
+          --partner-logo-width: min(100%, 480px);
+          --partner-logo-height: 128px;
+        }
+
+        .logos-wrapper[data-tier='Gold Sponsors'] {
+          --partner-logo-width: min(85%, 400px);
+          --partner-logo-height: 104px;
+        }
+
+        .logos-wrapper[data-tier='Silver Sponsors'] {
+          --partner-logo-width: min(70%, 320px);
+          --partner-logo-height: 80px;
+        }
+
+        .logos-wrapper[data-tier='Bronze Sponsors'] {
+          --partner-logo-width: min(55%, 240px);
+          --partner-logo-height: 60px;
+        }
+
+        .logos-wrapper[data-tier='Community Partners'] {
+          --partner-logo-width: min(40%, 160px);
+          --partner-logo-height: 40px;
+        }
+
+        .logos-wrapper[data-tier='Community Partners'] .logo-item {
+          padding: 20px;
+          min-height: 120px;
+          gap: 16px;
+        }
+
         .logo-item {
           display: flex;
           flex-direction: column;
@@ -83,10 +115,11 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logo-img {
           --lazy-image-width: 100%;
-          --lazy-image-height: 88px;
+          --lazy-image-height: 100%;
           --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
+          width: var(--partner-logo-width, 100%);
+          height: var(--partner-logo-height, 88px);
+          align-self: center;
         }
 
         .cta-button {
@@ -298,7 +331,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         <template is="dom-repeat" items="[[visibleGroups]]" as="block">
           <h3 class="block-title">[[block.title]]</h3>
-          <div class="logos-wrapper">
+          <div class="logos-wrapper" data-tier$="[[block.title]]">
             <template is="dom-repeat" items="[[block.items]]" as="logo">
               <a
                 class="logo-item"
