@@ -1,0 +1,79 @@
+{
+  "status": "COMPLETE",
+  "scope": "Shareable Hosting preview only; production publication not authorised",
+  "url": "https://gdg-warsaw-devfest26-web--speakers-review-2026-n0tp7s9u.web.app",
+  "speakersUrl": "https://gdg-warsaw-devfest26-web--speakers-review-2026-n0tp7s9u.web.app/speakers",
+  "expiresAt": "2026-10-26T21:50:04+01:00",
+  "deployment": {
+    "site": "gdg-warsaw-devfest26-web",
+    "channel": "speakers-review-2026",
+    "config": "firebase.speakers-review.json",
+    "output": "dist-review",
+    "buildCommit": "7924305b",
+    "noAuthorizedDomains": true,
+    "gitPush": false,
+    "liveDeployment": false,
+    "databaseFunctionsRulesDeployment": false
+  },
+  "integration": {
+    "base": "origin/main 9a9851ba",
+    "preserved": [
+      "CFP closed/reviewing landing wording",
+      "Tickets → Partners → Schedule → Speakers → CFP → Subscribe homepage order",
+      "Seven approved event organizers, LinkedIn links, personal website and portrait orientation",
+      "Existing partner and historical speaker archive work"
+    ],
+    "merge": "74304237"
+  },
+  "acceptance": {
+    "speakers": 12,
+    "sessions": 8,
+    "panelParticipants": 5,
+    "usedImagesHttp200": 21,
+    "fixtureMatchesSource": true,
+    "schedule": "Empty and unpublished; panel has no timetable keys",
+    "hostedChecks": [
+      "Homepage section order and CFP review wording",
+      "12-card listing on desktop and mobile",
+      "Andrii mobile profile and LinkedIn portrait",
+      "Seven-person team and LinkedIn links; mobile no horizontal overflow",
+      "Shared five-person panel and unscheduled session data",
+      "Unpublished schedule page"
+    ],
+    "productionBaseline": "Homepage and speakers HTML SHA256, three generated programme collections and live Hosting release unchanged",
+    "network": "Sampled 82 requests across panel/schedule: fixture HTTP200; zero Firestore writes, auth or analytics calls",
+    "normalBuild": "No preview data/assets or fixture copy in output",
+    "indexing": "robots.txt disallows all; preview HTTP X-Robots-Tag noindex",
+    "serviceWorker": "No registered worker or worker files in hosted output"
+  },
+  "checks": {
+    "lint": "Passed; 0 errors, 65 existing warnings",
+    "tests": "98 passed, 5 skipped",
+    "reviewBuild": "Passed",
+    "normalBuild": "Passed",
+    "diffCheck": "Passed",
+    "gate": "Flag 1 only loopback; flag review only exact review channel host; production/other-host failures tested"
+  },
+  "documents": {
+    "sourceOfTruth": "Decision: shareable speaker review preview — 19 October 2026",
+    "program": "Shared speaker review preview — 19 October 2026",
+    "readbackVerified": true
+  },
+  "limitations": [
+    "Wild branding/Stealth Startup discrepancy and missing logo remain",
+    "Ivan low-resolution portrait and unchanged low-resolution CFP avatars remain",
+    "Hosted checks are representative; complete 12-profile sweep was verified locally in prior report. Browser automation connection failed during the attempted hosted sweep; a new independent browser verified panel, schedule and mobile listing."
+  ],
+  "childState": "preview_architecture COMPLETE; no active children",
+  "screenshots": [
+    "evidence/hosted-speakers-desktop.png",
+    "evidence/hosted-team-desktop.png",
+    "evidence/hosted-profile-mobile.png",
+    "evidence/hosted-speakers-mobile.png"
+  ],
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "upstream": null,
+    "pushed": false
+  }
+}
