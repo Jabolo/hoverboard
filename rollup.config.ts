@@ -12,8 +12,10 @@ import { generateSW } from 'rollup-plugin-workbox';
 import { compileBufferTemplate, production, watch } from './utils/build';
 import { workboxConfig } from './workbox.config';
 
-const speakersPreview = process.env['SPEAKERS_PREVIEW'] === '1';
-const outputDir = speakersPreview ? 'dist-preview' : 'dist';
+const previewMode = process.env['SPEAKERS_PREVIEW'];
+const speakersReview = previewMode === 'review';
+const speakersPreview = speakersReview || previewMode === '1';
+const outputDir = speakersReview ? 'dist-review' : speakersPreview ? 'dist-preview' : 'dist';
 const previewFlag = {
   name: 'speakers-preview-flag',
   transform(code: string, id: string) {
@@ -21,7 +23,7 @@ const previewFlag = {
     return {
       code: code.replace(
         "'__SPEAKERS_PREVIEW_BUILD__'",
-        JSON.stringify(speakersPreview ? '1' : '0'),
+        JSON.stringify(speakersPreview ? previewMode : '0'),
       ),
       map: null,
     };

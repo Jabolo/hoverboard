@@ -1,17 +1,26 @@
 import {
   generatePreviewData,
-  isSpeakersPreview,
+  resolveSpeakersPreview,
   PreviewCollections,
 } from './speakers-preview-data';
 
-// Replaced by Rollup from SPEAKERS_PREVIEW=1. Never enabled by a URL or browser storage.
+// Replaced by Rollup from SPEAKERS_PREVIEW=1 or review. Never enabled by a URL or storage.
 const buildFlag: string = '__SPEAKERS_PREVIEW_BUILD__';
-export const speakersPreview = isSpeakersPreview(buildFlag, window.location.hostname);
-if (buildFlag === '1' && !speakersPreview) {
-  throw new Error('Speaker preview is restricted to loopback hosts');
-}
+export const speakersPreview = (() => {
+  try {
+    return resolveSpeakersPreview(buildFlag, window.location.hostname);
+  } catch (error) {
+    const banner = document.createElement('p');
+    banner.setAttribute('role', 'alert');
+    banner.style.cssText = 'padding:20px;background:#b3261e;color:white;font-weight:bold';
+    banner.textContent =
+      'Speaker review preview is not allowed on this host. No production programme data was loaded.';
+    (document.body ?? document.documentElement).prepend(banner);
+    throw error;
+  }
+})();
 export function assertPreviewWritesDisabled() {
-  if (speakersPreview) throw new Error('This local preview is read-only');
+  if (speakersPreview) throw new Error('This speaker review preview is read-only');
 }
 
 let loaded: Promise<PreviewCollections> | undefined;
@@ -29,7 +38,7 @@ export function loadPreviewData(): Promise<PreviewCollections> {
       const banner = document.createElement('p');
       banner.setAttribute('role', 'alert');
       banner.style.cssText = 'padding:20px;background:#b3261e;color:white;font-weight:bold';
-      banner.textContent = `Local speaker preview failed: ${error instanceof Error ? error.message : String(error)}. No production programme data was loaded.`;
+      banner.textContent = `Speaker review preview failed: ${error instanceof Error ? error.message : String(error)}. No production programme data was loaded.`;
       document.body.prepend(banner);
       throw error;
     });

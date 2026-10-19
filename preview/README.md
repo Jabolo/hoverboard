@@ -38,3 +38,29 @@ Safety boundaries:
 For a build without serving: `npm run preview:speakers -- --build-only`.
 To serve an already-built preview: `npm run preview:speakers -- --serve-only`.
 The server is a local static preview server and must not be deployed.
+
+## Shareable speaker review
+
+The organiser authorised a separate Hosting review channel on 19 October 2026.
+The branch includes the latest CFP review wording, homepage section order and
+seven-person event team from origin/main, alongside the confirmed speaker fixtures.
+
+Run `npm run build:speakers-review` to create `dist-review/`. This uses the explicit
+`review` build mode, which permits only the Firebase `speakers-review-2026` channel
+hostname. Local mode still requires loopback. Production hosts are rejected by
+review builds, and normal builds exclude preview records and portraits.
+
+Only use the following command after the build and checks pass:
+
+```sh
+node_modules/.bin/firebase hosting:channel:deploy speakers-review-2026 --config firebase.speakers-review.json --project gdg-warsaw-devfest26-web --expires 7d --no-authorized-domains
+```
+
+This config contains Hosting only and serves `dist-review/`. The command does not
+deploy to the live channel or change Firebase Auth authorised domains. Do not use
+`firebase deploy` or `hosting:clone` for this review. No Git push is required.
+
+The URL is accessible to anyone who has it, expires after seven days, and is marked
+noindex. It keeps local speaker/session fixtures, an empty schedule, disabled
+analytics, and blocked account/bookmark/newsletter writes. Other public event
+content uses existing read subscriptions. No production programme data is imported.

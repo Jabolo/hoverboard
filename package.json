@@ -32,7 +32,8 @@
     "start:rollup": "mkdir -p dist && rollup --config rollup.config.ts --configPlugin typescript --watch",
     "test": "jest",
     "verify:live": "node ./scripts/verify-live-status.mjs",
-    "preview:speakers": "node scripts/preview-speakers.mjs"
+    "preview:speakers": "node scripts/preview-speakers.mjs",
+    "build:speakers-review": "node scripts/build-speakers-review.mjs"
   },
   "dependencies": {
     "@abraham/remotedata": "1.4.0",

@@ -1,0 +1,28 @@
+{
+  "homepage": {
+    "url": "https://warsaw.devfest.pl/",
+    "status": 200,
+    "sha256": "56fd47bd0aaaae26524816a9379a9fbee2a04fce201704ff35d7f9e90e2497eb"
+  },
+  "speakersPage": {
+    "url": "https://warsaw.devfest.pl/speakers",
+    "status": 200,
+    "sha256": "8bfe3d399fef296f40fb7f9234f7e0926a9f7bea629783ceb00ed9deb6b59e65"
+  },
+  "speakers": {
+    "url": "https://firestore.googleapis.com/v1/projects/gdg-warsaw-devfest26-web/databases/(default)/documents/generatedSpeakers?pageSize=100",
+    "status": 200,
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  "sessions": {
+    "url": "https://firestore.googleapis.com/v1/projects/gdg-warsaw-devfest26-web/databases/(default)/documents/generatedSessions?pageSize=100",
+    "status": 200,
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  "schedule": {
+    "url": "https://firestore.googleapis.com/v1/projects/gdg-warsaw-devfest26-web/databases/(default)/documents/generatedSchedule?pageSize=100",
+    "status": 200,
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  "liveHostingRelease": "projects/gdg-warsaw-devfest26-web/sites/gdg-warsaw-devfest26-web/channels/live/releases/1792442204102000"
+}

@@ -31,7 +31,7 @@ const isLocalPreview = ['localhost', '127.0.0.1', '[::1]', '::1'].includes(
 );
 const firebaseConfig =
   window.firebaseConfig ??
-  (isLocalPreview
+  (isLocalPreview || speakersPreview
     ? {
         apiKey: 'AIzaSyBYDCE-M_SS2bXqtLWCYUOpZ38T_RJMEVM',
         authDomain: 'gdg-warsaw-devfest26-web.firebaseapp.com',

@@ -289,7 +289,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
   private emptyMessage(preview: boolean) {
     return preview
       ? 'Confirmed speaker preview unavailable.'
-      : 'Speaker profiles will appear here as the programme is confirmed. Got a talk or workshop idea?';
+      : 'Call for Papers is closed, and we’re reviewing submissions. Speaker profiles will appear here as confirmations are made.';
   }
 
   private speakersBlock = speakersPreview

@@ -1,5 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import { generatePreviewData, isSpeakersPreview, PreviewSource } from './speakers-preview-data';
+import {
+  generatePreviewData,
+  isSpeakersPreview,
+  PreviewSource,
+  resolveSpeakersPreview,
+} from './speakers-preview-data';
 import type { SpeakerData } from '../models/speaker';
 
 const source = (): PreviewSource => ({
@@ -64,6 +69,46 @@ describe('local speaker preview mapping', () => {
     }
     for (const host of ['warsaw.devfest.pl', 'localhost.example.com', '192.168.1.2']) {
       expect(isSpeakersPreview('1', host)).toBe(false);
+    }
+  });
+
+  it('allows review builds only on the exact Firebase speaker review channel', () => {
+    for (const suffix of ['abc123', '1', 'abcdef']) {
+      const host = `gdg-warsaw-devfest26-web--speakers-review-2026-${suffix}.web.app`;
+      expect(resolveSpeakersPreview('review', host)).toBe(true);
+      expect(isSpeakersPreview('1', host)).toBe(false);
+      for (const flag of ['', '0', '__SPEAKERS_PREVIEW_BUILD__']) {
+        expect(resolveSpeakersPreview(flag, host)).toBe(false);
+      }
+    }
+  });
+
+  it('fails closed for preview flags on production, other channels and lookalikes', () => {
+    const denied = [
+      'warsaw.devfest.pl',
+      'gdg-warsaw-devfest26-web.web.app',
+      'gdg-warsaw-devfest26-web.firebaseapp.com',
+      'gdg-warsaw-devfest26-web--other-channel-abc123.web.app',
+      'other-site--speakers-review-2026-abc123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-.web.app',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-abc-123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-ABC123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-abc123.firebaseapp.com',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-abc123.web.app.example.com',
+      'prefix.gdg-warsaw-devfest26-web--speakers-review-2026-abc123.web.app',
+      'localhost.example.com',
+      '192.168.1.2',
+    ];
+    for (const host of denied) {
+      for (const flag of ['1', 'review']) {
+        expect(isSpeakersPreview(flag, host)).toBe(false);
+        expect(() => resolveSpeakersPreview(flag, host)).toThrow('not allowed on this host');
+      }
+      expect(resolveSpeakersPreview('', host)).toBe(false);
+    }
+    for (const host of ['localhost', '127.0.0.1', '[::1]', '::1']) {
+      expect(() => resolveSpeakersPreview('review', host)).toThrow('not allowed on this host');
+      expect(resolveSpeakersPreview('1', host)).toBe(true);
     }
   });
 
