@@ -274,8 +274,8 @@ export class CfpBlock extends ThemedElement {
 
         <div class="action-panel">
           <div class="deadline-card">
-            <span class="deadline-label">Submission deadline</span>
-            <span class="deadline-val">${cfpBlock.deadline}</span>
+            <span class="deadline-label">Current status</span>
+            <span class="deadline-val">${cfpBlock.status}</span>
           </div>
 
           <div class="meta-grid">
@@ -292,8 +292,6 @@ export class CfpBlock extends ThemedElement {
           <md-filled-button
             class="cfp-action-button"
             href="${cfpBlock.link}"
-            target="_blank"
-            rel="noopener noreferrer"
             aria-describedby="cfp-note"
             >${cfpBlock.cta}</md-filled-button
           >
@@ -301,22 +299,6 @@ export class CfpBlock extends ThemedElement {
         </div>
       </section>
     `;
-  }
-
-  override firstUpdated() {
-    const btn = this.shadowRoot?.querySelector('md-filled-button');
-    if (btn) {
-      const patchAnchor = () => {
-        const link = btn.shadowRoot?.querySelector<HTMLAnchorElement>('a#link');
-        if (link) {
-          link.setAttribute('rel', 'noopener noreferrer');
-        }
-      };
-      patchAnchor();
-      customElements.whenDefined('md-filled-button').then(() => {
-        requestAnimationFrame(patchAnchor);
-      });
-    }
   }
 }
 

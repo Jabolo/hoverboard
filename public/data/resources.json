@@ -15,18 +15,18 @@
   "buyTicket": "Register",
   "ticketingPreview": "View registration",
   "cfpBlock": {
-    "title": "Real Work, Real Lessons.",
-    "kicker": "> cfp --open-now",
-    "description": "Got something real to share? We’re not looking for a corporate pitch, a reheated slide deck, or a generic “AI is changing everything” talk. Bring the project that taught you a hard lesson, the experiment that surprised you, the debugging story that changed your approach, or the side project you cannot stop thinking about. First-time and experienced speakers welcome!",
-    "openTo": "All experience levels — first-time & veteran speakers welcome",
-    "formats": "15m fire talks, 30m standard sessions & 1h workshops",
-    "platform": "Auditorium (~200 ppl), Cafe (~50 ppl) & Classroom (~40 ppl) stages",
-    "deadline": "October 4, 2026, 11:45 PM GMT+02:00",
+    "title": "Call for Papers closed.",
+    "kicker": "> cfp --under-review",
+    "description": "Thank you for sharing your ideas with DevFest Warsaw. Submissions are now closed, and we’re reviewing the talks and workshops to shape this year’s programme.",
+    "openTo": "Submissions closed",
+    "formats": "Talks and workshops under review",
+    "platform": "Programme planning in progress",
+    "status": "Submissions under review",
     "participation": "In-person",
     "languages": "English & Polish",
-    "cta": "Submit a Talk or Workshop on Advocu",
-    "link": "https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0",
-    "note": "AI is welcome — AI-for-the-sake-of-AI is not. Concrete lessons and practical builds beat buzzwords."
+    "cta": "View speaker updates",
+    "link": "/speakers",
+    "note": "Speaker announcements will follow as confirmations are made."
   },
   "pastDevFestsBlock": {
     "title": "Built together over the years.",
@@ -102,7 +102,7 @@
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",
     "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
-    "emptyState": "Call for Papers is live! We’re reviewing submissions across practical AI/ML, Cloud, Web, Mobile, Firebase, Open Source, and engineering culture. Full timetable coming soon."
+    "emptyState": "Call for Papers is closed. We’re reviewing submissions across practical AI/ML, Cloud, Web, Mobile, Firebase, Open Source, and engineering culture. Full timetable coming soon."
   },
   "signIn": "Sign in",
   "signOut": "Sign out",
@@ -241,9 +241,9 @@
     "title": "Real Work, Real Lessons.",
     "callToAction": {
       "featuredSessions": {
-        "description": "DevFest Warsaw 2026 is a community-run day of talks, demos, and hands-on workshops at Google for Startups Campus Warsaw. We’re not looking for corporate pitches, reheated slide decks, or generic buzzword talks. Bring the project that taught you a hard lesson, the experiment that surprised you, the production debugging story that changed your approach, or the practical idea that deserves a roomful of curious people.",
-        "label": "Submit a talk on Advocu",
-        "link": "https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
+        "description": "DevFest Warsaw 2026 is a community-run day of talks, demos, and hands-on workshops at Google for Startups Campus Warsaw. Call for Papers is closed, and we’re reviewing submissions focused on real projects, practical ideas, and lessons learned.",
+        "label": "View speaker updates",
+        "link": "/speakers"
       },
       "howItWas": {
         "description": "",

@@ -276,16 +276,8 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           Loading the speaker lineup…
         </p>
         <p class="status-message" role="status" hidden$="[[!empty]]">
-          Speaker profiles will appear here as the programme is confirmed. Got a talk or workshop
-          idea?
-          <a
-            href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-left: 4px;"
-          >
-            Submit on Advocu &rarr;
-          </a>
+          Call for Papers is closed, and we’re reviewing submissions. Speaker profiles will appear
+          here as confirmations are made.
         </p>
 
         <md-outlined-button

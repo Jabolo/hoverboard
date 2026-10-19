@@ -112,18 +112,7 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="container">
-          <p class="empty-state" role="status">
-            [[scheduleBlock.emptyState]]
-            <br />
-            <a
-              href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
-              target="_blank"
-              rel="noopener noreferrer"
-              style="display: inline-block; color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-top: 12px;"
-            >
-              Submit to our Call for Papers on Advocu &rarr;
-            </a>
-          </p>
+          <p class="empty-state" role="status">[[scheduleBlock.emptyState]]</p>
         </div>
       </template>
 

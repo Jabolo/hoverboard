@@ -478,11 +478,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span></span
                     ><span
                       ><span class="key">call_for_papers:</span>
-                      <span class="green">open_now</span></span
+                      <span class="green">closed</span></span
                     >
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">platform:</span> advocu</span>
+                    <span></span><span><span class="key">review:</span> in_progress</span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">ethos:</span> zero_corporate_pitches</span>
