@@ -478,11 +478,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     <span></span
                     ><span
                       ><span class="key">call_for_papers:</span>
-                      <span class="green">open_now</span></span
+                      <span class="green">closed</span></span
                     >
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">platform:</span> advocu</span>
+                    <span></span><span><span class="key">review:</span> in_progress</span>
                   </div>
                   <div class="terminal-line">
                     <span></span><span><span class="key">ethos:</span> zero_corporate_pitches</span>
@@ -570,13 +570,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         <fork-me-block></fork-me-block>
       </template>
       <about-block></about-block>
-      <cfp-block></cfp-block>
-      <subscribe-block></subscribe-block>
       <div id="tickets" style="scroll-margin-top: 80px;"></div>
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
       <speakers-block></speakers-block>
+      <cfp-block></cfp-block>
+      <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>
       <past-devfests-block></past-devfests-block>
       <about-organizer-block></about-organizer-block>

@@ -268,18 +268,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="container empty-state-container">
-          <p class="empty-state">
-            [[emptyMessage(speakersPreview)]]
-            <a
-              hidden$="[[speakersPreview]]"
-              href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
-              target="_blank"
-              rel="noopener noreferrer"
-              style="color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-left: 6px;"
-            >
-              Submit to our Call for Papers on Advocu &rarr;
-            </a>
-          </p>
+          <p class="empty-state">[[emptyMessage(speakersPreview)]]</p>
         </div>
       </template>
 

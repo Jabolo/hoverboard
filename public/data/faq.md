@@ -40,7 +40,7 @@ The programme and speaker lineup will be added as they are confirmed. Subscribe 
 
 ## How can I speak at DevFest Warsaw?
 
-The Call for Papers is officially open! Visit our [Advocu CFP submission page](https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0) to apply. The published deadline is **October 4, 2026 at 23:45 Europe/Warsaw**. We welcome 15-minute fire talks, 30-minute standard sessions, and up to 1-hour workshops across our three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl). Both first-time and experienced speakers from anywhere in the community are welcome!
+The Call for Papers is closed. We’re reviewing submissions and planning the programme. Speaker announcements will follow as confirmations are made.
 
 ## How can my company support the event?
 

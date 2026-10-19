@@ -96,6 +96,11 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           border: 3px solid var(--google-blue);
         }
 
+        /* This source portrait is stored sideways; rotate its display only. */
+        .photo[data-photo$='/oleksandr-katrych.jpg'] {
+          transform: translateZ(0) rotate(-90deg);
+        }
+
         .member-details {
           min-width: 0;
           color: var(--primary-text-color);
@@ -190,6 +195,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                 <lazy-image
                   class="photo"
                   src="[[member.photoUrl]]"
+                  data-photo$="[[member.photoUrl]]"
                   alt="[[member.name]]"
                 ></lazy-image>
 
@@ -202,7 +208,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                         <paper-icon-button
                           class="social-icon"
                           icon="hoverboard:{{social.icon}}"
-                          aria-label="Open [[member.name]] on [[social.icon]]"
+                          aria-label="Open [[member.name]]: [[social.name]]"
                         ></paper-icon-button>
                       </a>
                     </template>

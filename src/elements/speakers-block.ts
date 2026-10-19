@@ -257,15 +257,6 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         </p>
         <p class="status-message" role="status" hidden$="[[!empty]]">
           [[emptyMessage(speakersPreview)]]
-          <a
-            hidden$="[[speakersPreview]]"
-            href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-left: 4px;"
-          >
-            Submit on Advocu &rarr;
-          </a>
         </p>
 
         <md-outlined-button

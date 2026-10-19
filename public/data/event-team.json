@@ -1,0 +1,96 @@
+{
+  "teamId": "0",
+  "title": "DevFest Warsaw 2026 organizing team",
+  "sourceUrl": "https://gdg.community.dev/gdg-warszawa/",
+  "members": [
+    {
+      "id": "0",
+      "name": "Michał Jabłoński",
+      "profileUrl": "https://gdg.community.dev/u/mpwqe3/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/m-jab/"
+        },
+        {
+          "icon": "website",
+          "name": "Personal website",
+          "link": "https://michaljablonski.dev/"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "name": "Vatsal Patel",
+      "profileUrl": "https://gdg.community.dev/u/mrwpfx/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/vatsal-patel-py/"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Viktoriia Vinnykova",
+      "profileUrl": "https://gdg.community.dev/u/mcxbxr/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/viktoriia-vinnykova/"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Oleksandr Katrych",
+      "profileUrl": "https://gdg.community.dev/u/mjuxfk/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/oleksandr-katrych"
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Anhelina Sudenkova",
+      "profileUrl": "https://gdg.community.dev/u/angelina1/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/anhelina-sudenkova/"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Maryna Kamienieva",
+      "profileUrl": "https://gdg.community.dev/u/m9pkp3/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/kamienieva"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "name": "Jakub Kołakowski",
+      "profileUrl": "https://gdg.community.dev/u/mwwkjv/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/jkolski/"
+        }
+      ]
+    }
+  ]
+}

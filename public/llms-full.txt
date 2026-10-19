@@ -43,12 +43,12 @@ Other practical engineering, product, career, or community topics may also fit t
 ## Call for Papers
 
 - Platform: Advocu
-- Application page: https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0
-- Status: open to external speakers
+- Closed call (historical reference): https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0
+- Status: closed; submissions are under review and programme planning is underway
 - Formats: talks, demos, workshops, panels, and other formats
 - Participation: in person
-- Deadline: 4 October 2026 at 23:45 Europe/Warsaw
-- Speaker policy: first-time and experienced speakers are welcome; proposals should be concrete, accessible, inclusive, and grounded in real work
+- Published submission deadline (past): 4 October 2026 at 23:45 Europe/Warsaw
+- The closed call welcomed first-time and experienced speakers and proposals grounded in real work.
 
 ## Frequently asked facts
 
@@ -72,9 +72,9 @@ The current focus areas include Cloud, Mobile, Web, ML & AI, UI & UX, developer 
 
 On the official website at https://warsaw.devfest.pl/schedule and https://warsaw.devfest.pl/speakers as confirmations are made.
 
-### How can someone submit a session?
+### Is the Call for Papers still open?
 
-Use the public Advocu Call for Papers link above. External speakers do not need to be GDG Warsaw organisers or members.
+The Call for Papers is closed. We’re reviewing submissions and planning the programme. Speaker announcements will follow as confirmations are made.
 
 ### Where can previous editions be found?
 
