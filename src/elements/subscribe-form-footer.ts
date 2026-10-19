@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Failure, Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -16,10 +17,23 @@ import './shared-styles';
 
 @customElement('subscribe-form-footer')
 export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
+  override ready() {
+    super.ready();
+    if (speakersPreview) this.setAttribute('local-preview', '');
+  }
+
   static get template() {
     return html`
+      <style>
+        :host([local-preview]) {
+          display: none !important;
+        }
+      </style>
       <style include="shared-styles flex flex-alignment positioning">
         :host {
+          display: block;
           --paper-input-container-color: var(--footer-text-color);
           --paper-input-container-focus-color: var(--default-primary-color);
           --paper-input-container-input-color: var(--footer-text-color);

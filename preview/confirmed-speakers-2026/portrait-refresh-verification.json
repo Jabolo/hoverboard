@@ -1,0 +1,45 @@
+{
+  "status": "COMPLETE",
+  "scope": "Local preview only; portrait-only refresh",
+  "date": "2026-10-19",
+  "sourceProfiles": [
+    "https://www.linkedin.com/in/andriikhrystian/",
+    "https://www.linkedin.com/in/viacheslavmiroshnychenko/"
+  ],
+  "retrieval": "Signed-in Chrome pageAssets export of attributed profile photos",
+  "portraits": [
+    {
+      "file": "andrii-khrystian-linkedin.png",
+      "status": 200,
+      "servedBytesMatchSource": true,
+      "sha256": "cb08075b1e9cea94149af47c2ffeceb12c98b0c1cf18432421cad82cdcd663bb"
+    },
+    {
+      "file": "viacheslav-miroshnychenko.jpg",
+      "status": 200,
+      "servedBytesMatchSource": true,
+      "sha256": "8e950ebfb25171854fdef6e7c9deae00145496284c5ce826e56ee40b1813b10e"
+    }
+  ],
+  "visualChecks": "Both source portraits and both local profile screenshots inspected; originals retained",
+  "sizes": {
+    "andrii": "800x800",
+    "viacheslav": "200x200"
+  },
+  "programme": "12 speakers and 8 sessions unchanged",
+  "codeChanges": false,
+  "tests": "HTTP 200, source/served file equality, JSON formatting and git diff check passed. No code change; prior full checks retained.",
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "head": "28d2ef36",
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "preserved": "All previous modifications and original unused image assets"
+  },
+  "children": "None active",
+  "remainingGaps": [
+    "Wild logo",
+    "Ivan portrait low-resolution; other unchanged CFP avatars remain low-resolution"
+  ]
+}

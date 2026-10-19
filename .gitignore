@@ -71,3 +71,5 @@ serviceAccount.json
 *-adminsdk-*.json
 .DS_Store
 .idea/
+
+dist-preview/

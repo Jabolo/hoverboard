@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { Failure, Initialized, Pending, RemoteData, Success } from '@abraham/remotedata';
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
@@ -44,6 +45,7 @@ export const subscribe = (userId: string) => {
 export const setFeedback = createAsyncThunk<FeedbackId, Feedback>(
   'feedback/set',
   async (data: Feedback) => {
+    assertPreviewWritesDisabled();
     await setDoc(doc(db, 'sessions', data.parentId, 'feedback', data.userId), {
       contentRating: data.contentRating,
       styleRating: data.styleRating,
@@ -62,6 +64,7 @@ export const setFeedback = createAsyncThunk<FeedbackId, Feedback>(
 export const deleteFeedback = createAsyncThunk<FeedbackId, FeedbackId>(
   'feedback/delete',
   async (data: FeedbackId) => {
+    assertPreviewWritesDisabled();
     await deleteDoc(doc(db, 'sessions', data.parentId, 'feedback', data.userId));
 
     return data;

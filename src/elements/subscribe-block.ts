@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -17,8 +18,20 @@ import './shared-styles';
 
 @customElement('subscribe-block')
 export class SubscribeBlock extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
+  override ready() {
+    super.ready();
+    if (speakersPreview) this.setAttribute('local-preview', '');
+  }
+
   static get template() {
     return html`
+      <style>
+        :host([local-preview]) {
+          display: none !important;
+        }
+      </style>
       <style include="shared-styles flex flex-alignment">
         :host {
           display: flex;
@@ -65,6 +78,7 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
 
         @media (min-width: 640px) {
           :host {
+            display: block;
             padding: 32px 0;
           }
 

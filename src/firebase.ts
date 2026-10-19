@@ -1,12 +1,14 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import {
+  connectFirestoreEmulator,
   Firestore,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
 } from 'firebase/firestore';
-import { getFunctions, Functions } from 'firebase/functions';
+import { connectFunctionsEmulator, getFunctions, Functions } from 'firebase/functions';
 import { getPerformance, initializePerformance } from 'firebase/performance';
+import { speakersPreview } from './utils/speakers-preview';
 
 /**
  * Load Firebase config in index.html with /__/firebase/init.js. It stubs out
@@ -24,7 +26,9 @@ declare global {
   }
 }
 
-const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const isLocalPreview = ['localhost', '127.0.0.1', '[::1]', '::1'].includes(
+  window.location.hostname,
+);
 const firebaseConfig =
   window.firebaseConfig ??
   (isLocalPreview
@@ -42,13 +46,29 @@ if (!firebaseConfig) {
   throw new Error('window.firebaseConfig is not defined');
 }
 
-export const firebaseApp = initializeApp(firebaseConfig);
+// All operational SDKs use an isolated demo project in preview. Only the subscription
+// helper receives the production read connection; mutations never receive that handle.
+export const firebaseApp = initializeApp(
+  speakersPreview
+    ? {
+        apiKey: 'demo-local-preview',
+        projectId: 'demo-devfest-speakers-preview',
+        appId: 'demo-local-preview',
+      }
+    : firebaseConfig,
+);
 export const db: Firestore = initializeFirestore(firebaseApp, {
   localCache: persistentLocalCache({
     tabManager: persistentMultipleTabManager(),
   }),
 });
 export const firebaseFunctions: Functions = getFunctions(firebaseApp);
-export const performance = getPerformance(firebaseApp);
-
-initializePerformance(firebaseApp);
+if (speakersPreview) {
+  connectFirestoreEmulator(db, '127.0.0.1', 8089);
+  connectFunctionsEmulator(firebaseFunctions, '127.0.0.1', 5009);
+}
+export const readOnlyDb = speakersPreview
+  ? initializeFirestore(initializeApp(firebaseConfig, 'preview-read-only'), {})
+  : db;
+export const performance = speakersPreview ? undefined : getPerformance(firebaseApp);
+if (!speakersPreview) initializePerformance(firebaseApp);

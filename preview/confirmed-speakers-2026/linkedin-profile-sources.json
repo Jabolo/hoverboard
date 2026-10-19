@@ -1,0 +1,147 @@
+{
+  "checkedOn": "2026-10-19",
+  "scope": "All 12 confirmed speakers, local preview only",
+  "method": "Public professional profile headline and About inspected in organiser-authorised signed-in Chrome; no messages or profile changes",
+  "profiles": {
+    "calgan-aygun": {
+      "name": "Çalgan Aygün",
+      "linkedin": "https://www.linkedin.com/in/calganaygun/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Senior DevOps Lead",
+      "company": "FinalCheck",
+      "highlight": "Cloud architecture specialist and active technology community contributor.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "DevOps Lead"
+    },
+    "andrii-khrystian": {
+      "name": "Andrii Khrystian",
+      "linkedin": "https://www.linkedin.com/in/andriikhrystian/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Senior Mobile Developer",
+      "company": "Dynatrace",
+      "highlight": "GDG Linz founder with over a decade of Android and cross-platform development experience.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Flutter Software Developer"
+    },
+    "ivan-lapa": {
+      "name": "Ivan Lapa",
+      "linkedin": "https://www.linkedin.com/in/ai-consult/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "AI Engineer",
+      "company": "Netflix",
+      "highlight": "12 years in product engineering; consulted and trained teams across 20+ product companies.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Software Engineer (UI)",
+      "titleBasis": "Current public headline says AI Engineer; CFP listed Software Engineer (UI). Netflix is identified in both. Headline describes current professional focus, not a separately verified formal Netflix job classification."
+    },
+    "yonatan-levin": {
+      "name": "Yonatan Levin",
+      "linkedin": "https://www.linkedin.com/in/levinyonatan/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Head of AI",
+      "company": "Wild",
+      "highlight": "Former monday.com GenAI, Public API and mobile team leader; Android Academy community builder.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Head of AI",
+      "unresolved": "Current LinkedIn says Stealth Startup, CFP says Wild. Preserve CFP company, no invented logo; existing organiser conflict remains unresolved."
+    },
+    "hasan-rafiq": {
+      "name": "Hasan Rafiq",
+      "linkedin": "https://www.linkedin.com/in/hrfq/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Forward Deployed Engineer",
+      "company": "Google",
+      "highlight": "Google AI engineer with 15+ years of cloud and machine learning experience across three regions.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Senior AI Engineer"
+    },
+    "dominika-zajac": {
+      "name": "Dominika Zając",
+      "linkedin": "https://www.linkedin.com/in/dominikazajac/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Senior Software Engineer",
+      "company": "Qualtrics",
+      "highlight": "Microsoft MVP in Web Technologies and accessibility specialist, speaker and mentor.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Senior Software Engineer"
+    },
+    "dmytro-nedvetskyi": {
+      "name": "Dmytro Nedvetskyi",
+      "linkedin": "https://www.linkedin.com/in/dmytronedvetskyi/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Senior Engineering Leader",
+      "company": "Intellias",
+      "highlight": "15+ years scaling engineering organisations; led eight teams delivering self-service AI platforms.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Senior Engineering Leader"
+    },
+    "yaroslav-polyakov": {
+      "name": "Yaroslav Polyakov",
+      "linkedin": "https://www.linkedin.com/in/poliak/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Engineering Manager, AI",
+      "company": "Google",
+      "highlight": "BCS Fellow; led teams of up to 32 engineers and worked on products serving 100–180 million users.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "AI Engineering Manager"
+    },
+    "sergiy-mokiyenko": {
+      "name": "Sergiy Mokiyenko",
+      "linkedin": "https://www.linkedin.com/in/sergiy-mokiyenko-76891359/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Engineering Manager",
+      "company": "Netflix",
+      "highlight": "Mobile engineering leader who has built and led teams of 3–20 people across diverse product domains.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Engineering Manager"
+    },
+    "serhii-kasianchuk": {
+      "name": "Serhii Kasianchuk",
+      "linkedin": "https://www.linkedin.com/in/serhii-kasianchuk-b56896b2/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Senior Engineering Manager",
+      "company": "solidgate",
+      "highlight": "Leads Solidgate’s payments department, spanning multiple teams and payment orchestration.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Senior Engineering Manager"
+    },
+    "viacheslav-miroshnychenko": {
+      "name": "Viacheslav Miroshnychenko",
+      "linkedin": "https://www.linkedin.com/in/viacheslavmiroshnychenko/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Engineering Manager II & Engineering Site Lead",
+      "company": "Bolt",
+      "highlight": "Former CTO at IT Resistance and team lead at Zendesk; builds teams and large-scale products.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Engineering Manager II & Engineering Site Lead"
+    },
+    "adrian-romanski": {
+      "name": "Adrian Romański",
+      "linkedin": "https://www.linkedin.com/in/adrianromanski/",
+      "checkedOn": "2026-10-19",
+      "verifiedSections": ["Profile headline", "About"],
+      "title": "Full Stack Developer",
+      "company": "PushBased",
+      "highlight": "Angular specialist and community organiser focused on accessibility, architecture and developer tooling.",
+      "copy": "Editorial third-person summary of public professional profile; not a verbatim quotation",
+      "priorTitle": "Software Developer",
+      "companyBasis": "Headline explicitly Software Developer@PushBased; top employer button says meet.js, reflecting additional community work. PushBased affiliation retained."
+    }
+  },
+  "remainingGaps": [
+    "Yonatan: Wild brand unresolved against LinkedIn Stealth Startup",
+    "Ivan: retained existing low-resolution verified portrait"
+  ],
+  "boundaries": "No contact details, messages, follower or connection data, recommendations or sensitive personal data imported; no timetable changes"
+}

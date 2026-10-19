@@ -11,7 +11,8 @@ import {
   QueryDocumentSnapshot,
   Unsubscribe,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { readOnlyDb as db } from '../firebase';
+import { loadPreviewData, previewCollection, speakersPreview } from './speakers-preview';
 import { Id, ParentId } from '../models/types';
 
 export const mergeDataAndId = <T>(
@@ -41,6 +42,25 @@ export const subscribeToDocument = <T>(
   onNext: (payload: T | undefined) => void,
   onError: (error: Error) => void,
 ): Subscription => {
+  const localCollection = speakersPreview && previewCollection(path);
+  if (localCollection) {
+    let active = true;
+    onStart();
+    loadPreviewData().then(
+      (data) => {
+        if (active)
+          onNext(
+            data[localCollection].find((entry) => entry.id === path.split('/')[1]) as T | undefined,
+          );
+      },
+      (error: Error) => {
+        if (active) onError(error);
+      },
+    );
+    return new Success(() => {
+      active = false;
+    });
+  }
   const unsubscribe = onSnapshot(
     doc(db, path),
     (snapshot) => onNext(snapshot.exists() ? mergeDataAndId(snapshot) : undefined),
@@ -58,6 +78,22 @@ export const subscribeToCollection = <T>(
   onError: (error: Error) => void,
   order = orderBy('name'),
 ): Subscription => {
+  const localCollection = speakersPreview && previewCollection(path);
+  if (localCollection) {
+    let active = true;
+    onStart();
+    loadPreviewData().then(
+      (data) => {
+        if (active) onNext(data[localCollection] as T[]);
+      },
+      (error: Error) => {
+        if (active) onError(error);
+      },
+    );
+    return new Success(() => {
+      active = false;
+    });
+  }
   const unsubscribe = onSnapshot(
     query(collection(db, path), order),
     (snapshot) => onNext(snapshot.docs.map<T>(mergeDataAndId)),
@@ -75,6 +111,22 @@ export const subscribeToCollectionGroup = <T>(
   onError: (error: Error) => void,
   order = orderBy('name'),
 ): Subscription => {
+  const localCollection = speakersPreview && previewCollection(path);
+  if (localCollection) {
+    let active = true;
+    onStart();
+    loadPreviewData().then(
+      (data) => {
+        if (active) onNext(data[localCollection] as T[]);
+      },
+      (error: Error) => {
+        if (active) onError(error);
+      },
+    );
+    return new Success(() => {
+      active = false;
+    });
+  }
   const unsubscribe = onSnapshot(
     query(collectionGroup(db, path), order),
     (snapshot) => onNext(snapshot.docs.map<T>(dataWithParentId)),

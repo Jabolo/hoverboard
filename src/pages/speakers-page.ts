@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -7,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/hero/simple-hero';
 import '../components/text-truncate';
+import '../components/speaker-affiliations';
 import '../elements/content-loader';
 import '../elements/filter-menu';
 import '../elements/previous-speakers-block';
@@ -28,6 +30,8 @@ import { updateMetadata } from '../utils/metadata';
 
 @customElement('speakers-page')
 export class SpeakersPage extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
@@ -100,58 +104,6 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           transform: translateZ(0);
         }
 
-        .badges {
-          position: absolute;
-          top: 32px;
-          left: calc(50% + 32px);
-        }
-
-        .badge {
-          margin-left: -10px;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          border: 2px solid var(--primary-background-color);
-          transition: transform var(--animation);
-        }
-
-        .badge:hover {
-          transform: scale(1.1);
-        }
-
-        .badge:nth-of-type(2) {
-          transform: translate(25%, 75%);
-        }
-
-        .badge:nth-of-type(2):hover {
-          transform: translate3d(25%, 75%, 20px) scale(1.1);
-        }
-
-        .badge:nth-of-type(3) {
-          transform: translate(10%, 180%);
-        }
-
-        .badge:nth-of-type(3):hover {
-          transform: translate3d(10%, 180%, 20px) scale(1.1);
-        }
-
-        .badge-icon {
-          --iron-icon-width: 12px;
-          --iron-icon-height: 12px;
-          color: #fff;
-        }
-
-        .company-logo {
-          padding: 3px 6px;
-          border-radius: 3px;
-          background: #fff;
-          --lazy-image-width: 100%;
-          --lazy-image-height: 16px;
-          --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
-        }
-
         .description {
           color: var(--primary-text-color);
         }
@@ -164,18 +116,37 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           line-height: 1;
         }
 
-        .origin {
-          margin-top: 4px;
-          color: var(--google-green);
-          font-family: var(--font-mono, monospace);
+        .professional-role {
+          margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
           font-size: 14px;
-          line-height: 1.1;
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
         }
 
-        .bio {
-          margin-top: 16px;
-          color: var(--secondary-text-color);
+        .professional-company {
+          margin-top: 2px;
+          color: var(--terminal-green);
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .professional-highlight {
+          margin: 12px 0 0;
+          color: var(--terminal-muted);
+          font-size: 14px;
           line-height: 1.6;
+          overflow-wrap: anywhere;
+        }
+
+        .origin {
+          margin-top: 4px;
+          color: var(--terminal-muted);
+          font-size: 12px;
+          line-height: 1.5;
         }
 
         .contacts {
@@ -250,39 +221,35 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 src="[[speaker.photoUrl]]"
                 alt="[[speaker.name]]"
               ></lazy-image>
-              <lazy-image
-                class="company-logo"
-                src="[[speaker.companyLogoUrl]]"
-                alt="[[speaker.company]]"
-              ></lazy-image>
 
               <div class="description">
                 <h2 class="name">[[speaker.name]]</h2>
-                <div class="origin">[[speaker.country]]</div>
+                <template is="dom-if" if="[[speaker.title]]">
+                  <div class="professional-role">[[speaker.title]]</div>
+                </template>
+                <template is="dom-if" if="[[speaker.company]]">
+                  <div class="professional-company">[[speaker.company]]</div>
+                </template>
+                <template
+                  is="dom-if"
+                  if="[[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]"
+                >
+                  <p class="professional-highlight">
+                    [[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]
+                  </p>
+                </template>
+                <template is="dom-if" if="[[speaker.country]]">
+                  <div class="origin">[[speaker.country]]</div>
+                </template>
 
-                <text-truncate lines="5">
-                  <div class="bio">[[speaker.bio]]</div>
-                </text-truncate>
+                <speaker-affiliations
+                  company="[[speaker.company]]"
+                  logo-url="[[speaker.companyLogoUrl]]"
+                  logo-background="[[speaker.companyLogoBackground]]"
+                  badges="[[speaker.badges]]"
+                ></speaker-affiliations>
               </div>
             </a>
-
-            <div class="badges" layout horizontal>
-              <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-                <a
-                  class$="badge [[badge.name]]-b"
-                  href$="[[badge.link]]"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title$="[[badge.description]]"
-                  aria-label="[[badge.description]]"
-                  layout
-                  horizontal
-                  center-center
-                >
-                  <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
-                </a>
-              </template>
-            </div>
 
             <div class="contacts">
               <template is="dom-repeat" items="[[speaker.socials]]" as="social">
@@ -302,9 +269,9 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="container empty-state-container">
           <p class="empty-state">
-            Speaker profiles and sessions will appear here as the programme is confirmed. Got a
-            project, hard lesson, or experiment to share?
+            [[emptyMessage(speakersPreview)]]
             <a
+              hidden$="[[speakersPreview]]"
               href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
               target="_blank"
               rel="noopener noreferrer"
@@ -320,6 +287,25 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
       <footer-block></footer-block>
     `;
+  }
+
+  private professionalHighlight(shortBio = '', title = '', company = '') {
+    const normalize = (value: string) =>
+      value
+        .trim()
+        .toLocaleLowerCase()
+        .replace(/[\s,|·–—-]+/g, ' ');
+    const highlight = shortBio.trim();
+    const repeated = [title, company, `${title} at ${company}`, `${title} ${company}`].map(
+      normalize,
+    );
+    return highlight && !repeated.includes(normalize(highlight)) ? highlight : '';
+  }
+
+  private emptyMessage(preview: boolean) {
+    return preview
+      ? 'Confirmed speaker preview unavailable.'
+      : 'Speaker profiles and sessions will appear here as the programme is confirmed. Got a project, hard lesson, or experiment to share?';
   }
 
   private heroSettings = heroSettings.speakers;

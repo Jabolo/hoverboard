@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -5,6 +6,7 @@ import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/text-truncate';
+import '../components/speaker-affiliations';
 import { Speaker } from '../models/speaker';
 import { router } from '../router';
 import { RootState, store } from '../store';
@@ -18,6 +20,8 @@ import './shared-styles';
 
 @customElement('speakers-block')
 export class SpeakersBlock extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
@@ -91,51 +95,6 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           transform: translateZ(0);
         }
 
-        .badges {
-          position: absolute;
-          top: 16px;
-          left: calc(50% + 24px);
-        }
-
-        .badge {
-          margin-left: -10px;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          border: 2px solid #fff;
-          transition: transform var(--animation);
-        }
-
-        .badge:hover {
-          transform: scale(1.1);
-        }
-
-        .badge:nth-of-type(2) {
-          transform: translate(0, 100%);
-        }
-
-        .badge:nth-of-type(2):hover {
-          transform: translate3d(0, 100%, 20px) scale(1.1);
-        }
-
-        .badge-icon {
-          --iron-icon-width: 12px;
-          --iron-icon-height: 12px;
-          color: #fff;
-        }
-
-        .company-logo {
-          margin-top: 6px;
-          padding: 3px 6px;
-          border-radius: 3px;
-          background: #fff;
-          --lazy-image-width: 100%;
-          --lazy-image-height: 16px;
-          --lazy-image-fit: contain;
-          width: var(--lazy-image-width);
-          height: var(--lazy-image-height);
-        }
-
         .description {
           color: var(--primary-text-color);
         }
@@ -148,12 +107,37 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           line-height: 1.1;
         }
 
+        .professional-role {
+          margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .professional-company {
+          margin-top: 2px;
+          color: var(--terminal-green);
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .professional-highlight {
+          margin: 12px 0 0;
+          color: var(--terminal-muted);
+          font-size: 14px;
+          line-height: 1.6;
+          overflow-wrap: anywhere;
+        }
+
         .origin {
           margin-top: 4px;
-          color: var(--terminal-green);
-          font-family: var(--font-mono, monospace);
-          font-size: 14px;
-          line-height: 1.1;
+          color: var(--terminal-muted);
+          font-size: 12px;
+          line-height: 1.5;
         }
 
         .cta-button {
@@ -236,38 +220,34 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
                   src="[[speaker.photoUrl]]"
                   alt="[[speaker.name]]"
                 ></lazy-image>
-                <lazy-image
-                  class="company-logo"
-                  src="[[speaker.companyLogoUrl]]"
-                  alt="[[speaker.company]]"
-                ></lazy-image>
 
                 <div class="description">
-                  <text-truncate lines="1">
-                    <h3 class="name">[[speaker.name]]</h3>
-                  </text-truncate>
-                  <text-truncate lines="1">
+                  <h3 class="name">[[speaker.name]]</h3>
+                  <template is="dom-if" if="[[speaker.title]]">
+                    <div class="professional-role">[[speaker.title]]</div>
+                  </template>
+                  <template is="dom-if" if="[[speaker.company]]">
+                    <div class="professional-company">[[speaker.company]]</div>
+                  </template>
+                  <template
+                    is="dom-if"
+                    if="[[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]"
+                  >
+                    <p class="professional-highlight">
+                      [[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]
+                    </p>
+                  </template>
+                  <template is="dom-if" if="[[speaker.country]]">
                     <div class="origin">[[speaker.country]]</div>
-                  </text-truncate>
+                  </template>
                 </div>
               </a>
-              <div class="badges" layout horizontal>
-                <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-                  <a
-                    class$="badge [[badge.name]]-b"
-                    href$="[[badge.link]]"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title$="[[badge.description]]"
-                    aria-label="[[badge.description]]"
-                    layout
-                    horizontal
-                    center-center
-                  >
-                    <iron-icon icon="hoverboard:[[badge.name]]" class="badge-icon"></iron-icon>
-                  </a>
-                </template>
-              </div>
+              <speaker-affiliations
+                company="[[speaker.company]]"
+                logo-url="[[speaker.companyLogoUrl]]"
+                logo-background="[[speaker.companyLogoBackground]]"
+                badges="[[speaker.badges]]"
+              ></speaker-affiliations>
             </div>
           </template>
         </div>
@@ -276,9 +256,9 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           Loading the speaker lineup…
         </p>
         <p class="status-message" role="status" hidden$="[[!empty]]">
-          Speaker profiles will appear here as the programme is confirmed. Got a talk or workshop
-          idea?
+          [[emptyMessage(speakersPreview)]]
           <a
+            hidden$="[[speakersPreview]]"
             href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
             target="_blank"
             rel="noopener noreferrer"
@@ -302,7 +282,31 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
   @property({ type: Object })
   speakers = initialSpeakersState;
 
-  private speakersBlock = speakersBlock;
+  private professionalHighlight(shortBio = '', title = '', company = '') {
+    const normalize = (value: string) =>
+      value
+        .trim()
+        .toLocaleLowerCase()
+        .replace(/[\s,|·–—-]+/g, ' ');
+    const highlight = shortBio.trim();
+    const repeated = [title, company, `${title} at ${company}`, `${title} ${company}`].map(
+      normalize,
+    );
+    return highlight && !repeated.includes(normalize(highlight)) ? highlight : '';
+  }
+
+  private emptyMessage(preview: boolean) {
+    return preview
+      ? 'Confirmed speaker preview unavailable.'
+      : 'Speaker profiles will appear here as the programme is confirmed. Got a talk or workshop idea?';
+  }
+
+  private speakersBlock = speakersPreview
+    ? {
+        ...speakersBlock,
+        callToAction: { label: 'Meet the confirmed speakers', link: '/speakers' },
+      }
+    : speakersBlock;
 
   override connectedCallback() {
     super.connectedCallback();

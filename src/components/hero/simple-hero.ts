@@ -50,8 +50,14 @@ export class SimpleHero extends ThemedElement {
   @property()
   page: SimpleHeroKeys = 'notFound';
 
+  @property({ type: String })
+  heading = '';
+
+  @property({ type: Boolean, attribute: 'hide-description' })
+  hideDescription = false;
+
   private renderDescription() {
-    if (hasDescription(heroSettings[this.page])) {
+    if (!this.hideDescription && hasDescription(heroSettings[this.page])) {
       return html`<p class="hero-description">
         ${(heroSettings[this.page] as Description).description}
       </p>`;
@@ -61,6 +67,7 @@ export class SimpleHero extends ThemedElement {
   }
 
   private renderTitle() {
+    if (this.heading) return html`<h1 class="hero-title">${this.heading}</h1>`;
     if (hasTitle(heroSettings[this.page])) {
       return html`<h1 class="hero-title">${(heroSettings[this.page] as Title).title}</h1>`;
     } else {

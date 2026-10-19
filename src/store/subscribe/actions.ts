@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { httpsCallable } from 'firebase/functions';
 import { Dispatch } from 'redux';
 import { store } from '../';
@@ -30,6 +31,7 @@ const registerNewsletterConsent = httpsCallable<
 >(firebaseFunctions, 'registerNewsletterConsent');
 
 const setSubscribe = async (data: DialogData): Promise<true> => {
+  assertPreviewWritesDisabled();
   if (!data.consentGiven) {
     throw new Error('Newsletter consent is required.');
   }

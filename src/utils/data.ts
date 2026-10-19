@@ -1,3 +1,21 @@
+import { speakersPreview } from './speakers-preview';
+import {
+  disabledSchedule as publishedDisabledSchedule,
+  heroSettings as publishedHeroSettings,
+} from '../../public/data/settings.json';
+
+export const disabledSchedule = speakersPreview || publishedDisabledSchedule;
+export const heroSettings = speakersPreview
+  ? {
+      ...publishedHeroSettings,
+      speakers: {
+        ...publishedHeroSettings.speakers,
+        description:
+          'Meet the confirmed 2026 speakers and explore their sessions. The schedule is not yet published.',
+      },
+    }
+  : publishedHeroSettings;
+
 export {
   aboutBlock,
   aboutOrganizerBlock,
@@ -61,9 +79,7 @@ export {
 export {
   contentLoaders,
   dateFormat,
-  disabledSchedule,
   hashtag,
-  heroSettings,
   location,
   mailto,
   navigation,

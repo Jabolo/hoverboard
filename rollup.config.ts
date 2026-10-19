@@ -1,3 +1,4 @@
+import process from 'node:process';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
@@ -11,18 +12,36 @@ import { generateSW } from 'rollup-plugin-workbox';
 import { compileBufferTemplate, production, watch } from './utils/build';
 import { workboxConfig } from './workbox.config';
 
+const speakersPreview = process.env['SPEAKERS_PREVIEW'] === '1';
+const outputDir = speakersPreview ? 'dist-preview' : 'dist';
+const previewFlag = {
+  name: 'speakers-preview-flag',
+  transform(code: string, id: string) {
+    if (!id.endsWith('/utils/speakers-preview.ts')) return null;
+    return {
+      code: code.replace(
+        "'__SPEAKERS_PREVIEW_BUILD__'",
+        JSON.stringify(speakersPreview ? '1' : '0'),
+      ),
+      map: null,
+    };
+  },
+};
+
 const config: RollupOptions[] = [
   {
     input: 'src/firebase-messaging-sw.ts',
     treeshake: production,
     output: {
-      dir: 'dist',
+      dir: outputDir,
       sourcemap: production,
     },
     plugins: [
+      previewFlag,
       nodeResolve(),
       typescript({
         noEmitOnError: true,
+        outDir: `${outputDir}/.build`,
         sourceMap: production,
       }),
       production && terser(),
@@ -31,16 +50,18 @@ const config: RollupOptions[] = [
   {
     treeshake: production,
     output: {
-      dir: 'dist',
+      dir: outputDir,
       entryFileNames: production ? '[name]-[hash].js' : '[name].js',
       chunkFileNames: production ? '[name]-[hash].js' : '[name].js',
       sourcemap: production,
     },
     plugins: [
+      previewFlag,
       nodeResolve(),
       json(),
       typescript({
         noEmitOnError: true,
+        outDir: `${outputDir}/.build`,
         sourceMap: production,
       }),
       html({
@@ -54,25 +75,25 @@ const config: RollupOptions[] = [
         targets: [
           {
             src: 'public/*',
-            dest: 'dist',
+            dest: outputDir,
           },
           {
             src: 'public/manifest.json',
-            dest: 'dist',
+            dest: outputDir,
             transform: compileBufferTemplate,
           },
           {
             src: 'public/data/*.md',
-            dest: 'dist/data',
+            dest: `${outputDir}/data`,
             transform: compileBufferTemplate,
           },
         ],
       }),
-      production && generateSW(workboxConfig),
+      production && !speakersPreview && generateSW(workboxConfig),
       production && terser(),
       watch && livereload({ watch: 'dist' }),
     ],
   },
 ];
 
-export default config;
+export default speakersPreview ? config.slice(1) : config;

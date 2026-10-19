@@ -17,6 +17,7 @@ export default [
   {
     ignores: [
       'dist/**',
+      'dist-preview/**',
       'node_modules/**',
       'functions/dist/**',
       'public/**',

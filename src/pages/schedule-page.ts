@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/paper-progress';
@@ -26,6 +27,8 @@ import { updateMetadata } from '../utils/metadata';
 
 @customElement('schedule-page')
 export class SchedulePage extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment">
@@ -114,15 +117,17 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         <div class="container">
           <p class="empty-state" role="status">
             [[scheduleBlock.emptyState]]
-            <br />
-            <a
-              href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
-              target="_blank"
-              rel="noopener noreferrer"
-              style="display: inline-block; color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-top: 12px;"
-            >
-              Submit to our Call for Papers on Advocu &rarr;
-            </a>
+            <template is="dom-if" if="[[!speakersPreview]]">
+              <br />
+              <a
+                href="https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="display: inline-block; color: var(--google-blue); font-weight: 700; text-decoration: underline; margin-top: 12px;"
+              >
+                Submit to our Call for Papers on Advocu &rarr;
+              </a>
+            </template>
           </p>
         </div>
       </template>
@@ -133,7 +138,13 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
   private heroSettings = heroSettings.schedule;
   private contentLoaders = contentLoaders.schedule;
-  private scheduleBlock = scheduleBlock;
+  private scheduleBlock = speakersPreview
+    ? {
+        ...scheduleBlock,
+        emptyState:
+          'The schedule is not published yet. Explore the confirmed speakers and their sessions.',
+      }
+    : scheduleBlock;
 
   @property({ type: Object })
   schedule = initialScheduleState;

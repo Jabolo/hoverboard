@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Success } from '@abraham/remotedata';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import { computed, customElement, observe, property } from '@polymer/decorators';
@@ -395,7 +396,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
   }
 
   private shouldHideAccountEntry(signedIn: boolean, hasAttendeeAgenda: boolean) {
-    return signedIn || !hasAttendeeAgenda;
+    return speakersPreview || signedIn || !hasAttendeeAgenda;
   }
 
   private isAccountIconHidden(
@@ -403,7 +404,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
     isTabletPlus: boolean,
     hasAttendeeAgenda: boolean,
   ) {
-    return signedIn || isTabletPlus || !hasAttendeeAgenda;
+    return speakersPreview || signedIn || isTabletPlus || !hasAttendeeAgenda;
   }
 
   private isBuyButtonHidden(ticketUrl: string, isLaptopPlus: boolean): boolean {

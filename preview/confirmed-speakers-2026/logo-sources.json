@@ -1,0 +1,89 @@
+{
+  "retrievedAt": "2026-10-19",
+  "logos": [
+    {
+      "company": "FinalCheck",
+      "file": "logos/finalcheck.png",
+      "website": "https://finalcheck.net/en/",
+      "assetURL": "https://finalcheck.net/wp-content/uploads/2023/09/finalcheck-logo.png",
+      "background": "light",
+      "evidence": "Logo repeatedly used in official website header; business specializes in background checks, consistent with CFP company and individual verification bio.",
+      "identityEvidence": "The speaker's own GitHub profile https://github.com/calganaygun links directly to https://finalcheck.net/. Official company footer names My Security Analytics, matching the CFP biography."
+    },
+    {
+      "company": "Qualtrics",
+      "file": "logos/qualtrics.svg",
+      "website": "https://www.qualtrics.com/",
+      "assetURL": "https://www.qualtrics.com/m/qualtrics-xm-long.svg",
+      "background": "light",
+      "evidence": "Official homepage Organization structured-data logo URL."
+    },
+    {
+      "company": "solidgate",
+      "file": "logos/solidgate.svg",
+      "website": "https://solidgate.com/",
+      "assetURL": "https://fa7cda2cubg8rqr9.public.blob.vercel-storage.com/Logo_new_015b7bb7f9.svg",
+      "background": "light",
+      "evidence": "Logo img source used on official homepage."
+    },
+    {
+      "company": "Bolt",
+      "file": "logos/bolt.svg",
+      "website": "https://bolt.eu/",
+      "assetURL": "https://assets.homepage.bolt.eu/1.24.6/public/common-assets/bolt-logo-white.svg",
+      "background": "dark",
+      "evidence": "Official mobility company homepage footer logo."
+    },
+    {
+      "company": "Dynatrace",
+      "file": "logos/dynatrace.png",
+      "website": "https://www.dynatrace.com/",
+      "assetURL": "https://cdn.dm.dynatrace.com/assets/Marketing/seo/_600x60_fit_center-center_82_none/dynatrace_web.png?mtime=1689253902",
+      "background": "light",
+      "evidence": "Official homepage Organization structured-data logo URL."
+    },
+    {
+      "company": "Netflix",
+      "file": "logos/netflix.svg",
+      "website": "https://help.netflix.com/en/",
+      "assetURL": "https://help.netflix.com/en/#netflix-svg",
+      "background": "dark",
+      "evidence": "Exact official inline SVG extracted without altering paths or colors."
+    },
+    {
+      "company": "PushBased",
+      "file": "logos/pushbased.svg",
+      "website": "https://push-based.io/",
+      "assetURL": "https://push-based.io/#pb-logo",
+      "background": "light",
+      "evidence": "Exact official inline SVG extracted without altering paths or colors."
+    },
+    {
+      "company": "Intellias",
+      "file": "logos/intellias.svg",
+      "website": "https://intellias.com/",
+      "assetURL": "https://intellias.com/#logo",
+      "background": "light",
+      "evidence": "Exact logo symbol from official homepage wrapped as standalone SVG. Default black paths require light surface; geometry unchanged."
+    },
+    {
+      "company": "Google",
+      "file": "logos/google.svg",
+      "website": "https://about.google/brand-resource-center/logos-list/",
+      "assetURL": "repo:public/images/previous-speakers/logos/google.svg",
+      "background": "light",
+      "evidence": "Existing project Google wordmark reused unchanged."
+    }
+  ],
+  "unresolved": [
+    {
+      "company": "Wild",
+      "speaker": "Yonatan Levin",
+      "reason": "Cannot identity-match Wild to an official company/domain. Personal LinkedIn currently says Stealth Startup; no unrelated Wild logo downloaded.",
+      "sources": [
+        "https://il.linkedin.com/in/levinyonatan",
+        "https://sessionize.com/yonatan-yoni-levin/"
+      ]
+    }
+  ]
+}

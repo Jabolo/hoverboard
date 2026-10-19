@@ -1,3 +1,4 @@
+import { speakersPreview } from '../../utils/speakers-preview';
 import { Failure, Initialized, Pending, RemoteData, Success } from '@abraham/remotedata';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getMessaging, getToken } from 'firebase/messaging';
@@ -19,6 +20,7 @@ const initialState: NotificationPermissionState = {
 export const requestNotificationPermission = createAsyncThunk<string | undefined, PROMPT_USER>(
   'notificationPermission/requestPermission',
   async (promptUser = PROMPT_USER.NO) => {
+    if (speakersPreview) return undefined;
     const permission =
       promptUser === PROMPT_USER.YES
         ? await Notification.requestPermission()

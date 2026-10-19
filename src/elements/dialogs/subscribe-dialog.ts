@@ -1,3 +1,4 @@
+import { speakersPreview } from '../../utils/speakers-preview';
 import { Failure, Success } from '@abraham/remotedata';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
@@ -28,8 +29,15 @@ import '../shared-styles';
 // Used for adding documents to both `subscribers` and `potentialPartners` collections
 
 class SubscribeDialog extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
+      <style>
+        :host([local-preview]) {
+          display: none !important;
+        }
+      </style>
       <style include="shared-styles flex flex-alignment">
         :host {
           display: block;
@@ -205,6 +213,7 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
 
   override ready() {
     super.ready();
+    if (speakersPreview) this.setAttribute('local-preview', '');
     this.initialHeight = window.innerHeight;
     this.dialogElm.addEventListener('closed', () => closeDialog());
   }

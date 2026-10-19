@@ -1,0 +1,80 @@
+{
+  "verifiedOn": "2026-10-19",
+  "scope": "Local-only preview",
+  "cfp": "https://docs.google.com/spreadsheets/d/1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q/edit",
+  "profiles": {
+    "calgan-aygun": {
+      "company": "FinalCheck",
+      "companySource": "https://github.com/calganaygun",
+      "gde": true,
+      "gdeSource": "https://gdg.community.dev/events/details/google-gdg-3city-presents-build-with-ai-hands-on-workshop-build-multi-agent-systems-with-google-adk/"
+    },
+    "dominika-zajac": {
+      "company": "Qualtrics",
+      "companySource": "https://www.linkedin.com/in/dominikazajac",
+      "gde": true,
+      "gdeSource": "https://gdg.community.dev/events/details/google-gdg-prishtina-presents-code-amp-share-web-development-workshop-series/"
+    },
+    "yonatan-levin": {
+      "company": "Wild",
+      "companySource": "CFP row 21",
+      "gde": true,
+      "gdeSource": "https://www.linkedin.com/in/levinyonatan/",
+      "conflict": {
+        "linkedinCompany": "Stealth Startup",
+        "companyPage": "https://www.linkedin.com/company/stealth-startup-community/",
+        "logo": "Unresolved: generic community, not an identifiable Wild brand",
+        "resolution": "Retain existing CFP company text; no logo until organiser identifies brand. LinkedIn About confirms Google Developer Expert in AI."
+      }
+    },
+    "adrian-romanski": {
+      "company": "PushBased",
+      "companySource": "https://www.waysconf.com/speaker/adrian-romanski",
+      "gde": true,
+      "gdeSource": "https://push-based.io/event/meetjs-krakow-accessibility-driven-development-with-adrian-romanski"
+    },
+    "andrii-khrystian": {
+      "company": "Dynatrace",
+      "companySource": "https://sessionize.com/andrii-khrystian/",
+      "gde": "Not established; no badge"
+    },
+    "hasan-rafiq": {
+      "company": "Google",
+      "companySource": "https://pl.linkedin.com/in/hrfq",
+      "additionalSource": "https://gdg.community.dev/events/details/google-gdg-on-campus-warsaw-university-of-technology-warsaw-poland-presents-gdg-on-campus-wut-x-jetbrains-build-with-ai/",
+      "gde": "Not established; no badge"
+    },
+    "ivan-lapa": {
+      "company": "Netflix",
+      "companySource": "CFP row 14; Advocu verified in previous implementation",
+      "gde": "Not established; no badge"
+    },
+    "dmytro-nedvetskyi": {
+      "company": "Intellias",
+      "companySource": "https://mentor.sh/mentors/Deni",
+      "gde": "Not established; no badge"
+    },
+    "yaroslav-polyakov": {
+      "company": "Google",
+      "companySource": "Organiser-added CFP row 52",
+      "gde": "Not established; no badge"
+    },
+    "sergiy-mokiyenko": {
+      "company": "Netflix",
+      "companySource": "https://meetup.skelar.tech/skelar-meetup-tech-meetup-20-05",
+      "gde": "Not established; no badge"
+    },
+    "serhii-kasianchuk": {
+      "company": "solidgate",
+      "companySource": "https://pl.linkedin.com/in/serhii-kasianchuk-b56896b2",
+      "gde": "Not established; no badge"
+    },
+    "viacheslav-miroshnychenko": {
+      "company": "Bolt",
+      "companySource": "https://pl.linkedin.com/in/viacheslavmiroshnychenko",
+      "gde": "Not established; no badge"
+    }
+  },
+  "logoProvenance": "logo-sources.json",
+  "linkedinAccess": "Yonatan profile and currently linked employer inspected through organiser's signed-in Chrome. No messages or LinkedIn profile changes."
+}

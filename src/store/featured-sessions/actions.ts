@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Dispatch } from 'redux';
 import { store } from '..';
@@ -48,6 +49,7 @@ const setFeaturedSessions = async (
   userId: string,
   featuredSessions: FeaturedSessions,
 ): Promise<void> => {
+  assertPreviewWritesDisabled();
   await setDoc(doc(db, 'featuredSessions', userId), featuredSessions);
 };
 

@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { Success } from '@abraham/remotedata';
 import { doc, setDoc } from 'firebase/firestore';
 import { Dispatch } from 'redux';
@@ -14,6 +15,7 @@ import {
 } from './types';
 
 const setNotificationsUsersDoc = async (uid: string, data: UserTokensData): Promise<void> => {
+  assertPreviewWritesDisabled();
   await setDoc(doc(db, 'notificationsUsers', uid), data);
 };
 

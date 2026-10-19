@@ -31,7 +31,8 @@
     "start:functions": "npm --prefix functions start",
     "start:rollup": "mkdir -p dist && rollup --config rollup.config.ts --configPlugin typescript --watch",
     "test": "jest",
-    "verify:live": "node ./scripts/verify-live-status.mjs"
+    "verify:live": "node ./scripts/verify-live-status.mjs",
+    "preview:speakers": "node scripts/preview-speakers.mjs"
   },
   "dependencies": {
     "@abraham/remotedata": "1.4.0",

@@ -1,0 +1,94 @@
+{
+  "retrievedOn": "2026-10-19",
+  "portraits": [
+    {
+      "name": "Adrian Romański",
+      "slug": "adrian-romanski",
+      "sourcePage": "https://www.waysconf.com/speaker/adrian-romanski",
+      "imageUrl": "https://cdn.sanity.io/images/f4b7shkz/production/d3a3d905ddbe2c123e8a034d0f71e5c9217b2ee6-3023x3023.jpg",
+      "identityEvidence": "Speaker page labels the portrait Adrian Romański, Senior Full Stack Developer at PushBased.",
+      "localPath": "preview/confirmed-speakers-2026/photos/adrian-romanski.jpg",
+      "sha256": "58a31c3c5e0c570abf2080767181dd75063fa9a7856be32474e9fb87a903de72",
+      "bytes": 806757,
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Dmytro Nedvetskyi",
+      "slug": "dmytro-nedvetskyi",
+      "sourcePage": "https://mentor.sh/mentors/Deni",
+      "imageUrl": "https://charizard.mentor.sh/storage/v1/object/public/avatars/7df1fb6c-684b-4f55-9c7a-d4650dd79a75-0.427856280313057.jpeg",
+      "identityEvidence": "Personal mentor page names Dmytro Nedvetskyi, Lead Engineering Manager at Intellias, and image alt text names him.",
+      "localPath": "preview/confirmed-speakers-2026/photos/dmytro-nedvetskyi.jpg",
+      "sha256": "956e32a66faa2a5171bccbc8ece180082834f33774f95d3877a80d32072caf3b",
+      "bytes": 74853,
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Hasan Rafiq",
+      "slug": "hasan-rafiq",
+      "sourcePage": "https://gdg.community.dev/events/details/google-gdg-on-campus-polish-japanese-academy-of-information-technology-warsaw-poland-presents-building-ai-powered-databases-nl2sql-amp-image-generation-with-google-gemini/",
+      "imageUrl": "https://res.cloudinary.com/startup-grind/image/upload/v1/gcs/platform-data-goog/events/hasanrafiq_t9e8IM3.png",
+      "identityEvidence": "Official GDG PJATK event names Hasan Rafiq, Google, Senior AI Engineer, and maps this portrait directly in event_person record.",
+      "localPath": "preview/confirmed-speakers-2026/photos/hasan-rafiq.png",
+      "sha256": "8c01825b7cdb7f14114e5b8869b7c41b6f5cb9c02384b7d1c10f47b9a29a5d53",
+      "bytes": 106361,
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Sergiy Mokiyenko",
+      "slug": "sergiy-mokiyenko",
+      "sourcePage": "https://meetup.skelar.tech/skelar-meetup-tech-meetup-20-05",
+      "imageUrl": "https://cdn.prod.website-files.com/6540ecd6e08b4c83dddb5175/6814ca6980a1f9404e8522b4_4-Mokiyenko%20(1).webp",
+      "identityEvidence": "Official Skelar meetup speaker card pairs this portrait with Sergiy Mokiyenko, Engineering Manager at Netflix, and his LinkedIn profile.",
+      "localPath": "preview/confirmed-speakers-2026/photos/sergiy-mokiyenko.webp",
+      "sha256": "9dde528eeedaa8796e0fc2fe4d46a260a62ec355a06122c63d6641dae6ed9d1d",
+      "bytes": 55316,
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Ivan Lapa",
+      "slug": "ivan-lapa",
+      "sourcePage": "https://neoversity.com.ua/knowledge-hub/ai-kouch-dlya-ultramarafonu-keys-vid-inzhenera-z-netflix",
+      "imageUrl": "https://cdn.prod.website-files.com/66eae8f664123b670f5a255f/694ac2cfc3a01f6841f70194_kh-e-19.jpg",
+      "identityEvidence": "Neoversity official talk page labels this portrait Іван Лапа and his role UI Engineer L5 at Netflix.",
+      "localPath": "preview/confirmed-speakers-2026/photos/ivan-lapa.jpg",
+      "sha256": "b651b1e9098760fe77a6e86b8ad5cfb98e350669ef6add051463c53d1746a4a5",
+      "bytes": 13851,
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Serhii Kasianchuk",
+      "slug": "serhii-kasianchuk",
+      "sourcePage": "https://www.linkedin.com/in/serhii-kasianchuk-b56896b2/",
+      "identityEvidence": "Signed-in profile names Serhii Kasianchuk and Solidgate; attributed profile avatar downloaded from visible img labelled View Serhii Kasianchuk’s profile. Visually inspected.",
+      "localPath": "preview/confirmed-speakers-2026/photos/serhii-kasianchuk.jpg",
+      "sha256": "adbfeb914404465d5e660b8e339502e62e6bc731296c259b2101d78d35e533cf",
+      "bytes": 12659,
+      "dimensions": "200x200",
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Andrii Khrystian",
+      "slug": "andrii-khrystian",
+      "sourcePage": "https://www.linkedin.com/in/andriikhrystian/",
+      "identityEvidence": "Profile photo explicitly attributed to this named LinkedIn profile. Exported through signed-in Chrome pageAssets and visually inspected.",
+      "localPath": "preview/confirmed-speakers-2026/photos/andrii-khrystian-linkedin.png",
+      "sha256": "cb08075b1e9cea94149af47c2ffeceb12c98b0c1cf18432421cad82cdcd663bb",
+      "bytes": 799296,
+      "dimensions": "800x800",
+      "retrievedOn": "2026-10-19"
+    },
+    {
+      "name": "Viacheslav Miroshnychenko",
+      "slug": "viacheslav-miroshnychenko",
+      "sourcePage": "https://www.linkedin.com/in/viacheslavmiroshnychenko/",
+      "identityEvidence": "Profile photo explicitly attributed to this named LinkedIn profile. Exported through signed-in Chrome pageAssets and visually inspected.",
+      "localPath": "preview/confirmed-speakers-2026/photos/viacheslav-miroshnychenko.jpg",
+      "sha256": "8e950ebfb25171854fdef6e7c9deae00145496284c5ce826e56ee40b1813b10e",
+      "bytes": 7890,
+      "dimensions": "200x200",
+      "retrievedOn": "2026-10-19"
+    }
+  ],
+  "gaps": []
+}

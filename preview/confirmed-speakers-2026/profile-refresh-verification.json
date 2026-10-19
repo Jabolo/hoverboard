@@ -1,0 +1,235 @@
+{
+  "status": "COMPLETE",
+  "scope": "Local-only professional profile enrichment for the existing confirmed roster",
+  "verifiedOn": "2026-10-19",
+  "previewUrl": "http://localhost:5002/speakers",
+  "counts": {
+    "speakers": 12,
+    "sessions": 8,
+    "biographies": 12,
+    "professionalHighlights": 12,
+    "linkedinLinks": 12,
+    "companyLogos": 11,
+    "gdeBadges": 4
+  },
+  "sources": "linkedin-profile-sources.json",
+  "desktopListing": {
+    "cards": 12,
+    "roles": true,
+    "companies": true,
+    "highlights": true,
+    "logos": 11,
+    "gde": 4,
+    "overflow": false
+  },
+  "mobileProfiles": [
+    {
+      "id": "calgan-aygun",
+      "name": "Çalgan Aygün",
+      "role": "Senior DevOps Lead",
+      "company": "FinalCheck",
+      "bioLength": 316,
+      "highlight": "Cloud architecture specialist and active technology community contributor.",
+      "links": ["/sessions/CFP-002"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "andrii-khrystian",
+      "name": "Andrii Khrystian",
+      "role": "Senior Mobile Developer",
+      "company": "Dynatrace",
+      "bioLength": 380,
+      "highlight": "GDG Linz founder with over a decade of Android and cross-platform development experience.",
+      "links": ["/sessions/CFP-012"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "ivan-lapa",
+      "name": "Ivan Lapa",
+      "role": "AI Engineer",
+      "company": "Netflix",
+      "bioLength": 568,
+      "highlight": "12 years in product engineering; consulted and trained teams across 20+ product companies.",
+      "links": ["/sessions/CFP-014"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "yonatan-levin",
+      "name": "Yonatan Levin",
+      "role": "Head of AI",
+      "company": "Wild",
+      "bioLength": 496,
+      "highlight": "Former monday.com GenAI, Public API and mobile team leader; Android Academy community builder.",
+      "links": ["/sessions/CFP-021"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "hasan-rafiq",
+      "name": "Hasan Rafiq",
+      "role": "Forward Deployed Engineer",
+      "company": "Google",
+      "bioLength": 534,
+      "highlight": "Google AI engineer with 15+ years of cloud and machine learning experience across three regions.",
+      "links": ["/sessions/CFP-034"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "dominika-zajac",
+      "name": "Dominika Zając",
+      "role": "Senior Software Engineer",
+      "company": "Qualtrics",
+      "bioLength": 522,
+      "highlight": "Microsoft MVP in Web Technologies and accessibility specialist, speaker and mentor.",
+      "links": ["/sessions/CFP-050"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "dmytro-nedvetskyi",
+      "role": "Senior Engineering Leader",
+      "company": "Intellias",
+      "bioLength": 505,
+      "highlight": "15+ years scaling engineering organisations; led eight teams delivering self-service AI platforms.",
+      "links": ["/sessions/PANEL-01"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "yaroslav-polyakov",
+      "role": "Engineering Manager, AI",
+      "company": "Google",
+      "bioLength": 403,
+      "highlight": "BCS Fellow; led teams of up to 32 engineers and worked on products serving 100–180 million users.",
+      "links": ["/sessions/PANEL-01"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "sergiy-mokiyenko",
+      "role": "Engineering Manager",
+      "company": "Netflix",
+      "bioLength": 407,
+      "highlight": "Mobile engineering leader who has built and led teams of 3–20 people across diverse product domains.",
+      "links": ["/sessions/PANEL-01"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "serhii-kasianchuk",
+      "role": "Senior Engineering Manager",
+      "company": "solidgate",
+      "bioLength": 500,
+      "highlight": "Leads Solidgate’s payments department, spanning multiple teams and payment orchestration.",
+      "links": ["/sessions/PANEL-01"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "viacheslav-miroshnychenko",
+      "role": "Engineering Manager II & Engineering Site Lead",
+      "company": "Bolt",
+      "bioLength": 321,
+      "highlight": "Former CTO at IT Resistance and team lead at Zendesk; builds teams and large-scale products.",
+      "links": ["/sessions/PANEL-01"],
+      "overflow": false,
+      "photoLoaded": true
+    },
+    {
+      "id": "adrian-romanski",
+      "role": "Full Stack Developer",
+      "company": "PushBased",
+      "bioLength": 454,
+      "highlight": "Angular specialist and community organiser focused on accessibility, architecture and developer tooling.",
+      "links": ["/sessions/INVITED-001"],
+      "overflow": false,
+      "photoLoaded": true
+    }
+  ],
+  "homepage": {
+    "cards": [
+      {
+        "name": "Çalgan Aygün",
+        "role": "Senior DevOps Lead",
+        "company": "FinalCheck",
+        "highlight": "Cloud architecture specialist and active technology community contributor."
+      },
+      {
+        "name": "Andrii Khrystian",
+        "role": "Senior Mobile Developer",
+        "company": "Dynatrace",
+        "highlight": "GDG Linz founder with over a decade of Android and cross-platform development experience."
+      },
+      {
+        "name": "Serhii Kasianchuk",
+        "role": "Senior Engineering Manager",
+        "company": "solidgate",
+        "highlight": "Leads Solidgate’s payments department, spanning multiple teams and payment orchestration."
+      },
+      {
+        "name": "Yaroslav Polyakov",
+        "role": "Engineering Manager, AI",
+        "company": "Google",
+        "highlight": "BCS Fellow; led teams of up to 32 engineers and worked on products serving 100–180 million users."
+      }
+    ],
+    "overflow": false
+  },
+  "checks": {
+    "lint": "Passed; 0 errors, 65 existing warnings",
+    "tests": "92 passed, 5 skipped",
+    "productionBuild": "Passed",
+    "previewBuild": "Passed",
+    "diffCheck": "Passed",
+    "uiDetector": "Zero findings (agent check)",
+    "network": "Local fixture HTTP 200; no observed Firestore Write/commit/batchWrite, authentication or analytics calls. Unrelated read-only Firestore Listen connections intermittently unavailable; local programme remains available.",
+    "normalOutput": "No preview paths, speaker fixture identifiers or new copy strings in dist",
+    "schedule": "Empty generated schedule; unpublished text remains; no timetable keys on session"
+  },
+  "productionComparison": {
+    "programmeCollections": "All 3 match the baseline",
+    "htmlPages": "Homepage and speaker-page hashes changed during task; no deployment executed by this task. Remote origin/main is now adf7aca1cc1da9218bd352f3adc138fe8bc358f9, independently of local HEAD 28d2ef36. Do not claim live pages are unchanged."
+  },
+  "assetUpdates": ["Serhii Kasianchuk: verified local 200x200 LinkedIn portrait replaces initials"],
+  "remainingGaps": [
+    "Yonatan: Wild company logo and Wild/Stealth Startup discrepancy remain unresolved",
+    "Viacheslav: attributed portrait identified but media download fails; initials retained",
+    "Ivan: existing verified portrait is 112x112; existing 96x96 CFP avatars unchanged"
+  ],
+  "documents": {
+    "sourceOfTruth": "Local speaker profile enrichment — 19 October 2026",
+    "program": "LinkedIn profile review for local website — 19 October 2026",
+    "readback": "Both inserted sections verified through connector"
+  },
+  "changedScopes": [
+    "src/elements/speakers-block.ts",
+    "src/pages/speakers-page.ts",
+    "src/pages/speaker-page.ts",
+    "src/pages/session-page.ts",
+    "preview/confirmed-speakers-2026/data.json",
+    "preview/confirmed-speakers-2026/linkedin-profile-sources.json",
+    "preview/confirmed-speakers-2026/photos/serhii-kasianchuk.jpg",
+    "preview provenance/portrait manifests and README"
+  ],
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "head": "28d2ef36c3dde8d70eb9f2cd9aaac191d86e7442",
+    "trackingBranch": null,
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "preserved": "All prior local preview, partner and archive work"
+  },
+  "childState": "implement_preview COMPLETE; no running children",
+  "screenshots": [
+    "evidence/profiles-desktop-cards.png",
+    "evidence/profiles-home-desktop.png",
+    "evidence/hasan-profile-desktop.png",
+    "evidence/ivan-profile-mobile.png",
+    "evidence/profiles-mobile-bottom.png"
+  ]
+}

@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -7,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import { RouterLocation } from '@vaadin/router';
 import '../components/hero/simple-hero';
+import '../components/speaker-affiliations';
 import '../components/markdown/short-markdown';
 import '../elements/feedback-block';
 import '../elements/shared-styles';
@@ -39,6 +41,9 @@ import { getVariableColor } from '../utils/styles';
 
 @customElement('session-page')
 export class SessionPage extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+  private sessionHeroHeading = speakersPreview ? 'Sessions' : '';
+
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
@@ -156,9 +161,19 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           line-height: 1.2;
         }
 
+        .section-role {
+          margin-top: 6px;
+          color: var(--terminal-copy);
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+        }
+
         .section-secondary-text {
-          font-size: 12px;
-          line-height: 1;
+          margin-top: 2px;
+          color: var(--terminal-muted);
+          font-size: 13px;
+          line-height: 1.5;
         }
 
         @media (min-width: 812px) {
@@ -208,7 +223,11 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <simple-hero page="schedule">
+      <simple-hero
+        page="schedule"
+        heading="[[sessionHeroHeading]]"
+        hide-description$="[[speakersPreview]]"
+      >
         <div class="header-content" layout vertical end-justified>
           <h2 class="name">[[session.title]]</h2>
           <div class="tags" hidden$="[[!session.tags.length]]">
@@ -217,8 +236,13 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
             </template>
           </div>
 
-          <div class="float-button" hidden$="[[!contentLoaderVisibility]]">
+          <div
+            class="float-button"
+            style$="[[previewActionsStyle(speakersPreview)]]"
+            hidden$="[[!contentLoaderVisibility]]"
+          >
             <paper-fab
+              style$="[[previewActionsStyle(speakersPreview)]]"
               icon="hoverboard:[[featuredSessionIcon]]"
               hidden$="[[!viewport.isLaptopPlus]]"
               on-click="toggleFeaturedSession"
@@ -241,8 +265,13 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
       ></content-loader>
 
       <div class="container content">
-        <div class="float-button" hidden$="[[!contentLoaderVisibility]]">
+        <div
+          class="float-button"
+          style$="[[previewActionsStyle(speakersPreview)]]"
+          hidden$="[[!contentLoaderVisibility]]"
+        >
           <paper-fab
+            style$="[[previewActionsStyle(speakersPreview)]]"
             icon="hoverboard:[[featuredSessionIcon]]"
             hidden$="[[viewport.isLaptopPlus]]"
             on-click="toggleFeaturedSession"
@@ -298,16 +327,36 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
                 <div class="section-details" flex>
                   <div class="section-primary-text">[[speaker.name]]</div>
-                  <div class="section-secondary-text">
-                    [[speaker.company]] / [[speaker.country]]
-                  </div>
+                  <template is="dom-if" if="[[speaker.title]]">
+                    <div class="section-role">[[speaker.title]]</div>
+                  </template>
+                  <template
+                    is="dom-if"
+                    if="[[speakerAffiliation(speaker.company, speaker.country)]]"
+                  >
+                    <div class="section-secondary-text">
+                      [[speakerAffiliation(speaker.company, speaker.country)]]
+                    </div>
+                  </template>
+                  <speaker-affiliations
+                    company="[[speaker.company]]"
+                    logo-url="[[speaker.companyLogoUrl]]"
+                    logo-background="[[speaker.companyLogoBackground]]"
+                    badges="[[speaker.badges]]"
+                    align="start"
+                    compact
+                  ></speaker-affiliations>
                 </div>
               </div>
             </a>
           </template>
         </div>
 
-        <div id="feedback" class="additional-sections">
+        <div
+          id="feedback"
+          style$="[[previewActionsStyle(speakersPreview)]]"
+          class="additional-sections"
+        >
           <h3>[[feedback.headline]]</h3>
 
           <auth-required hidden="[[!acceptingFeedback]]">
@@ -321,6 +370,14 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
       <footer-block></footer-block>
     `;
+  }
+
+  private previewActionsStyle(preview: boolean) {
+    return preview ? 'display:none' : '';
+  }
+
+  private speakerAffiliation(company: string, country: string) {
+    return [company, country].filter(Boolean).join(' / ');
   }
 
   private feedback = feedback;

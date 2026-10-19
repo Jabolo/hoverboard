@@ -1,3 +1,4 @@
+import { speakersPreview } from './speakers-preview';
 const MEASUREMENT_ID = 'G-6H09QP1YCQ';
 const CONSENT_STORAGE_KEY = 'devfest-analytics-consent';
 const GOOGLE_ANALYTICS_SCRIPT = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
@@ -86,10 +87,11 @@ function loadAnalytics(): Promise<void> {
 }
 
 export function getAnalyticsConsent(): AnalyticsConsent | null {
-  return analyticsConsent;
+  return speakersPreview ? 'denied' : analyticsConsent;
 }
 
 export async function setAnalyticsConsent(consent: AnalyticsConsent) {
+  if (speakersPreview) return;
   analyticsConsent = consent;
   persistAnalyticsConsent(consent);
 
@@ -110,7 +112,7 @@ export async function setAnalyticsConsent(consent: AnalyticsConsent) {
 }
 
 export async function logPageView() {
-  if (analyticsConsent !== 'granted') return;
+  if (speakersPreview || analyticsConsent !== 'granted') return;
 
   await loadAnalytics();
   window.gtag?.('event', 'page_view', {
@@ -124,7 +126,7 @@ export async function logAnalyticsEvent(
   eventName: string,
   parameters: Record<string, unknown> = {},
 ) {
-  if (analyticsConsent !== 'granted') return;
+  if (speakersPreview || analyticsConsent !== 'granted') return;
 
   await loadAnalytics();
   window.gtag?.('event', eventName, parameters);

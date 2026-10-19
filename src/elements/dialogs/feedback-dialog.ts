@@ -1,3 +1,4 @@
+import { speakersPreview } from '../../utils/speakers-preview';
 import { Success } from '@abraham/remotedata';
 import '@material/web/button/outlined-button.js';
 import { Dialog } from '@material/mwc-dialog';
@@ -16,8 +17,15 @@ import '../feedback-block';
 import '../shared-styles';
 
 class FeedbackDialog extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
+      <style>
+        :host([local-preview]) {
+          display: none !important;
+        }
+      </style>
       <style include="shared-styles flex flex-alignment">
         :host {
           display: block;
@@ -56,6 +64,7 @@ class FeedbackDialog extends ReduxMixin(PolymerElement) {
 
   override ready() {
     super.ready();
+    if (speakersPreview) this.setAttribute('local-preview', '');
     this.dialog.addEventListener('closed', () => closeDialog());
   }
 

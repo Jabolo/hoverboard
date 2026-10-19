@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { Dispatch } from 'redux';
 import { store } from '..';
@@ -13,6 +14,7 @@ import {
 } from './types';
 
 const setNotificationsSubscribersDoc = async (token: string): Promise<void> => {
+  assertPreviewWritesDisabled();
   await setDoc(doc(db, 'notificationsSubscribers', token), {
     value: true,
     updatedAt: Timestamp.now(),
@@ -20,6 +22,7 @@ const setNotificationsSubscribersDoc = async (token: string): Promise<void> => {
 };
 
 const removeNotificationsSubscribersDoc = async (token: string): Promise<void> => {
+  assertPreviewWritesDisabled();
   await deleteDoc(doc(db, 'notificationsSubscribers', token));
 };
 

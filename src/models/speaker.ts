@@ -8,6 +8,7 @@ export interface SpeakerData {
   company: string;
   companyLogo: string;
   companyLogoUrl: string;
+  companyLogoBackground?: 'light' | 'dark';
   country: string;
   featured: boolean;
   name: string;

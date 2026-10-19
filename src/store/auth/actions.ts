@@ -1,3 +1,4 @@
+import { speakersPreview, assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { FirebaseError } from 'firebase/app';
 import {
   AuthError,
@@ -32,6 +33,7 @@ import {
 const auth = getAuth(firebaseApp);
 
 export const signIn = async (providerId: PROVIDER) => {
+  assertPreviewWritesDisabled();
   store.dispatch<AuthActions>({ type: AUTH });
   const provider = getFederatedProvider(providerId);
 
@@ -60,6 +62,7 @@ const setAuthFailure = async (error: AuthError, credentialProviderId: PROVIDER) 
 };
 
 export const mergeAccounts = async (providerId: PROVIDER, pendingCredential: OAuthCredential) => {
+  assertPreviewWritesDisabled();
   const provider = getFederatedProvider(providerId);
 
   try {
@@ -76,6 +79,7 @@ export const mergeAccounts = async (providerId: PROVIDER, pendingCredential: OAu
 };
 
 export const onUser = () => {
+  if (speakersPreview) return;
   onAuthStateChanged(auth, (user: FirebaseUser | null) => {
     if (user) {
       setUser(user);
@@ -92,4 +96,7 @@ export const onUser = () => {
 
 const unAuth = () => store.dispatch<AuthActions>({ type: UN_AUTH });
 
-export const signOut = () => firebaseSignOut(auth);
+export const signOut = () => {
+  assertPreviewWritesDisabled();
+  return firebaseSignOut(auth);
+};

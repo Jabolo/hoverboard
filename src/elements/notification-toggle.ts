@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import '@material/mwc-formfield';
 import '@material/mwc-switch';
@@ -34,8 +35,20 @@ import './shared-styles';
 
 @customElement('notification-toggle')
 export class NotificationToggle extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
+  override ready() {
+    super.ready();
+    if (speakersPreview) this.setAttribute('local-preview', '');
+  }
+
   static get template() {
     return html`
+      <style>
+        :host([local-preview]) {
+          display: none !important;
+        }
+      </style>
       <style include="shared-styles flex flex-alignment positioning">
         .dropdown-panel {
           padding: 24px;

@@ -1,3 +1,4 @@
+import { assertPreviewWritesDisabled } from '../../utils/speakers-preview';
 import { doc, setDoc } from 'firebase/firestore';
 import { Dispatch } from 'redux';
 import { db } from '../../firebase';
@@ -10,6 +11,7 @@ import {
 } from './types';
 
 const setPartner = async (data: DialogData) => {
+  assertPreviewWritesDisabled();
   const id = data.email.replace(/[^\w\s]/gi, '');
   const partner = {
     email: data.email,

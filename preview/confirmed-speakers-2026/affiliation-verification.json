@@ -1,0 +1,58 @@
+{
+  "status": "COMPLETE with one explicitly recorded asset gap",
+  "scope": "Local-only company logos and independent GDE badges; no publication",
+  "previewUrl": "http://localhost:5002/speakers",
+  "counts": {
+    "speakers": 12,
+    "sessions": 8,
+    "companyLogos": 11,
+    "uniqueCompanyLogos": 9,
+    "gdeBadges": 4
+  },
+  "gdeSpeakers": ["calgan-aygun", "dominika-zajac", "yonatan-levin", "adrian-romanski"],
+  "checks": {
+    "desktopListing": "12 affiliations, 11 logos loaded, 4 GDE badges",
+    "mobileListing": "Same counts; all images loaded; no horizontal overflow at 393px",
+    "homepage": "4 featured cards; company logos and GDE independently rendered",
+    "profile": "FinalCheck logo and GDE together; image loaded; mobile screenshot inspected",
+    "session": "Embedded speaker retains logo and GDE; mobile no overflow",
+    "logoRequests": "All 9 unique logo URLs returned HTTP 200",
+    "tests": "92 passed, 5 skipped; 34 suites passed, 1 skipped",
+    "lint": "Passed; 65 existing warnings, zero errors",
+    "normalBuild": "Passed; no preview assets or fixture strings in dist",
+    "previewBuild": "Passed",
+    "designDetector": "Zero findings",
+    "gitDiffCheck": "Passed",
+    "network": "No observed Firestore Write/commit/batchWrite, auth or analytics calls; unrelated Firestore Listen connection failure observed, programme remained available locally",
+    "productionBaseline": "Homepage, speakers page and all 3 generated collections unchanged by SHA256"
+  },
+  "assetGaps": [
+    {
+      "speaker": "yonatan-levin",
+      "company": "Wild",
+      "reason": "CFP says Wild. Signed-in LinkedIn says Stealth Startup and links to a generic startup community, not an identifiable Wild brand. Retained CFP text; no unrelated logo."
+    }
+  ],
+  "sources": ["affiliation-sources.json", "logo-sources.json"],
+  "documents": {
+    "sourceOfTruth": "Unresolved speaker-company branding — 19 October 2026",
+    "program": "Local preview company logos and GDE recognition — 19 October 2026"
+  },
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "head": "28d2ef36c3dde8d70eb9f2cd9aaac191d86e7442",
+    "upstream": null,
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "preserved": "Existing preview, community-partner and speaker-archive work"
+  },
+  "children": "Both research agents finished; no running children",
+  "screenshots": [
+    "evidence/affiliations-home-desktop.png",
+    "evidence/affiliations-list-desktop.png",
+    "evidence/affiliations-list-mobile.png",
+    "evidence/affiliations-profile-mobile.png",
+    "evidence/affiliations-session-mobile.png"
+  ]
+}

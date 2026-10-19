@@ -14,7 +14,7 @@
     />
     <meta content="{{ keywords }}" name="keywords" />
     <meta
-      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      content="{% if SPEAKERS_PREVIEW %}noindex, nofollow{% else %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endif %}"
       name="robots"
     />
     <meta content="{{ organizer.name }}" name="author" />
@@ -167,10 +167,14 @@
       };
     </script>
 
+    {% if not SPEAKERS_PREVIEW %}
     <script src="/__/firebase/init.js"></script>
+    {% endif %}
     <script src="./src/hoverboard-app.ts" type="module"></script>
     <script src="./src/components/app-install.ts" type="module"></script>
+    {% if not SPEAKERS_PREVIEW %}
     <script src="./src/service-worker-registration.ts" type="module"></script>
+    {% endif %}
 
     <style>
       html,
@@ -186,6 +190,23 @@
           'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         font-size: 16px;
         line-height: 1.5;
+      }
+
+      .local-preview-banner {
+        position: fixed;
+        z-index: 10000;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: calc(100% - 24px);
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #fbbc04;
+        color: #202124;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
       }
 
       *,
@@ -211,6 +232,11 @@
   </head>
 
   <body>
+    {% if SPEAKERS_PREVIEW %}
+    <aside class="local-preview-banner" role="status">
+      Local preview · Confirmed speakers and sessions · Schedule unpublished
+    </aside>
+    {% endif %}
     <hoverboard-app unresolved>{{ title }}</hoverboard-app>
 
     <noscript>

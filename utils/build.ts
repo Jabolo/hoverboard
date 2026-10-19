@@ -3,7 +3,7 @@ import fs from 'fs';
 
 type Data = typeof import('../public/data/resources.json') &
   typeof import('../public/data/settings.json') &
-  typeof import('../config/production.json') & { NODE_ENV: string };
+  typeof import('../config/production.json') & { NODE_ENV: string; SPEAKERS_PREVIEW: boolean };
 
 const { BUILD_ENV, NODE_ENV, ROLLUP_WATCH } = process.env;
 export const production = NODE_ENV === 'production';
@@ -40,6 +40,7 @@ const getData = (): Data => {
 
   return settingsFiles.reduce(combineSettings, {
     NODE_ENV: NODE_ENV || 'production',
+    SPEAKERS_PREVIEW: process.env['SPEAKERS_PREVIEW'] === '1',
   }) as Data;
 };
 

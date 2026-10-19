@@ -1,0 +1,165 @@
+{
+  "retrievedOn": "2026-10-19",
+  "mode": "local-only; not approved for public release",
+  "sheet": "https://docs.google.com/spreadsheets/d/1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q/edit",
+  "sourceOfTruth": "https://docs.google.com/document/d/1-L1DovdZVSOnbUBS37HYgYleQBrcKZvp9uDbULqh2lM/edit",
+  "program": "https://docs.google.com/document/d/1gDnC_pmoWnefXySGpypvNfbA0QUcvZmTT0-XF_T58D0/edit",
+  "selection": [
+    {
+      "row": 2,
+      "speakerId": "calgan-aygun",
+      "programmeId": "CFP-002",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 12,
+      "speakerId": "andrii-khrystian",
+      "programmeId": "CFP-012",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 14,
+      "speakerId": "ivan-lapa",
+      "programmeId": "CFP-014",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 21,
+      "speakerId": "yonatan-levin",
+      "programmeId": "CFP-021",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 34,
+      "speakerId": "hasan-rafiq",
+      "programmeId": "CFP-034",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 50,
+      "speakerId": "dominika-zajac",
+      "programmeId": "CFP-050",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    },
+    {
+      "row": 51,
+      "speakerId": "dmytro-nedvetskyi",
+      "programmeId": "PANEL-01",
+      "status": "Confirmed",
+      "basis": "Explicit organiser confirmation in this chat; stale Accepted sheet label superseded"
+    },
+    {
+      "row": 52,
+      "speakerId": "yaroslav-polyakov",
+      "programmeId": "PANEL-01",
+      "status": "Confirmed",
+      "basis": "Explicit organiser confirmation in this chat; stale Accepted sheet label superseded"
+    },
+    {
+      "row": 53,
+      "speakerId": "sergiy-mokiyenko",
+      "programmeId": "PANEL-01",
+      "status": "Confirmed",
+      "basis": "Explicit organiser confirmation in this chat; stale Accepted sheet label superseded"
+    },
+    {
+      "row": 54,
+      "speakerId": "serhii-kasianchuk",
+      "programmeId": "PANEL-01",
+      "status": "Confirmed",
+      "basis": "Explicit organiser confirmation in this chat; stale Accepted sheet label superseded"
+    },
+    {
+      "row": 55,
+      "speakerId": "viacheslav-miroshnychenko",
+      "programmeId": "PANEL-01",
+      "status": "Confirmed",
+      "basis": "Explicit organiser confirmation in this chat; stale Accepted sheet label superseded"
+    },
+    {
+      "row": 56,
+      "speakerId": "adrian-romanski",
+      "programmeId": "INVITED-001",
+      "status": "Confirmed",
+      "basis": "Live sheet Confirmed"
+    }
+  ],
+  "advocuVerified": [
+    {
+      "speakerId": "calgan-aygun",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6ab64d7d66f6c255eaab56ae",
+      "photo": "https://lh3.googleusercontent.com/a/AAcHTtc4PBjXam2Cpcq0dA3wX-Vjjwm4BYEqzQL72xA4eDsuTac=s96-c",
+      "photoUsed": true
+    },
+    {
+      "speakerId": "andrii-khrystian",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6aba0f219716fe1c1a4d20b5",
+      "photo": "https://lh3.googleusercontent.com/a/ACg8ocJ7Ia22NdzLOKkdC5nQLr6Okt8H1FUUwxEpsh-wTjs0ZGXbl5bW=s96-c",
+      "photoUsed": true
+    },
+    {
+      "speakerId": "ivan-lapa",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6aa829110c0c4153dcacbec3",
+      "photo": null,
+      "photoUsed": false
+    },
+    {
+      "speakerId": "yonatan-levin",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6abeae4b5d626a558ccd6922",
+      "photo": "https://lh3.googleusercontent.com/a-/AFdZucrfHqpqNv_adHX07I7QwBsxTGi-nMW5iqwUbQpiaPQ=s96-c",
+      "photoUsed": true
+    },
+    {
+      "speakerId": "hasan-rafiq",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6ac1ea961db70629779e54d4",
+      "photo": null,
+      "photoUsed": false
+    },
+    {
+      "speakerId": "dominika-zajac",
+      "proposal": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6ac276f13b5fb933c2607c2d",
+      "photo": "https://storage.googleapis.com/advocu-app/images/6597d5c3b52eaef4e46a602e/avatar-images/1cf08910-ee2e-4ae0-8e70-a50dccef19a4",
+      "photoUsed": false
+    }
+  ],
+  "additionalPortraitEvidence": "portrait-sources.json",
+  "existingPortraits": [
+    {
+      "speakerId": "yaroslav-polyakov",
+      "path": "public/images/previous-speakers/people/yaroslav-polyakov.jpg",
+      "basis": "Existing identity-matched Warsaw DevFest archive portrait; preserved archive unchanged"
+    },
+    {
+      "speakerId": "dominika-zajac",
+      "path": "public/images/previous-speakers/people/dominika-zajac.png",
+      "basis": "Existing identity-matched archive portrait. Advocu's original image served as application/octet-stream; browser asset export rejected it. Existing verified portrait used as fallback."
+    }
+  ],
+  "decisions": [
+    "12 confirmed people, 8 sessions; PANEL-01 deduplicated across five participant rows.",
+    "Adrian uses live sheet row 56 title/abstract; older Program Doc wording superseded for this preview.",
+    "No room, track, time, date or schedule records imported.",
+    "Submitted language and audience-level choices are preserved as provided; not a final timetable assignment."
+  ],
+  "gaps": [
+    {
+      "speakerIds": ["calgan-aygun", "yonatan-levin"],
+      "field": "portraitResolution",
+      "detail": "Advocu Google avatars are 96x96."
+    },
+    {
+      "speakerId": "ivan-lapa",
+      "field": "portraitResolution",
+      "detail": "Verified portrait is 112x112."
+    }
+  ],
+  "privacy": "No emails, review text/scores, travel or communication notes in preview fixtures.",
+  "profileRefresh": "linkedin-profile-sources.json",
+  "portraitRefresh": "19 October 2026: Andrii and Viacheslav now use verified local LinkedIn portraits; original unused source files retained."
+}

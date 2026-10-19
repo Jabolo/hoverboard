@@ -1,3 +1,4 @@
+import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -6,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import { RouterLocation } from '@vaadin/router';
 import '../components/hero/simple-hero';
+import '../components/speaker-affiliations';
 import '../components/markdown/short-markdown';
 import '../elements/content-loader';
 import '../elements/previous-speakers-block';
@@ -17,7 +19,6 @@ import { ReduxMixin } from '../store/mixin';
 import { fetchSpeakers } from '../store/speakers/actions';
 import { selectSpeaker } from '../store/speakers/selectors';
 import { initialSpeakersState, SpeakersState } from '../store/speakers/state';
-import { isEmpty } from '../utils/arrays';
 import { speakerDetails } from '../utils/data';
 import '../utils/icons';
 import { updateImageMetadata } from '../utils/metadata';
@@ -25,6 +26,8 @@ import { getVariableColor } from '../utils/styles';
 
 @customElement('speaker-page')
 export class SpeakerPage extends ReduxMixin(PolymerElement) {
+  private speakersPreview = speakersPreview;
+
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
@@ -65,9 +68,37 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           line-height: 1.2;
         }
 
-        .subtitle {
+        .professional-role {
+          margin-top: 8px;
+          color: var(--terminal-copy, var(--primary-text-color));
           font-size: 16px;
-          color: var(--google-green);
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .professional-company {
+          margin-top: 2px;
+          color: var(--terminal-green);
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 1.5;
+          overflow-wrap: anywhere;
+        }
+
+        .professional-highlight {
+          margin: 24px 0 16px;
+          max-width: 65ch;
+          color: var(--terminal-copy);
+          font-size: 16px;
+          line-height: 1.6;
+          overflow-wrap: anywhere;
+        }
+
+        .subtitle {
+          margin-top: 8px;
+          font-size: 13px;
+          color: var(--terminal-muted);
           font-family: var(--font-mono, monospace);
         }
 
@@ -159,12 +190,20 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <simple-hero page="speakers">
+      <simple-hero page="speakers" hide-description$="[[speakersPreview]]">
         <div class="dialog-container header-content" layout horizontal center>
           <lazy-image class="photo" src="[[speaker.photoUrl]]" alt="[[speaker.name]]"></lazy-image>
           <div>
             <h2 class="name" flex>[[speaker.name]]</h2>
-            <div class="subtitle">[[subtitle]]</div>
+            <template is="dom-if" if="[[speaker.title]]">
+              <div class="professional-role">[[speaker.title]]</div>
+            </template>
+            <template is="dom-if" if="[[speaker.company]]">
+              <div class="professional-company">[[speaker.company]]</div>
+            </template>
+            <template is="dom-if" if="[[subtitle]]">
+              <div class="subtitle">[[subtitle]]</div>
+            </template>
           </div>
         </div>
       </simple-hero>
@@ -183,22 +222,25 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
       ></content-loader>
 
       <div class="container content">
-        <h3 class="meta-info">[[companyInfo]]</h3>
-        <h3 class="meta-info" hidden$="[[isEmpty(speaker.badges)]]">
-          <template is="dom-repeat" items="[[speaker.badges]]" as="badge">
-            <a
-              class="badge"
-              href$="[[badge.link]]"
-              target="_blank"
-              rel="noopener noreferrer"
-              title$="[[badge.description]]"
-            >
-              [[badge.description]]
-            </a>
-          </template>
-        </h3>
+        <template
+          is="dom-if"
+          if="[[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]"
+        >
+          <p class="professional-highlight">
+            [[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]
+          </p>
+        </template>
+        <speaker-affiliations
+          company="[[speaker.company]]"
+          logo-url="[[speaker.companyLogoUrl]]"
+          logo-background="[[speaker.companyLogoBackground]]"
+          badges="[[speaker.badges]]"
+          align="start"
+        ></speaker-affiliations>
 
-        <short-markdown class="description" content="[[speaker.bio]]"></short-markdown>
+        <template is="dom-if" if="[[speaker.bio]]">
+          <short-markdown class="description" content="[[speaker.bio]]"></short-markdown>
+        </template>
 
         <div class="actions" layout horizontal>
           <template is="dom-repeat" items="[[speaker.socials]]" as="social">
@@ -251,8 +293,6 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
   private speakerId: string | undefined;
   @property({ type: String, computed: 'computeJoin(speaker.country, speaker.pronouns)' })
   private subtitle: string = '';
-  @property({ type: String, computed: 'computeCompanyInfo(speaker.title, speaker.company)' })
-  private companyInfo: string = '';
 
   override stateChanged(state: RootState) {
     super.stateChanged(state);
@@ -295,16 +335,21 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
     return values.filter(Boolean).join(' • ');
   }
 
-  private computeCompanyInfo(title: string, company: string) {
-    return [title, company].filter(Boolean).join(', ');
+  private professionalHighlight(shortBio = '', title = '', company = '') {
+    const normalize = (value: string) =>
+      value
+        .trim()
+        .toLocaleLowerCase()
+        .replace(/[\s,|·–—-]+/g, ' ');
+    const highlight = shortBio.trim();
+    const repeated = [title, company, `${title} at ${company}`, `${title} ${company}`].map(
+      normalize,
+    );
+    return highlight && !repeated.includes(normalize(highlight)) ? highlight : '';
   }
 
   private getVariableColor(value: string) {
     return getVariableColor(this as unknown as PolymerElement, value);
-  }
-
-  private isEmpty(items: unknown[]) {
-    return isEmpty(items);
   }
 
   sessionUrl(id: string) {

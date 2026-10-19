@@ -1,0 +1,546 @@
+{
+  "status": "COMPLETE",
+  "scope": "Local confirmed-speaker preview only; public publication not authorised.",
+  "previewUrl": "http://localhost:5002/speakers",
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "head": "28d2ef36c3dde8d70eb9f2cd9aaac191d86e7442",
+    "baseBranch": "preview/community-partners-2026",
+    "origin": "https://github.com/Jabolo/hoverboard.git",
+    "upstream": null,
+    "changes": "Uncommitted implementation and new preview files; no pre-existing changes were present; existing partner/archive files preserved.",
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  },
+  "acceptance": {
+    "speakers": 12,
+    "sessions": 8,
+    "panelSessions": 1,
+    "panelParticipants": 5,
+    "desktopProfiles": [
+      {
+        "id": "calgan-aygun",
+        "name": "Çalgan Aygün",
+        "links": ["/sessions/CFP-002"],
+        "photoSource": "/preview/speakers/calgan-aygun.jpg",
+        "loaded": true
+      },
+      {
+        "id": "andrii-khrystian",
+        "name": "Andrii Khrystian",
+        "links": ["/sessions/CFP-012"],
+        "photoSource": "/preview/speakers/andrii-khrystian.jpg",
+        "loaded": true
+      },
+      {
+        "id": "ivan-lapa",
+        "name": "Ivan Lapa",
+        "links": ["/sessions/CFP-014"],
+        "photoSource": "/preview/speakers/ivan-lapa.jpg",
+        "loaded": true
+      },
+      {
+        "id": "yonatan-levin",
+        "name": "Yonatan Levin",
+        "links": ["/sessions/CFP-021"],
+        "photoSource": "/preview/speakers/yonatan-levin.gif",
+        "loaded": true
+      },
+      {
+        "id": "hasan-rafiq",
+        "name": "Hasan Rafiq",
+        "links": ["/sessions/CFP-034"],
+        "photoSource": "/preview/speakers/hasan-rafiq.png",
+        "loaded": true
+      },
+      {
+        "id": "dominika-zajac",
+        "name": "Dominika Zając",
+        "links": ["/sessions/CFP-050"],
+        "photoSource": "/preview/speakers/dominika-zajac.png",
+        "loaded": true
+      },
+      {
+        "id": "dmytro-nedvetskyi",
+        "name": "Dmytro Nedvetskyi",
+        "links": ["/sessions/PANEL-01"],
+        "photoSource": "/preview/speakers/dmytro-nedvetskyi.jpg",
+        "loaded": true
+      },
+      {
+        "id": "yaroslav-polyakov",
+        "name": "Yaroslav Polyakov",
+        "links": ["/sessions/PANEL-01"],
+        "photoSource": "/preview/speakers/yaroslav-polyakov.jpg",
+        "loaded": true
+      },
+      {
+        "id": "sergiy-mokiyenko",
+        "name": "Sergiy Mokiyenko",
+        "links": ["/sessions/PANEL-01"],
+        "photoSource": "/preview/speakers/sergiy-mokiyenko.webp",
+        "loaded": true
+      },
+      {
+        "id": "serhii-kasianchuk",
+        "name": "Serhii Kasianchuk",
+        "links": ["/sessions/PANEL-01"],
+        "photoSource": "/preview/speakers/serhii-kasianchuk.svg",
+        "loaded": true
+      },
+      {
+        "id": "viacheslav-miroshnychenko",
+        "name": "Viacheslav Miroshnychenko",
+        "links": ["/sessions/PANEL-01"],
+        "photoSource": "/preview/speakers/viacheslav-miroshnychenko.svg",
+        "loaded": true
+      },
+      {
+        "id": "adrian-romanski",
+        "name": "Adrian Romański",
+        "links": ["/sessions/INVITED-001"],
+        "photoSource": "/preview/speakers/adrian-romanski.jpg",
+        "loaded": true
+      }
+    ],
+    "desktopSessions": [
+      {
+        "id": "CFP-002",
+        "title": "Event-Driven AI Pipelines on GCP: From Eventarc to LLMs",
+        "pageTitle": "Event-Driven AI Pipelines on GCP: From Eventarc to LLMs | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/calgan-aygun"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Intermediate",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "CFP-012",
+        "title": "The Physics of Voice: Building a Coach in Flutter with Whisper and Acoustic Analysis",
+        "pageTitle": "The Physics of Voice: Building a Coach in Flutter with Whisper and Acoustic Analysis | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/andrii-khrystian"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Beginner, Intermediate, Advance",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "CFP-014",
+        "title": "AI Code Review: Comparing Ready-Made Tools and Building Your Own",
+        "pageTitle": "AI Code Review: Comparing Ready-Made Tools and Building Your Own | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/ivan-lapa"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Advance, Intermediate, Beginner",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "CFP-021",
+        "title": "Written by Agents. Reviewed by Nobody. Running in Production",
+        "pageTitle": "Written by Agents. Reviewed by Nobody. Running in Production | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/yonatan-levin"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Intermediate, Beginner, Advance",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "CFP-034",
+        "title": "Beyond Prompt Engineering: Solving Complex Optimization Problems with AlphaEvolve",
+        "pageTitle": "Beyond Prompt Engineering: Solving Complex Optimization Problems with AlphaEvolve | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/hasan-rafiq"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Intermediate",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "CFP-050",
+        "title": "Stop Guessing, Start Debugging (with Antigravity & Chrome DevTools MCP)",
+        "pageTitle": "Stop Guessing, Start Debugging (with Antigravity & Chrome DevTools MCP) | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/dominika-zajac"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level: Beginner",
+            "visible": true
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "INVITED-001",
+        "title": "Stop Chatting with Your Docs — Architecting a Local-First AI Mind Coach in TypeScript with Gemma & Gemini Argon",
+        "pageTitle": "Stop Chatting with Your Docs — Architecting a Local-First AI Mind Coach in TypeScript with Gemma & Gemini Argon | GDG DevFest Warsaw 2026",
+        "links": ["/speakers/adrian-romanski"],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level:",
+            "visible": false
+          }
+        ],
+        "description": true
+      },
+      {
+        "id": "PANEL-01",
+        "title": "From 10x Coders to 10x Teams: Engineering Leadership with AI",
+        "pageTitle": "From 10x Coders to 10x Teams: Engineering Leadership with AI | GDG DevFest Warsaw 2026",
+        "links": [
+          "/speakers/dmytro-nedvetskyi",
+          "/speakers/yaroslav-polyakov",
+          "/speakers/sergiy-mokiyenko",
+          "/speakers/serhii-kasianchuk",
+          "/speakers/viacheslav-miroshnychenko"
+        ],
+        "timetableFields": [],
+        "meta": [
+          {
+            "text": ",  -",
+            "visible": false
+          },
+          {
+            "text": "",
+            "visible": false
+          },
+          {
+            "text": "Content level:",
+            "visible": false
+          }
+        ],
+        "description": true
+      }
+    ],
+    "mobileProfiles": [
+      {
+        "id": "calgan-aygun",
+        "name": "Çalgan Aygün",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-002"],
+        "loaded": true
+      },
+      {
+        "id": "andrii-khrystian",
+        "name": "Andrii Khrystian",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-012"],
+        "loaded": true
+      },
+      {
+        "id": "ivan-lapa",
+        "name": "Ivan Lapa",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-014"],
+        "loaded": true
+      },
+      {
+        "id": "yonatan-levin",
+        "name": "Yonatan Levin",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-021"],
+        "loaded": true
+      },
+      {
+        "id": "hasan-rafiq",
+        "name": "Hasan Rafiq",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-034"],
+        "loaded": true
+      },
+      {
+        "id": "dominika-zajac",
+        "name": "Dominika Zając",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/CFP-050"],
+        "loaded": true
+      },
+      {
+        "id": "dmytro-nedvetskyi",
+        "name": "Dmytro Nedvetskyi",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/PANEL-01"],
+        "loaded": true
+      },
+      {
+        "id": "yaroslav-polyakov",
+        "name": "Yaroslav Polyakov",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/PANEL-01"],
+        "loaded": true
+      },
+      {
+        "id": "sergiy-mokiyenko",
+        "name": "Sergiy Mokiyenko",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/PANEL-01"],
+        "loaded": true
+      },
+      {
+        "id": "serhii-kasianchuk",
+        "name": "Serhii Kasianchuk",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/PANEL-01"],
+        "loaded": true
+      },
+      {
+        "id": "viacheslav-miroshnychenko",
+        "name": "Viacheslav Miroshnychenko",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/PANEL-01"],
+        "loaded": true
+      },
+      {
+        "id": "adrian-romanski",
+        "name": "Adrian Romański",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/sessions/INVITED-001"],
+        "loaded": true
+      }
+    ],
+    "mobileSessions": [
+      {
+        "id": "CFP-002",
+        "title": "Event-Driven AI Pipelines on GCP: From Eventarc to LLMs",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/calgan-aygun"],
+        "timetableFields": []
+      },
+      {
+        "id": "CFP-012",
+        "title": "The Physics of Voice: Building a Coach in Flutter with Whisper and Acoustic Analysis",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/andrii-khrystian"],
+        "timetableFields": []
+      },
+      {
+        "id": "CFP-014",
+        "title": "AI Code Review: Comparing Ready-Made Tools and Building Your Own",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/ivan-lapa"],
+        "timetableFields": []
+      },
+      {
+        "id": "CFP-021",
+        "title": "Written by Agents. Reviewed by Nobody. Running in Production",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/yonatan-levin"],
+        "timetableFields": []
+      },
+      {
+        "id": "CFP-034",
+        "title": "Beyond Prompt Engineering: Solving Complex Optimization Problems with AlphaEvolve",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/hasan-rafiq"],
+        "timetableFields": []
+      },
+      {
+        "id": "CFP-050",
+        "title": "Stop Guessing, Start Debugging (with Antigravity & Chrome DevTools MCP)",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/dominika-zajac"],
+        "timetableFields": []
+      },
+      {
+        "id": "INVITED-001",
+        "title": "Stop Chatting with Your Docs — Architecting a Local-First AI Mind Coach in TypeScript with Gemma & Gemini Argon",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": ["/speakers/adrian-romanski"],
+        "timetableFields": []
+      },
+      {
+        "id": "PANEL-01",
+        "title": "From 10x Coders to 10x Teams: Engineering Leadership with AI",
+        "viewport": 393,
+        "scrollWidth": 393,
+        "links": [
+          "/speakers/dmytro-nedvetskyi",
+          "/speakers/yaroslav-polyakov",
+          "/speakers/sergiy-mokiyenko",
+          "/speakers/serhii-kasianchuk",
+          "/speakers/viacheslav-miroshnychenko"
+        ],
+        "timetableFields": []
+      }
+    ],
+    "allTwelvePhotosLoaded": true,
+    "emptyCompanyLogosNotRendered": true,
+    "schedule": {
+      "items": 0,
+      "unpublished": true,
+      "submissionLinkAbsent": true,
+      "copy": "The schedule is not published yet. Explore the confirmed speakers and their sessions."
+    },
+    "sourceStatusOverrides": "Panel participants confirmed by organiser in this chat; stale Accepted labels left unchanged in the sheet. Adrian uses current sheet row 56 copy.",
+    "failureHandling": {
+      "alert": "Local speaker preview failed: Preview data request failed (404). No production programme data was loaded.",
+      "cards": 0
+    },
+    "safety": {
+      "programmeData": "GET /preview/data.json",
+      "remoteRequests": "Only existing Firestore Listen channels for unrelated public content; no Write/Commit/BatchWrite/Functions/Auth/analytics endpoints observed.",
+      "operationalFirebase": "demo-devfest-speakers-preview; emulator endpoints; write guards",
+      "localServer": "GET/HEAD only; POST405; non-loopback Host403",
+      "normalBuild": "No preview directory, fixture, new portrait copies or preview banner. Production robots preserved.",
+      "productionBaseline": "Homepage, speakers HTML and three generated programme collections matched baseline byte-for-byte after verification."
+    },
+    "tests": {
+      "lint": "passed, existing warnings remain",
+      "passed": 87,
+      "skipped": 5,
+      "passedSuites": 33,
+      "skippedSuites": 1,
+      "productionBuild": "passed",
+      "previewBuild": "passed",
+      "diffCheck": "passed",
+      "finalStableBrowserConsoleErrors": 0,
+      "stressTestLimitation": "One transient unrelated Firestore read-backend connection error occurred during rapid full-page navigation; final stable checks had no console errors."
+    },
+    "documents": {
+      "section": "Local website preview: confirmed speakers — 19 October 2026",
+      "sourceOfTruth": "https://docs.google.com/document/d/1-L1DovdZVSOnbUBS37HYgYleQBrcKZvp9uDbULqh2lM",
+      "program": "https://docs.google.com/document/d/1gDnC_pmoWnefXySGpypvNfbA0QUcvZmTT0-XF_T58D0",
+      "readbackVerified": true,
+      "timetableAllocationsUnchanged": true
+    }
+  },
+  "limitations": {
+    "initialsInsteadOfPortraits": ["Serhii Kasianchuk", "Viacheslav Miroshnychenko"],
+    "missingBios": [
+      "Andrii Khrystian",
+      "Ivan Lapa",
+      "Hasan Rafiq",
+      "Dmytro Nedvetskyi",
+      "Yaroslav Polyakov",
+      "Sergiy Mokiyenko",
+      "Serhii Kasianchuk",
+      "Viacheslav Miroshnychenko"
+    ],
+    "smallPortraits": [
+      "Çalgan Aygün, Andrii Khrystian and Yonatan Levin: 96x96 Advocu avatars.",
+      "Ivan Lapa: 112x112 verified event portrait."
+    ],
+    "portraitFallback": "Dominika uses the verified existing archive portrait after Advocu's image export failed; source recorded in provenance.json.",
+    "publication": "Human review still required before any public publication."
+  },
+  "remainingWork": "No remaining local implementation work. Supply two missing portraits and optional biographies; review low-resolution photos before future publication.",
+  "children": [
+    {
+      "name": "preview_architecture",
+      "state": "COMPLETE"
+    },
+    {
+      "name": "implement_preview",
+      "state": "COMPLETE"
+    },
+    {
+      "name": "find_portraits",
+      "state": "Finished; PARTIAL source retrieval resolved with approved initials fallback"
+    }
+  ],
+  "sources": "provenance.json and portrait-sources.json",
+  "screenshots": [
+    "evidence/list-desktop.png",
+    "evidence/list-full-desktop.png",
+    "evidence/list-mobile.png",
+    "evidence/profile-mobile.png",
+    "evidence/panel-desktop.png",
+    "evidence/panel-mobile.png",
+    "evidence/missing-data.png"
+  ]
+}
