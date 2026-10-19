@@ -161,5 +161,9 @@
   ],
   "privacy": "No emails, review text/scores, travel or communication notes in preview fixtures.",
   "profileRefresh": "linkedin-profile-sources.json",
-  "portraitRefresh": "19 October 2026: Andrii and Viacheslav now use verified local LinkedIn portraits; original unused source files retained."
+  "portraitRefresh": "19 October 2026: Andrii and Viacheslav now use verified local LinkedIn portraits; original unused source files retained.",
+  "presentation": {
+    "countryLabels": false,
+    "basis": "Michał requested removal of country/nationality labels from speaker cards, profiles and linked session speaker rows on 19 October 2026. Preview fixture country fields are intentionally blank."
+  }
 }
