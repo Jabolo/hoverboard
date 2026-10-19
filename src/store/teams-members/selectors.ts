@@ -20,7 +20,10 @@ const mergeMembers = (team: TeamWithoutMembers, possibleMembers: Member[]): Team
             ...member,
             name: selected.name,
             order,
-            socials: [{ icon: 'gdg', name: 'GDG profile', link: selected.profileUrl }],
+            socials: [
+              { icon: 'gdg', name: 'GDG profile', link: selected.profileUrl },
+              ...selected.socials,
+            ],
           },
         ]
       : [];
