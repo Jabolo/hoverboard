@@ -60,7 +60,13 @@
       "id": "11",
       "name": "Anhelina Sudenkova",
       "profileUrl": "https://gdg.community.dev/u/angelina1/",
-      "socials": []
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/anhelina-sudenkova/"
+        }
+      ]
     },
     {
       "id": "4",

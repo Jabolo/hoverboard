@@ -35,7 +35,7 @@ describe('DevFest event team', () => {
     ).toBe(true);
   });
 
-  it('adds only published personal LinkedIn links and the owner-provided website', () => {
+  it('adds verified and owner-supplied personal links', () => {
     const members: Member[] = seed.team[0]!.members.map((member, index) => ({
       ...member,
       id: String(index),
@@ -49,12 +49,12 @@ describe('DevFest event team', () => {
     const displayed = result.data[0]!.members;
     expect(
       displayed.flatMap((member) => member.socials).filter((social) => social.icon === 'linkedin'),
-    ).toHaveLength(6);
+    ).toHaveLength(7);
     expect(
       displayed
         .find((member) => member.name === 'Anhelina Sudenkova')!
         .socials.map((social) => social.icon),
-    ).toEqual(['gdg']);
+    ).toEqual(['gdg', 'linkedin']);
     expect(displayed.find((member) => member.name === 'Michał Jabłoński')!.socials).toContainEqual({
       icon: 'website',
       name: 'Personal website',
