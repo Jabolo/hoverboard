@@ -1,0 +1,22 @@
+{
+  "status": "COMPLETE",
+  "preview": "https://gdg-warsaw-devfest26-web--speakers-review-2026-n0tp7s9u.web.app/speakers",
+  "deploymentCommit": "ea260518",
+  "change": "All 12 fixture country fields intentionally blank; cards, profiles and embedded session speakers omit country labels.",
+  "checks": [
+    "Preview build passed",
+    "Formatting and diff checks passed",
+    "Hosted fixture has 12 blank country fields and 8 sessions",
+    "Hosted listing has 12 cards and zero country label nodes",
+    "Yonatan profile has no country/subtitle",
+    "Production Hosting live release unchanged"
+  ],
+  "expiresAt": "2026-10-26T21:58:51+01:00",
+  "git": {
+    "branch": "preview/confirmed-speakers-2026",
+    "trackingBranch": null,
+    "pushed": false
+  },
+  "productionDeployed": false,
+  "children": "None active"
+}
