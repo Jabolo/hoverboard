@@ -1,5 +1,6 @@
 import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import { createSelector } from '@reduxjs/toolkit';
+import eventTeam from '../../../public/data/event-team.json';
 import { Member } from '../../models/member';
 import { Team, TeamWithoutMembers } from '../../models/team';
 import { selectMembers } from '../members/selectors';
@@ -9,12 +10,25 @@ import { TeamsState } from '../teams/state';
 import { TeamsMembersState } from './state';
 
 const mergeMembers = (team: TeamWithoutMembers, possibleMembers: Member[]): Team => {
-  const members = possibleMembers
-    .filter((member) => member.parentId === team.id)
-    .sort((left, right) => left.order - right.order);
+  const members = eventTeam.members.flatMap((selected, order) => {
+    const member = possibleMembers.find(
+      (candidate) => candidate.parentId === team.id && candidate.id === selected.id,
+    );
+    return member
+      ? [
+          {
+            ...member,
+            name: selected.name,
+            order,
+            socials: [{ icon: 'gdg', name: 'GDG profile', link: selected.profileUrl }],
+          },
+        ]
+      : [];
+  });
 
   return {
     ...team,
+    title: eventTeam.title,
     members,
   };
 };
@@ -24,7 +38,9 @@ export const selectTeamsAndMembers = createSelector(
   selectMembers,
   (teams: TeamsState, members: MembersState): TeamsMembersState => {
     if (teams instanceof Success && members instanceof Success) {
-      const merged = teams.data.map((team) => mergeMembers(team, members.data));
+      const merged = teams.data
+        .filter((team) => team.id === eventTeam.teamId)
+        .map((team) => mergeMembers(team, members.data));
       return new Success(merged);
     } else if (teams instanceof Pending || members instanceof Pending) {
       return new Pending();

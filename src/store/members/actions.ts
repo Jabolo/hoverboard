@@ -1,7 +1,8 @@
 import { Initialized, Success } from '@abraham/remotedata';
+import eventTeam from '../../../public/data/event-team.json';
 import { Dispatch } from 'redux';
 import { Member } from '../../models/member';
-import { subscribeToCollectionGroup, Subscription } from '../../utils/firestore';
+import { subscribeToCollection, Subscription } from '../../utils/firestore';
 import {
   FETCH_MEMBERS,
   FETCH_MEMBERS_FAILURE,
@@ -19,10 +20,14 @@ export const unsubscribe = () => {
 
 export const fetchMembers = async (dispatch: Dispatch<MembersActions>) => {
   if (subscription instanceof Initialized) {
-    subscription = subscribeToCollectionGroup(
-      'members',
+    subscription = subscribeToCollection(
+      `team/${eventTeam.teamId}/members`,
       () => dispatch({ type: FETCH_MEMBERS }),
-      (payload: Member[]) => dispatch({ type: FETCH_MEMBERS_SUCCESS, payload }),
+      (payload: Member[]) =>
+        dispatch({
+          type: FETCH_MEMBERS_SUCCESS,
+          payload: payload.map((member) => ({ ...member, parentId: eventTeam.teamId })),
+        }),
       (payload: Error) => dispatch({ type: FETCH_MEMBERS_FAILURE, payload }),
     );
   }

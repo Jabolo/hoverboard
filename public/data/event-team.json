@@ -1,0 +1,42 @@
+{
+  "teamId": "0",
+  "title": "DevFest Warsaw 2026 organizing team",
+  "sourceUrl": "https://gdg.community.dev/gdg-warszawa/",
+  "members": [
+    {
+      "id": "0",
+      "name": "Michał Jabłoński",
+      "profileUrl": "https://gdg.community.dev/u/mpwqe3/"
+    },
+    {
+      "id": "1",
+      "name": "Vatsal Patel",
+      "profileUrl": "https://gdg.community.dev/u/mrwpfx/"
+    },
+    {
+      "id": "3",
+      "name": "Viktoriia Vinnykova",
+      "profileUrl": "https://gdg.community.dev/u/mcxbxr/"
+    },
+    {
+      "id": "2",
+      "name": "Oleksandr Katrych",
+      "profileUrl": "https://gdg.community.dev/u/mjuxfk/"
+    },
+    {
+      "id": "11",
+      "name": "Anhelina Sudenkova",
+      "profileUrl": "https://gdg.community.dev/u/angelina1/"
+    },
+    {
+      "id": "4",
+      "name": "Maryna Kamienieva",
+      "profileUrl": "https://gdg.community.dev/u/m9pkp3/"
+    },
+    {
+      "id": "9",
+      "name": "Jakub Kołakowski",
+      "profileUrl": "https://gdg.community.dev/u/mwwkjv/"
+    }
+  ]
+}
