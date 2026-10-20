@@ -7,7 +7,9 @@ import process from 'node:process';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = resolve(root, 'preview/confirmed-speakers-2026');
-const output = resolve(root, 'dist-review');
+const comparison = process.argv.includes('--comparison');
+const channel = comparison ? 'cards-v2-2026' : 'speakers-review-2026';
+const output = resolve(root, comparison ? 'dist-review-v2' : 'dist-review');
 const data = JSON.parse(await readFile(resolve(source, 'data.json'), 'utf8'));
 if (
   Object.keys(data.speakers || {}).length !== 12 ||
@@ -33,7 +35,11 @@ const build = spawnSync(
   ['--config', 'rollup.config.ts', '--configPlugin', 'typescript'],
   {
     cwd: root,
-    env: { ...process.env, NODE_ENV: 'production', SPEAKERS_PREVIEW: 'review' },
+    env: {
+      ...process.env,
+      NODE_ENV: 'production',
+      SPEAKERS_PREVIEW: comparison ? 'comparison' : 'review',
+    },
     stdio: 'inherit',
   },
 );
@@ -55,6 +61,4 @@ await writeFile(resolve(output, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
 await rm(resolve(output, 'sitemap.xml'), { force: true });
 await rm(resolve(output, 'service-worker.js'), { force: true });
 await rm(resolve(output, 'firebase-messaging-sw.js'), { force: true });
-console.log(
-  'Review build ready in dist-review. Deployment permitted only to channel speakers-review-2026.',
-);
+console.log(`Review build ready in ${output}. Deployment permitted only to channel ${channel}.`);

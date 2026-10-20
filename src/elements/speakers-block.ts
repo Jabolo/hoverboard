@@ -7,6 +7,8 @@ import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/text-truncate';
 import '../components/speaker-affiliations';
+import '../components/speaker-session-links';
+import { curatedPreviewSpeakers } from '../utils/speaker-programme';
 import { Speaker } from '../models/speaker';
 import { router } from '../router';
 import { RootState, store } from '../store';
@@ -176,6 +178,14 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
             display: none;
           }
 
+          .speakers-wrapper[curated-preview] {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .speakers-wrapper[curated-preview] .speaker:last-of-type {
+            display: block;
+          }
+
           .badges {
             left: calc(50% + 32px);
           }
@@ -205,13 +215,21 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           .speaker:last-of-type {
             display: block;
           }
+
+          .speakers-wrapper[curated-preview] {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+          }
         }
       </style>
 
       <div class="container">
         <h2 class="container-title">[[speakersBlock.title]]</h2>
 
-        <div class="speakers-wrapper" hidden$="[[!hasSpeakers]]">
+        <div
+          class="speakers-wrapper"
+          curated-preview$="[[speakersPreview]]"
+          hidden$="[[!hasSpeakers]]"
+        >
           <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">
             <div class="speaker">
               <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
@@ -248,6 +266,10 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
                 logo-background="[[speaker.companyLogoBackground]]"
                 badges="[[speaker.badges]]"
               ></speaker-affiliations>
+              <speaker-session-links
+                sessions="[[speaker.sessions]]"
+                session-roles="[[speaker.sessionRoles]]"
+              ></speaker-session-links>
             </div>
           </template>
         </div>
@@ -295,7 +317,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
   private speakersBlock = speakersPreview
     ? {
         ...speakersBlock,
-        callToAction: { label: 'Meet the confirmed speakers', link: '/speakers' },
+        callToAction: { label: 'Meet all speakers', link: '/speakers' },
       }
     : speakersBlock;
 
@@ -316,6 +338,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
   get featuredSpeakers(): Speaker[] {
     if (this.speakers instanceof Success) {
       const { data } = this.speakers;
+      if (speakersPreview) return curatedPreviewSpeakers(data);
       const filteredSpeakers = data.filter((speaker) => speaker.featured);
       const randomSpeakers = randomOrder(filteredSpeakers.length ? filteredSpeakers : data);
       return randomSpeakers.slice(0, 4);

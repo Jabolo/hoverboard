@@ -9,6 +9,7 @@ import '@power-elements/lazy-image';
 import '../components/hero/simple-hero';
 import '../components/text-truncate';
 import '../components/speaker-affiliations';
+import '../components/speaker-session-links';
 import '../elements/content-loader';
 import '../elements/filter-menu';
 import '../elements/previous-speakers-block';
@@ -250,6 +251,11 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 ></speaker-affiliations>
               </div>
             </a>
+
+            <speaker-session-links
+              sessions="[[speaker.sessions]]"
+              session-roles="[[speaker.sessionRoles]]"
+            ></speaker-session-links>
 
             <div class="contacts">
               <template is="dom-repeat" items="[[speaker.socials]]" as="social">

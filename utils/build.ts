@@ -7,6 +7,7 @@ type Data = typeof import('../public/data/resources.json') &
     NODE_ENV: string;
     SPEAKERS_PREVIEW: boolean;
     SPEAKERS_REVIEW: boolean;
+    SPEAKERS_COMPARISON: boolean;
   };
 
 const { BUILD_ENV, NODE_ENV, ROLLUP_WATCH } = process.env;
@@ -44,8 +45,9 @@ const getData = (): Data => {
 
   return settingsFiles.reduce(combineSettings, {
     NODE_ENV: NODE_ENV || 'production',
-    SPEAKERS_PREVIEW: ['1', 'review'].includes(process.env['SPEAKERS_PREVIEW'] || ''),
-    SPEAKERS_REVIEW: process.env['SPEAKERS_PREVIEW'] === 'review',
+    SPEAKERS_PREVIEW: ['1', 'review', 'comparison'].includes(process.env['SPEAKERS_PREVIEW'] || ''),
+    SPEAKERS_REVIEW: ['review', 'comparison'].includes(process.env['SPEAKERS_PREVIEW'] || ''),
+    SPEAKERS_COMPARISON: process.env['SPEAKERS_PREVIEW'] === 'comparison',
   }) as Data;
 };
 

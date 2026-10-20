@@ -169,6 +169,14 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           line-height: 1.5;
         }
 
+        .panel-role {
+          margin-top: 4px;
+          color: var(--terminal-green, var(--primary-text-color));
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+        }
+
         .section-secondary-text {
           margin-top: 2px;
           color: var(--terminal-muted);
@@ -315,7 +323,7 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
         </div>
 
         <div class="additional-sections" hidden$="[[!session.speakers.length]]">
-          <h3>[[sessionDetails.speakers]]</h3>
+          <h3>[[participantsHeading(session.id)]]</h3>
           <template is="dom-repeat" items="[[session.speakers]]" as="speaker">
             <a class="section" href$="[[speakerUrl(speaker.id)]]">
               <div layout horizontal center>
@@ -327,6 +335,9 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
                 <div class="section-details" flex>
                   <div class="section-primary-text">[[speaker.name]]</div>
+                  <template is="dom-if" if="[[panelRole(session.id, speaker.sessionRoles)]]">
+                    <div class="panel-role">[[panelRole(session.id, speaker.sessionRoles)]]</div>
+                  </template>
                   <template is="dom-if" if="[[speaker.title]]">
                     <div class="section-role">[[speaker.title]]</div>
                   </template>
@@ -374,6 +385,16 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
   private previewActionsStyle(preview: boolean) {
     return preview ? 'display:none' : '';
+  }
+
+  private participantsHeading(sessionId: string) {
+    return sessionId === 'PANEL-01' ? 'Moderator and panellists' : sessionDetails.speakers;
+  }
+
+  private panelRole(sessionId: string, roles?: Record<string, 'Moderator' | 'Panellist'>) {
+    if (sessionId !== 'PANEL-01') return '';
+    const role = roles?.[sessionId];
+    return role === 'Moderator' || role === 'Panellist' ? role : '';
   }
 
   private speakerAffiliation(company: string, country: string) {

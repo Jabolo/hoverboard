@@ -19,6 +19,7 @@ export default [
       'dist/**',
       'dist-preview/**',
       'dist-review/**',
+      'dist-review-v2/**',
       'node_modules/**',
       'functions/dist/**',
       'public/**',

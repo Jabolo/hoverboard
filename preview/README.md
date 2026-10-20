@@ -13,8 +13,8 @@ the data. Only data.json, portraits and company logos are copied to the preview 
 The 19 October LinkedIn review of all 12 speakers is recorded in
 `confirmed-speakers-2026/linkedin-profile-sources.json`. Cards show the current
 public professional role, company and an editorial highlight; profiles show a
-source-backed third-person biography and a verified LinkedIn link. The existing
-Wild/Stealth Startup company discrepancy remains recorded for organiser review.
+source-backed third-person biography and a verified LinkedIn link. On 20 October, the organiser selected Stealth Startup for Yonatan, using his
+current LinkedIn identity. A distinct verified company logo is unavailable.
 
 The adapter requires 12 speakers and 8 sessions, validates references and local
 portrait URLs, embeds speakers on sessions, and links sessions back to speakers.
@@ -64,3 +64,19 @@ The URL is accessible to anyone who has it, expires after seven days, and is mar
 noindex. It keeps local speaker/session fixtures, an empty schedule, disabled
 analytics, and blocked account/bookmark/newsletter writes. Other public event
 content uses existing read subscriptions. No production programme data is imported.
+
+## Speaker card comparison (20 October 2026)
+
+`npm run build:speakers-comparison` creates `dist-review-v2/`, gated to the
+`cards-v2-2026` channel hostname. It keeps the original review channel intact.
+After all implementation and verification are complete, deploy only with:
+
+```sh
+node_modules/.bin/firebase hosting:channel:deploy cards-v2-2026 --config firebase.speakers-comparison.json --project gdg-warsaw-devfest26-web --expires 7d --no-authorized-domains
+```
+
+The comparison adds linked session titles on cards, panel participation roles,
+short highlights, 800×800 LinkedIn portraits for Ivan and Çalgan, Yonatan’s
+selected current company, and a stable featured homepage selection. Source
+portrait files are retained; current provenance is in `portrait-v2-sources.json`.
+No schedule or production publication is authorised by this comparison.

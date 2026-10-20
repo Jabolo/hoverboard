@@ -1,6 +1,7 @@
 import { Badge } from './badge';
 import { Social } from './social';
 import { Id } from './types';
+import type { Session } from './session';
 
 export interface SpeakerData {
   badges?: Badge[];
@@ -19,6 +20,8 @@ export interface SpeakerData {
   shortBio: string;
   socials: Social[];
   title: string;
+  sessions?: Session[];
+  sessionRoles?: Record<string, 'Moderator' | 'Panellist'>;
 }
 
 export type Speaker = Id & SpeakerData;

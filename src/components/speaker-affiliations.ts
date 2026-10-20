@@ -51,7 +51,6 @@ export class SpeakerAffiliations extends LitElement {
       height: 100%;
       object-fit: contain;
     }
-    .company-name,
     .recognition {
       display: inline-flex;
       align-items: center;
@@ -61,9 +60,6 @@ export class SpeakerAffiliations extends LitElement {
       font-size: 13px;
       line-height: 1.35;
       text-align: left;
-    }
-    .company-name {
-      font-weight: 600;
     }
     .recognition {
       padding: 6px 8px;
@@ -89,16 +85,15 @@ export class SpeakerAffiliations extends LitElement {
 
   override render() {
     const badges = this.badges || [];
-    if (!this.company && !badges.length) return nothing;
+    const hasCompanyLogo = !!(this.company && this.logoUrl);
+    if (!hasCompanyLogo && !badges.length) return nothing;
     return html`
       <div class="affiliations" role="group" aria-label="Company and community recognition">
         ${
-          this.company
-            ? this.logoUrl
-              ? html`<span class="company-mark ${this.logoBackground === 'dark' ? 'dark' : ''}">
-                  <img src=${this.logoUrl} alt=${`${this.company} logo`} />
-                </span>`
-              : html`<span class="company-name">${this.company}</span>`
+          hasCompanyLogo
+            ? html`<span class="company-mark ${this.logoBackground === 'dark' ? 'dark' : ''}">
+                <img src=${this.logoUrl} alt=${`${this.company} logo`} />
+              </span>`
             : nothing
         }
         ${badges.map(

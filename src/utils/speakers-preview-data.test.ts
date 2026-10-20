@@ -83,6 +83,17 @@ describe('local speaker preview mapping', () => {
     }
   });
 
+  it('isolates comparison builds from the original preview and production', () => {
+    const comparison = 'gdg-warsaw-devfest26-web--cards-v2-2026-abc123.web.app';
+    const original = 'gdg-warsaw-devfest26-web--speakers-review-2026-abc123.web.app';
+    expect(resolveSpeakersPreview('comparison', comparison)).toBe(true);
+    expect(() => resolveSpeakersPreview('review', comparison)).toThrow();
+    for (const host of [original, 'localhost', 'warsaw.devfest.pl', `${comparison}.evil.com`]) {
+      expect(() => resolveSpeakersPreview('comparison', host)).toThrow();
+    }
+    expect(resolveSpeakersPreview('0', comparison)).toBe(false);
+  });
+
   it('fails closed for preview flags on production, other channels and lookalikes', () => {
     const denied = [
       'warsaw.devfest.pl',
@@ -115,6 +126,7 @@ describe('local speaker preview mapping', () => {
   it('preserves company logos and GDE badges together, including embedded session speakers', () => {
     const data = source();
     data.speakers['alice']!.company = 'Qualtrics';
+    data.speakers['alice']!.sessionRoles = { 'PANEL-01': 'Moderator' };
     data.speakers['alice']!.companyLogoUrl = '/preview/logos/qualtrics.svg';
     data.speakers['alice']!.badges = [
       {
@@ -129,6 +141,7 @@ describe('local speaker preview mapping', () => {
       badges: [{ name: 'gde' }],
     });
     expect(generated.generatedSessions[0]?.speakers[0]).toMatchObject({
+      sessionRoles: { 'PANEL-01': 'Moderator' },
       companyLogoUrl: '/preview/logos/qualtrics.svg',
       badges: [{ name: 'gde' }],
     });

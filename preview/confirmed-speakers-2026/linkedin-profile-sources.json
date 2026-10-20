@@ -143,5 +143,12 @@
     "Yonatan: Wild brand unresolved against LinkedIn Stealth Startup",
     "Ivan: retained existing low-resolution verified portrait"
   ],
-  "boundaries": "No contact details, messages, follower or connection data, recommendations or sensitive personal data imported; no timetable changes"
+  "boundaries": "No contact details, messages, follower or connection data, recommendations or sensitive personal data imported; no timetable changes",
+  "comparisonDecision20261020": {
+    "speaker": "yonatan-levin",
+    "company": "Stealth Startup",
+    "basis": "Organiser explicitly selected current LinkedIn identity on 20 October 2026; supersedes earlier Wild retention and unresolved notes.",
+    "source": "https://www.linkedin.com/in/levinyonatan/",
+    "logo": "No distinct verified company logo available; text identity only."
+  }
 }

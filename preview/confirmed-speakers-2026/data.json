@@ -11,8 +11,8 @@
       "featured": true,
       "order": 0,
       "photo": "/preview/speakers/calgan-aygun.jpg",
-      "photoUrl": "/preview/speakers/calgan-aygun.jpg",
-      "shortBio": "Cloud architecture specialist and active technology community contributor.",
+      "photoUrl": "/preview/speakers/calgan-aygun-linkedin-v2.jpg",
+      "shortBio": "Cloud architecture and DevOps practitioner.",
       "socials": [
         {
           "icon": "github",
@@ -66,7 +66,7 @@
       "order": 1,
       "photo": "/preview/speakers/andrii-khrystian-linkedin.png",
       "photoUrl": "/preview/speakers/andrii-khrystian-linkedin.png",
-      "shortBio": "GDG Linz founder with over a decade of Android and cross-platform development experience.",
+      "shortBio": "GDG Linz founder · 10+ years in mobile development.",
       "socials": [
         {
           "icon": "linkedin",
@@ -87,8 +87,8 @@
       "featured": true,
       "order": 2,
       "photo": "/preview/speakers/ivan-lapa.jpg",
-      "photoUrl": "/preview/speakers/ivan-lapa.jpg",
-      "shortBio": "12 years in product engineering; consulted and trained teams across 20+ product companies.",
+      "photoUrl": "/preview/speakers/ivan-lapa-linkedin-v2.jpg",
+      "shortBio": "12 years in product engineering · AI adoption across 20+ companies.",
       "socials": [
         {
           "icon": "linkedin",
@@ -101,7 +101,7 @@
     "yonatan-levin": {
       "name": "Yonatan Levin",
       "bio": "Yonatan Levin is an AI engineering leader and Google Developer Expert in AI. At monday.com, he led Generative AI, Public API and mobile teams, building from a team of one and scaling engineering teams. He co-founded genetics startup KolGene and has helped build Android Academy since 2014, sharing knowledge with a community of more than 20,000 members. He speaks internationally about AI, software development and startups, with a focus on turning advanced technology into practical human value.",
-      "company": "Wild",
+      "company": "Stealth Startup",
       "title": "Head of AI",
       "country": "",
       "companyLogo": "",
@@ -110,7 +110,7 @@
       "order": 3,
       "photo": "/preview/speakers/yonatan-levin.gif",
       "photoUrl": "/preview/speakers/yonatan-levin.gif",
-      "shortBio": "Former monday.com GenAI, Public API and mobile team leader; Android Academy community builder.",
+      "shortBio": "Former monday.com GenAI leader · Android Academy co-leader.",
       "socials": [
         {
           "icon": "facebook",
@@ -168,7 +168,7 @@
       "order": 4,
       "photo": "/preview/speakers/hasan-rafiq.png",
       "photoUrl": "/preview/speakers/hasan-rafiq.png",
-      "shortBio": "Google AI engineer with 15+ years of cloud and machine learning experience across three regions.",
+      "shortBio": "Google AI · 15+ years in cloud and machine learning.",
       "socials": [
         {
           "icon": "linkedin",
@@ -190,7 +190,7 @@
       "order": 5,
       "photo": "/preview/speakers/dominika-zajac.png",
       "photoUrl": "/preview/speakers/dominika-zajac.png",
-      "shortBio": "Microsoft MVP in Web Technologies and accessibility specialist, speaker and mentor.",
+      "shortBio": "Microsoft MVP · Web accessibility and Chrome DevTools.",
       "socials": [
         {
           "icon": "website",
@@ -234,7 +234,7 @@
       "order": 6,
       "photo": "/preview/speakers/dmytro-nedvetskyi.jpg",
       "photoUrl": "/preview/speakers/dmytro-nedvetskyi.jpg",
-      "shortBio": "15+ years scaling engineering organisations; led eight teams delivering self-service AI platforms.",
+      "shortBio": "15+ years scaling teams and AI platforms.",
       "socials": [
         {
           "icon": "linkedin",
@@ -242,7 +242,10 @@
           "link": "https://www.linkedin.com/in/dmytronedvetskyi/"
         }
       ],
-      "companyLogoBackground": "light"
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Moderator"
+      }
     },
     "yaroslav-polyakov": {
       "name": "Yaroslav Polyakov",
@@ -256,7 +259,7 @@
       "order": 7,
       "photo": "/preview/speakers/yaroslav-polyakov.jpg",
       "photoUrl": "/preview/speakers/yaroslav-polyakov.jpg",
-      "shortBio": "BCS Fellow; led teams of up to 32 engineers and worked on products serving 100–180 million users.",
+      "shortBio": "BCS Fellow · AI leadership and large-scale products.",
       "socials": [
         {
           "icon": "linkedin",
@@ -264,7 +267,10 @@
           "link": "https://www.linkedin.com/in/poliak/"
         }
       ],
-      "companyLogoBackground": "light"
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
     },
     "sergiy-mokiyenko": {
       "name": "Sergiy Mokiyenko",
@@ -278,7 +284,7 @@
       "order": 8,
       "photo": "/preview/speakers/sergiy-mokiyenko.webp",
       "photoUrl": "/preview/speakers/sergiy-mokiyenko.webp",
-      "shortBio": "Mobile engineering leader who has built and led teams of 3–20 people across diverse product domains.",
+      "shortBio": "Mobile engineering leader · Product-minded teams.",
       "socials": [
         {
           "icon": "linkedin",
@@ -286,7 +292,10 @@
           "link": "https://www.linkedin.com/in/sergiy-mokiyenko-76891359/"
         }
       ],
-      "companyLogoBackground": "dark"
+      "companyLogoBackground": "dark",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
     },
     "serhii-kasianchuk": {
       "name": "Serhii Kasianchuk",
@@ -300,7 +309,7 @@
       "order": 9,
       "photo": "/preview/speakers/serhii-kasianchuk.jpg",
       "photoUrl": "/preview/speakers/serhii-kasianchuk.jpg",
-      "shortBio": "Leads Solidgate’s payments department, spanning multiple teams and payment orchestration.",
+      "shortBio": "Payments leadership · Distributed systems and orchestration.",
       "socials": [
         {
           "icon": "linkedin",
@@ -308,7 +317,10 @@
           "link": "https://www.linkedin.com/in/serhii-kasianchuk-b56896b2/"
         }
       ],
-      "companyLogoBackground": "light"
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
     },
     "viacheslav-miroshnychenko": {
       "name": "Viacheslav Miroshnychenko",
@@ -322,7 +334,7 @@
       "order": 10,
       "photo": "/preview/speakers/viacheslav-miroshnychenko.jpg",
       "photoUrl": "/preview/speakers/viacheslav-miroshnychenko.jpg",
-      "shortBio": "Former CTO at IT Resistance and team lead at Zendesk; builds teams and large-scale products.",
+      "shortBio": "Former CTO at IT Resistance · Former team lead at Zendesk.",
       "socials": [
         {
           "icon": "linkedin",
@@ -330,7 +342,10 @@
           "link": "https://www.linkedin.com/in/viacheslavmiroshnychenko/"
         }
       ],
-      "companyLogoBackground": "dark"
+      "companyLogoBackground": "dark",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
     },
     "adrian-romanski": {
       "name": "Adrian Romański",
@@ -344,7 +359,7 @@
       "order": 11,
       "photo": "/preview/speakers/adrian-romanski.jpg",
       "photoUrl": "/preview/speakers/adrian-romanski.jpg",
-      "shortBio": "Angular specialist and community organiser focused on accessibility, architecture and developer tooling.",
+      "shortBio": "Angular, accessibility and developer tooling.",
       "socials": [
         {
           "icon": "linkedin",

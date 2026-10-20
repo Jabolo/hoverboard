@@ -234,8 +234,8 @@
   <body>
     {% if SPEAKERS_PREVIEW %}
     <aside class="local-preview-banner" role="status">
-      {% if SPEAKERS_REVIEW %}Review preview{% else %}Local preview{% endif %} · Confirmed speakers
-      and sessions · Schedule unpublished
+      {% if SPEAKERS_COMPARISON %}Comparison preview{% elif SPEAKERS_REVIEW %}Review preview{% else
+      %}Local preview{% endif %} · Confirmed speakers and sessions · Schedule unpublished
     </aside>
     {% endif %}
     <hoverboard-app unresolved>{{ title }}</hoverboard-app>

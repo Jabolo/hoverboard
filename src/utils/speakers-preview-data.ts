@@ -41,6 +41,7 @@ export function generatePreviewData(source: PreviewSource): PreviewCollections {
       companyLogoUrl: raw.companyLogoUrl || '',
       companyLogoBackground: raw.companyLogoBackground === 'dark' ? 'dark' : 'light',
       country: raw.country || '',
+      sessionRoles: raw.sessionRoles || {},
       title: raw.title || '',
       photo: raw.photoUrl,
       photoUrl: raw.photoUrl,
@@ -97,6 +98,9 @@ export function isSpeakersPreview(buildFlag: string, hostname: string): boolean 
   if (buildFlag === '1') {
     return ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname);
   }
+  if (buildFlag === 'comparison') {
+    return /^gdg-warsaw-devfest26-web--cards-v2-2026-[a-z0-9]+\.web\.app$/.test(hostname);
+  }
   return (
     buildFlag === 'review' &&
     /^gdg-warsaw-devfest26-web--speakers-review-2026-[a-z0-9]+\.web\.app$/.test(hostname)
@@ -105,7 +109,7 @@ export function isSpeakersPreview(buildFlag: string, hostname: string): boolean 
 
 export function resolveSpeakersPreview(buildFlag: string, hostname: string): boolean {
   const enabled = isSpeakersPreview(buildFlag, hostname);
-  if ((buildFlag === '1' || buildFlag === 'review') && !enabled) {
+  if (['1', 'review', 'comparison'].includes(buildFlag) && !enabled) {
     throw new Error('Speaker review preview is not allowed on this host');
   }
   return enabled;

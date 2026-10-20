@@ -41,13 +41,21 @@ describe('speaker affiliations', () => {
     expect(shadowRoot.querySelector('.recognition')).toBeNull();
   });
 
-  it('keeps the company name when a logo is unavailable and still shows GDE', async () => {
+  it('omits duplicate company text when a logo is unavailable and still shows GDE', async () => {
     const { shadowRoot } = await fixture<SpeakerAffiliations>(html`
-      <speaker-affiliations company="Wild" .badges=${badges}></speaker-affiliations>
+      <speaker-affiliations company="Stealth Startup" .badges=${badges}></speaker-affiliations>
     `);
-    expect(shadowRoot.querySelector('.company-name')).toHaveTextContent('Wild');
+    expect(shadowRoot).not.toHaveTextContent('Stealth Startup');
     expect(shadowRoot.querySelector('img')).toBeNull();
     expect(shadowRoot.querySelector('.recognition')).toHaveTextContent('Google Developer Expert');
+  });
+
+  it('renders nothing for a company without a logo or recognition', async () => {
+    const { shadowRoot } = await fixture<SpeakerAffiliations>(html`
+      <speaker-affiliations company="Stealth Startup"></speaker-affiliations>
+    `);
+    expect(shadowRoot.querySelector('[role="group"]')).toBeNull();
+    expect(shadowRoot).not.toHaveTextContent('Stealth Startup');
   });
 
   it('supports a GDE without a company and renders nothing when both are absent', async () => {

@@ -183,6 +183,14 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           line-height: 1;
         }
 
+        .panel-role {
+          margin: 4px 0 8px;
+          color: var(--terminal-green, var(--primary-text-color));
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.5;
+        }
+
         paper-progress {
           width: 100%;
           --paper-progress-active-color: var(--default-primary-color);
@@ -258,6 +266,9 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
               <div layout horizontal center>
                 <div class="section-details" flex>
                   <div class="section-primary-text">[[session.title]]</div>
+                  <template is="dom-if" if="[[panelRole(session.id, speaker.sessionRoles)]]">
+                    <div class="panel-role">[[panelRole(session.id, speaker.sessionRoles)]]</div>
+                  </template>
                   <div class="section-secondary-text" hidden$="[[!session.dateReadable]]">
                     [[session.dateReadable]], [[session.startTime]] - [[session.endTime]]
                   </div>
@@ -333,6 +344,12 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
 
   private computeJoin(...values: string[]) {
     return values.filter(Boolean).join(' • ');
+  }
+
+  private panelRole(sessionId: string, roles?: Record<string, 'Moderator' | 'Panellist'>) {
+    if (sessionId !== 'PANEL-01') return '';
+    const role = roles?.[sessionId];
+    return role === 'Moderator' ? 'Panel moderator' : role === 'Panellist' ? 'Panellist' : '';
   }
 
   private professionalHighlight(shortBio = '', title = '', company = '') {
