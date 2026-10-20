@@ -156,7 +156,7 @@
     {
       "speakerId": "yonatan-levin",
       "field": "companyLogo",
-      "detail": "Organiser selected Stealth Startup; no distinct verified company mark. Show text once and keep GDE badge."
+      "detail": "Latest organiser decision: Wild / Head of AI from CFP. Exact Wild company website or logo identity remains unverified; awaiting brand link."
     }
   ],
   "privacy": "No emails, review text/scores, travel or communication notes in preview fixtures.",
@@ -179,5 +179,12 @@
     "sources": ["tomek-source.json", "tomek-asset-sources.json"],
     "verification": "tomek-verification.json",
     "scope": "New Hosting preview only; earlier previews and production preserved; yellow banner removed"
+  },
+  "yonatanLatestDecision": {
+    "date": "2026-10-20",
+    "company": "Wild",
+    "title": "Head of AI",
+    "basis": "Explicit organiser instruction to use supplied CFP data, superseding prior Stealth Startup decision",
+    "logo": "Pending exact company identity; no unrelated Wild brand mark used."
   }
 }

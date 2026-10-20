@@ -1,0 +1,21 @@
+{
+  "status": "PARTIAL",
+  "completed": "Yonatan Wild / Head of AI from explicit CFP decision, deployed and verified in latest preview; GDE preserved",
+  "preview": "https://gdg-warsaw-devfest26-web--speakers-tomek-2026-elnrgzia.web.app/speakers/yonatan-levin",
+  "sourceCommit": "a30d560d",
+  "checks": [
+    "Lint/types passed",
+    "108 tests passed,5 skipped",
+    "Hosted preview build passed",
+    "Hosted13/9 fixture and profile show Wild/Head of AI",
+    "Production and earlier2preview releases unchanged",
+    "No Git push or production data write"
+  ],
+  "remaining": "Need exact Wild company website or company-page link to verify and download its logo; question pending with organiser. CFP only says Wild, LinkedIn generic Stealth Startup and Sessionize links monday.com. No unrelated brand downloaded.",
+  "sources": [
+    "Explicit organiser CFP row in chat",
+    "https://www.linkedin.com/in/levinyonatan/",
+    "https://sessionize.com/yonatan-yoni-levin/"
+  ],
+  "children": "None spawned for this change"
+}
