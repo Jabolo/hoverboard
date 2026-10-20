@@ -1,0 +1,57 @@
+{
+  "status": "COMPLETE",
+  "date": "2026-10-20",
+  "sourceCommit": "4c86fc21",
+  "branch": "preview/speakers-tomek-2026",
+  "trackingBranch": null,
+  "gitPush": false,
+  "preview": "https://gdg-warsaw-devfest26-web--speakers-tomek-2026-elnrgzia.web.app",
+  "expiresAt": "2026-10-27T10:29:02.394461684Z",
+  "changes": [
+    "Confirmed Tomasz Porożyński, Staff ML Engineer at deepsense.ai",
+    "Original 800x800 LinkedIn portrait, official company wordmark and independently verified GDE badge",
+    "Biography and socials from matched Advocu/sheet/LinkedIn identity",
+    "Selected CFP-028 title/abstract, linked in both directions",
+    "Yellow fixed banner removed; failure alerts and all guards retained",
+    "Isolated tomek build/hostname/output/config; prior modes retain12/8 guards"
+  ],
+  "checks": {
+    "lint": "Passed, zero errors and65 existing warnings",
+    "tests": "108 passed,5 skipped",
+    "builds": ["normal", "local", "new hosted tomek"],
+    "normalOutput": "No preview directory or new Tomek PNG/deepsense SVG; original archive portrait preserved",
+    "data": "13/9, one five-person shared panel; no other proposal added, country fields blank, no timetable fields imported",
+    "source": "Sheetrow28 and exact Advocu proposal match; organiser confirmation supersedes stale Accepted labels, source statuses unchanged",
+    "browser": "Local desktop/mobile card/profile/session reciprocal links, image800/logo144, GDE, no banner or overflow; hosted desktop profile and mobile listing13/cards, reciprocal link and no banner",
+    "http": {
+      "fixtureExact": true,
+      "speakers": 13,
+      "sessions": 9,
+      "assets200": 23,
+      "programmeCollectionsUnchanged": true,
+      "sha256": "1066cbe7dc698ae9fd739952f8f55263dc4d3c11dce39604fa822d20063e23e1"
+    },
+    "network": {
+      "sampleEntries": 43,
+      "fixture": "GET200",
+      "nonGetWriteAuthAnalyticsRequests": 0
+    },
+    "unpublishedSchedule": true,
+    "preservedReleaseIds": {
+      "live": "1792442204102000",
+      "cards-v2-2026": "1792490986018000",
+      "speakers-review-2026": "1792443541491000"
+    },
+    "newReleaseId": "1792492150968000"
+  },
+  "deployment": "Only new speakers-tomek-2026 Hosting preview, after checks; no Auth domain sync, production deployment, Git push, DBwrite, Functions/rules or Advocu status change",
+  "screenshots": [
+    "/tmp/devfest-tomek-hosted-profile.png",
+    "/tmp/devfest-tomek-hosted-card-mobile.png"
+  ],
+  "limitations": [
+    "No remaining Tomasz asset gap",
+    "Earlier Yonatan96 avatar and intentionally missing Stealth Startup logo remain"
+  ],
+  "children": "Implementation and asset subagents complete; no running children"
+}

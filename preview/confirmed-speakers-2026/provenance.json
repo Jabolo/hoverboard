@@ -167,5 +167,17 @@
     "basis": "Michał requested removal of country/nationality labels from speaker cards, profiles and linked session speaker rows on 19 October 2026. Preview fixture country fields are intentionally blank."
   },
   "portraitRefreshV2": "20 October 2026: original 800x800 LinkedIn portraits for Ivan and Çalgan. See portrait-v2-sources.json; earlier source files preserved.",
-  "comparisonVerification": "comparison-v2-verification.json"
+  "comparisonVerification": "comparison-v2-verification.json",
+  "tomaszAddition": {
+    "date": "2026-10-20",
+    "confirmedBy": "Organiser explicitly: He is now confirmed — add him",
+    "currentRoster": {
+      "speakers": 13,
+      "sessions": 9
+    },
+    "programmeId": "CFP-028",
+    "sources": ["tomek-source.json", "tomek-asset-sources.json"],
+    "verification": "tomek-verification.json",
+    "scope": "New Hosting preview only; earlier previews and production preserved; yellow banner removed"
+  }
 }
