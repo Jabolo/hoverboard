@@ -149,14 +149,14 @@
   ],
   "gaps": [
     {
-      "speakerIds": ["calgan-aygun", "yonatan-levin"],
+      "speakerId": "yonatan-levin",
       "field": "portraitResolution",
-      "detail": "Advocu Google avatars are 96x96."
+      "detail": "Existing Advocu avatar remains 96x96."
     },
     {
-      "speakerId": "ivan-lapa",
-      "field": "portraitResolution",
-      "detail": "Verified portrait is 112x112."
+      "speakerId": "yonatan-levin",
+      "field": "companyLogo",
+      "detail": "Organiser selected Stealth Startup; no distinct verified company mark. Show text once and keep GDE badge."
     }
   ],
   "privacy": "No emails, review text/scores, travel or communication notes in preview fixtures.",
@@ -165,5 +165,7 @@
   "presentation": {
     "countryLabels": false,
     "basis": "Michał requested removal of country/nationality labels from speaker cards, profiles and linked session speaker rows on 19 October 2026. Preview fixture country fields are intentionally blank."
-  }
+  },
+  "portraitRefreshV2": "20 October 2026: original 800x800 LinkedIn portraits for Ivan and Çalgan. See portrait-v2-sources.json; earlier source files preserved.",
+  "comparisonVerification": "comparison-v2-verification.json"
 }

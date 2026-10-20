@@ -1,0 +1,147 @@
+{
+  "status": "COMPLETE",
+  "date": "2026-10-20",
+  "sourceCommit": "ca639f17",
+  "branch": "preview/speaker-cards-v2-2026",
+  "trackingBranch": null,
+  "gitPush": false,
+  "previewUrl": "https://gdg-warsaw-devfest26-web--cards-v2-2026-ojd8de0a.web.app",
+  "oldPreview": "https://gdg-warsaw-devfest26-web--speakers-review-2026-n0tp7s9u.web.app",
+  "expiresAt": "2026-10-27T10:09:30.375709657Z",
+  "implementation": [
+    "Session links on every listing/home card, outside profile anchors",
+    "Shared PANEL-01, one Moderator and four Panellists in cards/profile/session",
+    "All short highlights shortened; 1-2 lines verified in listing and phone homepage",
+    "Original 800x800 LinkedIn Ivan and Calgan portraits",
+    "Yonatan Stealth Startup per explicit organiser decision; duplicate company fallback removed",
+    "Stable featured Ivan, Hasan, Andrii, Dominika with Meet all speakers; phone1/tablet2/desktop4 columns"
+  ],
+  "checks": {
+    "lint": "Passed with 65 existing warnings, zero errors",
+    "tests": "106 passed, 5 skipped; 19 focused tests repeated after integration",
+    "builds": ["normal production", "local preview", "comparison production"],
+    "productionOutput": "No preview fixture directory or v2 portrait assets",
+    "mapping": "12 speakers, 8 sessions, 5 people share panel; no orphan or excluded entries",
+    "gating": "Comparison flag only cards-v2-2026 hostname; other review/prod/loopback/lookalike blocked; mapping and missing-data tests pass",
+    "browser": "Local desktop/list/mobile all12 session links; panel roles/profile; stable home selection; two-line highlights; Ivan profile800; no overflow. Hosted desktop listing12/cards12links, phone shared panel and home1col/2line checks passed.",
+    "fixture": "Hosted bytes exactly match source; SHA256 5f7cdc83cc32ff565d3261e8d4ea7f6176066e91d647bfba3736e984b60551a2",
+    "assets": [
+      {
+        "path": "/preview/speakers/calgan-aygun-linkedin-v2.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/finalcheck.png",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/andrii-khrystian-linkedin.png",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/dynatrace.png",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/ivan-lapa-linkedin-v2.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/netflix.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/yonatan-levin.gif",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/hasan-rafiq.png",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/google.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/dominika-zajac.png",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/qualtrics.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/dmytro-nedvetskyi.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/intellias.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/yaroslav-polyakov.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/sergiy-mokiyenko.webp",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/serhii-kasianchuk.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/solidgate.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/viacheslav-miroshnychenko.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/bolt.svg",
+        "status": 200
+      },
+      {
+        "path": "/preview/speakers/adrian-romanski.jpg",
+        "status": 200
+      },
+      {
+        "path": "/preview/logos/pushbased.svg",
+        "status": 200
+      }
+    ],
+    "network": "Hosted sampled71 entries: local fixture GET200; no non-GET or write/auth/analytics requests",
+    "database": {
+      "generatedSpeakers": "unchanged",
+      "generatedSessions": "unchanged",
+      "generatedSchedule": "unchanged"
+    },
+    "preservedReleaseIds": {
+      "live": "1792442204102000",
+      "speakers-review-2026": "1792443541491000"
+    },
+    "newReleaseId": "1792490986018000"
+  },
+  "schedule": "Unpublished; empty generatedSchedule; no timetable allocations changed",
+  "deployment": "Hosting-only cards-v2-2026 after implementation and checks; no Auth domain sync, production channel, Functions, rules or Advocu changes",
+  "sources": ["portrait-v2-sources.json", "linkedin-profile-sources.json", "provenance.json"],
+  "gaps": [
+    {
+      "speakerId": "yonatan-levin",
+      "field": "portraitResolution",
+      "detail": "Existing Advocu avatar remains 96x96."
+    },
+    {
+      "speakerId": "yonatan-levin",
+      "field": "companyLogo",
+      "detail": "Organiser selected Stealth Startup; no distinct verified company mark. Show text once and keep GDE badge."
+    }
+  ],
+  "screenshots": [
+    "/tmp/devfest-cards-v2-hosted-desktop.png",
+    "/tmp/devfest-cards-v2-hosted-mobile.png",
+    "/tmp/devfest-cards-v2-panel-mobile.png"
+  ],
+  "children": "All delegated implementation complete; no running children. Network diagnostic subtask partial, subsequently resolved sufficiently for upload; no system configuration changed."
+}
