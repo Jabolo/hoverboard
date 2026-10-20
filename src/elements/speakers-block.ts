@@ -58,6 +58,15 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           grid-gap: 32px 16px;
         }
 
+        .speakers-wrapper[curated-preview] {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .speakers-wrapper[curated-preview] .photo {
+          --lazy-image-width: 128px;
+          --lazy-image-height: 128px;
+        }
+
         .speaker {
           position: relative;
           padding: 16px 12px;
@@ -159,6 +168,10 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         @media (min-width: 640px) {
+          .speakers-wrapper[curated-preview] {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
           .photo {
             --lazy-image-width: 128px;
             --lazy-image-height: 128px;
