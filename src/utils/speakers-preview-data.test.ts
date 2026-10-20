@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import {
   generatePreviewData,
+  expectedPreviewRoster,
   isSpeakersPreview,
   PreviewSource,
   resolveSpeakersPreview,
@@ -94,6 +95,37 @@ describe('local speaker preview mapping', () => {
     expect(resolveSpeakersPreview('0', comparison)).toBe(false);
   });
 
+  it('isolates the Tomek preview from prior review/comparison channels and all production hosts', () => {
+    const tomek = 'gdg-warsaw-devfest26-web--speakers-tomek-2026-abc123.web.app';
+    expect(resolveSpeakersPreview('tomek', tomek)).toBe(true);
+    for (const flag of ['review', 'comparison', '1']) {
+      expect(() => resolveSpeakersPreview(flag, tomek)).toThrow('not allowed on this host');
+    }
+    for (const host of [
+      'gdg-warsaw-devfest26-web--cards-v2-2026-abc123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-review-2026-abc123.web.app',
+      'warsaw.devfest.pl',
+      'gdg-warsaw-devfest26-web.web.app',
+      'localhost',
+      `${tomek}.evil.com`,
+      'other-site--speakers-tomek-2026-abc123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-tomek-2026-abc-123.web.app',
+      'gdg-warsaw-devfest26-web--speakers-tomek-2026-ABC123.web.app',
+    ]) {
+      expect(() => resolveSpeakersPreview('tomek', host)).toThrow('not allowed on this host');
+    }
+    expect(resolveSpeakersPreview('0', tomek)).toBe(false);
+  });
+
+  it('uses the confirmed 13/9 roster for Tomek/local previews and preserves old roster guards', () => {
+    for (const flag of ['tomek', '1']) {
+      expect(expectedPreviewRoster(flag)).toEqual({ speakers: 13, sessions: 9 });
+    }
+    for (const flag of ['review', 'comparison']) {
+      expect(expectedPreviewRoster(flag)).toEqual({ speakers: 12, sessions: 8 });
+    }
+  });
+
   it('fails closed for preview flags on production, other channels and lookalikes', () => {
     const denied = [
       'warsaw.devfest.pl',
@@ -111,7 +143,7 @@ describe('local speaker preview mapping', () => {
       '192.168.1.2',
     ];
     for (const host of denied) {
-      for (const flag of ['1', 'review']) {
+      for (const flag of ['1', 'review', 'comparison', 'tomek']) {
         expect(isSpeakersPreview(flag, host)).toBe(false);
         expect(() => resolveSpeakersPreview(flag, host)).toThrow('not allowed on this host');
       }

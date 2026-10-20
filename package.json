@@ -34,7 +34,8 @@
     "verify:live": "node ./scripts/verify-live-status.mjs",
     "preview:speakers": "node scripts/preview-speakers.mjs",
     "build:speakers-review": "node scripts/build-speakers-review.mjs",
-    "build:speakers-comparison": "node scripts/build-speakers-review.mjs --comparison"
+    "build:speakers-comparison": "node scripts/build-speakers-review.mjs --comparison",
+    "build:speakers-tomek": "node scripts/build-speakers-review.mjs --tomek"
   },
   "dependencies": {
     "@abraham/remotedata": "1.4.0",

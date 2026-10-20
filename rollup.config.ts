@@ -13,16 +13,19 @@ import { compileBufferTemplate, production, watch } from './utils/build';
 import { workboxConfig } from './workbox.config';
 
 const previewMode = process.env['SPEAKERS_PREVIEW'];
+const speakersTomek = previewMode === 'tomek';
 const speakersComparison = previewMode === 'comparison';
-const speakersReview = previewMode === 'review' || speakersComparison;
+const speakersReview = previewMode === 'review' || speakersComparison || speakersTomek;
 const speakersPreview = speakersReview || previewMode === '1';
-const outputDir = speakersComparison
-  ? 'dist-review-v2'
-  : speakersReview
-    ? 'dist-review'
-    : speakersPreview
-      ? 'dist-preview'
-      : 'dist';
+const outputDir = speakersTomek
+  ? 'dist-review-tomek'
+  : speakersComparison
+    ? 'dist-review-v2'
+    : speakersReview
+      ? 'dist-review'
+      : speakersPreview
+        ? 'dist-preview'
+        : 'dist';
 const previewFlag = {
   name: 'speakers-preview-flag',
   transform(code: string, id: string) {

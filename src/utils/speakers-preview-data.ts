@@ -98,6 +98,9 @@ export function isSpeakersPreview(buildFlag: string, hostname: string): boolean 
   if (buildFlag === '1') {
     return ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname);
   }
+  if (buildFlag === 'tomek') {
+    return /^gdg-warsaw-devfest26-web--speakers-tomek-2026-[a-z0-9]+\.web\.app$/.test(hostname);
+  }
   if (buildFlag === 'comparison') {
     return /^gdg-warsaw-devfest26-web--cards-v2-2026-[a-z0-9]+\.web\.app$/.test(hostname);
   }
@@ -109,8 +112,15 @@ export function isSpeakersPreview(buildFlag: string, hostname: string): boolean 
 
 export function resolveSpeakersPreview(buildFlag: string, hostname: string): boolean {
   const enabled = isSpeakersPreview(buildFlag, hostname);
-  if (['1', 'review', 'comparison'].includes(buildFlag) && !enabled) {
+  if (['1', 'review', 'comparison', 'tomek'].includes(buildFlag) && !enabled) {
     throw new Error('Speaker review preview is not allowed on this host');
   }
   return enabled;
+}
+
+/** Preserve each approved roster boundary when a preview is rebuilt. */
+export function expectedPreviewRoster(buildFlag: string): { speakers: number; sessions: number } {
+  return buildFlag === 'tomek' || buildFlag === '1'
+    ? { speakers: 13, sessions: 9 }
+    : { speakers: 12, sessions: 8 };
 }

@@ -1,10 +1,11 @@
 import {
   generatePreviewData,
+  expectedPreviewRoster,
   resolveSpeakersPreview,
   PreviewCollections,
 } from './speakers-preview-data';
 
-// Replaced by Rollup from SPEAKERS_PREVIEW=1 or review. Never enabled by a URL or storage.
+// Replaced by Rollup from SPEAKERS_PREVIEW=1, review, comparison or tomek. Never enabled by a URL or storage.
 const buildFlag: string = '__SPEAKERS_PREVIEW_BUILD__';
 export const speakersPreview = (() => {
   try {
@@ -29,8 +30,14 @@ export function loadPreviewData(): Promise<PreviewCollections> {
     .then(async (response) => {
       if (!response.ok) throw new Error(`Preview data request failed (${response.status})`);
       const data = generatePreviewData(await response.json());
-      if (data.generatedSpeakers.length !== 12 || data.generatedSessions.length !== 8) {
-        throw new Error('Expected 12 confirmed speakers and 8 sessions');
+      const expected = expectedPreviewRoster(buildFlag);
+      if (
+        data.generatedSpeakers.length !== expected.speakers ||
+        data.generatedSessions.length !== expected.sessions
+      ) {
+        throw new Error(
+          `Expected ${expected.speakers} confirmed speakers and ${expected.sessions} sessions`,
+        );
       }
       return data;
     })

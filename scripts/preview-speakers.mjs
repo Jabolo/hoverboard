@@ -14,11 +14,11 @@ if (!options.has('--serve-only')) {
   // Fail before building if the approved input has not yet been prepared.
   const data = JSON.parse(await readFile(resolve(source, 'data.json'), 'utf8'));
   if (
-    Object.keys(data.speakers || {}).length !== 12 ||
-    Object.keys(data.sessions || {}).length !== 8
+    Object.keys(data.speakers || {}).length !== 13 ||
+    Object.keys(data.sessions || {}).length !== 9
   ) {
     throw new Error(
-      'Expected 12 speakers and 8 sessions in preview/confirmed-speakers-2026/data.json',
+      'Expected 13 speakers and 9 sessions in preview/confirmed-speakers-2026/data.json',
     );
   }
   await rm(output, { recursive: true, force: true });

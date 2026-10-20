@@ -1,0 +1,29 @@
+{
+  "retrievedOn": "2026-10-20",
+  "assets": [
+    {
+      "name": "Tomasz Porożyński",
+      "kind": "portrait",
+      "sourcePage": "https://www.linkedin.com/in/tomaszporozynski/",
+      "assetUrl": "https://media.licdn.com/dms/image/v2/D4D03AQEvEUE-34arnA/profile-displayphoto-crop_800_800/B4DZdk2Np3G8AI-/0/1749743624125?e=1793836800&v=beta&t=PrClcXQoJitZZ6saZqyEChsVljq_0W9e3kmKYZYGXY8",
+      "identityEvidence": "Signed-in LinkedIn profile is Tomek Porozynski with AI/ML & Cloud Architect | Google Developer Expert (GenAI and Cloud) headline and deepsense.ai employer. Profile photo modal opens this original image, 800×800 natural dimensions. Exact observed image exported through pageAssets.",
+      "localPath": "preview/confirmed-speakers-2026/photos/tomasz-porozynski.png",
+      "dimensions": "800x800",
+      "format": "png",
+      "bytes": 509593,
+      "sha256": "58769c262543daf55f8604badd7e10de84574db214b88f21248c27a8981b0306"
+    },
+    {
+      "name": "deepsense.ai",
+      "kind": "company-logo",
+      "sourcePage": "https://deepsense.ai/",
+      "assetUrl": "https://deepsense.ai/wp-content/uploads/2024/10/deepsenseai.svg",
+      "identityEvidence": "Official company homepage masthead links home and uses this img.custom-logo with alt deepsense.ai. Original SVG exported through pageAssets without edits.",
+      "localPath": "preview/confirmed-speakers-2026/logos/deepsense-ai.svg",
+      "dimensions": "144x24",
+      "format": "svg",
+      "bytes": 13491,
+      "sha256": "c4506236376bf05b25952f70eceeafbe236c2f89c8ea689ba06800226d471631"
+    }
+  ]
+}

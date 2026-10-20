@@ -375,6 +375,55 @@
           "link": "https://developers.google.com/community/experts"
         }
       ]
+    },
+    "tomasz-porozynski": {
+      "name": "Tomasz Porożyński",
+      "bio": "Tomek is a Google Cloud expert with a keen interest in Kubernetes and serverless app deployment. He is passionate about programming in Python, especially when it involves integrating cutting-edge technologies through diverse APIs. While he appreciates the value of open source, his main focus lies in applying his skills in cloud-native solutions. Tomek actively shares his expertise on his YouTube channel and technical blog, creating engaging tutorials on GCP and Kubernetes. He's also an advocate for practical applications of open source technologies in everyday solutions. In his downtime, Tomek enjoys exploring smart home automation using the open-source Home Assistant project and finds tranquility in his desk-side fish tank, which provides a serene backdrop during intense work sessions and long conference calls.",
+      "company": "deepsense.ai",
+      "title": "Staff ML Engineer",
+      "country": "",
+      "companyLogo": "/preview/logos/deepsense-ai.svg",
+      "companyLogoUrl": "/preview/logos/deepsense-ai.svg",
+      "companyLogoBackground": "light",
+      "featured": false,
+      "order": 12,
+      "photo": "/preview/speakers/tomasz-porozynski.png",
+      "photoUrl": "/preview/speakers/tomasz-porozynski.png",
+      "shortBio": "GenAI and Google Cloud GDE · Python and Kubernetes.",
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert — GenAI and Cloud",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ],
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/tomaszporozynski/"
+        },
+        {
+          "icon": "github",
+          "name": "GitHub",
+          "link": "https://github.com/ontaptom"
+        },
+        {
+          "icon": "website",
+          "name": "Sessionize",
+          "link": "https://sessionize.com/tomekporozynski/"
+        },
+        {
+          "icon": "youtube",
+          "name": "YouTube",
+          "link": "https://www.youtube.com/@storagefreak"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://storagefreak.net/"
+        }
+      ]
     }
   },
   "sessions": {
@@ -452,6 +501,14 @@
         "viacheslav-miroshnychenko"
       ],
       "tags": ["Engineering Culture", "AI"]
+    },
+    "CFP-028": {
+      "title": "Voice agents, hype-free: lessons from Gemini's audio stack",
+      "description": "Voice agents are having a moment, but building one that feels responsive, useful, and not painfully awkward is still harder than the demos make it look. In this talk, I’ll walk through Gemini’s current audio stack, including Gemini Live, TTS, transcription, translation, and asynchronous tool calling, and show how the pieces fit together when you build a real voice-first experience. Rather than focusing on API basics, I’ll concentrate on the parts that become interesting in practice: latency, interruptions, long-running tools, choosing between native audio and traditional speech pipelines, and handling conversations that do not follow neat request-response turns. Expect practical demos, architectural trade-offs, and lessons learned from experimenting with the stack, including what works well, what still feels rough, and where voice agents are genuinely useful beyond the hype.",
+      "speakers": ["tomasz-porozynski"],
+      "tags": ["AI", "AI - Gemini", "AI - Gemini Enterprise Agent Platform", "AI - AI Studio"],
+      "language": "English, Polish",
+      "complexity": "Intermediate, Advance"
     }
   }
 }

@@ -8,14 +8,27 @@ import process from 'node:process';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const source = resolve(root, 'preview/confirmed-speakers-2026');
 const comparison = process.argv.includes('--comparison');
-const channel = comparison ? 'cards-v2-2026' : 'speakers-review-2026';
-const output = resolve(root, comparison ? 'dist-review-v2' : 'dist-review');
+const tomek = process.argv.includes('--tomek');
+if (comparison && tomek) throw new Error('Choose only one hosted preview mode');
+const channel = tomek
+  ? 'speakers-tomek-2026'
+  : comparison
+    ? 'cards-v2-2026'
+    : 'speakers-review-2026';
+const output = resolve(
+  root,
+  tomek ? 'dist-review-tomek' : comparison ? 'dist-review-v2' : 'dist-review',
+);
+const expectedSpeakers = tomek ? 13 : 12;
+const expectedSessions = tomek ? 9 : 8;
 const data = JSON.parse(await readFile(resolve(source, 'data.json'), 'utf8'));
 if (
-  Object.keys(data.speakers || {}).length !== 12 ||
-  Object.keys(data.sessions || {}).length !== 8
+  Object.keys(data.speakers || {}).length !== expectedSpeakers ||
+  Object.keys(data.sessions || {}).length !== expectedSessions
 ) {
-  throw new Error('Review requires the approved 12-speaker / 8-session roster');
+  throw new Error(
+    `Review requires the approved ${expectedSpeakers}-speaker / ${expectedSessions}-session roster for ${channel}`,
+  );
 }
 const files = new Set();
 for (const speaker of Object.values(data.speakers)) {
@@ -38,7 +51,7 @@ const build = spawnSync(
     env: {
       ...process.env,
       NODE_ENV: 'production',
-      SPEAKERS_PREVIEW: comparison ? 'comparison' : 'review',
+      SPEAKERS_PREVIEW: tomek ? 'tomek' : comparison ? 'comparison' : 'review',
     },
     stdio: 'inherit',
   },

@@ -10,13 +10,13 @@ The source is `confirmed-speakers-2026/data.json` with maps named `speakers` and
 to `/preview/speakers/<filename>`. Source/provenance records are maintained beside
 the data. Only data.json, portraits and company logos are copied to the preview build.
 
-The 19 October LinkedIn review of all 12 speakers is recorded in
+The 19 October LinkedIn review of the original 12 speakers is recorded in
 `confirmed-speakers-2026/linkedin-profile-sources.json`. Cards show the current
 public professional role, company and an editorial highlight; profiles show a
 source-backed third-person biography and a verified LinkedIn link. On 20 October, the organiser selected Stealth Startup for Yonatan, using his
 current LinkedIn identity. A distinct verified company logo is unavailable.
 
-The adapter requires 12 speakers and 8 sessions, validates references and local
+The adapter requires 13 speakers and 9 sessions, validates references and local
 portrait URLs, embeds speakers on sessions, and links sessions back to speakers.
 It copies only public profile/session fields. Timetable fields are omitted and
 the generated schedule is empty. Missing or malformed data shows an alert and
@@ -80,3 +80,18 @@ short highlights, 800×800 LinkedIn portraits for Ivan and Çalgan, Yonatan’s
 selected current company, and a stable featured homepage selection. Source
 portrait files are retained; current provenance is in `portrait-v2-sources.json`.
 No schedule or production publication is authorised by this comparison.
+
+## Confirmed Tomasz addition (20 October 2026)
+
+The organiser confirmed Tomasz Porożyński and approved one selected session,
+CFP-028. Current local/new preview roster is 13 speakers and 9 sessions.
+Source details: `confirmed-speakers-2026/tomek-source.json`; original portrait
+and company logo provenance: `tomek-asset-sources.json`. Timetable stays unpublished.
+The yellow preview banner is removed; failure alerts and safeguards are retained.
+
+`npm run build:speakers-tomek` builds `dist-review-tomek/` with mode `tomek`,
+which permits only the `speakers-tomek-2026` Hosting channel hostname. Deploy only
+this new channel after verification, using `firebase.speakers-tomek.json` and
+`--no-authorized-domains`; preserve both earlier hosted previews. Original review
+and comparison build modes retain their 12/8 roster guards and require the
+original fixture revision. No Git push or production publication is authorised.

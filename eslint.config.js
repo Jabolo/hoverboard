@@ -20,6 +20,7 @@ export default [
       'dist-preview/**',
       'dist-review/**',
       'dist-review-v2/**',
+      'dist-review-tomek/**',
       'node_modules/**',
       'functions/dist/**',
       'public/**',

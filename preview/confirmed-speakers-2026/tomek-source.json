@@ -1,0 +1,104 @@
+{
+  "retrievedOn": "2026-10-20",
+  "sheet": "https://docs.google.com/spreadsheets/d/1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q/edit#gid=837472775",
+  "row": 28,
+  "advocu": "https://app.advocu.com/events/6a9e63804f57bc69c8b411c1/session-proposals/6ac1515b1db70629779e33fe",
+  "linkedin": "https://www.linkedin.com/in/tomaszporozynski/",
+  "organiserDecision": "20 October 2026: He is now confirmed — add him. Organiser confirmation supersedes stale Accepted labels; no source status or timetable changed.",
+  "publicCells": [
+    {
+      "startRow": 27,
+      "startColumn": 1,
+      "rowData": [
+        {
+          "values": [
+            {
+              "formattedValue": "Accepted"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startRow": 27,
+      "startColumn": 3,
+      "rowData": [
+        {
+          "values": [
+            {
+              "formattedValue": "Tomasz"
+            },
+            {
+              "formattedValue": "Porozynski"
+            },
+            {
+              "formattedValue": "deepsense.ai",
+              "hyperlink": "http://deepsense.ai"
+            },
+            {
+              "formattedValue": "Staff ML Engineer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startRow": 27,
+      "startColumn": 9,
+      "rowData": [
+        {
+          "values": [
+            {
+              "formattedValue": "Tomek is a Google Cloud expert with a keen interest in Kubernetes and serveless app deployment. He is passionate about programming in Python, especially when it involves integrating cutting-edge technologies through diverse APIs. While he appreciates the value of open source, his main focus lies in applying his skills in cloud-native solutions. Tomek actively shares his expertise on his YouTube channel and technical blog, creating engaging tutorials on GCP and Kubernetes. He's also an advocate for practical applications of open source technologies in everyday solutions. In his downtime, Tomek enjoys exploring smart home automation using the open-source Home Assistant project and finds tranquility in his desk-side fish tank, which provides a serene backdrop during intense work sessions and long conference calls."
+            },
+            {
+              "formattedValue": "Call for Papers — GDG DevFest Warsaw 2026: Real Work, Real Lessons"
+            },
+            {
+              "formattedValue": "Voice agents, hype-free: lessons from Gemini's audio stack"
+            },
+            {
+              "formattedValue": "Voice agents are having a moment, but building one that feels responsive, useful, and not painfully awkward is still harder than the demos make it look. In this talk, I’ll walk through Gemini’s current audio stack, including Gemini Live, TTS, transcription, translation, and asynchronous tool calling, and show how the pieces fit together when you build a real voice-first experience. Rather than focusing on API basics, I’ll concentrate on the parts that become interesting in practice: latency, interruptions, long-running tools, choosing between native audio and traditional speech pipelines, and handling conversations that do not follow neat request-response turns. Expect practical demos, architectural trade-offs, and lessons learned from experimenting with the stack, including what works well, what still feels rough, and where voice agents are genuinely useful beyond the hype."
+            },
+            {
+              "formattedValue": "English, Polish"
+            },
+            {
+              "formattedValue": "AI, AI - Gemini, AI - Gemini Enterprise Agent Platform, AI - AI Studio"
+            },
+            {
+              "formattedValue": "Talk, Demo"
+            },
+            {
+              "formattedValue": "Intermediate, Advance"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startRow": 27,
+      "startColumn": 33,
+      "rowData": [
+        {
+          "values": [
+            {
+              "formattedValue": "CFP-028"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "profile": {
+    "displayName": "Tomasz Porożyński",
+    "nameBasis": "Organiser-provided spelling; source profiles use Tomasz/Tomek Porozynski. Identity matched by exact LinkedIn link from Advocu.",
+    "role": "Staff ML Engineer, deepsense.ai — sheet and Advocu",
+    "linkedinHeadline": "AI/ML & Cloud Architect | Google Developer Expert (GenAI and Cloud) | Speaker & Tech Evangelist",
+    "bio": "Advocu/sheet copy, spelling correction serverless only",
+    "gdeEvidence": "Current signed-in LinkedIn headline explicitly states Google Developer Expert (GenAI and Cloud).",
+    "socials": "All links copied from selected Advocu proposal page.",
+    "sessionCount": 1,
+    "status": "Confirmed by organiser on 20 October 2026; Accepted platform labels unchanged."
+  }
+}
