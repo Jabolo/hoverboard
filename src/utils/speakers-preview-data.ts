@@ -121,6 +121,6 @@ export function resolveSpeakersPreview(buildFlag: string, hostname: string): boo
 /** Preserve each approved roster boundary when a preview is rebuilt. */
 export function expectedPreviewRoster(buildFlag: string): { speakers: number; sessions: number } {
   return buildFlag === 'tomek' || buildFlag === '1'
-    ? { speakers: 13, sessions: 9 }
+    ? { speakers: 14, sessions: 10 }
     : { speakers: 12, sessions: 8 };
 }

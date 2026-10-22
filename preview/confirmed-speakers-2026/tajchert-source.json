@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-22",
+  "speaker": "Michał Tajchert",
+  "programmeId": "CFP-043",
+  "sheetRow": 43,
+  "confirmation": "Explicit organiser confirmation22Oct2026; sheet B43 Confirmed and AI43 note updated; row42 pending unchanged.",
+  "sheet": "https://docs.google.com/spreadsheets/d/1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q/edit#gid=837472775",
+  "publicSourceCells": [
+    {
+      "startRow": 42,
+      "startColumn": 3,
+      "rowData": [
+        {
+          "values": [
+            {
+              "formattedValue": "Michał"
+            },
+            {
+              "formattedValue": "Tajchert"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "startRow": 42,
+      "startColumn": 9,
+      "rowData": [
+        {
+          "values": [
+            {},
+            {
+              "formattedValue": "Call for Papers — GDG DevFest Warsaw 2026: Real Work, Real Lessons"
+            },
+            {
+              "formattedValue": "So you want to be a Developer in 2026..."
+            },
+            {
+              "formattedValue": "This session will show how our area of work has changed in past 2 years. How to focus on what is important and what is important if \"coding is solved\". I will touch topics such as personal development, career, how to stay sane, and what companies and employees are looking for when hiring. As a person responsible for many hiring decision as well team structure and work organization in a Żabka Jush I can show what modern and agile workplaces look for and value. This session won't have coding in it. It is directed toward people studying computer science, first employment years, as well trying to better understand current job market for developers."
+            },
+            {
+              "formattedValue": "Polish, English"
+            },
+            {
+              "formattedValue": "AI, Build with AI"
+            },
+            {
+              "formattedValue": "Talk"
+            },
+            {
+              "formattedValue": "Beginner, Advance, Intermediate"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "profile": "https://mtajchert.com/",
+  "linkedin": "https://www.linkedin.com/in/micha%C5%82-tajchert-517b7668/",
+  "identity": "Own website and signed-in LinkedIn agree: CTO at Lite e-Commerce, responsible for Żabka Jush and delio; author of Kanarek app. No GDE badge inferred."
+}

@@ -16,7 +16,7 @@ public professional role, company and an editorial highlight; profiles show a
 source-backed third-person biography and a verified LinkedIn link. On 20 October, the organiser selected Stealth Startup for Yonatan, using his
 current LinkedIn identity. A distinct verified company logo is unavailable.
 
-The adapter requires 13 speakers and 9 sessions, validates references and local
+The adapter requires 14 speakers and 10 sessions, validates references and local
 portrait URLs, embeds speakers on sessions, and links sessions back to speakers.
 It copies only public profile/session fields. Timetable fields are omitted and
 the generated schedule is empty. Missing or malformed data shows an alert and
@@ -95,3 +95,11 @@ this new channel after verification, using `firebase.speakers-tomek.json` and
 `--no-authorized-domains`; preserve both earlier hosted previews. Original review
 and comparison build modes retain their 12/8 roster guards and require the
 original fixture revision. No Git push or production publication is authorised.
+
+## Michał Tajchert confirmed (22 October 2026)
+
+Current hosted/local roster: 14 speakers and 10 sessions. Selected CFP-043 only;
+CFP row43 is Confirmed, while his other proposal in row42 remains pending.
+See `confirmed-speakers-2026/tajchert-source.json` and `tajchert-assets.json`.
+Use the existing `build:speakers-tomek` and Hosting configuration to refresh only
+`speakers-tomek-2026`; production and earlier previews stay unchanged.

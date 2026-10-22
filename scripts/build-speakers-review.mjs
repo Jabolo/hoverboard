@@ -19,8 +19,8 @@ const output = resolve(
   root,
   tomek ? 'dist-review-tomek' : comparison ? 'dist-review-v2' : 'dist-review',
 );
-const expectedSpeakers = tomek ? 13 : 12;
-const expectedSessions = tomek ? 9 : 8;
+const expectedSpeakers = tomek ? 14 : 12;
+const expectedSessions = tomek ? 10 : 8;
 const data = JSON.parse(await readFile(resolve(source, 'data.json'), 'utf8'));
 if (
   Object.keys(data.speakers || {}).length !== expectedSpeakers ||

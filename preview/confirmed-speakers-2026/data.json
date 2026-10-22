@@ -424,6 +424,44 @@
           "link": "https://storagefreak.net/"
         }
       ]
+    },
+    "michal-tajchert": {
+      "name": "Michał Tajchert",
+      "company": "Lite e-Commerce",
+      "title": "Chief Technology Officer",
+      "country": "",
+      "order": 13,
+      "featured": false,
+      "photoUrl": "/preview/speakers/michal-tajchert.png",
+      "photo": "/preview/speakers/michal-tajchert.png",
+      "shortBio": "Leading technology for Żabka Jush and delio · Creator of Kanarek.",
+      "bio": "Michał Tajchert is Chief Technology Officer at Lite e-Commerce, where he leads software, design and data for Żabka Jush and delio. His work spans product engineering, architecture and team development. Previously, he led mobile engineering at MODIVO and worked on mobile technology in banking. He is the creator of the Kanarek air-quality app and an open-source contributor. A former GDG Warszawa organiser, he has shared his Android experience through conference talks, workshops and startup mentoring.",
+      "badges": [],
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/micha%C5%82-tajchert-517b7668/"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://mtajchert.com/"
+        },
+        {
+          "icon": "github",
+          "name": "GitHub",
+          "link": "https://github.com/tajchert"
+        },
+        {
+          "icon": "website",
+          "name": "Blog",
+          "link": "https://mtajchert.hashnode.dev/"
+        }
+      ],
+      "companyLogo": "/preview/logos/lite-ecommerce.png",
+      "companyLogoUrl": "/preview/logos/lite-ecommerce.png",
+      "companyLogoBackground": "light"
     }
   },
   "sessions": {
@@ -509,6 +547,14 @@
       "tags": ["AI", "AI - Gemini", "AI - Gemini Enterprise Agent Platform", "AI - AI Studio"],
       "language": "English, Polish",
       "complexity": "Intermediate, Advance"
+    },
+    "CFP-043": {
+      "title": "So you want to be a Developer in 2026...",
+      "description": "This session will show how our area of work has changed in past 2 years. How to focus on what is important and what is important if \"coding is solved\". I will touch topics such as personal development, career, how to stay sane, and what companies and employees are looking for when hiring. As a person responsible for many hiring decision as well team structure and work organization in a Żabka Jush I can show what modern and agile workplaces look for and value. This session won't have coding in it. It is directed toward people studying computer science, first employment years, as well trying to better understand current job market for developers.",
+      "speakers": ["michal-tajchert"],
+      "tags": ["AI", "Build with AI"],
+      "language": "Polish, English",
+      "complexity": "Beginner, Advance, Intermediate"
     }
   }
 }

@@ -152,11 +152,6 @@
       "speakerId": "yonatan-levin",
       "field": "portraitResolution",
       "detail": "Existing Advocu avatar remains 96x96."
-    },
-    {
-      "speakerId": "yonatan-levin",
-      "field": "companyLogo",
-      "detail": "Latest organiser decision: Wild / Head of AI from CFP. Exact Wild company website or logo identity remains unverified; awaiting brand link."
     }
   ],
   "privacy": "No emails, review text/scores, travel or communication notes in preview fixtures.",
@@ -185,6 +180,18 @@
     "company": "Wild",
     "title": "Head of AI",
     "basis": "Explicit organiser instruction to use supplied CFP data, superseding prior Stealth Startup decision",
-    "logo": "Pending exact company identity; no unrelated Wild brand mark used."
+    "logo": "Organiser explicitly accepted Wild company text only; logo not required."
+  },
+  "tajchertAddition": {
+    "date": "2026-10-22",
+    "speaker": "michal-tajchert",
+    "programmeId": "CFP-043",
+    "roster": {
+      "speakers": 14,
+      "sessions": 10
+    },
+    "sheetChange": "B43 Confirmed; AI43 confirmation note. Row42 remains pending.",
+    "sources": ["tajchert-source.json", "tajchert-assets.json"],
+    "scope": "Hosted preview only; schedule unchanged"
   }
 }

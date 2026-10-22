@@ -117,9 +117,9 @@ describe('local speaker preview mapping', () => {
     expect(resolveSpeakersPreview('0', tomek)).toBe(false);
   });
 
-  it('uses the confirmed 13/9 roster for Tomek/local previews and preserves old roster guards', () => {
+  it('uses the confirmed 14/10 roster for Tomek/local previews and preserves old roster guards', () => {
     for (const flag of ['tomek', '1']) {
-      expect(expectedPreviewRoster(flag)).toEqual({ speakers: 13, sessions: 9 });
+      expect(expectedPreviewRoster(flag)).toEqual({ speakers: 14, sessions: 10 });
     }
     for (const flag of ['review', 'comparison']) {
       expect(expectedPreviewRoster(flag)).toEqual({ speakers: 12, sessions: 8 });
