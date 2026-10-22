@@ -585,7 +585,7 @@
       "language": "Polish, English",
       "complexity": "Beginner, Advance, Intermediate"
     },
-    "SPONSOR-001": {
+    "scaling-hugging-face-hub": {
       "title": "Serving 3 Million Models Without Melting: Scaling the Hugging Face Hub with MongoDB.",
       "description": "Hugging Face hosts over 3 million public models, 1 million datasets, and serves 18 million users across 50,000+ organisations, including over 30% of the Fortune 500.\nThat growth didn't come with a manual. In this talk, I will pull back the curtain on the infrastructure decisions that kept the Hub fast and reliable as traffic grew by orders of magnitude. I will dive into why we chose MongoDB as our core data layer, how its document model maps naturally to the messy reality of ML model metadata, and what it took to keep p99 latency low when every request hits a catalog of millions. I will also cover the trade-offs we faced, the things that broke along the way, and what \"lean operations\" actually means when your platform serves a third of the Fortune 500. Expect real architecture decisions, real numbers, and lessons you can take back to your own stack",
       "speakers": ["arek-borucki"],

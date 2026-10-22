@@ -20,7 +20,7 @@ describe('approved programme publication', () => {
       'CFP-050',
       'INVITED-001',
       'PANEL-01',
-      'SPONSOR-001',
+      'scaling-hugging-face-hub',
     ]);
     expect(data.generatedSchedule).toEqual([]);
     const panel = data.generatedSessions.find(({ id }) => id === 'PANEL-01');

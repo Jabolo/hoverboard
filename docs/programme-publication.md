@@ -70,8 +70,11 @@ links. Original source media is preserved; the release has 28 fingerprinted asse
 
 ## Sponsor speaker confirmation — 22 October 2026
 
-Arek Borucki is confirmed for the 30-minute technical talk `SPONSOR-001`, introduced
-via sponsor MongoDB. His professional affiliation is Hugging Face, with the role
+Arek Borucki is confirmed for the 30-minute technical talk selected by MongoDB.
+His public session URL is `/sessions/scaling-hugging-face-hub/`; the private
+coordination ID remains `SPONSOR-001`. Previous preview URLs redirect permanently
+to the neutral public URL. He is presented as a regular technical speaker, without
+a sponsored-talk label. His professional affiliation is Hugging Face, with the role
 ML Platform & Database Engineer. The organiser's complete title and abstract are
 preserved. Language, audience level and technical requirements were not supplied.
 No timetable allocation was added.
@@ -85,3 +88,10 @@ MongoDB's current interview; those agree on Hugging Face.
 
 This addition is authorised for the `programme-ready-2026` review channel only.
 Production publication and merging remain separate decisions.
+
+## Production release approval — 22 October 2026
+
+The organiser explicitly approved merging, pushing and deploying the verified
+programme to the public domain. Keep the schedule unpublished. The normal Hosting
+release includes all 15 confirmed speakers and 11 sessions; no programme database
+import, Functions deployment, rules change or timetable publication is required.

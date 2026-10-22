@@ -11,7 +11,18 @@
     "site": "gdg-warsaw-devfest26-web",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "redirects": [],
+    "redirects": [
+      {
+        "source": "/sessions/SPONSOR-001",
+        "destination": "/sessions/scaling-hugging-face-hub/",
+        "type": 301
+      },
+      {
+        "source": "/sessions/SPONSOR-001/",
+        "destination": "/sessions/scaling-hugging-face-hub/",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "/sessions",

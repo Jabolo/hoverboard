@@ -23,7 +23,7 @@ const approvedSessions = {
   ],
   'CFP-028': ['tomasz-porozynski'],
   'CFP-043': ['michal-tajchert'],
-  'SPONSOR-001': ['arek-borucki'],
+  'scaling-hugging-face-hub': ['arek-borucki'],
 };
 const speakerKeys = [
   'name',
