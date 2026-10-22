@@ -1,0 +1,62 @@
+{
+  "status": "COMPLETE",
+  "date": "2026-10-22",
+  "sourceCommit": "77a617ac",
+  "branch": "preview/programme-ready-2026",
+  "preview": "https://gdg-warsaw-devfest26-web--programme-ready-2026-snw6ikap.web.app/speakers/arek-borucki/",
+  "session": "https://gdg-warsaw-devfest26-web--programme-ready-2026-snw6ikap.web.app/sessions/SPONSOR-001/",
+  "release": "1792668040327000",
+  "expires": "2026-10-29T11:20:30Z",
+  "counts": {
+    "speakers": 15,
+    "sessions": 11,
+    "panelParticipants": 5,
+    "fingerprintedAssets": 28
+  },
+  "records": {
+    "cfpSheetRow": 58,
+    "programmeId": "SPONSOR-001",
+    "duration": "30 minutes",
+    "confirmed": true,
+    "sourceOfTruthUpdated": true,
+    "programDocUpdated": true,
+    "privateContact": "Verified in private coordination sheet only; excluded from Git public data and build."
+  },
+  "checks": {
+    "lint": "pass: 65 warnings, 0 errors",
+    "tests": "123 passed, 5 skipped; 42 suites passed",
+    "normalBuild": "pass; static speaker/session routes generated",
+    "programmeValidation": "exact approved IDs, reciprocal links and asset hashes pass",
+    "portrait": "LinkedIn profile identity checked; 800x800 source resized to 400x400 WebP, 22836 bytes",
+    "companyLogo": "Unmodified official Hugging Face logo; asset loads",
+    "desktop": "15 cards, professional role/company, portrait/logo, profile and session links verified; no overflow",
+    "mobile": "iPhone 15 profile/session checked; portrait loads, no horizontal overflow",
+    "discovery": "Arek query finds exactly SPONSOR-001: 1 of 11 confirmed sessions",
+    "schedule": "Schedule is not published yet; zero schedule-day elements; Explore sessions CTA remains",
+    "sessionTimetable": "No visible timetable metadata or bookmark controls on desktop/mobile",
+    "hostedBytes": "Programme JSON and both new assets match built files byte-for-byte",
+    "privacy": "Private email absent throughout dist; preview provenance/original images excluded from dist",
+    "network": "Hosted programme loaded from same-origin /data/programme-2026.json; all captured fetch/xhr requests GET, unrelated Firestore Listen reads only",
+    "docs": "Read-back verified confirmation, biography source discrepancy and preview delivery entry in both canonical docs"
+  },
+  "boundaries": {
+    "productionReleaseBefore": "1792442204102000",
+    "productionReleaseAfter": "1792442204102000",
+    "otherHostingChannels": "All unchanged",
+    "firestoreProgrammeCollections": "speakers, sessions, generatedSpeakers, generatedSessions and generatedSchedule remain empty before/after",
+    "gitPush": false,
+    "mainMerge": false,
+    "timetableAllocationsChanged": false,
+    "advocuStatusChanged": false,
+    "authDomainSync": false
+  },
+  "gaps": [
+    "Session language, audience level and technical requirements not supplied; omitted. No remaining portrait/logo gaps."
+  ],
+  "evidence": [
+    "evidence/arek-profile-hosted.png",
+    "evidence/arek-card-hosted.png",
+    "evidence/arek-profile-mobile-hosted.png"
+  ],
+  "children": "No new subagents used; previous children completed, none running."
+}
