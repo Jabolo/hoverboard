@@ -1,0 +1,60 @@
+{
+  "status": "COMPLETE",
+  "date": "2026-10-22",
+  "sourceCommit": "b36fdcce",
+  "branch": "preview/confirmed-lineup-2026",
+  "trackingBranch": null,
+  "gitPush": false,
+  "sheet": {
+    "id": "1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q",
+    "tabId": 837472775,
+    "changed": {
+      "B43": "Confirmed",
+      "AI43": "Dated organiser confirmation22Oct2026, preserving invitation/allocation notes"
+    },
+    "verified": "Connector readback and Google-rendered sheet showed Confirmed; B42 remains PENDING; formatting preserved"
+  },
+  "preview": "https://gdg-warsaw-devfest26-web--speakers-tomek-2026-elnrgzia.web.app",
+  "expiresAt": "2026-10-29T08:52:57.315453612Z",
+  "addition": {
+    "speaker": "michal-tajchert",
+    "programmeId": "CFP-043",
+    "portrait": "Original800x800LinkedInPNG",
+    "logo": "Official Lite presskit PNG",
+    "role": "Chief Technology Officer, Lite e-Commerce",
+    "bio": "Editorial from own professional website; source sheet bio blank",
+    "excluded": "Other Tajchert proposal row42 remains pending"
+  },
+  "checks": {
+    "lint": "Passed with existing65warnings/zeroerrors",
+    "tests": "108passed,5skipped",
+    "builds": ["normal", "local", "hosted tomek14/10"],
+    "normalOutput": "No preview data directory or new portrait/logo files",
+    "data": "14speakers/10sessions, no orphans, one shared panel5; countryfieldsblank and timetablefieldsabsent",
+    "browser": "Local desktop/profile and mobile card/session reciprocal links verified. Hosted desktop profile shows correct name/CTO/company, portrait800 and session; hosted phone listing14cards with correct session link and no overflow. Yellowbannerabsent; local schedule unpublished.",
+    "http": {
+      "fixtureExact": true,
+      "speakers": 14,
+      "sessions": 10,
+      "assets200": 25,
+      "programmeCollectionsUnchanged": true,
+      "sha256": "aa52eed05ebcb99d1b59abab3427e845bea4f97863d732fa73bb99e792dcc4c5"
+    },
+    "network": {
+      "entries": 47,
+      "fixture": "GET200",
+      "nonGetWriteAuthAnalyticsRequests": 0
+    },
+    "preservedReleaseIds": {
+      "live": "1792442204102000",
+      "cards-v2-2026": "1792490986018000",
+      "speakers-review-2026": "1792443541491000"
+    },
+    "newPreviewRelease": "1792659188558000"
+  },
+  "publication": "Only existing speakers-tomek-2026 Hosting channel refreshed after implementation/checks; no production, Gitpush, DBwrite, Functions/rules, Authdomainsync or Advocu decision change",
+  "sources": ["tajchert-source.json", "tajchert-assets.json"],
+  "screenshots": ["/tmp/devfest-tajchert-hosted.png", "/tmp/devfest-tajchert-hosted-mobile.png"],
+  "limitations": "No remaining new speaker implementation/asset gaps; unpublished timetable preserved. Yonatan Wild logo waived explicitly by organiser.",
+  "children": "No new subagents; prior agents complete."
+}
