@@ -16,6 +16,7 @@ export interface SpeakerData {
   order: number;
   photo: string;
   photoUrl: string;
+  animatedPhotoUrl?: string;
   pronouns?: string;
   shortBio: string;
   socials: Social[];

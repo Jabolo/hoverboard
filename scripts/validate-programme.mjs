@@ -38,6 +38,7 @@ const speakerKeys = [
   'order',
   'photo',
   'photoUrl',
+  'animatedPhotoUrl',
   'socials',
   'badges',
   'sessionRoles',
@@ -123,6 +124,8 @@ export function validateProgramme(source, publicRoot = path.join(root, 'public')
     assert(typeof speaker.featured === 'boolean', `${id}.featured: expected boolean`);
     assert(Number.isFinite(speaker.order), `${id}.order: expected number`);
     asset(speaker.photoUrl, 'speakers', `${id}.photoUrl`);
+    if (speaker.animatedPhotoUrl)
+      asset(speaker.animatedPhotoUrl, 'speakers', `${id}.animatedPhotoUrl`);
     assert.equal(speaker.photo, speaker.photoUrl, `${id}: inconsistent portrait aliases`);
     assert.equal(
       speaker.companyLogo || '',

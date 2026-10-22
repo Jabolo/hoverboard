@@ -430,6 +430,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     [[viewHighlights]]
                   </md-outlined-button>
                 </template>
+                <md-outlined-button href="/sessions/">Explore sessions</md-outlined-button>
                 <md-filled-button on-click="scrollToTickets">
                   <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
                   [[ticketActionLabel]]

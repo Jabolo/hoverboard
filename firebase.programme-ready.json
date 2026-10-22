@@ -3,14 +3,12 @@
     "site": "gdg-warsaw-devfest26-web",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "redirects": [
+    "redirects": [],
+    "rewrites": [
       {
         "source": "/sessions",
-        "destination": "/schedule",
-        "type": 301
-      }
-    ],
-    "rewrites": [
+        "destination": "/index.html"
+      },
       {
         "source": "/blog",
         "destination": "/index.html"
@@ -112,6 +110,51 @@
       },
       {
         "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/speakers",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/speakers/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/sessions",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/sessions/**",
         "headers": [
           {
             "key": "Cache-Control",

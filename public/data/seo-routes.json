@@ -84,5 +84,15 @@
     "fallbackParagraphs": [
       "Read the Code of Conduct for GDG DevFest Warsaw 2026 and help keep the community welcoming, inclusive, and respectful."
     ]
+  },
+  "/sessions": {
+    "title": "Sessions | GDG DevFest Warsaw 2026",
+    "description": "Find your next rabbit hole: explore confirmed DevFest Warsaw talks and the shared panel. Search by topic, speaker or company. Timetable coming later.",
+    "structuredData": null,
+    "fallbackHeading": "Sessions",
+    "fallbackParagraphs": [
+      "Explore confirmed talks and the shared panel at DevFest Warsaw 2026.",
+      "Search by topic, speaker or company. Dates, times and rooms are not assigned here. The timetable is not yet published."
+    ]
   }
 }

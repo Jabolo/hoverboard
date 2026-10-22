@@ -55,3 +55,15 @@ rules or Auth-domain change. Verify live speaker/session links and hidden timeta
 Rollback restores the previous Hosting release and reverts the release commit through
 the usual reviewed Git workflow. There is no programme database migration to undo.
 Preserve unrelated partner, team and ticket data.
+
+## Session discovery and portrait motion
+
+The `/sessions/` route presents searchable confirmed talks and the shared panel
+without timetable fields. Links from navigation, the homepage and the unpublished
+schedule lead there. Search covers titles, full abstracts, speaker names and company
+names; topic filters use existing tags. Filter state is shareable in the URL.
+
+Yonatan’s original eight-second animation is delivered as a 198,458-byte animated
+WebP (the original GIF is 1,405,612 bytes), with a separate static poster for
+sharing, pausing and reduced-motion preferences. Pause controls are outside card
+links. Original source media is preserved; the release has 26 fingerprinted assets.

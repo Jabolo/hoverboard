@@ -80,6 +80,27 @@ export class ScheduleBlock extends ThemedElement {
           line-height: 1.25;
         }
 
+        .sessions-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 48px;
+          margin-top: 20px;
+          padding: 0 20px;
+          border: 1px solid var(--google-blue);
+          border-radius: 4px;
+          color: var(--primary-text-color);
+          font-weight: 700;
+          text-decoration: none;
+        }
+        .sessions-link:hover {
+          background: var(--secondary-background-color);
+        }
+        .sessions-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
+        }
+
         .note {
           max-width: 580px;
           margin: 22px 0 0;
@@ -109,7 +130,8 @@ export class ScheduleBlock extends ThemedElement {
           <p class="time">${scheduleBlock.time}</p>
           <p class="milestone">${scheduleBlock.milestone}</p>
         </div>
-        <p class="note">${scheduleBlock.note}</p>
+        <p class="note">The talks are ready to explore. The timetable is coming later.</p>
+        <a class="sessions-link" href="/sessions/">Find your next rabbit hole →</a>
       </section>
     `;
   }

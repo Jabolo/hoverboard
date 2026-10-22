@@ -51,6 +51,26 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
           text-align: center;
         }
 
+        .empty-state h2 {
+          color: var(--primary-text-color);
+          line-height: 1.3;
+        }
+        .sessions-link {
+          display: inline-flex;
+          align-items: center;
+          min-height: 48px;
+          margin-top: 16px;
+          padding: 0 20px;
+          border: 1px solid var(--google-blue);
+          border-radius: 4px;
+          color: var(--primary-text-color);
+          font-weight: 700;
+          text-decoration: none;
+        }
+        .sessions-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
+        }
         paper-progress {
           width: 100%;
           --paper-progress-active-color: var(--default-primary-color);
@@ -115,7 +135,11 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
 
       <template is="dom-if" if="[[showEmptyState]]">
         <div class="container">
-          <p class="empty-state" role="status">[[scheduleBlock.emptyState]]</p>
+          <section class="empty-state" aria-labelledby="programme-ready-title">
+            <h2 id="programme-ready-title">The talks are ready. The clock can wait.</h2>
+            <p>[[scheduleBlock.emptyState]]</p>
+            <a class="sessions-link" href="/sessions/">Explore sessions →</a>
+          </section>
         </div>
       </template>
 

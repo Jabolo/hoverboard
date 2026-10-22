@@ -1,3 +1,5 @@
+import '../components/portrait-animation-control';
+import { portraitSource } from '../utils/portrait-source';
 import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
@@ -34,6 +36,12 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
   private speakersPreview = speakersPreview;
 
   private socialLabel = speakerSocialLabel;
+
+  @property({ type: Boolean }) private portraitsPaused = false;
+  private portraitSource = portraitSource;
+  private onPortraitMotionChange(event: CustomEvent<{ paused: boolean }>) {
+    this.portraitsPaused = event.detail.paused;
+  }
 
   static get template() {
     return html`
@@ -241,7 +249,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
             <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
               <lazy-image
                 class="photo"
-                src="[[speaker.photoUrl]]"
+                src="[[portraitSource(speaker.photoUrl, speaker.animatedPhotoUrl, portraitsPaused)]]"
                 alt="[[speaker.name]]"
               ></lazy-image>
 
@@ -273,6 +281,13 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
                 ></speaker-affiliations>
               </div>
             </a>
+
+            <template is="dom-if" if="[[speaker.animatedPhotoUrl]]">
+              <portrait-animation-control
+                paused="[[portraitsPaused]]"
+                on-portrait-motion-change="onPortraitMotionChange"
+              ></portrait-animation-control>
+            </template>
 
             <speaker-session-links
               sessions="[[speaker.sessions]]"

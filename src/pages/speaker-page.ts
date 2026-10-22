@@ -1,3 +1,5 @@
+import '../components/portrait-animation-control';
+import { portraitSource } from '../utils/portrait-source';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -29,6 +31,12 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
   private disabledSchedule = disabledSchedule;
 
   private socialLabel = speakerSocialLabel;
+
+  @property({ type: Boolean }) private portraitsPaused = false;
+  private portraitSource = portraitSource;
+  private onPortraitMotionChange(event: CustomEvent<{ paused: boolean }>) {
+    this.portraitsPaused = event.detail.paused;
+  }
 
   static get template() {
     return html`
@@ -217,14 +225,25 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
 
       <simple-hero page="speakers" hide-description$="[[disabledSchedule]]">
         <div class="dialog-container header-content" layout horizontal center>
-          <lazy-image class="photo" src="[[speaker.photoUrl]]" alt="[[speaker.name]]"></lazy-image>
+          <lazy-image
+            class="photo"
+            src="[[portraitSource(speaker.photoUrl, speaker.animatedPhotoUrl, portraitsPaused)]]"
+            alt="[[speaker.name]]"
+          ></lazy-image>
           <div>
             <h2 class="name" flex>[[speaker.name]]</h2>
+
             <template is="dom-if" if="[[speaker.title]]">
               <div class="professional-role">[[speaker.title]]</div>
             </template>
             <template is="dom-if" if="[[speaker.company]]">
               <div class="professional-company">[[speaker.company]]</div>
+            </template>
+            <template is="dom-if" if="[[speaker.animatedPhotoUrl]]">
+              <portrait-animation-control
+                paused="[[portraitsPaused]]"
+                on-portrait-motion-change="onPortraitMotionChange"
+              ></portrait-animation-control>
             </template>
             <template is="dom-if" if="[[subtitle]]">
               <div class="subtitle">[[subtitle]]</div>

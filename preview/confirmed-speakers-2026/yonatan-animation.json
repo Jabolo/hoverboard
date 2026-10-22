@@ -1,0 +1,11 @@
+{
+  "source": "preview/confirmed-speakers-2026/photos/yonatan-levin.gif",
+  "sourceBytes": 1405612,
+  "path": "public/images/speakers/2026/yonatan-levin-animated.d064fe65.webp",
+  "bytes": 198458,
+  "frames": 96,
+  "durationMs": 8000,
+  "sha256": "d064fe65554960a50a0582c54bd417e0865bdc3e5c6d510b1abc2fcc597d5276",
+  "staticPoster": "/images/speakers/2026/yonatan-levin.0137fc04.webp",
+  "processing": "Every second frame, original total duration, animated WebP quality75; original GIF preserved"
+}

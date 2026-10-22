@@ -42,6 +42,9 @@ export function generateProgrammeData(
     if (raw.companyLogoUrl && !logoPath.test(raw.companyLogoUrl)) {
       throw new Error(`Company logo must be local for ${id}`);
     }
+    if (raw.animatedPhotoUrl && !portraitPath.test(raw.animatedPhotoUrl)) {
+      throw new Error(`Animated portrait must be local for ${id}`);
+    }
     speakers[id] = {
       id,
       name: raw.name,
@@ -56,6 +59,7 @@ export function generateProgrammeData(
       title: raw.title || '',
       photo: raw.photoUrl,
       photoUrl: raw.photoUrl,
+      ...(raw.animatedPhotoUrl ? { animatedPhotoUrl: raw.animatedPhotoUrl } : {}),
       order: raw.order ?? 0,
       featured: !!raw.featured,
       socials: raw.socials || [],

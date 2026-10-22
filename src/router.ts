@@ -21,10 +21,6 @@ window.addEventListener('vaadin-router-location-changed', (event) => {
 export const selectRouteName = (pathname: string): string => {
   let [, part] = pathname.split('/');
   switch (part) {
-    case 'sessions':
-      part = 'schedule';
-      break;
-
     case 'previous-speakers':
       part = 'speakers';
       break;
@@ -96,7 +92,10 @@ const ROUTES: Route[] = [
   },
   {
     path: '/sessions',
-    redirect: '/schedule',
+    component: 'sessions-page',
+    action: async () => {
+      await import('./pages/sessions-page.js');
+    },
   },
   {
     path: '/sessions/:id',
