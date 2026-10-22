@@ -1,3 +1,4 @@
+import { speakersPreview } from './utils/speakers-preview';
 import { register } from 'register-service-worker';
 import { store } from './store';
 import { queueComplexSnackbar, queueSnackbar } from './store/snackbars';
@@ -18,27 +19,28 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
   }
 });
 
-register('service-worker.js', {
-  registrationOptions: { scope: getConfig(CONFIG.BASEPATH) },
-  updated(registration) {
-    store.dispatch(
-      queueComplexSnackbar({
-        label: serviceWorkerAvailable,
-        action: {
-          title: refresh,
-          callback: () => {
-            if (registration?.waiting) {
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            } else {
-              window.location.reload();
-            }
+if (!speakersPreview)
+  register('service-worker.js', {
+    registrationOptions: { scope: getConfig(CONFIG.BASEPATH) },
+    updated(registration) {
+      store.dispatch(
+        queueComplexSnackbar({
+          label: serviceWorkerAvailable,
+          action: {
+            title: refresh,
+            callback: () => {
+              if (registration?.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+              } else {
+                window.location.reload();
+              }
+            },
           },
-        },
-      }),
-    );
-  },
-  error(e) {
-    console.error('Service worker registration failed:', e);
-    store.dispatch(queueSnackbar(serviceWorkerError));
-  },
-});
+        }),
+      );
+    },
+    error(e) {
+      console.error('Service worker registration failed:', e);
+      store.dispatch(queueSnackbar(serviceWorkerError));
+    },
+  });

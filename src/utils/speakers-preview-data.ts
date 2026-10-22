@@ -20,15 +20,26 @@ export interface PreviewCollections {
 }
 
 /** Reproduce Hoverboard's generated relationship shape without any timetable fields. */
-export function generatePreviewData(source: PreviewSource): PreviewCollections {
+export function generateProgrammeData(
+  source: PreviewSource,
+  assetMode: 'preview' | 'published' = 'preview',
+): PreviewCollections {
   if (!source || !source.speakers || !source.sessions) throw new Error('Missing preview records');
   const speakers: Record<string, GeneratedPreviewSpeaker> = {};
   for (const [id, raw] of Object.entries(source.speakers)) {
     if (!raw.name?.trim()) throw new Error(`Missing name for ${id}`);
-    if (!raw.photoUrl?.startsWith('/preview/speakers/')) {
+    const portraitPath =
+      assetMode === 'preview'
+        ? /^\/preview\/speakers\/[a-z0-9.-]+$/
+        : /^\/images\/speakers\/2026\/[a-z0-9.-]+\.webp$/;
+    const logoPath =
+      assetMode === 'preview'
+        ? /^\/preview\/logos\/[a-z0-9.-]+$/
+        : /^\/images\/speaker-companies\/2026\/[a-z0-9.-]+$/;
+    if (!portraitPath.test(raw.photoUrl || '')) {
       throw new Error(`Portrait must be local for ${id}`);
     }
-    if (raw.companyLogoUrl && !raw.companyLogoUrl.startsWith('/preview/logos/')) {
+    if (raw.companyLogoUrl && !logoPath.test(raw.companyLogoUrl)) {
       throw new Error(`Company logo must be local for ${id}`);
     }
     speakers[id] = {
@@ -123,4 +134,17 @@ export function expectedPreviewRoster(buildFlag: string): { speakers: number; se
   return buildFlag === 'tomek' || buildFlag === '1'
     ? { speakers: 14, sessions: 10 }
     : { speakers: 12, sessions: 8 };
+}
+
+/** Legacy fixtures retain their local-only asset boundary. */
+export function generatePreviewData(source: PreviewSource): PreviewCollections {
+  return generateProgrammeData(source, 'preview');
+}
+
+/** Normal build review is read-only without changing its compiled files. */
+export function isReleaseReviewHost(hostname: string): boolean {
+  return (
+    ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname) ||
+    /^gdg-warsaw-devfest26-web--programme-ready-2026-[a-z0-9]+\.web\.app$/.test(hostname)
+  );
 }

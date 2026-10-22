@@ -11,6 +11,47 @@ const eventSchema = JSON.parse(
 );
 const faqSchema = JSON.parse(fs.readFileSync(path.join(root, 'public/schema/faq.jsonld'), 'utf8'));
 
+// Generate share metadata and no-JavaScript descriptions from the same approved snapshot.
+const programme = JSON.parse(
+  fs.readFileSync(path.join(root, 'public/data/programme-2026.json'), 'utf8'),
+);
+const plainText = (value = '') =>
+  value
+    .replace(/<[^>]*>/g, '')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[*_#`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+for (const [id, speaker] of Object.entries(programme.speakers)) {
+  routes[`/speakers/${id}`] = {
+    title: `${speaker.name} | GDG DevFest Warsaw 2026`,
+    description: plainText(
+      [speaker.title, speaker.company, speaker.shortBio].filter(Boolean).join(' · '),
+    ).slice(0, 200),
+    image: speaker.photoUrl,
+    fallbackHeading: speaker.name,
+    fallbackParagraphs: [
+      [speaker.title, speaker.company].filter(Boolean).join(' · '),
+      plainText(speaker.bio),
+      ...Object.values(programme.sessions)
+        .filter((session) => session.speakers.includes(id))
+        .map((session) => `Session: ${session.title}`),
+    ],
+  };
+}
+for (const [id, session] of Object.entries(programme.sessions)) {
+  routes[`/sessions/${id}`] = {
+    title: `${session.title} | GDG DevFest Warsaw 2026`,
+    description: plainText(session.description).slice(0, 200),
+    fallbackHeading: session.title,
+    fallbackParagraphs: [
+      plainText(session.description),
+      `Speakers: ${session.speakers.map((id) => programme.speakers[id].name).join(', ')}`,
+      'The timetable is not yet published.',
+    ],
+  };
+}
+
 const escapeAttribute = (value) =>
   String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
@@ -51,6 +92,11 @@ const setMetadata = (html, route, metadata) => {
     /<meta\b[^>]*\bname="twitter:description"[^>]*>/i,
     metadata.description,
   );
+  if (metadata.image) {
+    const imageUrl = `https://warsaw.devfest.pl${metadata.image}`;
+    output = replaceTagContent(output, /<meta\b[^>]*\bproperty="og:image"[^>]*>/i, imageUrl);
+    output = replaceTagContent(output, /<meta\b[^>]*\bname="twitter:image"[^>]*>/i, imageUrl);
+  }
   output = output.replace(
     /<link\b[^>]*\brel="canonical"[^>]*>/i,
     `<link href="${canonical}" rel="canonical">`,

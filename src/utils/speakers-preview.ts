@@ -3,13 +3,18 @@ import {
   expectedPreviewRoster,
   resolveSpeakersPreview,
   PreviewCollections,
+  isReleaseReviewHost,
 } from './speakers-preview-data';
 
 // Replaced by Rollup from SPEAKERS_PREVIEW=1, review, comparison or tomek. Never enabled by a URL or storage.
 const buildFlag: string = '__SPEAKERS_PREVIEW_BUILD__';
+export const legacyProgrammePreview = ['1', 'review', 'comparison', 'tomek'].includes(buildFlag);
 export const speakersPreview = (() => {
   try {
-    return resolveSpeakersPreview(buildFlag, window.location.hostname);
+    return (
+      resolveSpeakersPreview(buildFlag, window.location.hostname) ||
+      (!legacyProgrammePreview && isReleaseReviewHost(window.location.hostname))
+    );
   } catch (error) {
     const banner = document.createElement('p');
     banner.setAttribute('role', 'alert');

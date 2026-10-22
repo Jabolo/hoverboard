@@ -9,7 +9,7 @@ jest.mock('firebase/firestore', () => ({
   orderBy: jest.fn(),
 }));
 jest.mock('./speakers-preview', () => ({
-  speakersPreview: true,
+  legacyProgrammePreview: true,
   previewCollection: (path: string) => path.split('/')[0],
   loadPreviewData: jest.fn(),
 }));

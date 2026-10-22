@@ -1,0 +1,560 @@
+{
+  "speakers": {
+    "calgan-aygun": {
+      "name": "Çalgan Aygün",
+      "bio": "Çalgan Aygün is Senior DevOps Lead at FinalCheck and a Google Developer Expert. His work focuses on cloud architecture and DevOps. His background includes backend and cloud engineering at QuarPay and software development at My Security Analytics, spanning payment systems, infrastructure modernisation and analytics.",
+      "company": "FinalCheck",
+      "title": "Senior DevOps Lead",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/finalcheck.9997eea0.png",
+      "companyLogoUrl": "/images/speaker-companies/2026/finalcheck.9997eea0.png",
+      "featured": true,
+      "order": 0,
+      "photo": "/images/speakers/2026/calgan-aygun.1fe2b8a8.webp",
+      "photoUrl": "/images/speakers/2026/calgan-aygun.1fe2b8a8.webp",
+      "shortBio": "Cloud architecture and DevOps practitioner.",
+      "socials": [
+        {
+          "icon": "github",
+          "name": "github",
+          "link": "https://github.com/calganaygun"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "http://medium.com/@calganaygun"
+        },
+        {
+          "icon": "twitter",
+          "name": "twitter",
+          "link": "https://x.com/calganaygun"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://calgan.dev/"
+        },
+        {
+          "icon": "youtube",
+          "name": "youtube",
+          "link": "https://www.youtube.com/@calganaygun"
+        },
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/calganaygun/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ]
+    },
+    "andrii-khrystian": {
+      "name": "Andrii Khrystian",
+      "bio": "Andrii Khrystian is a Senior Mobile Developer at Dynatrace and the founder of GDG Linz. With over a decade of experience, he designs and builds scalable mobile applications using Flutter, Kotlin and Android. He combines hands-on cross-platform engineering with technology evangelism and shares practical mobile development knowledge through his community work and YouTube channel.",
+      "company": "Dynatrace",
+      "title": "Senior Mobile Developer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/dynatrace.2d8bf822.png",
+      "companyLogoUrl": "/images/speaker-companies/2026/dynatrace.2d8bf822.png",
+      "featured": true,
+      "order": 1,
+      "photo": "/images/speakers/2026/andrii-khrystian.68b5b76c.webp",
+      "photoUrl": "/images/speakers/2026/andrii-khrystian.68b5b76c.webp",
+      "shortBio": "GDG Linz founder · 10+ years in mobile development.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/andriikhrystian/"
+        }
+      ],
+      "companyLogoBackground": "light"
+    },
+    "ivan-lapa": {
+      "name": "Ivan Lapa",
+      "bio": "Ivan Lapa is an AI engineer, consultant and technical speaker at Netflix, with 12 years of experience in product engineering and a full-stack/UI background. He builds AI features, agentic workflows and developer tooling, and helps engineering teams adopt AI in their delivery processes. He has consulted and trained teams across more than 20 product companies, covering AI agents, context engineering and repeatable engineering workflows. His background spans AI/ML platforms, enterprise products, data analytics, marketplaces, architecture and engineering leadership.",
+      "company": "Netflix",
+      "title": "AI Engineer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
+      "featured": true,
+      "order": 2,
+      "photo": "/images/speakers/2026/ivan-lapa.da94efb6.webp",
+      "photoUrl": "/images/speakers/2026/ivan-lapa.da94efb6.webp",
+      "shortBio": "12 years in product engineering · AI adoption across 20+ companies.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/ai-consult/"
+        }
+      ],
+      "companyLogoBackground": "dark"
+    },
+    "yonatan-levin": {
+      "name": "Yonatan Levin",
+      "bio": "Yonatan Levin is an AI engineering leader and Google Developer Expert in AI. At monday.com, he led Generative AI, Public API and mobile teams, building from a team of one and scaling engineering teams. He co-founded genetics startup KolGene and has helped build Android Academy since 2014, sharing knowledge with a community of more than 20,000 members. He speaks internationally about AI, software development and startups, with a focus on turning advanced technology into practical human value.",
+      "company": "Wild",
+      "title": "Head of AI",
+      "country": "",
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "featured": true,
+      "order": 3,
+      "photo": "/images/speakers/2026/yonatan-levin.0137fc04.webp",
+      "photoUrl": "/images/speakers/2026/yonatan-levin.0137fc04.webp",
+      "shortBio": "Former monday.com GenAI leader · Android Academy co-leader.",
+      "socials": [
+        {
+          "icon": "facebook",
+          "name": "facebook",
+          "link": "https://www.facebook.com/levin.yonatan"
+        },
+        {
+          "icon": "github",
+          "name": "github",
+          "link": "https://www.github.com/parahall"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://www.medium.com/@yonatanvlevin"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://sessionize.com/yonatan-yoni-levin"
+        },
+        {
+          "icon": "twitter",
+          "name": "twitter",
+          "link": "https://www.twitter.com/parahall"
+        },
+        {
+          "icon": "youtube",
+          "name": "youtube",
+          "link": "https://www.youtube.com/c/AndroidAcademyGlobal"
+        },
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/levinyonatan/"
+        }
+      ],
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ]
+    },
+    "hasan-rafiq": {
+      "name": "Hasan Rafiq",
+      "bio": "Hasan Rafiq is a Forward Deployed Engineer at Google AI with more than 15 years of cloud and machine learning experience across the Americas, EMEA and Asia-Pacific. He designs and implements large-scale ML, AI and generative AI solutions, with experience spanning cloud architecture, MLOps and agentic applications. He created the open-source Auto-Tensorflow project and shares his expertise as a technical speaker and mentor. His background includes Google Cloud and AWS implementations for structured and unstructured data at scale.",
+      "company": "Google",
+      "title": "Forward Deployed Engineer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "featured": true,
+      "order": 4,
+      "photo": "/images/speakers/2026/hasan-rafiq.e8f14667.webp",
+      "photoUrl": "/images/speakers/2026/hasan-rafiq.e8f14667.webp",
+      "shortBio": "Google AI · 15+ years in cloud and machine learning.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/hrfq/"
+        }
+      ],
+      "companyLogoBackground": "light"
+    },
+    "dominika-zajac": {
+      "name": "Dominika Zając",
+      "bio": "Dominika Zając is a Senior Software Engineer at Qualtrics, Google Developer Expert in Web Technologies and Microsoft MVP. A full-stack developer with a particular interest in frontend engineering, she focuses on web accessibility, Chrome DevTools and effective programming practices. She is also a DHS Trusted Accessibility Web Tester, an international conference speaker and a mentor. Her community work includes technical lectures, articles and helping people from historically underrepresented groups enter programming.",
+      "company": "Qualtrics",
+      "title": "Senior Software Engineer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/qualtrics.790b8722.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/qualtrics.790b8722.svg",
+      "featured": true,
+      "order": 5,
+      "photo": "/images/speakers/2026/dominika-zajac.0ec613c0.webp",
+      "photoUrl": "/images/speakers/2026/dominika-zajac.0ec613c0.webp",
+      "shortBio": "Microsoft MVP · Web accessibility and Chrome DevTools.",
+      "socials": [
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://domizajac.medium.com/"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://sessionize.com/domi-zajac"
+        },
+        {
+          "icon": "twitter",
+          "name": "twitter",
+          "link": "https://www.twitter.com/domizajac"
+        },
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/dominikazajac/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ]
+    },
+    "dmytro-nedvetskyi": {
+      "name": "Dmytro Nedvetskyi",
+      "bio": "Dmytro Nedvetskyi is a Senior Engineering Leader at Intellias with more than 15 years of experience building and scaling engineering organisations. His work spans platform engineering, AI-enabled products, distributed systems and large-scale transformation. His recent experience includes leading eight cross-functional teams delivering self-service AI platform capabilities in a Fortune 500 environment. He focuses on organisational design, platform delivery and aligning teams around reliable execution.",
+      "company": "Intellias",
+      "title": "Senior Engineering Leader",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/intellias.9df615cc.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/intellias.9df615cc.svg",
+      "featured": true,
+      "order": 6,
+      "photo": "/images/speakers/2026/dmytro-nedvetskyi.acf1de0c.webp",
+      "photoUrl": "/images/speakers/2026/dmytro-nedvetskyi.acf1de0c.webp",
+      "shortBio": "15+ years scaling teams and AI platforms.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/dmytronedvetskyi/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Moderator"
+      }
+    },
+    "yaroslav-polyakov": {
+      "name": "Yaroslav Polyakov",
+      "bio": "Yaroslav Polyakov is an Engineering Manager working in AI at Google and a Fellow of BCS. Since 2017, he has led engineering teams of up to 32 people, driven changes across locations and helped hire more than 63 engineers. His background includes Java and Kotlin, AI/ML infrastructure, health, ride-hailing and restaurant technology, with experience on large-scale products serving 100–180 million users.",
+      "company": "Google",
+      "title": "Engineering Manager, AI",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "featured": true,
+      "order": 7,
+      "photo": "/images/speakers/2026/yaroslav-polyakov.44a7216b.webp",
+      "photoUrl": "/images/speakers/2026/yaroslav-polyakov.44a7216b.webp",
+      "shortBio": "BCS Fellow · AI leadership and large-scale products.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/poliak/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
+    },
+    "sergiy-mokiyenko": {
+      "name": "Sergiy Mokiyenko",
+      "bio": "Sergiy Mokiyenko is an Engineering Manager at Netflix with a background in mobile engineering and leading high-performing teams. He has built and led teams of three to twenty people across domains including finance, Android Open Source Project, Chromium and authorisation systems. His focus is on building product-minded engineering teams that put results for end users at the centre of technical decisions.",
+      "company": "Netflix",
+      "title": "Engineering Manager",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
+      "featured": true,
+      "order": 8,
+      "photo": "/images/speakers/2026/sergiy-mokiyenko.52c40302.webp",
+      "photoUrl": "/images/speakers/2026/sergiy-mokiyenko.52c40302.webp",
+      "shortBio": "Mobile engineering leader · Product-minded teams.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/sergiy-mokiyenko-76891359/"
+        }
+      ],
+      "companyLogoBackground": "dark",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
+    },
+    "serhii-kasianchuk": {
+      "name": "Serhii Kasianchuk",
+      "bio": "Serhii Kasianchuk is a Senior Engineering Manager at Solidgate, where he leads the payments department and multiple engineering teams developing modern payment infrastructure, including payment orchestration. A former Solutions Architect, he brings experience in distributed systems, electronic document management, eSignature platforms and workflow automation. His technical background includes event streaming, message brokers, AWS and Google Cloud, with a current focus on scalable services in Go.",
+      "company": "solidgate",
+      "title": "Senior Engineering Manager",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/solidgate.59276628.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/solidgate.59276628.svg",
+      "featured": true,
+      "order": 9,
+      "photo": "/images/speakers/2026/serhii-kasianchuk.a0a12516.webp",
+      "photoUrl": "/images/speakers/2026/serhii-kasianchuk.a0a12516.webp",
+      "shortBio": "Payments leadership · Distributed systems and orchestration.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/serhii-kasianchuk-b56896b2/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
+    },
+    "viacheslav-miroshnychenko": {
+      "name": "Viacheslav Miroshnychenko",
+      "bio": "Viacheslav Miroshnychenko is Engineering Manager II and Engineering Site Lead at Bolt. Previously, he was CTO at IT Resistance and a team lead at Zendesk. His work combines engineering management, technical leadership and the development of large-scale products, with expertise in distributed systems and payment systems.",
+      "company": "Bolt",
+      "title": "Engineering Manager II & Engineering Site Lead",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/bolt.ca5685e6.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/bolt.ca5685e6.svg",
+      "featured": true,
+      "order": 10,
+      "photo": "/images/speakers/2026/viacheslav-miroshnychenko.f7762eae.webp",
+      "photoUrl": "/images/speakers/2026/viacheslav-miroshnychenko.f7762eae.webp",
+      "shortBio": "Former CTO at IT Resistance · Former team lead at Zendesk.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/viacheslavmiroshnychenko/"
+        }
+      ],
+      "companyLogoBackground": "dark",
+      "sessionRoles": {
+        "PANEL-01": "Panellist"
+      }
+    },
+    "adrian-romanski": {
+      "name": "Adrian Romański",
+      "bio": "Adrian Romański is a Full Stack Developer at PushBased and a Google Developer Expert in Angular. He works primarily with Java and Angular, with interests spanning frontend architecture, performance, component design, RxAngular, NgRx and Nx monorepos. He focuses on web accessibility, semantic HTML and inclusive Angular components, alongside developer tooling and AI-assisted productivity. He is active in the GDG Wrocław and meet.js Wrocław communities.",
+      "company": "PushBased",
+      "title": "Full Stack Developer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/pushbased.8d949ecc.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/pushbased.8d949ecc.svg",
+      "featured": true,
+      "order": 11,
+      "photo": "/images/speakers/2026/adrian-romanski.12d67a5e.webp",
+      "photoUrl": "/images/speakers/2026/adrian-romanski.12d67a5e.webp",
+      "shortBio": "Angular, accessibility and developer tooling.",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/adrianromanski/"
+        }
+      ],
+      "companyLogoBackground": "light",
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ]
+    },
+    "tomasz-porozynski": {
+      "name": "Tomasz Porożyński",
+      "bio": "Tomek is a Google Cloud expert with a keen interest in Kubernetes and serverless app deployment. He is passionate about programming in Python, especially when it involves integrating cutting-edge technologies through diverse APIs. While he appreciates the value of open source, his main focus lies in applying his skills in cloud-native solutions. Tomek actively shares his expertise on his YouTube channel and technical blog, creating engaging tutorials on GCP and Kubernetes. He's also an advocate for practical applications of open source technologies in everyday solutions. In his downtime, Tomek enjoys exploring smart home automation using the open-source Home Assistant project and finds tranquility in his desk-side fish tank, which provides a serene backdrop during intense work sessions and long conference calls.",
+      "company": "deepsense.ai",
+      "title": "Staff ML Engineer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/deepsense-ai.fff283f6.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/deepsense-ai.fff283f6.svg",
+      "companyLogoBackground": "light",
+      "featured": false,
+      "order": 12,
+      "photo": "/images/speakers/2026/tomasz-porozynski.99350ece.webp",
+      "photoUrl": "/images/speakers/2026/tomasz-porozynski.99350ece.webp",
+      "shortBio": "GenAI and Google Cloud GDE · Python and Kubernetes.",
+      "badges": [
+        {
+          "name": "gde",
+          "description": "Google Developer Expert — GenAI and Cloud",
+          "link": "https://developers.google.com/community/experts"
+        }
+      ],
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/tomaszporozynski/"
+        },
+        {
+          "icon": "github",
+          "name": "GitHub",
+          "link": "https://github.com/ontaptom"
+        },
+        {
+          "icon": "website",
+          "name": "Sessionize",
+          "link": "https://sessionize.com/tomekporozynski/"
+        },
+        {
+          "icon": "youtube",
+          "name": "YouTube",
+          "link": "https://www.youtube.com/@storagefreak"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://storagefreak.net/"
+        }
+      ]
+    },
+    "michal-tajchert": {
+      "name": "Michał Tajchert",
+      "company": "Lite e-Commerce",
+      "title": "Chief Technology Officer",
+      "country": "",
+      "order": 13,
+      "featured": false,
+      "photoUrl": "/images/speakers/2026/michal-tajchert.ac967010.webp",
+      "photo": "/images/speakers/2026/michal-tajchert.ac967010.webp",
+      "shortBio": "Leading technology for Żabka Jush and delio · Creator of Kanarek.",
+      "bio": "Michał Tajchert is Chief Technology Officer at Lite e-Commerce, where he leads software, design and data for Żabka Jush and delio. His work spans product engineering, architecture and team development. Previously, he led mobile engineering at MODIVO and worked on mobile technology in banking. He is the creator of the Kanarek air-quality app and an open-source contributor. A former GDG Warszawa organiser, he has shared his Android experience through conference talks, workshops and startup mentoring.",
+      "badges": [],
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/micha%C5%82-tajchert-517b7668/"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://mtajchert.com/"
+        },
+        {
+          "icon": "github",
+          "name": "GitHub",
+          "link": "https://github.com/tajchert"
+        },
+        {
+          "icon": "website",
+          "name": "Blog",
+          "link": "https://mtajchert.hashnode.dev/"
+        }
+      ],
+      "companyLogo": "/images/speaker-companies/2026/lite-ecommerce.a75f8e14.png",
+      "companyLogoUrl": "/images/speaker-companies/2026/lite-ecommerce.a75f8e14.png",
+      "companyLogoBackground": "light"
+    }
+  },
+  "sessions": {
+    "CFP-002": {
+      "title": "Event-Driven AI Pipelines on GCP: From Eventarc to LLMs",
+      "description": "In this live building session, I will create a production-ready, event-driven AI pipeline on Google Cloud from a blank terminal to a working system. A file lands in Cloud Storage, Eventarc routes the event, Cloud Run processes it reliably, and Vertex AI with Gemini enriches the data through classification, summarization, and entity extraction. The enriched results are then stored. The focus is not on AI hype or a pre-recorded happy-path demo. Attendees will see the system being built live, including the practical decisions, trade-offs, and failure scenarios involved in making it production-ready.",
+      "speakers": ["calgan-aygun"],
+      "tags": [
+        "AI - Gemini",
+        "AI - Gemini Enterprise Agent Platform",
+        "Build with AI",
+        "Cloud - App Development",
+        "Cloud - Compute, Networking, Storage",
+        "Cloud - Serverless & Containers",
+        "Google Cloud",
+        "Cloud - AI Tools"
+      ],
+      "language": "English, Turkish",
+      "complexity": "Intermediate"
+    },
+    "CFP-012": {
+      "title": "The Physics of Voice: Building a Coach in Flutter with Whisper and Acoustic Analysis",
+      "description": "Your voice is a waveform. Pitch, tempo, energy, silence — all measurable, all improvable. In this session, I'll show how I built a real-time public speaking coach in Flutter by combining acoustic physics with modern voice recognition.We'll start where most Flutter voice talks don't: the signal itself. Understanding frequency, amplitude, and phoneme structure determines which APIs you reach for, how you tune Whisper for real-world input, and why dialect — yes, Austrian German included — can silently wreck transcription accuracy. From there, we go hands-on: integrating Whisper for high-accuracy STT alongside on-device fallbacks, extracting real-time acoustic features like pitch variance, speaking rate, and filler words to deliver actionable coaching feedback, and designing Flutter UIs that feel natural when voice is the primary input.",
+      "speakers": ["andrii-khrystian"],
+      "tags": ["Dart - Flutter"],
+      "language": "English",
+      "complexity": "Beginner, Intermediate, Advance"
+    },
+    "CFP-014": {
+      "title": "AI Code Review: Comparing Ready-Made Tools and Building Your Own",
+      "description": "Should your team adopt an existing AI code reviewer or build its own? I will compare both approaches using real development workflows and moreover, tell the most effective approaches in verifying the PRs by AI reviewers. We will examine CodeRabbit, Greptile, Cursor Bugbot, and Claude Code across review quality, false positives, repository context, customization, developer experience, privacy, maintenance, and cost. Using PRs with planted defects, we will see what these tools catch and miss. Next, I will show how we built DevDigest, our own AI code reviewer. We will explore its architecture, model integration, structured findings, and context pipeline: system instructions, PR intent, linked specifications and skills, a repository map, affected callers, and finally the diff. We will also integrate review with spec-driven development. Instead of checking only whether the code looks correct, the reviewer can validate whether the implementation follows the original requirements, architectural decisions, and expected behavior. The talk will cover the pros and cons of ready-made and custom solutions and caveats on our path of creating a well-functioning solution that works for our purposes. I'm also planning to integrate Antigravity and Firebase into the talk. The duration is flexible, from 30 to 60 min. 30min can be also enough.",
+      "speakers": ["ivan-lapa"],
+      "tags": ["AI", "AI - Antigravity", "Google Cloud", "Web - AI for Web Developers"],
+      "language": "English",
+      "complexity": "Advance, Intermediate, Beginner"
+    },
+    "CFP-021": {
+      "title": "Written by Agents. Reviewed by Nobody. Running in Production",
+      "description": "I gave one feature to AI agents. They sent back 300,000 lines of code in one pull request. Nobody read it, and it is running in production. This talk is not about trusting the machine. It is about moving what you check. Across more than 400 companies, AI use rose 65%, but merged code changes rose only 7.76%. Reviews, handoffs and approvals absorbed the gain. Using Formula 1 as the lens, I show what replaces code review: a definition of \"done\" written before the work starts, tests on the real product, and team standards turned into automatic checks.",
+      "speakers": ["yonatan-levin"],
+      "tags": ["AI", "AI - Antigravity", "AI - Gemini"],
+      "language": "English, Hebrew, Ukrainian, Russian",
+      "complexity": "Intermediate, Beginner, Advance"
+    },
+    "CFP-034": {
+      "title": "Beyond Prompt Engineering: Solving Complex Optimization Problems with AlphaEvolve",
+      "description": "Large Language Models excel at generating standard boilerplate code, but how do we leverage them to discover novel, high-performance algorithms for complex combinatorial optimization problems? Enter AlphaEvolve—Google DeepMind's evolutionary coding framework that pairs LLMs with automated program verification to discover, evaluate, and iteratively refine code. In this talk, we will move past standard prompt engineering and explore how evolutionary compute loops turn Gemini into an engine for algorithmic discovery. Drawing from Google Cloud Professional Services Organization (PSO) deployment patterns, we will walk through setting up automated evaluation functions, defining seed algorithms, and scaling evolutionary iterations to solve real-world engineering bottlenecks—such as supply chain routing, data pipeline scheduling, and resource allocation. You will leave with a clear blueprint for deploying evolutionary AI pipelines on Google Cloud to tackle NP-hard and domain-specific system constraints.",
+      "speakers": ["hasan-rafiq"],
+      "tags": ["AI", "AI - Gemini Enterprise Agent Platform", "AI - Gemini"],
+      "language": "English",
+      "complexity": "Intermediate"
+    },
+    "CFP-050": {
+      "title": "Stop Guessing, Start Debugging (with Antigravity & Chrome DevTools MCP)",
+      "description": "“Works on my machine” doesn’t count as debugging. In this workshop, we’ll use Antigravity and Chrome DevTools MCP to catch bugs where they actually happen—the browser. Instead of guessing, we’ll let AI access real data like network requests, console logs, and runtime state to diagnose and fix issues faster (and with less frustration). Why does this matter? Because most debugging today is based on incomplete context—we read code, make assumptions, and hope we’re right. With Antigravity and MCP, AI stops guessing and starts collaborating with real, structured data from your app. This means fewer blind spots, faster feedback loops, and more confidence that your fix actually works—not just locally, but in reality.",
+      "speakers": ["dominika-zajac"],
+      "tags": ["AI", "Web - AI for Web Developers", "Web - DevTools & Browser Automation"],
+      "language": "English, Polish",
+      "complexity": "Beginner"
+    },
+    "INVITED-001": {
+      "title": "Stop Chatting with Your Docs — Architecting a Local-First AI Mind Coach in TypeScript with Gemma & Gemini Argon",
+      "description": "Most AI integrations for developer notes boil down to a simple \"chat with your docs\" wrapper. While convenient, this model creates a dangerous illusion of mastery: when AI serves ready-made summaries on demand, active thinking stops and deep learning fades away. What if we inverted this architecture in TypeScript turning our private knowledge base into a demanding Socratic coach with the absolute privacy of an offline notebook?\nIn this talk, we will dissect the architecture of a two-tier cognitive sparring partner that stress-tests your engineering knowledge without ever sending a single private file to the cloud:\nLocal Gemma (The Offline Sparring Partner): Running entirely on your machine against raw Markdown notes, it acts as a relentless coach on trains or flights driving Socratic dialogue, banning industry buzzwords, and forcing you to explain complex mechanisms in your own words using the Feynman technique.Gemini Argon (The Zero-Knowledge Judge): Stepping in when connectivity returns, we leverage Argon within a strict LLM-as-a-Judge pattern via the @google/genai SDK. Using a blind claim-extraction protocol, Argon never sees your underlying notes, only the generated challenge and your human response ruthlessly exposing logical fallacies, shallow hand-waving, and gaps in your mental model before scheduling your next review.Join this session to learn how to combine edge inference, zero-knowledge privacy patterns, and frontier reasoning with Gemini Argon to build tools that upgrade rather than replace your engineering brain.",
+      "speakers": ["adrian-romanski"],
+      "tags": ["AI", "Gemma", "Gemini", "Offline-first"]
+    },
+    "PANEL-01": {
+      "title": "From 10x Coders to 10x Teams: Engineering Leadership with AI",
+      "description": "Moderator: Dmytro Nedvetskyi (Intellias).\n\nPanellists: Yaroslav Polyakov (Google), Sergiy Mokiyenko (Netflix), Serhii Kasianchuk (solidgate), and Viacheslav Miroshnychenko (Bolt).",
+      "speakers": [
+        "dmytro-nedvetskyi",
+        "yaroslav-polyakov",
+        "sergiy-mokiyenko",
+        "serhii-kasianchuk",
+        "viacheslav-miroshnychenko"
+      ],
+      "tags": ["Engineering Culture", "AI"]
+    },
+    "CFP-028": {
+      "title": "Voice agents, hype-free: lessons from Gemini's audio stack",
+      "description": "Voice agents are having a moment, but building one that feels responsive, useful, and not painfully awkward is still harder than the demos make it look. In this talk, I’ll walk through Gemini’s current audio stack, including Gemini Live, TTS, transcription, translation, and asynchronous tool calling, and show how the pieces fit together when you build a real voice-first experience. Rather than focusing on API basics, I’ll concentrate on the parts that become interesting in practice: latency, interruptions, long-running tools, choosing between native audio and traditional speech pipelines, and handling conversations that do not follow neat request-response turns. Expect practical demos, architectural trade-offs, and lessons learned from experimenting with the stack, including what works well, what still feels rough, and where voice agents are genuinely useful beyond the hype.",
+      "speakers": ["tomasz-porozynski"],
+      "tags": ["AI", "AI - Gemini", "AI - Gemini Enterprise Agent Platform", "AI - AI Studio"],
+      "language": "English, Polish",
+      "complexity": "Intermediate, Advance"
+    },
+    "CFP-043": {
+      "title": "So you want to be a Developer in 2026...",
+      "description": "This session will show how our area of work has changed in past 2 years. How to focus on what is important and what is important if \"coding is solved\". I will touch topics such as personal development, career, how to stay sane, and what companies and employees are looking for when hiring. As a person responsible for many hiring decision as well team structure and work organization in a Żabka Jush I can show what modern and agile workplaces look for and value. This session won't have coding in it. It is directed toward people studying computer science, first employment years, as well trying to better understand current job market for developers.",
+      "speakers": ["michal-tajchert"],
+      "tags": ["AI", "Build with AI"],
+      "language": "Polish, English",
+      "complexity": "Beginner, Advance, Intermediate"
+    }
+  }
+}

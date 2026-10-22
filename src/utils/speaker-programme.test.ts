@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import type { Speaker } from '../models/speaker';
 import type { Session } from '../models/session';
-import { curatedPreviewSpeakers, speakerSessionLinks } from './speaker-programme';
+import { curatedSpeakers, speakerSessionLinks, speakerSocialLabel } from './speaker-programme';
 
 const speaker = (id: string) => ({ id, name: id, featured: false }) as Speaker;
 const panel: Session = {
@@ -16,7 +16,7 @@ describe('speaker programme presentation', () => {
     const input = ['other', 'dominika-zajac', 'andrii-khrystian', 'ivan-lapa', 'hasan-rafiq'].map(
       speaker,
     );
-    expect(curatedPreviewSpeakers(input).map(({ id }) => id)).toEqual([
+    expect(curatedSpeakers(input).map(({ id }) => id)).toEqual([
       'ivan-lapa',
       'hasan-rafiq',
       'andrii-khrystian',
@@ -32,9 +32,9 @@ describe('speaker programme presentation', () => {
   });
 
   it('does not silently replace a missing editorial pick with another person', () => {
-    expect(
-      curatedPreviewSpeakers([speaker('other'), speaker('hasan-rafiq')]).map(({ id }) => id),
-    ).toEqual(['hasan-rafiq']);
+    expect(curatedSpeakers([speaker('other'), speaker('hasan-rafiq')]).map(({ id }) => id)).toEqual(
+      ['hasan-rafiq'],
+    );
   });
 
   it('links the moderator and panellists to the same shared session without duplicating records', () => {
@@ -67,5 +67,21 @@ describe('speaker programme presentation', () => {
       { id: talk.id, title: talk.title, href: '/sessions/CFP-014', label: 'Session' },
     ]);
     expect(speakerSessionLinks([panel])[0]?.label).toBe('Shared panel');
+  });
+});
+
+describe('speaker social link labels', () => {
+  it('uses the speaker and correctly capitalised service name', () => {
+    expect(speakerSocialLabel('Ivan Lapa', 'linkedin', 'linkedin')).toBe(
+      'Visit Ivan Lapa on LinkedIn (opens in a new tab)',
+    );
+  });
+  it('distinguishes multiple website links and handles incomplete source data', () => {
+    expect(
+      speakerSocialLabel('Yonatan Levin', 'Website', 'website', 'https://www.medium.com/@yonatan'),
+    ).toContain('website (medium.com)');
+    expect(speakerSocialLabel('', '', '', 'not a url')).toBe(
+      'Visit speaker on website (opens in a new tab)',
+    );
   });
 });

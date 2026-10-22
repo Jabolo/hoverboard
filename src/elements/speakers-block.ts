@@ -8,14 +8,13 @@ import '@power-elements/lazy-image';
 import '../components/text-truncate';
 import '../components/speaker-affiliations';
 import '../components/speaker-session-links';
-import { curatedPreviewSpeakers } from '../utils/speaker-programme';
+import { curatedSpeakers } from '../utils/speaker-programme';
 import { Speaker } from '../models/speaker';
 import { router } from '../router';
 import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { fetchSpeakers } from '../store/speakers/actions';
 import { initialSpeakersState } from '../store/speakers/state';
-import { randomOrder } from '../utils/arrays';
 import { speakersBlock } from '../utils/data';
 import '../utils/icons';
 import './shared-styles';
@@ -58,11 +57,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           grid-gap: 32px 16px;
         }
 
-        .speakers-wrapper[curated-preview] {
+        .speakers-wrapper[curated-lineup] {
           grid-template-columns: minmax(0, 1fr);
         }
 
-        .speakers-wrapper[curated-preview] .photo {
+        .speakers-wrapper[curated-lineup] .photo {
           --lazy-image-width: 128px;
           --lazy-image-height: 128px;
         }
@@ -84,6 +83,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           display: block;
           color: inherit;
           text-decoration: none;
+        }
+
+        .speaker-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .speaker:hover {
@@ -168,7 +172,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         @media (min-width: 640px) {
-          .speakers-wrapper[curated-preview] {
+          .speakers-wrapper[curated-lineup] {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
@@ -191,11 +195,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
             display: none;
           }
 
-          .speakers-wrapper[curated-preview] {
+          .speakers-wrapper[curated-lineup] {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
-          .speakers-wrapper[curated-preview] .speaker:last-of-type {
+          .speakers-wrapper[curated-lineup] .speaker:last-of-type {
             display: block;
           }
 
@@ -229,7 +233,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
             display: block;
           }
 
-          .speakers-wrapper[curated-preview] {
+          .speakers-wrapper[curated-lineup] {
             grid-template-columns: repeat(4, minmax(0, 1fr));
           }
         }
@@ -238,11 +242,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       <div class="container">
         <h2 class="container-title">[[speakersBlock.title]]</h2>
 
-        <div
-          class="speakers-wrapper"
-          curated-preview$="[[speakersPreview]]"
-          hidden$="[[!hasSpeakers]]"
-        >
+        <div class="speakers-wrapper" curated-lineup hidden$="[[!hasSpeakers]]">
           <template is="dom-repeat" items="[[featuredSpeakers]]" as="speaker">
             <div class="speaker">
               <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
@@ -327,12 +327,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
       : 'Call for Papers is closed, and we’re reviewing submissions. Speaker profiles will appear here as confirmations are made.';
   }
 
-  private speakersBlock = speakersPreview
-    ? {
-        ...speakersBlock,
-        callToAction: { label: 'Meet all speakers', link: '/speakers' },
-      }
-    : speakersBlock;
+  private speakersBlock = speakersBlock;
 
   override connectedCallback() {
     super.connectedCallback();
@@ -351,10 +346,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
   get featuredSpeakers(): Speaker[] {
     if (this.speakers instanceof Success) {
       const { data } = this.speakers;
-      if (speakersPreview) return curatedPreviewSpeakers(data);
-      const filteredSpeakers = data.filter((speaker) => speaker.featured);
-      const randomSpeakers = randomOrder(filteredSpeakers.length ? filteredSpeakers : data);
-      return randomSpeakers.slice(0, 4);
+      return curatedSpeakers(data);
     } else {
       return [];
     }

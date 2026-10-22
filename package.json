@@ -9,7 +9,7 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs",
+    "build": "npm run validate:programme && npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs",
     "clean": "rm -rf dist",
     "deploy": "npm run build && NODE_ENV=production firebase deploy",
     "firestore:copy": "ts-node-script ./scripts/firestore-copy",
@@ -35,7 +35,8 @@
     "preview:speakers": "node scripts/preview-speakers.mjs",
     "build:speakers-review": "node scripts/build-speakers-review.mjs",
     "build:speakers-comparison": "node scripts/build-speakers-review.mjs --comparison",
-    "build:speakers-tomek": "node scripts/build-speakers-review.mjs --tomek"
+    "build:speakers-tomek": "node scripts/build-speakers-review.mjs --tomek",
+    "validate:programme": "node scripts/validate-programme.mjs"
   },
   "dependencies": {
     "@abraham/remotedata": "1.4.0",

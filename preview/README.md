@@ -103,3 +103,11 @@ CFP row43 is Confirmed, while his other proposal in row42 remains pending.
 See `confirmed-speakers-2026/tajchert-source.json` and `tajchert-assets.json`.
 Use the existing `build:speakers-tomek` and Hosting configuration to refresh only
 `speakers-tomek-2026`; production and earlier previews stay unchanged.
+
+## Merge-ready programme candidate (22 October 2026)
+
+The current candidate uses the normal production build and public snapshot, not
+legacy fixtures. See [programme publication](../docs/programme-publication.md) for
+source ownership, validation, exact preview-only deployment and rollback. Legacy
+preview descriptions above are historical; their existing hosted releases remain
+unchanged. Production merge/publication still requires an explicit human decision.

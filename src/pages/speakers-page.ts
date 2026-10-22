@@ -2,7 +2,6 @@ import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-icon-button';
 import '@polymer/paper-progress';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
@@ -28,10 +27,13 @@ import { initialSpeakersState } from '../store/speakers/state';
 import { contentLoaders, heroSettings } from '../utils/data';
 import '../utils/icons';
 import { updateMetadata } from '../utils/metadata';
+import { speakerSocialLabel } from '../utils/speaker-programme';
 
 @customElement('speakers-page')
 export class SpeakersPage extends ReduxMixin(PolymerElement) {
   private speakersPreview = speakersPreview;
+
+  private socialLabel = speakerSocialLabel;
 
   static get template() {
     return html`
@@ -83,6 +85,11 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           display: block;
           color: inherit;
           text-decoration: none;
+        }
+
+        .speaker-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .speaker:hover {
@@ -152,15 +159,30 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
         .contacts {
           margin-top: 16px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .social-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: var(--border-radius);
+          color: var(--secondary-text-color);
+        }
+
+        .social-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .social-icon {
-          --paper-icon-button: {
-            padding: 6px;
-            width: 32px;
-            height: 32px;
-          }
-          color: var(--secondary-text-color);
+          --iron-icon-width: 20px;
+          --iron-icon-height: 20px;
         }
 
         paper-progress {
@@ -259,12 +281,18 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
             <div class="contacts">
               <template is="dom-repeat" items="[[speaker.socials]]" as="social">
-                <a href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
-                  <paper-icon-button
+                <a
+                  class="social-link"
+                  href$="[[social.link]]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label$="[[socialLabel(speaker.name, social.name, social.icon, social.link)]]"
+                >
+                  <iron-icon
                     class="social-icon"
-                    icon="hoverboard:{{social.icon}}"
-                    aria-label="Open [[speaker.name]] on [[social.icon]]"
-                  ></paper-icon-button>
+                    icon="hoverboard:[[social.icon]]"
+                    aria-hidden="true"
+                  ></iron-icon>
                 </a>
               </template>
             </div>

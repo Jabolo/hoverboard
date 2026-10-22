@@ -1,4 +1,3 @@
-import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -19,14 +18,17 @@ import { ReduxMixin } from '../store/mixin';
 import { fetchSpeakers } from '../store/speakers/actions';
 import { selectSpeaker } from '../store/speakers/selectors';
 import { initialSpeakersState, SpeakersState } from '../store/speakers/state';
-import { speakerDetails } from '../utils/data';
+import { disabledSchedule, speakerDetails } from '../utils/data';
+import { speakerSocialLabel } from '../utils/speaker-programme';
 import '../utils/icons';
 import { updateImageMetadata } from '../utils/metadata';
 import { getVariableColor } from '../utils/styles';
 
 @customElement('speaker-page')
 export class SpeakerPage extends ReduxMixin(PolymerElement) {
-  private speakersPreview = speakersPreview;
+  private disabledSchedule = disabledSchedule;
+
+  private socialLabel = speakerSocialLabel;
 
   static get template() {
     return html`
@@ -131,17 +133,32 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           max-width: 700px;
         }
 
+        .actions {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
         .action {
-          margin-right: 16px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: var(--border-radius);
           color: var(--secondary-text-color);
           cursor: pointer;
           user-select: none;
         }
 
         .action iron-icon {
-          margin-right: 4px;
-          --iron-icon-width: 18px;
-          --iron-icon-height: 18px;
+          --iron-icon-width: 20px;
+          --iron-icon-height: 20px;
+        }
+
+        .action:focus-visible,
+        .section:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .additional-sections {
@@ -198,7 +215,7 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <simple-hero page="speakers" hide-description$="[[speakersPreview]]">
+      <simple-hero page="speakers" hide-description$="[[disabledSchedule]]">
         <div class="dialog-container header-content" layout horizontal center>
           <lazy-image class="photo" src="[[speaker.photoUrl]]" alt="[[speaker.name]]"></lazy-image>
           <div>
@@ -252,8 +269,14 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
 
         <div class="actions" layout horizontal>
           <template is="dom-repeat" items="[[speaker.socials]]" as="social">
-            <a class="action" href$="[[social.link]]" target="_blank" rel="noopener noreferrer">
-              <iron-icon icon="hoverboard:[[social.icon]]"></iron-icon>
+            <a
+              class="action"
+              href$="[[social.link]]"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label$="[[socialLabel(speaker.name, social.name, social.icon, social.link)]]"
+            >
+              <iron-icon icon="hoverboard:[[social.icon]]" aria-hidden="true"></iron-icon>
             </a>
           </template>
         </div>
@@ -269,10 +292,16 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
                   <template is="dom-if" if="[[panelRole(session.id, speaker.sessionRoles)]]">
                     <div class="panel-role">[[panelRole(session.id, speaker.sessionRoles)]]</div>
                   </template>
-                  <div class="section-secondary-text" hidden$="[[!session.dateReadable]]">
+                  <div
+                    class="section-secondary-text"
+                    hidden$="[[hideTimetable(disabledSchedule, session.dateReadable)]]"
+                  >
                     [[session.dateReadable]], [[session.startTime]] - [[session.endTime]]
                   </div>
-                  <div class="section-secondary-text" hidden$="[[!session.track.title]]">
+                  <div
+                    class="section-secondary-text"
+                    hidden$="[[hideTimetable(disabledSchedule, session.track.title)]]"
+                  >
                     [[session.track.title]]
                   </div>
                   <div class="tags" hidden$="[[!session.tags.length]]">
@@ -344,6 +373,10 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
 
   private computeJoin(...values: string[]) {
     return values.filter(Boolean).join(' • ');
+  }
+
+  private hideTimetable(scheduleDisabled: boolean, value?: string) {
+    return scheduleDisabled || !value;
   }
 
   private panelRole(sessionId: string, roles?: Record<string, 'Moderator' | 'Panellist'>) {

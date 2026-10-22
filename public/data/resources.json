@@ -26,7 +26,7 @@
     "languages": "English & Polish",
     "cta": "View speaker updates",
     "link": "/speakers",
-    "note": "Speaker announcements will follow as confirmations are made."
+    "note": "Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
   },
   "pastDevFestsBlock": {
     "title": "Built together over the years.",
@@ -314,7 +314,7 @@
   "speakersBlock": {
     "title": "Speakers",
     "callToAction": {
-      "label": "View all speakers",
+      "label": "Meet all speakers",
       "link": "/speakers"
     }
   },

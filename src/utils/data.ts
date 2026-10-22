@@ -5,16 +5,7 @@ import {
 } from '../../public/data/settings.json';
 
 export const disabledSchedule = speakersPreview || publishedDisabledSchedule;
-export const heroSettings = speakersPreview
-  ? {
-      ...publishedHeroSettings,
-      speakers: {
-        ...publishedHeroSettings.speakers,
-        description:
-          'Meet the confirmed 2026 speakers and explore their sessions. The schedule is not yet published.',
-      },
-    }
-  : publishedHeroSettings;
+export const heroSettings = publishedHeroSettings;
 
 export {
   aboutBlock,

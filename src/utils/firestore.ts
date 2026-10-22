@@ -12,8 +12,12 @@ import {
   Unsubscribe,
 } from 'firebase/firestore';
 import { readOnlyDb as db } from '../firebase';
-import { loadPreviewData, previewCollection, speakersPreview } from './speakers-preview';
+import { loadPreviewData, previewCollection, legacyProgrammePreview } from './speakers-preview';
+import { loadPublishedProgramme } from './published-programme';
 import { Id, ParentId } from '../models/types';
+
+const loadProgrammeData = () =>
+  legacyProgrammePreview ? loadPreviewData() : loadPublishedProgramme();
 
 export const mergeDataAndId = <T>(
   snapshot: QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>,
@@ -42,11 +46,11 @@ export const subscribeToDocument = <T>(
   onNext: (payload: T | undefined) => void,
   onError: (error: Error) => void,
 ): Subscription => {
-  const localCollection = speakersPreview && previewCollection(path);
+  const localCollection = previewCollection(path);
   if (localCollection) {
     let active = true;
     onStart();
-    loadPreviewData().then(
+    loadProgrammeData().then(
       (data) => {
         if (active)
           onNext(
@@ -78,11 +82,11 @@ export const subscribeToCollection = <T>(
   onError: (error: Error) => void,
   order = orderBy('name'),
 ): Subscription => {
-  const localCollection = speakersPreview && previewCollection(path);
+  const localCollection = previewCollection(path);
   if (localCollection) {
     let active = true;
     onStart();
-    loadPreviewData().then(
+    loadProgrammeData().then(
       (data) => {
         if (active) onNext(data[localCollection] as T[]);
       },
@@ -111,11 +115,11 @@ export const subscribeToCollectionGroup = <T>(
   onError: (error: Error) => void,
   order = orderBy('name'),
 ): Subscription => {
-  const localCollection = speakersPreview && previewCollection(path);
+  const localCollection = previewCollection(path);
   if (localCollection) {
     let active = true;
     onStart();
-    loadPreviewData().then(
+    loadProgrammeData().then(
       (data) => {
         if (active) onNext(data[localCollection] as T[]);
       },

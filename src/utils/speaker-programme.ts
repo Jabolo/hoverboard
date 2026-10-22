@@ -1,17 +1,17 @@
 import type { Session } from '../models/session';
 import type { Speaker, SpeakerData } from '../models/speaker';
 
-export const CURATED_PREVIEW_SPEAKER_IDS = [
+export const CURATED_SPEAKER_IDS = [
   'ivan-lapa',
   'hasan-rafiq',
   'andrii-khrystian',
   'dominika-zajac',
 ] as const;
 
-/** Keep the local homepage editorial selection stable, independent of record order. */
-export function curatedPreviewSpeakers(speakers: Speaker[]): Speaker[] {
+/** Keep the homepage editorial selection stable, independent of record order. */
+export function curatedSpeakers(speakers: Speaker[]): Speaker[] {
   const byId = new Map(speakers.map((speaker) => [speaker.id, speaker]));
-  return CURATED_PREVIEW_SPEAKER_IDS.flatMap((id) => {
+  return CURATED_SPEAKER_IDS.flatMap((id) => {
     const speaker = byId.get(id);
     return speaker ? [speaker] : [];
   });
@@ -47,4 +47,32 @@ export function speakerSessionLinks(
       },
     ];
   });
+}
+
+/** Give the link, rather than its decorative icon, an unambiguous accessible name. */
+export function speakerSocialLabel(
+  speakerName = '',
+  socialName = '',
+  icon = '',
+  link = '',
+): string {
+  const names: Record<string, string> = {
+    github: 'GitHub',
+    linkedin: 'LinkedIn',
+    twitter: 'X / Twitter',
+    youtube: 'YouTube',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    website: 'website',
+  };
+  const service = names[icon.toLowerCase()] || socialName.trim() || 'website';
+  let destination = '';
+  if (icon === 'website' && link) {
+    try {
+      destination = ` (${new URL(link).hostname.replace(/^www\./, '')})`;
+    } catch {
+      /* Label remains useful for malformed source URLs. */
+    }
+  }
+  return `Visit ${speakerName.trim() || 'speaker'} on ${service}${destination} (opens in a new tab)`;
 }

@@ -42,7 +42,8 @@ import { getVariableColor } from '../utils/styles';
 @customElement('session-page')
 export class SessionPage extends ReduxMixin(PolymerElement) {
   private speakersPreview = speakersPreview;
-  private sessionHeroHeading = speakersPreview ? 'Sessions' : '';
+  private sessionHeroHeading = disabledSchedule ? 'Sessions' : '';
+  private hideScheduleDescription = disabledSchedule;
 
   static get template() {
     return html`
@@ -137,6 +138,11 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           background: var(--secondary-background-color);
           color: var(--primary-text-color);
           transition: border-color var(--animation);
+        }
+
+        .section:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .section:hover {
@@ -234,7 +240,7 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
       <simple-hero
         page="schedule"
         heading="[[sessionHeroHeading]]"
-        hide-description$="[[speakersPreview]]"
+        hide-description$="[[hideScheduleDescription]]"
       >
         <div class="header-content" layout vertical end-justified>
           <h2 class="name">[[session.title]]</h2>
@@ -246,11 +252,11 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
           <div
             class="float-button"
-            style$="[[previewActionsStyle(speakersPreview)]]"
+            style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
             hidden$="[[!contentLoaderVisibility]]"
           >
             <paper-fab
-              style$="[[previewActionsStyle(speakersPreview)]]"
+              style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
               icon="hoverboard:[[featuredSessionIcon]]"
               hidden$="[[!viewport.isLaptopPlus]]"
               on-click="toggleFeaturedSession"
@@ -275,11 +281,11 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
       <div class="container content">
         <div
           class="float-button"
-          style$="[[previewActionsStyle(speakersPreview)]]"
+          style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
           hidden$="[[!contentLoaderVisibility]]"
         >
           <paper-fab
-            style$="[[previewActionsStyle(speakersPreview)]]"
+            style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
             icon="hoverboard:[[featuredSessionIcon]]"
             hidden$="[[viewport.isLaptopPlus]]"
             on-click="toggleFeaturedSession"
@@ -381,6 +387,10 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
       <footer-block></footer-block>
     `;
+  }
+
+  private bookmarkActionsStyle(preview: boolean, scheduleDisabled: boolean) {
+    return preview || scheduleDisabled ? 'display:none' : '';
   }
 
   private previewActionsStyle(preview: boolean) {
@@ -497,6 +507,8 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
   private toggleFeaturedSession(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+
+    if (speakersPreview || disabledSchedule) return;
 
     if (!(this.user instanceof Success)) {
       store.dispatch(
