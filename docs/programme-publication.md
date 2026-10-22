@@ -1,7 +1,7 @@
 # Confirmed 2026 programme publication
 
 The CFP sheet and Program Doc remain the organiser's authority. The approved public
-snapshot is `public/data/programme-2026.json`: 14 confirmed speakers, 10 sessions,
+snapshot is `public/data/programme-2026.json`: 15 confirmed speakers, 11 sessions,
 one five-person panel, CFP-043 only for Michał Tajchert, Wild / Head of AI for Yonatan.
 No nationality, timetable or private review/contact fields are published.
 
@@ -66,4 +66,22 @@ names; topic filters use existing tags. Filter state is shareable in the URL.
 Yonatan’s original eight-second animation is delivered as a 198,458-byte animated
 WebP (the original GIF is 1,405,612 bytes), with a separate static poster for
 sharing, pausing and reduced-motion preferences. Pause controls are outside card
-links. Original source media is preserved; the release has 26 fingerprinted assets.
+links. Original source media is preserved; the release has 28 fingerprinted assets.
+
+## Sponsor speaker confirmation — 22 October 2026
+
+Arek Borucki is confirmed for the 30-minute technical talk `SPONSOR-001`, introduced
+via sponsor MongoDB. His professional affiliation is Hugging Face, with the role
+ML Platform & Database Engineer. The organiser's complete title and abstract are
+preserved. Language, audience level and technical requirements were not supplied.
+No timetable allocation was added.
+
+The private CFP sheet records the confirmation and contact; Source of Truth and
+Program & Agenda record the programme addition. Public profile, biography, original
+LinkedIn portrait and official Hugging Face logo sources are documented in
+`preview/confirmed-speakers-2026/arek-source.json`. The older MongoDB Champion
+directory's STACKIT role is stale relative to his LinkedIn, personal website and
+MongoDB's current interview; those agree on Hugging Face.
+
+This addition is authorised for the `programme-ready-2026` review channel only.
+Production publication and merging remain separate decisions.

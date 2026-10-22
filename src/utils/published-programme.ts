@@ -5,8 +5,8 @@ export const PROGRAMME_URL = '/data/programme-2026.json';
 /** Hosting publishes this reviewed snapshot atomically with its portrait assets. */
 export function generatePublishedProgramme(source: PreviewSource): PreviewCollections {
   const data = generateProgrammeData(source, 'published');
-  if (data.generatedSpeakers.length !== 14 || data.generatedSessions.length !== 10) {
-    throw new Error('Expected 14 confirmed speakers and 10 sessions');
+  if (data.generatedSpeakers.length !== 15 || data.generatedSessions.length !== 11) {
+    throw new Error('Expected 15 confirmed speakers and 11 sessions');
   }
   return data;
 }

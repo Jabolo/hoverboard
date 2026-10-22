@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-22",
+  "speaker": "Arek Borucki",
+  "speakerId": "arek-borucki",
+  "programmeId": "SPONSOR-001",
+  "confirmation": "Explicit organiser confirmation, 22 October 2026; 30-minute technical talk via sponsor MongoDB. No timetable allocation. Preview only.",
+  "sheet": "https://docs.google.com/spreadsheets/d/1sIswcAfb-UUU9sHgnYOUS-mOvDNMkP8HBmRw5N5Q12Q/edit#gid=837472775&range=A58:AI58",
+  "publicCopy": "Title and complete abstract supplied by organiser; reproduced verbatim. No emails or coordination fields imported.",
+  "affiliation": {
+    "company": "Hugging Face",
+    "title": "ML Platform & Database Engineer",
+    "sponsor": "MongoDB",
+    "verifiedFrom": [
+      "https://www.linkedin.com/in/arekborucki/",
+      "https://arekborucki.cloud/",
+      "https://www.mongodb.com/company/blog/news/2025-william-zola-award-for-community-excellence-recipients"
+    ],
+    "staleDirectory": "https://www.mongodb.com/community/champions/arkadiusz-borucki lists an older STACKIT role; current LinkedIn, personal website and MongoDB interview agree on Hugging Face."
+  },
+  "biography": {
+    "text": "Arek Borucki is an ML Platform & Database Engineer at Hugging Face, where he designs and operates MongoDB Atlas infrastructure behind the Hugging Face Hub. His work focuses on scalability, reliability and database performance for machine-learning workloads. A MongoDB Community Champion since 2020, he founded the Munich MongoDB User Group and helps develop and validate MongoDB certifications. He is the author of MongoDB 8.0 in Action and co-author of Mastering MongoDB 7.0, and a recipient of the 2025 William Zola Award for Community Excellence.",
+    "source": "https://www.mongodb.com/company/blog/news/2025-william-zola-award-for-community-excellence-recipients",
+    "method": "Concise factual paraphrase, checked against signed-in LinkedIn and personal website."
+  },
+  "portrait": {
+    "source": "https://www.linkedin.com/in/arekborucki/",
+    "mediaUrl": "https://media.licdn.com/dms/image/v2/D4D03AQHPHn6-UI7RlA/profile-displayphoto-crop_800_800/B4DZ8jbZ_bJwAI-/0/1783005815846",
+    "original": "photos/arek-borucki-linkedin.png",
+    "originalDimensions": [800, 800],
+    "output": "/images/speakers/2026/arek-borucki.e952a566.webp",
+    "outputDimensions": [400, 400],
+    "bytes": 22836,
+    "method": "Identity-verified LinkedIn enlarged profile photo; EXIF transpose, resize to 400px, WebP quality85; no retouching."
+  },
+  "logo": {
+    "source": "https://huggingface.co/brand",
+    "download": "https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo-with-title.svg?download=true",
+    "output": "/images/speaker-companies/2026/hugging-face.fc95837e.svg",
+    "bytes": 46913,
+    "method": "Unmodified official full-colour logo on white background."
+  },
+  "gaps": [
+    "Session language, audience level and technical requirements not supplied; omitted rather than inferred."
+  ],
+  "privateContact": "Stored only in the private CFP coordination sheet."
+}

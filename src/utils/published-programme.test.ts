@@ -8,7 +8,7 @@ const source = () => JSON.parse(JSON.stringify(fixture)) as PreviewSource;
 describe('approved programme publication', () => {
   it('publishes only the approved sessions and reciprocal links with one shared panel', () => {
     const data = generatePublishedProgramme(source());
-    expect(data.generatedSpeakers).toHaveLength(14);
+    expect(data.generatedSpeakers).toHaveLength(15);
     expect(data.generatedSessions.map(({ id }) => id).sort()).toEqual([
       'CFP-002',
       'CFP-012',
@@ -20,6 +20,7 @@ describe('approved programme publication', () => {
       'CFP-050',
       'INVITED-001',
       'PANEL-01',
+      'SPONSOR-001',
     ]);
     expect(data.generatedSchedule).toEqual([]);
     const panel = data.generatedSessions.find(({ id }) => id === 'PANEL-01');
@@ -41,7 +42,7 @@ describe('approved programme publication', () => {
     const stale = source();
     delete stale.speakers['michal-tajchert'];
     delete stale.sessions['CFP-043'];
-    expect(() => generatePublishedProgramme(stale)).toThrow('14 confirmed');
+    expect(() => generatePublishedProgramme(stale)).toThrow('15 confirmed');
     const preview = source();
     preview.speakers['ivan-lapa']!.photoUrl = '/preview/speakers/ivan.jpg';
     expect(() => generatePublishedProgramme(preview)).toThrow('Portrait must be local');

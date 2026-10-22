@@ -463,6 +463,34 @@
       "companyLogo": "/images/speaker-companies/2026/lite-ecommerce.a75f8e14.png",
       "companyLogoUrl": "/images/speaker-companies/2026/lite-ecommerce.a75f8e14.png",
       "companyLogoBackground": "light"
+    },
+    "arek-borucki": {
+      "name": "Arek Borucki",
+      "company": "Hugging Face",
+      "title": "ML Platform & Database Engineer",
+      "country": "",
+      "order": 14,
+      "featured": false,
+      "photoUrl": "/images/speakers/2026/arek-borucki.e952a566.webp",
+      "photo": "/images/speakers/2026/arek-borucki.e952a566.webp",
+      "shortBio": "MongoDB Champion · Author of MongoDB 8.0 in Action · Scaling the Hugging Face Hub.",
+      "bio": "Arek Borucki is an ML Platform & Database Engineer at Hugging Face, where he designs and operates MongoDB Atlas infrastructure behind the Hugging Face Hub. His work focuses on scalability, reliability and database performance for machine-learning workloads. A MongoDB Community Champion since 2020, he founded the Munich MongoDB User Group and helps develop and validate MongoDB certifications. He is the author of MongoDB 8.0 in Action and co-author of Mastering MongoDB 7.0, and a recipient of the 2025 William Zola Award for Community Excellence.",
+      "badges": [],
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/arekborucki/"
+        },
+        {
+          "icon": "website",
+          "name": "Website",
+          "link": "https://arekborucki.cloud/"
+        }
+      ],
+      "companyLogo": "/images/speaker-companies/2026/hugging-face.fc95837e.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/hugging-face.fc95837e.svg",
+      "companyLogoBackground": "light"
     }
   },
   "sessions": {
@@ -556,6 +584,12 @@
       "tags": ["AI", "Build with AI"],
       "language": "Polish, English",
       "complexity": "Beginner, Advance, Intermediate"
+    },
+    "SPONSOR-001": {
+      "title": "Serving 3 Million Models Without Melting: Scaling the Hugging Face Hub with MongoDB.",
+      "description": "Hugging Face hosts over 3 million public models, 1 million datasets, and serves 18 million users across 50,000+ organisations, including over 30% of the Fortune 500.\nThat growth didn't come with a manual. In this talk, I will pull back the curtain on the infrastructure decisions that kept the Hub fast and reliable as traffic grew by orders of magnitude. I will dive into why we chose MongoDB as our core data layer, how its document model maps naturally to the messy reality of ML model metadata, and what it took to keep p99 latency low when every request hits a catalog of millions. I will also cover the trade-offs we faced, the things that broke along the way, and what \"lean operations\" actually means when your platform serves a third of the Fortune 500. Expect real architecture decisions, real numbers, and lessons you can take back to your own stack",
+      "speakers": ["arek-borucki"],
+      "tags": ["MongoDB", "Machine Learning", "Infrastructure", "Scaling"]
     }
   }
 }
