@@ -1,0 +1,201 @@
+{
+  "status": "COMPLETE",
+  "sourceCommit": "cc6a726d",
+  "date": "2026-10-22",
+  "branch": "preview/programme-ready-2026",
+  "preview": "https://gdg-warsaw-devfest26-web--programme-ready-2026-snw6ikap.web.app/sessions/",
+  "release": "1792662988501000",
+  "counts": {
+    "speakers": 14,
+    "sessions": 10,
+    "panelPeople": 5,
+    "imageAssets": 26
+  },
+  "tests": {
+    "lint": "pass; 65 warnings, 0 errors",
+    "tests": "123 passed, 5 skipped",
+    "normalBuild": "pass",
+    "independentReview": "Surprise history and same-route filter-state defects fixed; runtime verified",
+    "discovery": [
+      {
+        "case": "Google + AI deep link",
+        "count": 5,
+        "disabled": false,
+        "empty": false,
+        "ids": ["CFP-002", "CFP-014", "CFP-034", "INVITED-001", "PANEL-01"],
+        "input": "Google",
+        "overflow": false,
+        "path": "/sessions/",
+        "search": "?q=Google&topic=AI"
+      },
+      {
+        "case": "Surprise changes address",
+        "count": null,
+        "disabled": null,
+        "empty": false,
+        "ids": [],
+        "input": null,
+        "overflow": false,
+        "path": "/sessions/INVITED-001",
+        "search": ""
+      },
+      {
+        "case": "Back restores filters",
+        "count": 5,
+        "disabled": false,
+        "empty": false,
+        "ids": ["CFP-002", "CFP-014", "CFP-034", "INVITED-001", "PANEL-01"],
+        "input": "Google",
+        "overflow": false,
+        "path": "/sessions/",
+        "search": "?q=Google&topic=AI"
+      },
+      {
+        "case": "Navigation resets reused component",
+        "count": 10,
+        "disabled": false,
+        "empty": false,
+        "ids": [
+          "CFP-002",
+          "CFP-012",
+          "CFP-014",
+          "CFP-021",
+          "CFP-028",
+          "CFP-034",
+          "CFP-043",
+          "CFP-050",
+          "INVITED-001",
+          "PANEL-01"
+        ],
+        "input": "",
+        "overflow": false,
+        "path": "/sessions/",
+        "search": ""
+      },
+      {
+        "case": "Zero results",
+        "count": 0,
+        "disabled": true,
+        "empty": true,
+        "ids": [],
+        "input": "zzzz-not-a-session",
+        "overflow": false,
+        "path": "/sessions/",
+        "search": "?q=zzzz-not-a-session"
+      },
+      {
+        "case": "Reset all",
+        "count": 10,
+        "disabled": false,
+        "empty": false,
+        "ids": [
+          "CFP-002",
+          "CFP-012",
+          "CFP-014",
+          "CFP-021",
+          "CFP-028",
+          "CFP-034",
+          "CFP-043",
+          "CFP-050",
+          "INVITED-001",
+          "PANEL-01"
+        ],
+        "input": "",
+        "overflow": false,
+        "path": "/sessions/",
+        "search": ""
+      }
+    ],
+    "hostedNetflixSearch": {
+      "count": 2,
+      "ids": ["CFP-014", "PANEL-01"]
+    },
+    "mobile": {
+      "width393": "no overflow; all 10 sessions, all buttons >=44px",
+      "width820": "no overflow"
+    },
+    "animation": {
+      "play": {
+        "current": "http://127.0.0.1:5013/images/speakers/2026/yonatan-levin-animated.d064fe65.webp",
+        "label": "Pause portrait",
+        "paused": false,
+        "rect": {
+          "h": 96,
+          "w": 96,
+          "x": 112,
+          "y": 263.3984375
+        },
+        "reduced": false,
+        "src": "/images/speakers/2026/yonatan-levin-animated.d064fe65.webp"
+      },
+      "paused": {
+        "current": "http://127.0.0.1:5013/images/speakers/2026/yonatan-levin.0137fc04.webp",
+        "label": "Play portrait",
+        "paused": true,
+        "rect": {
+          "h": 96,
+          "w": 96,
+          "x": 112,
+          "y": 263.3984375
+        },
+        "reduced": false,
+        "src": "/images/speakers/2026/yonatan-levin.0137fc04.webp"
+      },
+      "reduced": {
+        "current": "http://127.0.0.1:5013/images/speakers/2026/yonatan-levin.0137fc04.webp",
+        "label": null,
+        "paused": true,
+        "rect": {
+          "h": 96,
+          "w": 96,
+          "x": 112,
+          "y": 242
+        },
+        "reduced": true,
+        "src": "/images/speakers/2026/yonatan-levin.0137fc04.webp"
+      },
+      "frames": 96,
+      "durationMs": 8000,
+      "sourceBytes": 1405612,
+      "outputBytes": 198458,
+      "visibleFrameDifference": [0, 0, 96, 96],
+      "hostedPause": {
+        "label": "Play portrait",
+        "src": "/images/speakers/2026/yonatan-levin.0137fc04.webp"
+      },
+      "hostedResume": {
+        "label": "Pause portrait",
+        "src": "/images/speakers/2026/yonatan-levin-animated.d064fe65.webp"
+      },
+      "originalPreserved": true
+    },
+    "schedule": "unpublished, zero calendar days, /sessions/ CTA",
+    "network": {
+      "requests": 32,
+      "nonGet": [],
+      "writeEndpoints": [],
+      "failed": []
+    },
+    "hashes": "session explorer JS, bootstrap bundles, programme JSON and animated image match local build",
+    "cache": "sessions and speaker HTML return no-cache,no-store,must-revalidate",
+    "detector": "no findings"
+  },
+  "safety": {
+    "changedChannel": "programme-ready-2026 only",
+    "production": "live release unchanged",
+    "otherPreviews": "unchanged",
+    "firestore": "all five programme collections still empty",
+    "push": false,
+    "merge": false,
+    "sourceStatusChanges": false
+  },
+  "limitations": [
+    "Chromium desktop and iPhone emulation; reduced-motion change simulated through MediaQueryList event and covered by unit test",
+    "No full assistive-technology certification or physical iOS Safari test"
+  ],
+  "documentsUpdated": [
+    "Source of Truth: Session discovery and restored portrait animation — 22 October 2026",
+    "Program Doc: same section"
+  ],
+  "activeChildren": 0
+}
