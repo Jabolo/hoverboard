@@ -65,7 +65,7 @@ names; topic filters use existing tags. Filter state is shareable in the URL.
 
 Yonatan’s verified Google avatar is delivered from its native 800×800 source.
 The animated WebP delivers 512×512 pixels and preserves source frame cadence at quality 95,
-plays once for under five seconds and rests on its final frame. A sharp final-frame
+loops continuously, as requested by the organiser. A sharp final-frame
 poster is used for reduced motion, social metadata and static thumbnails. No visible
 portrait play/pause control is rendered. Live changes to the system's motion
 preference are respected. Original source media is retained locally; source URL,
@@ -98,3 +98,10 @@ The organiser explicitly approved merging, pushing and deploying the verified
 programme to the public domain. Keep the schedule unpublished. The normal Hosting
 release includes all 15 confirmed speakers and 11 sessions; no programme database
 import, Functions deployment, rules change or timetable publication is required.
+
+## Speaker prominence — 23 October 2026
+
+The landing-page speaker showcase follows the hero directly, ahead of the event
+overview, tickets, partners and schedule. The hero scroll affordance leads to the
+speaker section. Yonatan’s portrait loops continuously, with a static portrait for
+reduced-motion preferences and no visible play/pause button.

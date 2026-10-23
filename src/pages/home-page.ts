@@ -500,7 +500,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <button
             class="scroll-down"
             type="button"
-            aria-label="Scroll to event details"
+            aria-label="Scroll to speakers"
             on-click="scrollNextBlock"
           >
             <svg
@@ -567,6 +567,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
+      <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
       </template>
@@ -575,7 +576,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
-      <speakers-block></speakers-block>
       <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>

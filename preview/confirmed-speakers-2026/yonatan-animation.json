@@ -7,13 +7,13 @@
   "originalFrames": 192,
   "frames": 115,
   "durationMs": 4790,
-  "loopCount": 1,
-  "processing": "Native 800x800 source; animated delivery at 512x512, sufficient for 128px portraits at 3x pixel density, retaining every source frame at quality95 for 4790ms, one play. Static final-frame poster is 800x800 quality98. No AI upscaling or retouching.",
+  "loopCount": 0,
+  "processing": "Native 800x800 source; animated delivery at 512x512, sufficient for 128px portraits at 3x pixel density, retaining every source frame at quality95 for 4790ms, continuous looping. Static final-frame poster is 800x800 quality98. No AI upscaling or retouching.",
   "assets": {
     "animated": {
-      "path": "/images/speakers/2026/yonatan-levin-animated.a851e36e.webp",
+      "path": "/images/speakers/2026/yonatan-levin-animated.256905d4.webp",
       "bytes": 8562306,
-      "sha256": "a851e36e1f62d50042a94bd19a38eca72dfc7dbc007c0b5d46d2adefb4941af4"
+      "sha256": "256905d4793121357676a132b583b75d020a80566fec23aff33866b68cba0935"
     },
     "poster": {
       "path": "/images/speakers/2026/yonatan-levin.4ef3790a.webp",

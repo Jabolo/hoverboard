@@ -1,7 +1,7 @@
 import { css, LitElement, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-/** Finite portrait animations need no visible control; honour live motion preferences. */
+/** Honour live system motion preferences without adding a visible portrait control. */
 @customElement('portrait-motion-preference')
 export class PortraitMotionPreference extends LitElement {
   private preference?: MediaQueryList;
