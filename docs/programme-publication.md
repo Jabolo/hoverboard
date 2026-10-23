@@ -63,10 +63,13 @@ without timetable fields. Links from navigation, the homepage and the unpublishe
 schedule lead there. Search covers titles, full abstracts, speaker names and company
 names; topic filters use existing tags. Filter state is shareable in the URL.
 
-Yonatan’s original eight-second animation is delivered as a 198,458-byte animated
-WebP (the original GIF is 1,405,612 bytes), with a separate static poster for
-sharing, pausing and reduced-motion preferences. Pause controls are outside card
-links. Original source media is preserved; the release has 28 fingerprinted assets.
+Yonatan’s verified Google avatar is delivered from its native 800×800 source.
+The animated WebP delivers 512×512 pixels and preserves source frame cadence at quality 95,
+plays once for under five seconds and rests on its final frame. A sharp final-frame
+poster is used for reduced motion, social metadata and static thumbnails. No visible
+portrait play/pause control is rendered. Live changes to the system's motion
+preference are respected. Original source media is retained locally; source URL,
+processing and hashes are recorded in `preview/confirmed-speakers-2026/yonatan-animation.json`.
 
 ## Sponsor speaker confirmation — 22 October 2026
 

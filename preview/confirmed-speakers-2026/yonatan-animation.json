@@ -1,11 +1,29 @@
 {
-  "source": "preview/confirmed-speakers-2026/photos/yonatan-levin.gif",
-  "sourceBytes": 1405612,
-  "path": "public/images/speakers/2026/yonatan-levin-animated.d064fe65.webp",
-  "bytes": 198458,
-  "frames": 96,
-  "durationMs": 8000,
-  "sha256": "d064fe65554960a50a0582c54bd417e0865bdc3e5c6d510b1abc2fcc597d5276",
-  "staticPoster": "/images/speakers/2026/yonatan-levin.0137fc04.webp",
-  "processing": "Every second frame, original total duration, animated WebP quality75; original GIF preserved"
+  "date": "2026-10-23",
+  "source": "https://lh3.googleusercontent.com/a-/AFdZucrfHqpqNv_adHX07I7QwBsxTGi-nMW5iqwUbQpiaPQ=s800-c",
+  "identity": "Same verified Advocu Google avatar as original; full-resolution image visually checked.",
+  "originalLocalCopy": ".firebase/source-assets/yonatan-levin-800-original.gif",
+  "sourceBytes": 66912185,
+  "originalFrames": 192,
+  "frames": 115,
+  "durationMs": 4790,
+  "loopCount": 1,
+  "processing": "Native 800x800 source; animated delivery at 512x512, sufficient for 128px portraits at 3x pixel density, retaining every source frame at quality95 for 4790ms, one play. Static final-frame poster is 800x800 quality98. No AI upscaling or retouching.",
+  "assets": {
+    "animated": {
+      "path": "/images/speakers/2026/yonatan-levin-animated.a851e36e.webp",
+      "bytes": 8562306,
+      "sha256": "a851e36e1f62d50042a94bd19a38eca72dfc7dbc007c0b5d46d2adefb4941af4"
+    },
+    "poster": {
+      "path": "/images/speakers/2026/yonatan-levin.4ef3790a.webp",
+      "bytes": 205908,
+      "sha256": "4ef3790a16294a9b5c3119220abaa37a87c1c1e4c0d73d094b866277ebc65e81"
+    }
+  },
+  "supersedes": "96x96 source and quality75/half-frame delivery from 22 October",
+  "sourceRetention": "Original 67 MB GIF retained locally under ignored .firebase/source-assets; source URL and checksums recorded without adding the bulky source to Git.",
+  "sourceDimensions": [800, 800],
+  "animatedDimensions": [512, 512],
+  "posterDimensions": [800, 800]
 }

@@ -1,4 +1,4 @@
-import '../components/portrait-animation-control';
+import '../components/portrait-motion-preference';
 import { portraitSource } from '../utils/portrait-source';
 import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
@@ -283,10 +283,9 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
             </a>
 
             <template is="dom-if" if="[[speaker.animatedPhotoUrl]]">
-              <portrait-animation-control
-                paused="[[portraitsPaused]]"
+              <portrait-motion-preference
                 on-portrait-motion-change="onPortraitMotionChange"
-              ></portrait-animation-control>
+              ></portrait-motion-preference>
             </template>
 
             <speaker-session-links
