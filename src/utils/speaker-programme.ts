@@ -4,8 +4,8 @@ import type { Speaker, SpeakerData } from '../models/speaker';
 export const CURATED_SPEAKER_IDS = [
   'ivan-lapa',
   'hasan-rafiq',
-  'andrii-khrystian',
-  'dominika-zajac',
+  'tomasz-porozynski',
+  'arek-borucki',
 ] as const;
 
 /** Keep the homepage editorial selection stable, independent of record order. */

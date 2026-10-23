@@ -13,19 +13,19 @@ const panel: Session = {
 
 describe('speaker programme presentation', () => {
   it('selects the four editorial picks in a stable order without relying on record order or featured flags', () => {
-    const input = ['other', 'dominika-zajac', 'andrii-khrystian', 'ivan-lapa', 'hasan-rafiq'].map(
+    const input = ['other', 'arek-borucki', 'tomasz-porozynski', 'ivan-lapa', 'hasan-rafiq'].map(
       speaker,
     );
     expect(curatedSpeakers(input).map(({ id }) => id)).toEqual([
       'ivan-lapa',
       'hasan-rafiq',
-      'andrii-khrystian',
-      'dominika-zajac',
+      'tomasz-porozynski',
+      'arek-borucki',
     ]);
     expect(input.map(({ id }) => id)).toEqual([
       'other',
-      'dominika-zajac',
-      'andrii-khrystian',
+      'arek-borucki',
+      'tomasz-porozynski',
       'ivan-lapa',
       'hasan-rafiq',
     ]);
