@@ -1,0 +1,17 @@
+{
+  "speakerId": "kasper-kulikowski",
+  "programmeId": "INVITED-002",
+  "confirmation": "Organiser reports accepted and confirmed on 28 October 2026; exact focus, duration, time and room remain to be coordinated.",
+  "linkedin": "https://www.linkedin.com/in/kasper-kulikowski/",
+  "roleAndBiography": "https://jspoland.pl/speaker/2026/kasper-kulikowski",
+  "personalWebsite": "https://www.kulikowski.me/",
+  "googleAuthorProfile": "https://developer.chrome.com/docs/ai/webmcp",
+  "portrait": {
+    "sourcePage": "https://jspoland.pl/speaker/2026/kasper-kulikowski",
+    "sourceImage": "https://jspoland.pl/images/speakers/kasper-kulikowski.webp",
+    "identityComparison": "https://web.dev/images/authors/kaskulikowski.jpg",
+    "output": "public/images/speakers/2026/kasper-kulikowski.798f4a1f.webp",
+    "sha256": "798f4a1fe332ffe2c3d14a08a45dac4837eafdfabcf063901e707662fba4c20c",
+    "dimensions": "600x600"
+  }
+}

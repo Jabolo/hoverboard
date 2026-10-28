@@ -8,7 +8,7 @@ const source = () => JSON.parse(JSON.stringify(fixture)) as PreviewSource;
 describe('approved programme publication', () => {
   it('publishes only the approved sessions and reciprocal links with one shared panel', () => {
     const data = generatePublishedProgramme(source());
-    expect(data.generatedSpeakers).toHaveLength(15);
+    expect(data.generatedSpeakers).toHaveLength(16);
     expect(data.generatedSessions.map(({ id }) => id).sort()).toEqual([
       'CFP-002',
       'CFP-012',
@@ -19,6 +19,7 @@ describe('approved programme publication', () => {
       'CFP-043',
       'CFP-050',
       'INVITED-001',
+      'INVITED-002',
       'PANEL-01',
       'scaling-hugging-face-hub',
     ]);
@@ -56,7 +57,7 @@ describe('approved programme publication', () => {
     const stale = source();
     delete stale.speakers['michal-tajchert'];
     delete stale.sessions['CFP-043'];
-    expect(() => generatePublishedProgramme(stale)).toThrow('15 confirmed');
+    expect(() => generatePublishedProgramme(stale)).toThrow('16 confirmed');
     const preview = source();
     preview.speakers['ivan-lapa']!.photoUrl = '/preview/speakers/ivan.jpg';
     expect(() => generatePublishedProgramme(preview)).toThrow('Portrait must be local');
@@ -66,6 +67,16 @@ describe('approved programme publication', () => {
     const traversal = source();
     traversal.speakers['ivan-lapa']!.photoUrl = '/images/speakers/2026/../portrait.webp';
     expect(() => generatePublishedProgramme(traversal)).toThrow('Portrait must be local');
+  });
+
+  it('links Kasper to his confirmed talk without publishing a timetable', () => {
+    const data = generatePublishedProgramme(source());
+    const speaker = data.generatedSpeakers.find(({ id }) => id === 'kasper-kulikowski');
+    const talk = data.generatedSessions.find(({ id }) => id === 'INVITED-002');
+    expect(speaker?.sessions.map(({ id }) => id)).toEqual(['INVITED-002']);
+    expect(talk?.speakers.map(({ id }) => id)).toEqual(['kasper-kulikowski']);
+    expect(talk?.title).toBe('The Agentic Web');
+    expect(data.generatedSchedule).toEqual([]);
   });
 
   it('uses read-only operational SDKs only on loopback and the exact release review channel', () => {

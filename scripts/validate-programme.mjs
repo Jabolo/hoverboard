@@ -14,6 +14,7 @@ const approvedSessions = {
   'CFP-034': ['hasan-rafiq'],
   'CFP-050': ['dominika-zajac'],
   'INVITED-001': ['adrian-romanski'],
+  'INVITED-002': ['kasper-kulikowski'],
   'PANEL-01': [
     'dmytro-nedvetskyi',
     'yaroslav-polyakov',
@@ -75,12 +76,12 @@ export function validateProgramme(source, publicRoot = path.join(root, 'public')
   assert.deepEqual(
     actualSpeakerIds,
     Object.values(approvedSessions).flat().sort(),
-    'Expected exactly 15 approved speakers',
+    'Expected exactly 16 approved speakers',
   );
   assert.deepEqual(
     Object.keys(source.sessions).sort(),
     Object.keys(approvedSessions).sort(),
-    'Expected exactly 11 approved sessions',
+    'Expected exactly 12 approved sessions',
   );
   assert(!JSON.stringify(source).includes('/preview/'), 'Legacy preview paths are forbidden');
   assert(!JSON.stringify(source).includes('CFP-042'), 'Unconfirmed CFP-042 is forbidden');

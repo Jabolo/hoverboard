@@ -491,6 +491,28 @@
       "companyLogo": "/images/speaker-companies/2026/hugging-face.fc95837e.svg",
       "companyLogoUrl": "/images/speaker-companies/2026/hugging-face.fc95837e.svg",
       "companyLogoBackground": "light"
+    },
+    "kasper-kulikowski": {
+      "name": "Kasper Kulikowski",
+      "bio": "Kasper Kulikowski is a Senior Developer Relations Engineer on Google's Chrome AI DevRel team, where he helps web developers build experiences with AI. He works with the core WebMCP team and explores the future of the web, browser agents and performance. Before joining Google, he spent around ten years at Dynatrace building log monitoring solutions.",
+      "shortBio": "Chrome AI DevRel at Google · WebMCP and the agentic web.",
+      "company": "Google",
+      "title": "Senior Developer Relations Engineer",
+      "country": "",
+      "companyLogo": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoBackground": "light",
+      "featured": false,
+      "order": 16,
+      "photo": "/images/speakers/2026/kasper-kulikowski.798f4a1f.webp",
+      "photoUrl": "/images/speakers/2026/kasper-kulikowski.798f4a1f.webp",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/kasper-kulikowski/"
+        }
+      ]
     }
   },
   "sessions": {
@@ -590,6 +612,13 @@
       "description": "Hugging Face hosts over 3 million public models, 1 million datasets, and serves 18 million users across 50,000+ organisations, including over 30% of the Fortune 500.\nThat growth didn't come with a manual. In this talk, I will pull back the curtain on the infrastructure decisions that kept the Hub fast and reliable as traffic grew by orders of magnitude. I will dive into why we chose MongoDB as our core data layer, how its document model maps naturally to the messy reality of ML model metadata, and what it took to keep p99 latency low when every request hits a catalog of millions. I will also cover the trade-offs we faced, the things that broke along the way, and what \"lean operations\" actually means when your platform serves a third of the Fortune 500. Expect real architecture decisions, real numbers, and lessons you can take back to your own stack",
       "speakers": ["arek-borucki"],
       "tags": ["MongoDB", "Machine Learning", "Infrastructure", "Scaling"]
+    },
+    "INVITED-002": {
+      "title": "The Agentic Web",
+      "description": "For the past 30 years, websites have been engineered exclusively for human users. Today, we are entering the agentic era. The Agentic Web is here! Users start offloading their heavy lifting to autonomous AI Agents. If your website is not built to speak the language of these agents, it risks broken workflows and missed conversions.\n\nThis session moves past the AI hype to provide a pragmatic engineering playbook for preparing your application for autonomous workflows. We will examine exactly how an AI agent \"sees\" and navigates a website. We will explore WebMCP, a proposed web standard, and tools that can help developers make their websites agent-ready.",
+      "speakers": ["kasper-kulikowski"],
+      "tags": ["AI", "Web - AI for Web Developers"],
+      "language": "English"
     }
   }
 }

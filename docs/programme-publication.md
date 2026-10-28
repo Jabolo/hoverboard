@@ -1,7 +1,7 @@
 # Confirmed 2026 programme publication
 
 The CFP sheet and Program Doc remain the organiser's authority. The approved public
-snapshot is `public/data/programme-2026.json`: 15 confirmed speakers, 11 sessions,
+snapshot is `public/data/programme-2026.json`: 16 confirmed speakers, 12 sessions,
 one five-person panel, CFP-043 only for Michał Tajchert, Wild / Head of AI for Yonatan.
 No nationality, timetable or private review/contact fields are published.
 
@@ -113,3 +113,12 @@ Igor Kachura, General Manager at Wix, replaces him on PANEL-01. Serhii Kasianchu
 remains a panellist; the roster stays 15 speakers and 11 sessions. Igor's verified
 LinkedIn profile and portrait, and the official Wix logo, are recorded in
 `preview/confirmed-speakers-2026/igor-source.json`. The timetable remains unpublished.
+
+## Kasper Kulikowski — 28 October 2026
+
+The organiser confirmed Kasper's participation and authorised publication of his
+English talk, The Agentic Web. The submitted abstract is retained. His LinkedIn
+profile and the portrait used by JS Poland are linked in
+`preview/confirmed-speakers-2026/kasper-source.json`; Google's author portrait
+confirms the same identity. His exact focus, duration, time and room remain to be
+agreed. No timetable or additional unconfirmed workshop is published.
