@@ -15,6 +15,7 @@ import {
   setSuppressTemplateNotifications,
 } from '@polymer/polymer/lib/utils/settings';
 import './components/snack-bar';
+import './components/sticky-countdown';
 import './components/cookie-consent';
 import './elements/footer-block';
 import './elements/header-toolbar';
@@ -197,6 +198,16 @@ export class HoverboardApp extends PolymerElement {
           cursor: pointer;
         }
 
+        sticky-countdown[active] ~ cookie-consent {
+          --countdown-offset: 64px;
+        }
+
+        @media (max-width: 480px) {
+          sticky-countdown[active] ~ cookie-consent {
+            --countdown-offset: 76px;
+          }
+        }
+
         @media (min-width: 640px) {
           app-toolbar {
             padding: 0 36px;
@@ -285,6 +296,7 @@ export class HoverboardApp extends PolymerElement {
       <subscribe-dialog></subscribe-dialog>
       <video-dialog></video-dialog>
 
+      <sticky-countdown></sticky-countdown>
       <cookie-consent></cookie-consent>
 
       <snack-bar></snack-bar>

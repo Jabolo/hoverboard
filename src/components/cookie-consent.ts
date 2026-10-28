@@ -8,7 +8,7 @@ export class CookieConsent extends LitElement {
     :host {
       position: fixed;
       right: 16px;
-      bottom: 16px;
+      bottom: calc(16px + var(--countdown-offset, 0px));
       z-index: 1000;
       color: var(--terminal-copy, #f7f7f7);
       font-family: var(--font-mono, monospace);
@@ -85,7 +85,7 @@ export class CookieConsent extends LitElement {
     @media (max-width: 640px) {
       :host {
         right: 8px;
-        bottom: 8px;
+        bottom: calc(8px + var(--countdown-offset, 0px));
       }
 
       .panel {
