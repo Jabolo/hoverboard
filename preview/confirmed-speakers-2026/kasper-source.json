@@ -7,11 +7,12 @@
   "personalWebsite": "https://www.kulikowski.me/",
   "googleAuthorProfile": "https://developer.chrome.com/docs/ai/webmcp",
   "portrait": {
-    "sourcePage": "https://jspoland.pl/speaker/2026/kasper-kulikowski",
-    "sourceImage": "https://jspoland.pl/images/speakers/kasper-kulikowski.webp",
-    "identityComparison": "https://web.dev/images/authors/kaskulikowski.jpg",
-    "output": "public/images/speakers/2026/kasper-kulikowski.798f4a1f.webp",
-    "sha256": "798f4a1fe332ffe2c3d14a08a45dac4837eafdfabcf063901e707662fba4c20c",
-    "dimensions": "600x600"
+    "sourcePage": "https://www.linkedin.com/in/kasper-kulikowski/",
+    "source": "LinkedIn profile photo, saved from the profile photo viewer on 28 October 2026; the same photograph appears on https://www.kulikowski.me/.",
+    "previousPortrait": "https://jspoland.pl/images/speakers/kasper-kulikowski.webp",
+    "output": "public/images/speakers/2026/kasper-kulikowski.8e8c97fa.webp",
+    "sha256": "8e8c97faf59fccb60748892314b249cd28841bd6f3e65b8ec3a543f8a2182d64",
+    "dimensions": "400x400",
+    "processing": "Converted LinkedIn JPEG to WebP at quality 92, without resizing."
   }
 }

@@ -118,7 +118,7 @@ LinkedIn profile and portrait, and the official Wix logo, are recorded in
 
 The organiser confirmed Kasper's participation and authorised publication of his
 English talk, The Agentic Web. The submitted abstract is retained. His LinkedIn
-profile and the portrait used by JS Poland are linked in
-`preview/confirmed-speakers-2026/kasper-source.json`; Google's author portrait
-confirms the same identity. His exact focus, duration, time and room remain to be
+profile and current portrait are linked in
+`preview/confirmed-speakers-2026/kasper-source.json`. The LinkedIn portrait replaces
+an older conference portrait at the organiser's request. His exact focus, duration, time and room remain to be
 agreed. No timetable or additional unconfirmed workshop is published.
