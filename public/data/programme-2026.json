@@ -273,27 +273,27 @@
         "PANEL-01": "Panellist"
       }
     },
-    "sergiy-mokiyenko": {
-      "name": "Sergiy Mokiyenko",
-      "bio": "Sergiy Mokiyenko is an Engineering Manager at Netflix with a background in mobile engineering and leading high-performing teams. He has built and led teams of three to twenty people across domains including finance, Android Open Source Project, Chromium and authorisation systems. His focus is on building product-minded engineering teams that put results for end users at the centre of technical decisions.",
-      "company": "Netflix",
-      "title": "Engineering Manager",
+    "igor-kachura": {
+      "name": "Igor Kachura",
+      "bio": "Igor Kachura is General Manager at Wix and a product and engineering executive with more than 15 years of experience building technology businesses, multi-product platforms and globally distributed engineering organisations. His experience spans fintech, e-commerce, media and consumer platforms. He leads teams across product, engineering and go-to-market, with a focus on platform reliability, modern architecture and AI.",
+      "company": "Wix",
+      "title": "General Manager",
       "country": "",
-      "companyLogo": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
-      "companyLogoUrl": "/images/speaker-companies/2026/netflix.23a96ad2.svg",
+      "companyLogo": "/images/speaker-companies/2026/wix.e9a4e09c.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/wix.e9a4e09c.svg",
       "featured": true,
       "order": 8,
-      "photo": "/images/speakers/2026/sergiy-mokiyenko.52c40302.webp",
-      "photoUrl": "/images/speakers/2026/sergiy-mokiyenko.52c40302.webp",
-      "shortBio": "Mobile engineering leader · Product-minded teams.",
+      "photo": "/images/speakers/2026/igor-kachura.81fd9fde.webp",
+      "photoUrl": "/images/speakers/2026/igor-kachura.81fd9fde.webp",
+      "shortBio": "15+ years in product and engineering leadership · Scaling teams and platforms.",
       "socials": [
         {
           "icon": "linkedin",
           "name": "LinkedIn",
-          "link": "https://www.linkedin.com/in/sergiy-mokiyenko-76891359/"
+          "link": "https://www.linkedin.com/in/igorkachura/"
         }
       ],
-      "companyLogoBackground": "dark",
+      "companyLogoBackground": "light",
       "sessionRoles": {
         "PANEL-01": "Panellist"
       }
@@ -559,11 +559,11 @@
     },
     "PANEL-01": {
       "title": "From 10x Coders to 10x Teams: Engineering Leadership with AI",
-      "description": "Moderator: Dmytro Nedvetskyi (Intellias).\n\nPanellists: Yaroslav Polyakov (Google), Sergiy Mokiyenko (Netflix), Serhii Kasianchuk (solidgate), and Viacheslav Miroshnychenko (Bolt).",
+      "description": "Moderator: Dmytro Nedvetskyi (Intellias).\n\nPanellists: Yaroslav Polyakov (Google), Igor Kachura (Wix), Serhii Kasianchuk (solidgate), and Viacheslav Miroshnychenko (Bolt).",
       "speakers": [
         "dmytro-nedvetskyi",
         "yaroslav-polyakov",
-        "sergiy-mokiyenko",
+        "igor-kachura",
         "serhii-kasianchuk",
         "viacheslav-miroshnychenko"
       ],

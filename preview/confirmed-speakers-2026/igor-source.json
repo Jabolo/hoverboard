@@ -1,0 +1,21 @@
+{
+  "speakerId": "igor-kachura",
+  "recordedOn": "2026-10-28",
+  "programmeId": "PANEL-01",
+  "decision": "The organiser confirmed that Igor replaces Sergiy Mokiyenko; Serhii Kasianchuk remains on the panel.",
+  "profile": "https://www.linkedin.com/in/igorkachura/",
+  "profileEvidence": "LinkedIn profile checked in the organiser's signed-in browser on 27 October 2026; headline identifies GM at Wix and the About section describes 15+ years in product and engineering leadership.",
+  "portrait": {
+    "source": "LinkedIn profile photo, 800 x 800 pixels, visually matched to Igor's profile",
+    "sourceSha256": "66911d809dcb6a66eeca50cc7be28e59e4a4022beba26cb245fdb58b02d927d9",
+    "output": "public/images/speakers/2026/igor-kachura.81fd9fde.webp",
+    "processing": "400 x 400 WebP, quality 88"
+  },
+  "companyLogo": {
+    "source": "https://www.wix.com/about/design-assets",
+    "archive": "https://9ab0d111-ec70-4f4c-900e-a9399b76d84c.usrfiles.com/archives/9ab0d1_a1c94e33202642618be2265c769c77b9.zip",
+    "archiveMember": "WixLogoNew/SVG/Wix logoW.svg",
+    "output": "public/images/speaker-companies/2026/wix.e9a4e09c.svg",
+    "processing": "Unmodified official logo for white backgrounds"
+  }
+}

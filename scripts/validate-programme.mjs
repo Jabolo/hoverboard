@@ -17,7 +17,7 @@ const approvedSessions = {
   'PANEL-01': [
     'dmytro-nedvetskyi',
     'yaroslav-polyakov',
-    'sergiy-mokiyenko',
+    'igor-kachura',
     'serhii-kasianchuk',
     'viacheslav-miroshnychenko',
   ],

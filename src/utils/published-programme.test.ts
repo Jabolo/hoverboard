@@ -24,7 +24,13 @@ describe('approved programme publication', () => {
     ]);
     expect(data.generatedSchedule).toEqual([]);
     const panel = data.generatedSessions.find(({ id }) => id === 'PANEL-01');
-    expect(panel?.speakers).toHaveLength(5);
+    expect(panel?.speakers.map(({ id }) => id)).toEqual([
+      'dmytro-nedvetskyi',
+      'yaroslav-polyakov',
+      'igor-kachura',
+      'serhii-kasianchuk',
+      'viacheslav-miroshnychenko',
+    ]);
     for (const speaker of data.generatedSpeakers) {
       for (const session of speaker.sessions) {
         expect(
@@ -36,6 +42,14 @@ describe('approved programme publication', () => {
       expect(speaker.country).toBe('');
       expect(speaker.photoUrl).toMatch(/^\/images\/speakers\/2026\//);
     }
+  });
+
+  it('replaces Sergiy with Igor on the shared panel', () => {
+    const data = generatePublishedProgramme(source());
+    expect(data.generatedSpeakers.map(({ id }) => id)).not.toContain('sergiy-mokiyenko');
+    expect(
+      data.generatedSpeakers.find(({ id }) => id === 'igor-kachura')?.sessions.map(({ id }) => id),
+    ).toEqual(['PANEL-01']);
   });
 
   it('rejects stale roster sizes, preview assets, and invalid or orphaned relationships', () => {

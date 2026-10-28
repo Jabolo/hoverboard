@@ -105,3 +105,11 @@ The landing-page speaker showcase follows the hero directly, ahead of the event
 overview, tickets, partners and schedule. The hero scroll affordance leads to the
 speaker section. Yonatan’s portrait loops continuously, with a static portrait for
 reduced-motion preferences and no visible play/pause button.
+
+## Panel replacement — 28 October 2026
+
+The organiser confirmed that Sergiy Mokiyenko is unavailable and will not speak.
+Igor Kachura, General Manager at Wix, replaces him on PANEL-01. Serhii Kasianchuk
+remains a panellist; the roster stays 15 speakers and 11 sessions. Igor's verified
+LinkedIn profile and portrait, and the official Wix logo, are recorded in
+`preview/confirmed-speakers-2026/igor-source.json`. The timetable remains unpublished.
