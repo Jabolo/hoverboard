@@ -1,7 +1,7 @@
 import type { Session } from '../models/session';
 import type { Speaker } from '../models/speaker';
 
-type Person = Pick<Speaker, 'id' | 'name' | 'company'>;
+type Person = Pick<Speaker, 'id' | 'name' | 'company'> & Partial<Pick<Speaker, 'photoUrl'>>;
 export type DiscoverableSession = Omit<Session, 'speakers'> & {
   speakers?: (Person | string)[];
 };
@@ -60,7 +60,10 @@ export function buildSessionDiscovery(
   const people = new Map(speakers.map((speaker) => [speaker.id, speaker]));
   return sessions.map((session) => {
     const linkedPeople = (session.speakers || []).flatMap((speaker) => {
-      const person = typeof speaker === 'string' ? people.get(speaker) : speaker;
+      const person =
+        typeof speaker === 'string'
+          ? people.get(speaker)
+          : { ...people.get(speaker.id), ...speaker };
       return person?.id && person.name
         ? [{ ...person, href: `/speakers/${encodeURIComponent(person.id)}` }]
         : [];

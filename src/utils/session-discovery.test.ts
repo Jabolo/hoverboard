@@ -59,6 +59,34 @@ describe('session discovery', () => {
     expect(items[1]?.people[0]?.href).toBe('/speakers/andrii-khrystian');
     expect(items[2]?.href).toBe('/sessions/PANEL-01');
   });
+  it('retains portraits for embedded speakers and resolves them for speaker references', () => {
+    const [embedded, referenced] = buildSessionDiscovery(
+      [
+        {
+          ...sessions[0]!,
+          speakers: [{ id: 'michal-tajchert', name: 'Michał Tajchert', company: 'Fairtale' }],
+        },
+        sessions[1]!,
+      ],
+      [
+        {
+          id: 'michal-tajchert',
+          name: 'Michał Tajchert',
+          company: 'Fairtale',
+          photoUrl: '/michal.webp',
+        },
+        {
+          id: 'andrii-khrystian',
+          name: 'Andrii Khrystian',
+          company: 'LeanCode',
+          photoUrl: '/andrii.webp',
+        },
+      ],
+    );
+    expect(embedded?.people[0]?.photoUrl).toBe('/michal.webp');
+    expect(referenced?.people[0]?.photoUrl).toBe('/andrii.webp');
+    expect(items[2]?.people[0]?.photoUrl).toBeUndefined();
+  });
   it('groups only supplied tags and never manufactures programme metadata', () => {
     expect(
       sessionTopics([

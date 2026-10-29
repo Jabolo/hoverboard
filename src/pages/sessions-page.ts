@@ -165,14 +165,18 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           list-style: none;
           padding: 0;
           margin: 0;
+          display: grid;
+          gap: 16px;
         }
         .session-item {
-          border-bottom: 1px solid var(--terminal-line);
-          padding: 32px 0;
+          background: var(--terminal-panel);
+          border: 1px solid var(--terminal-line);
+          border-radius: 16px;
+          padding: 28px 32px;
         }
         .session-title {
-          max-width: 36ch;
-          margin: 12px 0;
+          max-width: 45ch;
+          margin: 10px 0 12px;
           font-size: clamp(21px, 3vw, 28px);
           line-height: 1.35;
           overflow-wrap: anywhere;
@@ -192,7 +196,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         }
         .excerpt {
           margin: 0;
-          max-width: 72ch;
+          max-width: 68ch;
           color: var(--terminal-muted);
           font-size: 16px;
           line-height: 1.75;
@@ -201,20 +205,47 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           list-style: none;
           display: flex;
           flex-wrap: wrap;
-          gap: 4px 20px;
-          margin: 16px 0 8px;
+          gap: 12px 24px;
+          margin: 24px 0 12px;
           padding: 0;
         }
         .people a {
           display: inline-flex;
-          flex-direction: column;
-          justify-content: center;
+          align-items: center;
+          gap: 12px;
           min-height: 44px;
           padding: 4px 0;
           color: var(--terminal-copy);
           text-decoration: none;
           font-size: 14px;
           line-height: 1.5;
+        }
+        .portrait {
+          position: relative;
+          display: grid;
+          place-items: center;
+          flex: 0 0 56px;
+          width: 56px;
+          height: 56px;
+          overflow: hidden;
+          border-radius: 50%;
+          background: var(--terminal-panel);
+          color: var(--terminal-copy);
+          font-weight: 600;
+        }
+        .portrait img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .person-details {
+          display: flex;
+          flex-direction: column;
+        }
+        .person-name {
+          font-weight: 600;
         }
         .people a:hover .person-name {
           text-decoration: underline;
@@ -259,7 +290,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
             flex-basis: 100%;
           }
           .session-item {
-            padding: 28px 0;
+            padding: 24px 20px;
           }
         }
       `,
@@ -341,10 +372,22 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           ${session.people.map(
             (person) =>
               html`<li>
-                <a href=${person.href}
-                  ><span class="person-name">${person.name}</span
-                  >${person.company ? html`<span class="company">${person.company}</span>` : nothing}</a
-                >
+                <a href=${person.href}>
+                  <span class="portrait" aria-hidden="true">
+                    ${person.name
+                      .trim()
+                      .split(/\s+/)
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join('')
+                      .toLocaleUpperCase()}
+                    ${person.photoUrl ? html`<img src=${person.photoUrl} alt="" loading="lazy" decoding="async" @error=${(event: Event) => ((event.currentTarget as HTMLImageElement).hidden = true)} />` : nothing}
+                  </span>
+                  <span class="person-details">
+                    <span class="person-name">${person.name}</span>
+                    ${person.company ? html`<span class="company">${person.company}</span>` : nothing}
+                  </span>
+                </a>
               </li>`,
           )}
         </ul>
