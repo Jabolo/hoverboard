@@ -17,10 +17,19 @@ export const communityPartners: PartnerGroup = {
       description: 'Helion supports DevFest Warsaw 2026 with book prizes for our community.',
     },
     {
+      id: 'red-bull',
+      parentId: 'community-partners',
+      name: 'Red Bull',
+      order: 2,
+      url: 'https://www.redbull.com/',
+      logoUrl: '/images/partners/red-bull.svg',
+      description: 'Red Bull is a Community Partner of DevFest Warsaw 2026.',
+    },
+    {
       id: 'jetbrains',
       parentId: 'community-partners',
       name: 'JetBrains',
-      order: 2,
+      order: 3,
       url: 'https://www.jetbrains.com/',
       logoUrl: '/images/partners/jetbrains-mono-white.svg',
       description:

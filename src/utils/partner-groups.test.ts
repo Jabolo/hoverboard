@@ -6,8 +6,12 @@ describe('visible partner groups', () => {
   it('shows approved community partners without requiring database changes', () => {
     const groups = visiblePartnerGroups([]);
     expect(groups.map((group) => group.title)).toEqual(['Gold Sponsors', 'Community Partners']);
-    expect(groups[1]!.items.map((partner) => partner.name)).toEqual(['Helion', 'JetBrains']);
-    expect(groups[1]!.items[1]!.description).not.toMatch(/three|\b3\b/i);
+    expect(groups[1]!.items.map((partner) => partner.name)).toEqual([
+      'Helion',
+      'Red Bull',
+      'JetBrains',
+    ]);
+    expect(groups[1]!.items[2]!.description).not.toMatch(/three|\b3\b/i);
   });
 
   it('hides empty tiers and orders filled tiers above community partners', () => {
@@ -51,7 +55,7 @@ describe('visible partner groups', () => {
       communityPartners,
     ]);
     expect(result[0]!.items[0]!.name).toBe('Google for Startups');
-    expect(result[2]!.items).toHaveLength(2);
-    expect(communityPartners.items).toHaveLength(2);
+    expect(result[2]!.items).toHaveLength(3);
+    expect(communityPartners.items).toHaveLength(3);
   });
 });
