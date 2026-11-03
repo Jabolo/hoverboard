@@ -268,9 +268,12 @@ export class EveneaEmbed extends PolymerElement {
             <div class="guide-copy">
               <div class="guide-kicker">Next step</div>
               <div class="guide-title">
-                Your <strong>[[selectedTicketName]]</strong> ticket is ready below.
+                Continue with your <strong>[[selectedTicketName]]</strong> ticket below.
               </div>
-              <p>Complete your details and continue in the Evenea form.</p>
+              <p>
+                Complete your details below. If the ticket list appears, select your ticket and
+                click <span class="join-label">JOIN / DOŁĄCZAM!</span> to continue.
+              </p>
             </div>
           </template>
           <template is="dom-if" if="[[!selectedTicketId]]">
@@ -447,7 +450,8 @@ export class EveneaEmbed extends PolymerElement {
       {
         checkOrigin: ['https://app.evenea.pl', 'https://evenea.pl'],
         heightCalculationMethod: 'bodyOffset',
-        scrolling: false,
+        // Keep the form reachable if the cross-origin resize handshake is delayed or fails.
+        scrolling: true,
       },
       frame,
     );
