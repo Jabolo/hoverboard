@@ -10,6 +10,8 @@ describe('visible partner groups', () => {
       'Helion',
       'Red Bull',
       'JetBrains',
+      'meet.js',
+      'Legimi',
     ]);
     expect(groups[1]!.items[2]!.description).not.toMatch(/three|\b3\b/i);
   });
@@ -55,7 +57,7 @@ describe('visible partner groups', () => {
       communityPartners,
     ]);
     expect(result[0]!.items[0]!.name).toBe('Google for Startups');
-    expect(result[2]!.items).toHaveLength(3);
-    expect(communityPartners.items).toHaveLength(3);
+    expect(result[2]!.items).toHaveLength(5);
+    expect(communityPartners.items).toHaveLength(5);
   });
 });

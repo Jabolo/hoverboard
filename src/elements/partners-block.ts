@@ -86,8 +86,20 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .logos-wrapper[data-tier='Community Partners'] .logo-item {
           padding: 20px;
-          min-height: 120px;
-          gap: 16px;
+          min-height: 104px;
+        }
+
+        .logos-wrapper[data-tier='Community Partners'] .partner-description {
+          display: none;
+        }
+
+        @media (min-width: 640px) {
+          .logos-wrapper[data-tier='Community Partners'] .logo-item:last-of-type:nth-of-type(odd) {
+            grid-column: 1 / -1;
+            width: calc(50% - 8px);
+            box-sizing: border-box;
+            justify-self: center;
+          }
         }
 
         .logo-item {

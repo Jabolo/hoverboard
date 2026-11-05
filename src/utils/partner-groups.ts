@@ -35,6 +35,24 @@ export const communityPartners: PartnerGroup = {
       description:
         'JetBrains supports DevFest Warsaw 2026 with annual personal IDE subscriptions for attendee prizes.',
     },
+    {
+      id: 'meetjs',
+      parentId: 'community-partners',
+      name: 'meet.js',
+      order: 4,
+      url: 'https://meetjs.pl/',
+      logoUrl: '/images/partners/meetjs.svg',
+      description: 'meet.js is a Community Partner of DevFest Warsaw 2026.',
+    },
+    {
+      id: 'legimi',
+      parentId: 'community-partners',
+      name: 'Legimi',
+      order: 5,
+      url: 'https://www.legimi.pl/',
+      logoUrl: '/images/partners/legimi.svg',
+      description: 'Legimi is a Community Partner of DevFest Warsaw 2026.',
+    },
   ],
 };
 
