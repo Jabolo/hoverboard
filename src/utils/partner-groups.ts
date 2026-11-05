@@ -22,7 +22,7 @@ export const communityPartners: PartnerGroup = {
       name: 'Red Bull',
       order: 2,
       url: 'https://www.redbull.com/',
-      logoUrl: '/images/partners/red-bull.svg',
+      logoUrl: '/images/partners/red-bull-can.webp',
       description: 'Red Bull is a Community Partner of DevFest Warsaw 2026.',
     },
     {

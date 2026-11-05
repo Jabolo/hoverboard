@@ -85,8 +85,10 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .logos-wrapper[data-tier='Community Partners'] .logo-item {
+          box-sizing: border-box;
           padding: 20px;
-          min-height: 104px;
+          height: 160px;
+          min-height: 0;
         }
 
         .logos-wrapper[data-tier='Community Partners'] .partner-description {
@@ -132,6 +134,54 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           width: var(--partner-logo-width, 100%);
           height: var(--partner-logo-height, 88px);
           align-self: center;
+        }
+
+        .logo-item[data-partner='red-bull'] {
+          position: relative;
+          overflow: hidden;
+          background: radial-gradient(ellipse at center, #183458 0%, var(--terminal-panel) 70%);
+        }
+
+        .logo-item[data-partner='red-bull']::before,
+        .logo-item[data-partner='red-bull']::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          width: 24%;
+          height: 1px;
+          background: var(--google-blue);
+          opacity: 0.45;
+        }
+
+        .logo-item[data-partner='red-bull']::before {
+          left: 9%;
+        }
+
+        .logo-item[data-partner='red-bull']::after {
+          right: 9%;
+        }
+
+        .logo-item[data-partner='red-bull'] .logo-img {
+          position: relative;
+          width: 86px;
+          height: 120px;
+          filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+          transition: transform var(--animation);
+        }
+
+        .logo-item[data-partner='red-bull']:hover .logo-img,
+        .logo-item[data-partner='red-bull']:focus-visible .logo-img {
+          transform: translateY(-4px) rotate(4deg);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .logo-item[data-partner='red-bull'] .logo-img {
+            transition: none;
+          }
+          .logo-item[data-partner='red-bull']:hover .logo-img,
+          .logo-item[data-partner='red-bull']:focus-visible .logo-img {
+            transform: none;
+          }
         }
 
         .cta-button {
@@ -347,6 +397,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
             <template is="dom-repeat" items="[[block.items]]" as="logo">
               <a
                 class="logo-item"
+                data-partner$="[[logo.id]]"
                 href$="[[logo.url]]"
                 title$="[[logo.name]]"
                 target="_blank"
