@@ -463,8 +463,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   <div class="terminal-line">
                     <span></span
                     ><span
-                      ><span class="key">programme:</span> talks and workshops across the
-                      Campus</span
+                      ><span class="key">stages:</span> Auditorium, Classroom and Vibe Zone</span
                     >
                   </div>
                   <div class="terminal-line">

@@ -98,7 +98,7 @@
   "scheduleBlock": {
     "title": "Schedule",
     "kicker": "> schedule --in-preparation",
-    "intro": "A full day of talks and workshops across Google for Startups Campus Warsaw.",
+    "intro": "Three stages across Google for Startups Campus Warsaw: Auditorium, Classroom and Vibe Zone.",
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",
     "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
@@ -261,8 +261,8 @@
         "number": "1"
       },
       "sessions": {
-        "label": "Programme rooms",
-        "number": "2"
+        "label": "Stages",
+        "number": "3"
       },
       "tracks": {
         "label": "Formats",
