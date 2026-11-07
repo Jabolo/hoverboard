@@ -54,6 +54,33 @@ export class ScheduleBlock extends ThemedElement {
           line-height: 1.7;
         }
 
+        .stages {
+          display: grid;
+          gap: 14px;
+          max-width: 760px;
+          margin: 24px 0 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        .stage-name {
+          color: var(--primary-text-color);
+          font-weight: 700;
+        }
+
+        .stage-description {
+          margin: 4px 0 0;
+          color: var(--secondary-text-color);
+          line-height: 1.5;
+        }
+
+        @media (min-width: 640px) {
+          .stages {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+          }
+        }
+
         .milestone-row {
           display: grid;
           gap: 14px;
@@ -126,12 +153,26 @@ export class ScheduleBlock extends ThemedElement {
         <span class="kicker">${scheduleBlock.kicker}</span>
         <h2 id="schedule-title">${scheduleBlock.title}</h2>
         <p class="intro">${scheduleBlock.intro}</p>
+        <ul class="stages" aria-label="Event stages">
+          <li>
+            <span class="stage-name">Auditorium</span>
+            <p class="stage-description">Talks and a panel discussion.</p>
+          </li>
+          <li>
+            <span class="stage-name">Classroom</span>
+            <p class="stage-description">Talks and hands-on workshops.</p>
+          </li>
+          <li>
+            <span class="stage-name">Vibe Zone</span>
+            <p class="stage-description">Community-led challenges and activities.</p>
+          </li>
+        </ul>
         <div class="milestone-row" aria-label="Confirmed schedule milestone">
           <p class="time">${scheduleBlock.time}</p>
           <p class="milestone">${scheduleBlock.milestone}</p>
         </div>
         <p class="note">The talks are ready to explore. The timetable is coming later.</p>
-        <a class="sessions-link" href="/sessions/">Find your next rabbit hole →</a>
+        <a class="sessions-link" href="/sessions/">Explore confirmed sessions →</a>
       </section>
     `;
   }

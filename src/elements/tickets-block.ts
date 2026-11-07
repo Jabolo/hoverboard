@@ -60,6 +60,14 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           gap: 12px;
         }
 
+        .ticket-overview {
+          max-width: 640px;
+          margin: 16px auto 0;
+          color: var(--secondary-text-color);
+          font-size: 16px;
+          line-height: 1.6;
+        }
+
         .ticket-item {
           margin: 0;
           min-height: 290px;
@@ -533,6 +541,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
       <div class="tickets-wrapper container">
         <h2 class="container-title">[[ticketsBlock.title]]</h2>
+        <p class="ticket-overview">Every ticket includes the same full-day programme access.</p>
         <content-loader
           class="tickets-placeholder"
           card-padding="24px"
