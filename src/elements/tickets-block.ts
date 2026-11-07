@@ -630,7 +630,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 specialty coffee, custom community swag, and conference operations.
                 <span class="patron-promise"
                   >⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name
-                  recognition on our opening keynote intro slide!</span
+                  recognition on our opening intro slide!</span
                 >
               </div>
             </div>
@@ -641,7 +641,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
               <div class="drawer-hint">
                 <span class="drawer-icon">🎟️</span>
                 <span>
-                  Click <strong>REGISTER</strong> on any ticket above, or open the form directly.
+                  Choose <strong>GET YOUR TICKET</strong> on a ticket above, or open the form
+                  directly.
                 </span>
               </div>
 
@@ -753,7 +754,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   private getBadgeText(ticket: Ticket): string {
     const tier = this.getTicketTier(ticket);
-    if (tier === 'patron') return '⭐ Keynote Slide Sponsor';
+    if (tier === 'patron') return '⭐ Community Patron';
     if (tier === 'supporter') return '💛 Community Supporter';
     if (tier === 'early-bird') return '⚡ Early Bird';
     return '';

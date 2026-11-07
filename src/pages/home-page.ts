@@ -9,7 +9,6 @@ import '../components/event-countdown';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
-import '../elements/cfp-block';
 import '../elements/schedule-block';
 import '../elements/visit-block';
 import '../elements/footer-block';
@@ -464,8 +463,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   <div class="terminal-line">
                     <span></span
                     ><span
-                      ><span class="key">stages:</span> 3 (auditorium ~200 ppl, cafe ~50 ppl,
-                      classroom ~40 ppl)</span
+                      ><span class="key">programme:</span> talks and workshops across the
+                      Campus</span
                     >
                   </div>
                   <div class="terminal-line">
@@ -576,7 +575,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
-      <cfp-block></cfp-block>
       <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>
       <past-devfests-block></past-devfests-block>

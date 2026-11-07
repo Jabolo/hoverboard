@@ -12,7 +12,7 @@
   "emailUs": "Email us",
   "partnershipResources": "Partnership Resources",
   "eventResources": "Event Resources",
-  "buyTicket": "Register",
+  "buyTicket": "Get your ticket",
   "ticketingPreview": "View registration",
   "cfpBlock": {
     "title": "Call for Papers closed.",
@@ -98,7 +98,7 @@
   "scheduleBlock": {
     "title": "Schedule",
     "kicker": "> schedule --in-preparation",
-    "intro": "A single jam-packed day across three stages: Auditorium (~200 ppl), Cafe (~50 ppl), and Classroom (~40 ppl).",
+    "intro": "A full day of talks and workshops across Google for Startups Campus Warsaw.",
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",
     "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
@@ -241,9 +241,9 @@
     "title": "Real Work, Real Lessons.",
     "callToAction": {
       "featuredSessions": {
-        "description": "DevFest Warsaw 2026 is a community-run day of talks, demos, and hands-on workshops at Google for Startups Campus Warsaw. Call for Papers is closed, and we’re reviewing submissions focused on real projects, practical ideas, and lessons learned.",
-        "label": "View speaker updates",
-        "link": "/speakers"
+        "description": "Join GDG Warsaw for a full day of practical talks, workshops and conversations with the people building technology.",
+        "label": "Explore sessions",
+        "link": "/sessions"
       },
       "howItWas": {
         "description": "",
@@ -261,8 +261,8 @@
         "number": "1"
       },
       "sessions": {
-        "label": "Stages",
-        "number": "3"
+        "label": "Programme rooms",
+        "number": "2"
       },
       "tracks": {
         "label": "Formats",

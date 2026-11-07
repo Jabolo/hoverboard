@@ -44,7 +44,7 @@ The Call for Papers is closed. We’re reviewing submissions and planning the pr
 
 ## How can my company support the event?
 
-You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening keynote intro slide, or use the **Become a partner** form to discuss customized partner packages. For partnership enquiries, email [partnership@gdgwarsaw.pl](mailto:partnership@gdgwarsaw.pl).
+You can purchase a **Patron Ticket** directly during registration for guaranteed personal or company recognition on our opening intro slide, or use the **Become a partner** form to discuss customized partner packages. For partnership enquiries, email [partnership@gdgwarsaw.pl](mailto:partnership@gdgwarsaw.pl).
 
 ## Where can I ask another question?
 

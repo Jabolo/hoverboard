@@ -19,7 +19,7 @@ export const ticketsReducer = (
       return state instanceof Success ? state : new Failure(action.payload);
 
     case FETCH_TICKETS_SUCCESS:
-      return new Success(action.payload);
+      return new Success(action.payload.filter((ticket) => ticket.available && !ticket.soldOut));
 
     default:
       return state;

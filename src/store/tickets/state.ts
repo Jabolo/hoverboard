@@ -3,4 +3,6 @@ import { initialConferenceTickets } from '../../data/default-tickets';
 import { Ticket } from '../../models/ticket';
 
 export type TicketsState = RemoteData<Error, Ticket[]>;
-export const initialTicketsState: TicketsState = new Success(initialConferenceTickets);
+export const initialTicketsState: TicketsState = new Success(
+  initialConferenceTickets.filter((ticket) => ticket.available && !ticket.soldOut),
+);
