@@ -10,6 +10,7 @@ const approvedSessions = {
   'CFP-002': ['calgan-aygun'],
   'CFP-012': ['andrii-khrystian'],
   'CFP-014': ['ivan-lapa'],
+  'CFP-015': ['ivan-lapa'],
   'CFP-021': ['yonatan-levin'],
   'CFP-034': ['hasan-rafiq'],
   'CFP-050': ['dominika-zajac'],
@@ -70,18 +71,19 @@ function publicLink(value, label) {
 /** Fail the release build before Rollup if the approved public snapshot has drifted. */
 export function validateProgramme(source, publicRoot = path.join(root, 'public')) {
   keys(source, ['speakers', 'sessions'], 'programme');
-  keys(source.speakers, Object.values(approvedSessions).flat(), 'speakers');
+  const approvedSpeakers = [...new Set(Object.values(approvedSessions).flat())];
+  keys(source.speakers, approvedSpeakers, 'speakers');
   keys(source.sessions, Object.keys(approvedSessions), 'sessions');
   const actualSpeakerIds = Object.keys(source.speakers).sort();
   assert.deepEqual(
     actualSpeakerIds,
-    Object.values(approvedSessions).flat().sort(),
+    approvedSpeakers.sort(),
     'Expected exactly 16 approved speakers',
   );
   assert.deepEqual(
     Object.keys(source.sessions).sort(),
     Object.keys(approvedSessions).sort(),
-    'Expected exactly 12 approved sessions',
+    'Expected exactly 13 approved sessions',
   );
   assert(!JSON.stringify(source).includes('/preview/'), 'Legacy preview paths are forbidden');
   assert(!JSON.stringify(source).includes('CFP-042'), 'Unconfirmed CFP-042 is forbidden');

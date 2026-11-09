@@ -13,6 +13,7 @@ describe('approved programme publication', () => {
       'CFP-002',
       'CFP-012',
       'CFP-014',
+      'CFP-015',
       'CFP-021',
       'CFP-028',
       'CFP-034',
@@ -43,6 +44,18 @@ describe('approved programme publication', () => {
       expect(speaker.country).toBe('');
       expect(speaker.photoUrl).toMatch(/^\/images\/speakers\/2026\//);
     }
+  });
+
+  it('links Ivan to both sessions and presents Adrian’s session as a workshop', () => {
+    const data = generatePublishedProgramme(source());
+    const ivan = data.generatedSpeakers.find(({ id }) => id === 'ivan-lapa');
+    const workshop = data.generatedSessions.find(({ id }) => id === 'CFP-015');
+    const adrian = data.generatedSessions.find(({ id }) => id === 'INVITED-001');
+    expect(ivan?.sessions.map(({ id }) => id).sort()).toEqual(['CFP-014', 'CFP-015']);
+    expect(workshop?.speakers.map(({ id }) => id)).toEqual(['ivan-lapa']);
+    expect(workshop?.description).toContain('60-minute workshop');
+    expect(adrian?.description).toContain('45-minute workshop');
+    expect(data.generatedSchedule).toEqual([]);
   });
 
   it('replaces Sergiy with Igor on the shared panel', () => {
