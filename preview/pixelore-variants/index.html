@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Pixelore motion studies · DevFest Warsaw</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./motion.js"></script>
+  </head>
+  <body>
+    <main>
+      <header class="intro">
+        <a class="back" href="https://warsaw.devfest.pl/">← DevFest Warsaw</a>
+        <h1>Pixelore, in motion.</h1>
+        <p class="description">
+          Three ideas for the photography partner card, inspired by Pixelore’s interactive wordmark.
+          Move over each card or use your keyboard to explore.
+        </p>
+        <p class="note">Design preview · three alternatives for the partner card</p>
+      </header>
+      <section aria-labelledby="variants-title">
+        <h2 id="variants-title">Choose a direction</h2>
+        <div class="studies">
+          <article class="study">
+            <div class="study-heading">
+              <span class="number">01</span>
+              <div>
+                <h3>Pixel field</h3>
+                <p>The wordmark becomes particles that gently part around your pointer.</p>
+              </div>
+            </div>
+            <div class="card-pair">
+              <a
+                class="partner pixelore"
+                data-motion="field"
+                href="https://www.pixelorestudio.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Pixelore Studio, opens in a new tab"
+              >
+                <canvas aria-hidden="true"></canvas
+                ><img class="wordmark" src="/images/partners/pixelore-logo-dark.svg" alt="" />
+              </a>
+              <div class="partner neighbour">
+                <img src="/images/partners/red-bull-can.webp" alt="Red Bull" />
+              </div>
+            </div>
+          </article>
+          <article class="study">
+            <div class="study-heading">
+              <span class="number">02</span>
+              <div>
+                <h3>Light trail</h3>
+                <p>A warm lens glow follows your movement through a field of pixels.</p>
+              </div>
+            </div>
+            <div class="card-pair">
+              <a
+                class="partner pixelore"
+                data-motion="light"
+                href="https://www.pixelorestudio.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Pixelore Studio, opens in a new tab"
+              >
+                <canvas aria-hidden="true"></canvas
+                ><img class="wordmark" src="/images/partners/pixelore-logo-dark.svg" alt="" />
+              </a>
+              <div class="partner neighbour">
+                <img src="/images/partners/red-bull-can.webp" alt="Red Bull" />
+              </div>
+            </div>
+          </article>
+          <article class="study">
+            <div class="study-heading">
+              <span class="number">03</span>
+              <div>
+                <h3>Simple SVG</h3>
+                <p>The original logo, with a subtle lift on hover or keyboard focus.</p>
+              </div>
+            </div>
+            <div class="card-pair">
+              <a
+                class="partner pixelore basic"
+                href="https://www.pixelorestudio.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Pixelore Studio, opens in a new tab"
+              >
+                <img class="wordmark" src="/images/partners/pixelore-logo-dark.svg" alt="" />
+              </a>
+              <div class="partner neighbour">
+                <img src="/images/partners/red-bull-can.webp" alt="Red Bull" />
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <footer>
+        <a href="https://warsaw.devfest.pl/">Visit DevFest Warsaw →</a
+        ><span>Design preview for review.</span>
+      </footer>
+    </main>
+  </body>
+</html>

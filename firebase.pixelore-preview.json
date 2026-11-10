@@ -1,0 +1,21 @@
+{
+  "hosting": {
+    "site": "gdg-warsaw-devfest26-web",
+    "public": "dist-pixelore-preview",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Cache-Control", "value": "no-store" },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+          }
+        ]
+      }
+    ]
+  }
+}
