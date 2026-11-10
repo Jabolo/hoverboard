@@ -53,6 +53,15 @@ export const communityPartners: PartnerGroup = {
       logoUrl: '/images/partners/legimi.svg',
       description: 'Legimi is a Community Partner of DevFest Warsaw 2026.',
     },
+    {
+      id: 'pixelore',
+      parentId: 'community-partners',
+      name: 'Pixelore',
+      order: 6,
+      url: 'https://www.pixelorestudio.com/',
+      logoUrl: '/images/partners/pixelore-logo-dark.svg',
+      description: 'Pixelore is the photography partner for DevFest Warsaw 2026.',
+    },
   ],
 };
 
