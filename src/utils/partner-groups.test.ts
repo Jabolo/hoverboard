@@ -13,6 +13,7 @@ describe('visible partner groups', () => {
       'meet.js',
       'Legimi',
       'Pixelore',
+      'Kol.ski',
     ]);
     expect(groups[1]!.items[2]!.description).not.toMatch(/three|\b3\b/i);
   });
@@ -58,7 +59,7 @@ describe('visible partner groups', () => {
       communityPartners,
     ]);
     expect(result[0]!.items[0]!.name).toBe('Google for Startups');
-    expect(result[2]!.items).toHaveLength(6);
-    expect(communityPartners.items).toHaveLength(6);
+    expect(result[2]!.items).toHaveLength(7);
+    expect(communityPartners.items).toHaveLength(7);
   });
 });

@@ -62,6 +62,15 @@ export const communityPartners: PartnerGroup = {
       logoUrl: '/images/partners/pixelore-logo-dark.svg',
       description: 'Pixelore is the photography partner for DevFest Warsaw 2026.',
     },
+    {
+      id: 'kol-ski',
+      parentId: 'community-partners',
+      name: 'Kol.ski',
+      order: 7,
+      url: 'https://kol.ski/',
+      logoUrl: '/images/partners/kolski-wordmark-white.svg',
+      description: 'Kol.ski is a Community Partner of DevFest Warsaw 2026.',
+    },
   ],
 };
 
