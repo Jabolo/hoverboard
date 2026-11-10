@@ -174,7 +174,65 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           transform: translateY(-4px) rotate(4deg);
         }
 
+        .logo-item[data-partner='pixelore'] {
+          position: relative;
+          isolation: isolate;
+          overflow: hidden;
+          background: #171618;
+        }
+
+        .logo-item[data-partner='pixelore']::before,
+        .logo-item[data-partner='pixelore']::after {
+          content: '';
+          position: absolute;
+          pointer-events: none;
+        }
+
+        .logo-item[data-partner='pixelore']::before {
+          left: var(--pixel-x, 50%);
+          top: var(--pixel-y, 50%);
+          width: 184px;
+          height: 184px;
+          background: radial-gradient(circle, rgba(248, 176, 61, 0.23), transparent 70%);
+          transform: translate(-50%, -50%);
+          animation: pixelore-drift 7s ease-in-out infinite alternate;
+        }
+
+        .logo-item[data-partner='pixelore']::after {
+          inset: 0;
+          background: radial-gradient(circle, rgba(250, 190, 80, 0.65) 0.8px, transparent 1px) 0 0 /
+            11px 11px;
+          mask-image: radial-gradient(
+            circle 100px at var(--pixel-x, 50%) var(--pixel-y, 50%),
+            #000,
+            transparent
+          );
+          opacity: 0.7;
+        }
+
+        .logo-item[data-partner='pixelore']:hover::before,
+        .logo-item[data-partner='pixelore']:focus-visible::before {
+          animation: none;
+        }
+
+        .logo-item[data-partner='pixelore'] .logo-img {
+          position: relative;
+          z-index: 1;
+        }
+
+        @keyframes pixelore-drift {
+          from {
+            transform: translate(-80%, -50%);
+          }
+          to {
+            transform: translate(-20%, -50%);
+          }
+        }
+
         @media (prefers-reduced-motion: reduce) {
+          .logo-item[data-partner='pixelore']::before {
+            animation: none;
+          }
           .logo-item[data-partner='red-bull'] .logo-img {
             transition: none;
           }
@@ -402,6 +460,8 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
                 title$="[[logo.name]]"
                 target="_blank"
                 rel="noopener noreferrer"
+                on-pointermove="movePixeloreLight"
+                on-pointerleave="resetPixeloreLight"
               >
                 <lazy-image
                   class="logo-img"
@@ -514,6 +574,25 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
   private loading = loading;
   private partnersBlock = partnersBlock;
+
+  private movePixeloreLight(event: PointerEvent) {
+    const card = event.currentTarget as HTMLElement;
+    if (
+      card.dataset['partner'] !== 'pixelore' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    )
+      return;
+    const bounds = card.getBoundingClientRect();
+    card.style.setProperty('--pixel-x', `${event.clientX - bounds.left}px`);
+    card.style.setProperty('--pixel-y', `${event.clientY - bounds.top}px`);
+  }
+
+  private resetPixeloreLight(event: PointerEvent) {
+    const card = event.currentTarget as HTMLElement;
+    if (card.dataset['partner'] !== 'pixelore') return;
+    card.style.removeProperty('--pixel-x');
+    card.style.removeProperty('--pixel-y');
+  }
 
   @query('#partnerContact')
   private partnerContact!: HTMLDialogElement;
