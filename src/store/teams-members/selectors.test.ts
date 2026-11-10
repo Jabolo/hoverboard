@@ -8,7 +8,7 @@ jest.mock('../teams/selectors');
 jest.mock('../members/selectors');
 
 describe('DevFest event team', () => {
-  it('selects exactly the seven event organizers from the larger chapter roster, in owner order', () => {
+  it('selects the event organizers from the larger chapter roster, in owner order', () => {
     const members: Member[] = seed.team[0]!.members.map((member, index) => ({
       ...member,
       id: String(index),
@@ -29,6 +29,7 @@ describe('DevFest event team', () => {
       'Anhelina Sudenkova',
       'Maryna Kamienieva',
       'Jakub Kołakowski',
+      'Kamil Krawczyk',
     ]);
     expect(
       result.data[0]!.members.every((member) => member.photoUrl && member.socials[0]?.link),
@@ -49,7 +50,7 @@ describe('DevFest event team', () => {
     const displayed = result.data[0]!.members;
     expect(
       displayed.flatMap((member) => member.socials).filter((social) => social.icon === 'linkedin'),
-    ).toHaveLength(7);
+    ).toHaveLength(8);
     expect(
       displayed
         .find((member) => member.name === 'Anhelina Sudenkova')!
@@ -59,6 +60,16 @@ describe('DevFest event team', () => {
       icon: 'website',
       name: 'Personal website',
       link: 'https://michaljablonski.dev/',
+    });
+    expect(displayed.find((member) => member.name === 'Kamil Krawczyk')!.socials).toContainEqual({
+      icon: 'gdg',
+      name: 'GDG profile',
+      link: 'https://gdg.community.dev/u/m4m895/',
+    });
+    expect(displayed.find((member) => member.name === 'Kamil Krawczyk')!.socials).toContainEqual({
+      icon: 'linkedin',
+      name: 'LinkedIn',
+      link: 'https://www.linkedin.com/in/kamil-krawczyk2/',
     });
     expect(displayed.find((member) => member.name === 'Maryna Kamienieva')!.socials).toContainEqual(
       {

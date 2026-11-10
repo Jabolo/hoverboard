@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, jest } from '@jest/globals';
-import draft from '../../preview/agenda-draft-2026.json';
+import draft from '../../public/data/agenda-2026.json';
 import programme from '../../public/data/programme-2026.json';
 import { buildAgenda, eventInstant } from '../utils/agenda-preview-data';
 import type { AgendaItem, DraftAgenda } from '../utils/agenda-preview-data';

@@ -26,7 +26,7 @@
     "languages": "English & Polish",
     "cta": "View speaker updates",
     "link": "/speakers",
-    "note": "Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
+    "note": "Meet the confirmed speakers and explore their sessions and the event schedule."
   },
   "pastDevFestsBlock": {
     "title": "Built together over the years.",
@@ -97,7 +97,7 @@
   },
   "scheduleBlock": {
     "title": "Schedule",
-    "kicker": "> schedule --in-preparation",
+    "kicker": "> schedule --ready",
     "intro": "Three stages across Google for Startups Campus Warsaw: Auditorium, Classroom and Vibe Zone.",
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",

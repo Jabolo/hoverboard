@@ -171,8 +171,8 @@ export class ScheduleBlock extends ThemedElement {
           <p class="time">${scheduleBlock.time}</p>
           <p class="milestone">${scheduleBlock.milestone}</p>
         </div>
-        <p class="note">The talks are ready to explore. The timetable is coming later.</p>
-        <a class="sessions-link" href="/sessions/">Explore confirmed sessions →</a>
+        <p class="note">Explore the day by space and save the sessions you want to attend.</p>
+        <a class="sessions-link" href="/schedule">Explore the schedule →</a>
       </section>
     `;
   }

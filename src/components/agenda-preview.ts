@@ -38,7 +38,7 @@ const agendaTitle = (item: AgendaItem): string =>
       ? 'Networking · Disco Party'
       : item.title;
 
-/** A local-only working timetable. It never changes the published programme store. */
+/** Timetable built from the published agenda and programme data. */
 @customElement('agenda-preview')
 export class AgendaPreview extends ThemedElement {
   @state() private items: AgendaItem[] = [];
@@ -812,7 +812,7 @@ export class AgendaPreview extends ThemedElement {
   private async load(): Promise<void> {
     try {
       const [draftResponse, programmeResponse] = await Promise.all([
-        fetch('/data/agenda-draft-2026.json', { cache: 'no-store' }),
+        fetch('/data/agenda-2026.json', { cache: 'no-store' }),
         fetch('/data/programme-2026.json', { cache: 'no-store' }),
       ]);
       if (!draftResponse.ok || !programmeResponse.ok) throw new Error('Agenda data unavailable');
@@ -1009,8 +1009,8 @@ export class AgendaPreview extends ThemedElement {
         <span class="sr-only" role="status" aria-live="polite" aria-atomic="true"
           >${eventState(this.now) === 'during' && this.filter !== 'vibe' && this.loadState === 'ready' ? `Now: ${currentItems.length ? currentItems.map(agendaTitle).join(', ') : 'No timed sessions right now'}` : ''}</span
         >
-        ${this.loadState === 'loading' ? html`<p role="status">Loading the working agenda…</p>` : nothing}
-        ${this.loadState === 'error' ? html`<p class="error" role="alert">The working agenda could not be loaded. Reload the page to try again.</p>` : nothing}
+        ${this.loadState === 'loading' ? html`<p role="status">Loading the agenda…</p>` : nothing}
+        ${this.loadState === 'error' ? html`<p class="error" role="alert">The agenda could not be loaded. Reload the page to try again.</p>` : nothing}
         ${
           this.loadState === 'ready' && this.filter === 'vibe'
             ? html`<section class="empty">

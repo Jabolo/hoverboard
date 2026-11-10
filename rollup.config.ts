@@ -54,18 +54,6 @@ const agendaFlag = {
     };
   },
 };
-// The preview element has registration side effects, so omit its import entirely
-// from non-preview bundles instead of relying on runtime host checks.
-const agendaIsolation = {
-  name: 'agenda-preview-isolation',
-  transform(code: string, id: string) {
-    if (agendaPreview || !id.endsWith('/pages/schedule-page.ts')) return null;
-    const previewImport = "import '../components/agenda-preview';";
-    if (!code.includes(previewImport)) throw new Error('Agenda preview import was not found');
-    return { code: code.replace(previewImport, ''), map: null };
-  },
-};
-
 const config: RollupOptions[] = [
   {
     input: 'src/firebase-messaging-sw.ts',
@@ -97,7 +85,6 @@ const config: RollupOptions[] = [
     plugins: [
       previewFlag,
       agendaFlag,
-      agendaIsolation,
       nodeResolve(),
       json(),
       typescript({

@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-21",
+  "timezone": "Europe/Warsaw",
+  "items": [
+    {
+      "id": "registration",
+      "start": "09:00",
+      "space": "both",
+      "kind": "activity",
+      "title": "Registration, networking & games"
+    },
+    {
+      "id": "opening",
+      "start": "10:00",
+      "end": "10:15",
+      "space": "both",
+      "kind": "activity",
+      "title": "Opening"
+    },
+    {
+      "id": "CFP-021",
+      "start": "10:15",
+      "end": "10:45",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-043",
+      "start": "10:15",
+      "end": "10:45",
+      "space": "classroom",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-002",
+      "start": "11:00",
+      "end": "11:45",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-012",
+      "start": "11:00",
+      "end": "11:45",
+      "space": "classroom",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-014",
+      "start": "12:00",
+      "end": "12:45",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-050",
+      "start": "12:00",
+      "end": "13:00",
+      "space": "classroom",
+      "kind": "workshop"
+    },
+    {
+      "id": "CFP-034",
+      "start": "13:00",
+      "end": "13:45",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "lunch",
+      "start": "14:00",
+      "end": "15:00",
+      "space": "both",
+      "kind": "activity",
+      "title": "Lunch"
+    },
+    {
+      "id": "PANEL-01",
+      "start": "15:00",
+      "end": "16:00",
+      "space": "auditorium",
+      "kind": "panel"
+    },
+    {
+      "id": "CFP-028",
+      "start": "16:15",
+      "end": "16:45",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "CFP-015",
+      "start": "16:15",
+      "end": "17:15",
+      "space": "classroom",
+      "kind": "workshop"
+    },
+    {
+      "id": "scaling-hugging-face-hub",
+      "start": "17:00",
+      "end": "17:30",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "INVITED-002",
+      "start": "18:00",
+      "end": "18:30",
+      "space": "auditorium",
+      "kind": "session"
+    },
+    {
+      "id": "INVITED-001",
+      "start": "18:00",
+      "end": "18:45",
+      "space": "classroom",
+      "kind": "workshop"
+    },
+    {
+      "id": "closing",
+      "start": "19:00",
+      "end": "19:30",
+      "space": "auditorium",
+      "kind": "activity",
+      "title": "Closing, results & awards"
+    },
+    {
+      "id": "networking",
+      "start": "19:30",
+      "end": "21:00",
+      "space": "both",
+      "kind": "activity",
+      "title": "Networking"
+    }
+  ]
+}

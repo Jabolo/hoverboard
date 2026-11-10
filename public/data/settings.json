@@ -74,7 +74,7 @@
     "speakers": {
       "title": "Speakers",
       "metaDescription": "Speakers and sessions for GDG DevFest Warsaw 2026",
-      "description": "Meet the confirmed 2026 speakers and explore their sessions. The schedule is not yet published.",
+      "description": "Meet the confirmed 2026 speakers and explore their sessions and the event schedule.",
       "background": {
         "color": "#070C14"
       },
@@ -92,7 +92,7 @@
     "schedule": {
       "title": "Schedule",
       "metaDescription": "The GDG DevFest Warsaw 2026 schedule",
-      "description": "Explore three stages at Google for Startups Campus Warsaw: Auditorium, Classroom and Vibe Zone. The full timetable is coming soon.",
+      "description": "Explore the event schedule across Auditorium, Classroom and Vibe Zone at Google for Startups Campus Warsaw.",
       "background": {
         "color": "#070C14"
       },

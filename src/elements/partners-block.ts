@@ -4,6 +4,7 @@ import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
+import '../components/google-developers-brand';
 import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { PartnerGroupsState, selectPartnerGroups } from '../store/partners';
@@ -437,10 +438,23 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           font-size: 15px;
           line-height: 1.6;
         }
+
+        .community-program {
+          margin: 28px 0 8px;
+        }
+
+        .community-program .block-title {
+          margin-bottom: 12px;
+        }
       </style>
 
       <div class="container">
         <h2 class="container-title">[[partnersBlock.title]]</h2>
+
+        <div class="community-program">
+          <h3 class="block-title">Developer community</h3>
+          <google-developers-brand></google-developers-brand>
+        </div>
 
         <template is="dom-if" if="[[pending]]">
           <p>[[loading]]</p>

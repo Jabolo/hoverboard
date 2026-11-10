@@ -6,6 +6,7 @@ import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '../components/about-block';
 import '../components/event-countdown';
+import '../components/google-developers-brand';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
@@ -96,6 +97,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           display: block;
           width: 100%;
           height: auto;
+        }
+
+        .hero-community {
+          margin-top: 16px;
+          --google-developers-brand-width: 170px;
         }
 
         .event-details {
@@ -413,6 +419,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   alt="DevFest 2026"
                 />
               </div>
+
+              <google-developers-brand class="hero-community"></google-developers-brand>
 
               <div class="event-details">
                 <div class="event-date">[[eventDate]]</div>

@@ -2,6 +2,7 @@ import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { codeOfConduct, organizer } from '../utils/data';
 import { ThemedElement } from '../components/themed-element';
+import './google-developers-brand';
 
 @customElement('footer-nav')
 export class FooterNav extends ThemedElement {
@@ -11,7 +12,7 @@ export class FooterNav extends ThemedElement {
       css`
         :host {
           display: block;
-          margin: 0 20px;
+          margin: 18px 20px 0;
         }
 
         .nav-inline {
@@ -38,6 +39,17 @@ export class FooterNav extends ThemedElement {
           padding: 0;
           margin: 0;
           text-align: left;
+        }
+
+        .footer-brands {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 18px;
+        }
+
+        google-developers-brand {
+          --google-developers-brand-width: 155px;
         }
 
         .coc {
@@ -72,13 +84,15 @@ export class FooterNav extends ThemedElement {
   override render() {
     return html`
       <div class="nav-inline">
-        <a href="/" title="GDG DevFest Warsaw 2026">
-          <img
-            class="footer-logo"
-            src="/images/logos/devfest-2026-wordmark-dark.svg"
-            alt="DevFest 2026"
-          />
-        </a>
+        <div class="footer-brands">
+          <a href="/" title="GDG DevFest Warsaw 2026">
+            <img
+              class="footer-logo"
+              src="/images/logos/devfest-2026-wordmark-dark.svg"
+              alt="DevFest 2026"
+            /> </a
+          ><google-developers-brand></google-developers-brand>
+        </div>
 
         <div class="copyright">
           Based on

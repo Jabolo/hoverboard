@@ -26,7 +26,7 @@ export class FooterBlock extends PolymerElement {
 
         .container {
           margin: 0 auto;
-          padding: 20px 0;
+          padding: 20px 0 calc(20px + var(--footer-countdown-space, 0px));
           position: relative;
         }
 
@@ -69,7 +69,7 @@ export class FooterBlock extends PolymerElement {
 
         @media (min-width: 640px) {
           .container {
-            padding: 15px 36px;
+            padding: 15px 36px calc(15px + var(--footer-countdown-space, 0px));
           }
         }
       </style>

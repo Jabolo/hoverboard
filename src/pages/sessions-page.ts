@@ -322,7 +322,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
     super.connectedCallback();
     updateMetadata(
       'Sessions',
-      'Explore confirmed DevFest Warsaw 2026 sessions by topic, speaker or company. Timetable coming later.',
+      'Explore DevFest Warsaw 2026 sessions by topic, speaker or company and plan your day.',
     );
     if (this.sessions instanceof Initialized) store.dispatch(fetchSessions);
     if (this.speakers instanceof Initialized) store.dispatch(fetchSpeakers);
@@ -454,8 +454,8 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         <div class="intro">
           <h2>Pick your rabbit hole.</h2>
           <p>
-            Confirmed sessions. Timetable coming later.<br />Find your next idea by topic, speaker
-            or company.
+            Explore sessions and plan your day.<br />Find your next idea by topic, speaker or
+            company.
           </p>
         </div>
         <label class="search-label" for="session-search">What are you curious about?</label>

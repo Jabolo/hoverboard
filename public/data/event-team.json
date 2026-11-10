@@ -91,6 +91,18 @@
           "link": "https://www.linkedin.com/in/jkolski/"
         }
       ]
+    },
+    {
+      "id": "5",
+      "name": "Kamil Krawczyk",
+      "profileUrl": "https://gdg.community.dev/u/m4m895/",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/kamil-krawczyk2/"
+        }
+      ]
     }
   ]
 }

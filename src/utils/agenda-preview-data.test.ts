@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import draft from '../../preview/agenda-draft-2026.json';
+import draft from '../../public/data/agenda-2026.json';
 import programme from '../../public/data/programme-2026.json';
 import {
   buildAgenda,
@@ -15,8 +15,8 @@ import type { PreviewSource } from './speakers-preview-data';
 
 const items = () => buildAgenda(draft as DraftAgenda, programme as PreviewSource);
 
-describe('local draft agenda', () => {
-  it('matches the confirmed sessions, open slot and common event blocks', () => {
+describe('published agenda', () => {
+  it('matches the scheduled sessions and common event blocks', () => {
     const all = items();
     expect(all.filter((item) => item.href)).toHaveLength(13);
     expect(
@@ -36,11 +36,7 @@ describe('local draft agenda', () => {
       ['INVITED-002', '18:00', '18:30', 'auditorium'],
       ['INVITED-001', '18:00', '18:45', 'classroom'],
     ]);
-    expect(
-      all
-        .filter((item) => item.kind === 'open')
-        .map(({ start, end, space }) => [start, end, space]),
-    ).toEqual([['13:15', '13:45', 'classroom']]);
+    expect(all.some((item) => item.kind === 'open')).toBe(false);
     expect(all.find(({ id }) => id === 'CFP-050')).toMatchObject({
       start: '12:00',
       end: '13:00',

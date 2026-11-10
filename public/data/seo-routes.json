@@ -7,7 +7,7 @@
     "fallbackParagraphs": [
       "Real Work, Real Lessons. A one-day, community-led technology conference for developers, designers, entrepreneurs, engineers, researchers, and students.",
       "21 November 2026, 09:00–21:00 Europe/Warsaw · Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland.",
-      "The Call for Papers is closed. Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
+      "The Call for Papers is closed. Explore the speakers, sessions and event schedule."
     ]
   },
   "/blog": {
@@ -30,9 +30,9 @@
     "structuredData": "event",
     "fallbackHeading": "Schedule | GDG DevFest Warsaw 2026",
     "fallbackParagraphs": [
-      "Explore the GDG DevFest Warsaw 2026 programme in Warsaw. Talks, demos, practical sessions, and hands-on workshops will be published as they are confirmed.",
+      "Explore the GDG DevFest Warsaw 2026 programme in Warsaw. Find talks, practical sessions, and hands-on workshops across the event spaces.",
       "The event takes place on 21 November 2026 from 09:00 to 21:00 Europe/Warsaw at Google for Startups Campus Warsaw.",
-      "The Call for Papers is closed. Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
+      "The Call for Papers is closed. Explore the speakers, sessions and event schedule."
     ]
   },
   "/speakers": {
@@ -43,7 +43,7 @@
     "fallbackParagraphs": [
       "Meet the speakers and explore the speaker archive for GDG DevFest Warsaw, a community-led technology conference in Warsaw.",
       "Explore the confirmed 2026 speaker lineup and linked session abstracts.",
-      "The Call for Papers is closed. Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
+      "The Call for Papers is closed. Explore the speakers, sessions and event schedule."
     ]
   },
   "/team": {
@@ -64,7 +64,7 @@
     "fallbackParagraphs": [
       "Find answers about the date, venue, audience, programme, participation, and Call for Papers for GDG DevFest Warsaw 2026.",
       "The event takes place on 21 November 2026 at Google for Startups Campus Warsaw. Registration opens at 09:00 and the official event ends at 21:00 Europe/Warsaw.",
-      "The Call for Papers is closed. Meet the confirmed speakers and explore their sessions while we continue reviewing submissions. The schedule is not yet published."
+      "The Call for Papers is closed. Explore the speakers, sessions and event schedule."
     ]
   },
   "/privacy": {
@@ -87,12 +87,12 @@
   },
   "/sessions": {
     "title": "Sessions | GDG DevFest Warsaw 2026",
-    "description": "Find your next rabbit hole: explore confirmed DevFest Warsaw talks and the shared panel. Search by topic, speaker or company. Timetable coming later.",
+    "description": "Find your next rabbit hole: explore confirmed DevFest Warsaw talks and the shared panel. Search by topic, speaker or company and explore the schedule.",
     "structuredData": null,
     "fallbackHeading": "Sessions",
     "fallbackParagraphs": [
       "Explore confirmed talks and the shared panel at DevFest Warsaw 2026.",
-      "Search by topic, speaker or company. Dates, times and rooms are not assigned here. The timetable is not yet published."
+      "Search by topic, speaker or company, and explore dates and rooms in the schedule."
     ]
   }
 }

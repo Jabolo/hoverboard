@@ -115,6 +115,27 @@ export class HoverboardApp extends PolymerElement {
           object-fit: contain;
         }
 
+        app-drawer .drawer-google {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          margin-top: 12px;
+          padding: 8px 12px;
+          border-radius: 5px;
+          background: #fff;
+        }
+
+        .drawer-google img {
+          display: block;
+          width: 170px;
+          height: auto;
+        }
+
+        .drawer-google:focus-visible {
+          outline: 3px solid var(--google-blue);
+          outline-offset: 3px;
+        }
+
         app-drawer .dates {
           margin-top: 24px;
           color: var(--terminal-green);
@@ -203,9 +224,17 @@ export class HoverboardApp extends PolymerElement {
           --countdown-offset: 64px;
         }
 
+        app-drawer-layout:has(~ sticky-countdown[active]) {
+          --footer-countdown-space: calc(80px + env(safe-area-inset-bottom));
+        }
+
         @media (max-width: 480px) {
           sticky-countdown[active] ~ cookie-consent {
             --countdown-offset: 76px;
+          }
+
+          app-drawer-layout:has(~ sticky-countdown[active]) {
+            --footer-countdown-space: calc(100px + env(safe-area-inset-bottom));
           }
         }
 
@@ -239,6 +268,14 @@ export class HoverboardApp extends PolymerElement {
               src="/images/logos/devfest-2026-wordmark-dark.svg"
               alt="DevFest 2026"
             />
+            <a
+              class="drawer-google"
+              href="https://developers.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/logos/google-for-developers.svg" alt="Google for Developers" />
+            </a>
             <div class="dates">[[dates]]</div>
             <div class="location">[[shortLocation]]</div>
           </app-toolbar>

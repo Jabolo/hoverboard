@@ -1,4 +1,4 @@
-import { speakersPreview } from '../utils/speakers-preview';
+import { legacyProgrammePreview, speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
 import '@polymer/paper-progress';
@@ -30,7 +30,8 @@ import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
 @customElement('schedule-page')
 export class SchedulePage extends ReduxMixin(PolymerElement) {
   private speakersPreview = speakersPreview;
-  private agendaPreview = isAgendaPreviewEnabled(window.location.hostname);
+  private agendaPreview =
+    !legacyProgrammePreview || isAgendaPreviewEnabled(window.location.hostname);
 
   static get template() {
     return html`
