@@ -1,23 +1,27 @@
-/**
- * Default service worker unregisters itself and clears all caches. This is to
- * help prevent installed/bad service workers from interfering with the app.
- *
- * Production deploys will generate a custom service worker that will overwrite
- * this file.
- */
-console.info('Service worker disabled for development.');
+/* Replace previous Workbox workers so old event pages no longer win over the network. */
+self.addEventListener('install', (event) => {
+  event.waitUntil(self.skipWaiting());
+});
 
-async function unregisterAndClearCaches() {
-  const unregisterPromise = self.registration.unregister();
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const legacyCaches = (await caches.keys().catch(() => [])).filter((name) =>
+        name.startsWith('workbox-precache-'),
+      );
+      const windows = legacyCaches.length
+        ? await self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+        : [];
 
-  const allCaches = await caches.keys();
-  const cacheDeletionPromises = allCaches.map((cache) => caches.delete(cache));
+      await self.clients.claim();
 
-  await Promise.all([unregisterPromise, ...cacheDeletionPromises]);
-
-  console.info('Service worker unregistered and cache cleared.');
-}
-
-unregisterAndClearCaches().catch((error) =>
-  console.error(`Error unregistering service worker: ${error}`),
-);
+      // Do not await navigation here: the new navigation may itself wait for activation.
+      for (const client of windows) {
+        if (new URL(client.url).origin === self.location.origin) {
+          void client.navigate(client.url).catch(() => {});
+        }
+      }
+      await Promise.allSettled(legacyCaches.map((name) => caches.delete(name)));
+    })(),
+  );
+});

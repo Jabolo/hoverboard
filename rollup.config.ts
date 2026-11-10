@@ -8,9 +8,7 @@ import fs from 'fs';
 import { RollupOptions } from 'rollup';
 import copy from 'rollup-plugin-copy';
 import livereload from 'rollup-plugin-livereload';
-import { generateSW } from 'rollup-plugin-workbox';
 import { compileBufferTemplate, production, watch } from './utils/build';
-import { workboxConfig } from './workbox.config';
 
 const previewMode = process.env['SPEAKERS_PREVIEW'];
 const speakersTomek = previewMode === 'tomek';
@@ -120,7 +118,6 @@ const config: RollupOptions[] = [
             : []),
         ],
       }),
-      production && !speakersPreview && !agendaPreview && generateSW(workboxConfig),
       production && terser(),
       watch && livereload({ watch: 'dist' }),
     ],

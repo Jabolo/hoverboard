@@ -21,8 +21,8 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
 });
 
 if (!speakersPreview && !isAgendaPreviewEnabled(window.location.hostname))
-  register('service-worker.js', {
-    registrationOptions: { scope: getConfig(CONFIG.BASEPATH) },
+  register('/service-worker.js', {
+    registrationOptions: { scope: getConfig(CONFIG.BASEPATH), updateViaCache: 'none' },
     updated(registration) {
       store.dispatch(
         queueComplexSnackbar({
