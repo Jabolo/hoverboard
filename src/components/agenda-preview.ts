@@ -298,6 +298,40 @@ export class AgendaPreview extends ThemedElement {
         .entry.activity {
           background: #111f2c;
         }
+        .entry.lunch {
+          background: linear-gradient(115deg, #152b29, #132432);
+          border-color: #426b5c;
+        }
+        .entry.lunch.current {
+          border-color: var(--terminal-green);
+        }
+        .lunch-icons {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 12px;
+          font-size: 27px;
+          line-height: 1.2;
+        }
+        .lunch-icons span {
+          display: inline-block;
+          animation: lunch-bob 3s ease-in-out infinite alternate;
+        }
+        .lunch-icons span:nth-child(2) {
+          animation-delay: -1.4s;
+        }
+        .lunch-icons span:nth-child(3) {
+          font-size: 20px;
+          animation-delay: -0.7s;
+        }
+        @keyframes lunch-bob {
+          from {
+            transform: translateY(0) rotate(-4deg);
+          }
+          to {
+            transform: translateY(-3px) rotate(4deg);
+          }
+        }
         .entry.opening {
           position: relative;
           overflow: hidden;
@@ -737,7 +771,8 @@ export class AgendaPreview extends ThemedElement {
           .disco-ball,
           .disco-sparkle,
           .confetti i,
-          .party-lights i {
+          .party-lights i,
+          .lunch-icons span {
             animation: none;
           }
           .progress span,
@@ -874,10 +909,11 @@ export class AgendaPreview extends ThemedElement {
     const opening = item.id === 'opening';
     const registration = item.id === 'registration';
     const party = item.id === 'networking';
+    const lunch = item.id === 'lunch';
     const title = agendaTitle(item);
     return html`
       <article
-        class="entry ${item.space} ${item.kind} ${opening ? 'opening' : ''} ${registration ? 'registration' : ''} ${party ? 'networking' : ''} ${progress !== null ? 'current' : ''}"
+        class="entry ${item.space} ${item.kind} ${opening ? 'opening' : ''} ${registration ? 'registration' : ''} ${party ? 'networking' : ''} ${lunch ? 'lunch' : ''} ${progress !== null ? 'current' : ''}"
       >
         ${opening ? html`<span class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>` : nothing}
         ${party ? html`<span class="party-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>` : nothing}
@@ -926,6 +962,16 @@ export class AgendaPreview extends ThemedElement {
         </div>
         ${registration ? html`<p class="activity-copy">Grab a coffee and a croissant, meet the community, and jump into the games.</p>` : nothing}
         ${opening ? html`<p class="activity-copy">Let’s kick off a day of ideas, community and inspiration.</p>` : nothing}
+        ${
+          lunch
+            ? html`<p class="activity-copy">
+                  Wraps and salad bowls for everyone. Grab a bite and recharge!
+                </p>
+                <div class="lunch-icons" aria-hidden="true">
+                  <span>🌯</span><span>🥗</span><span>✨</span>
+                </div>`
+            : nothing
+        }
         ${party ? html`<p class="party-copy">Good people, good vibes, and a little 2000s sparkle.</p>` : nothing}
         ${
           item.speakers.length

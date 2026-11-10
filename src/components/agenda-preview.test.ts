@@ -15,6 +15,23 @@ afterEach(() => {
 });
 
 describe('local agenda presentation', () => {
+  it('shows lunch details while preserving the live progress indicator', async () => {
+    jest
+      .spyOn(AgendaPreview.prototype as unknown as { load: () => Promise<void> }, 'load')
+      .mockResolvedValue(undefined);
+    const agenda = document.createElement('agenda-preview') as AgendaPreview;
+    document.body.append(agenda);
+    const state = agenda as unknown as { items: AgendaItem[]; loadState: 'ready'; now: number };
+    state.items = buildAgenda(draft as DraftAgenda, programme as PreviewSource);
+    state.loadState = 'ready';
+    state.now = eventInstant('14:30');
+    await agenda.updateComplete;
+    const lunch = agenda.shadowRoot!.querySelector('.entry.lunch')!;
+    expect(lunch).toHaveTextContent('Wraps and salad bowls for everyone');
+    expect(lunch.querySelector('.lunch-icons')).toHaveAttribute('aria-hidden', 'true');
+    expect(lunch.querySelector('[role="progressbar"]')).toHaveAttribute('aria-valuenow', '50');
+  });
+
   it('uses the real clock to advance live progress without demo controls', async () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2026-11-21T11:15:00Z'));
