@@ -11,6 +11,7 @@ import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
 import '../components/hero/hero-block';
+import '../components/session-favorite';
 import '../elements/footer-block';
 import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
@@ -26,6 +27,7 @@ import {
   surpriseSession,
 } from '../utils/session-discovery';
 import type { SessionDiscoveryItem } from '../utils/session-discovery';
+import { isSessionFavorite, subscribeSessionFavorites } from '../utils/session-favorites';
 import { Router } from '@vaadin/router';
 
 @customElement('sessions-page')
@@ -34,6 +36,8 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
   @state() private speakers = initialSpeakersState;
   @state() private query = new URLSearchParams(window.location.search).get('q') || '';
   @state() private topic = new URLSearchParams(window.location.search).get('topic') || '';
+  @state() private savedOnly = false;
+  private unsubscribeFavorites: (() => void) | undefined;
 
   static override get styles() {
     return [
@@ -181,6 +185,23 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           line-height: 1.35;
           overflow-wrap: anywhere;
         }
+        .session-heading {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          justify-content: space-between;
+        }
+        .session-heading h3 {
+          min-width: 0;
+        }
+        .session-heading session-favorite {
+          flex: 0 0 auto;
+        }
+        .saved-filter[aria-pressed='true'] {
+          color: var(--terminal-background);
+          background: var(--terminal-green);
+          border-color: var(--terminal-green);
+        }
         .session-title a {
           color: var(--terminal-copy);
           text-decoration: none;
@@ -307,12 +328,15 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
     if (this.speakers instanceof Initialized) store.dispatch(fetchSpeakers);
     window.addEventListener('popstate', this.readUrl);
     window.addEventListener('vaadin-router-location-changed', this.routeChanged);
+    this.unsubscribeFavorites = subscribeSessionFavorites(() => this.requestUpdate());
     this.readUrl();
   }
 
   override disconnectedCallback() {
     window.removeEventListener('popstate', this.readUrl);
     window.removeEventListener('vaadin-router-location-changed', this.routeChanged);
+    this.unsubscribeFavorites?.();
+    this.unsubscribeFavorites = undefined;
     super.disconnectedCallback();
   }
 
@@ -351,6 +375,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
   private reset() {
     this.query = '';
     this.topic = '';
+    this.savedOnly = false;
     this.updateUrl();
     this.renderRoot.querySelector<HTMLInputElement>('#session-search')?.focus();
   }
@@ -364,9 +389,15 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
     return html`<li class="session-item" data-session-id=${session.id}>
       <article aria-labelledby=${`session-${session.id}`}>
         <div class="session-topics">${session.topics.join(' · ')}</div>
-        <h3 class="session-title" id=${`session-${session.id}`}>
-          <a href=${session.href}>${session.title}</a>
-        </h3>
+        <div class="session-heading">
+          <h3 class="session-title" id=${`session-${session.id}`}>
+            <a href=${session.href}>${session.title}</a>
+          </h3>
+          <session-favorite
+            session-id=${session.id}
+            session-title=${session.title}
+          ></session-favorite>
+        </div>
         <p class="excerpt">${session.excerpt}</p>
         <ul class="people" aria-label="Session speakers">
           ${session.people.map(
@@ -403,13 +434,15 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
       this.sessions instanceof Success ? this.sessions.data : [],
       this.speakers instanceof Success ? this.speakers.data : [],
     );
-    const filtered = filterSessionDiscovery(items, this.query, this.topic);
+    const filtered = filterSessionDiscovery(items, this.query, this.topic).filter(
+      (item) => !this.savedOnly || isSessionFavorite(item.id),
+    );
     const topics = [...new Set(items.flatMap((item) => item.topics))].sort((a, b) =>
       a.localeCompare(b),
     );
     const loading = this.sessions instanceof Initialized || this.sessions instanceof Pending;
     const failed = this.sessions instanceof Failure;
-    const filteredState = Boolean(this.query || this.topic);
+    const filteredState = Boolean(this.query || this.topic || this.savedOnly);
     return html` <hero-block
         background-color="var(--terminal-background)"
         font-color="var(--terminal-copy)"
@@ -454,8 +487,18 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           >${topics.map((topic) => html`<button type="button" aria-pressed=${String(this.topic === topic)} @click=${() => this.chooseTopic(topic)}>${topic}</button>`)}
         </fieldset>
         <div class="results-bar">
+          <button
+            class="saved-filter"
+            type="button"
+            aria-pressed=${String(this.savedOnly)}
+            @click=${() => {
+              this.savedOnly = !this.savedOnly;
+            }}
+          >
+            Saved sessions
+          </button>
           <p class="results-count" role="status" aria-live="polite">
-            ${loading ? 'Loading confirmed sessions…' : failed ? 'Sessions could not be loaded.' : `${filtered.length} of ${items.length} confirmed sessions${this.topic ? ` · ${this.topic}` : ''}`}
+            ${loading ? 'Loading confirmed sessions…' : failed ? 'Sessions could not be loaded.' : `${filtered.length} of ${items.length} confirmed sessions${this.topic ? ` · ${this.topic}` : ''}${this.savedOnly ? ' · Saved' : ''}`}
           </p>
           ${filteredState ? html`<button class="reset" @click=${() => this.reset()}>Reset filters</button>` : nothing}
         </div>
@@ -477,7 +520,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
                   ${items.length ? 'No sessions down this rabbit hole.' : 'Session details are on their way.'}
                 </h3>
                 <p>
-                  ${items.length ? 'Try another topic, a shorter search or a speaker’s name.' : 'The confirmed programme could not be displayed. Please check back shortly.'}
+                  ${items.length ? (this.savedOnly ? 'Save sessions with the heart, or adjust your filters.' : 'Try another topic, a shorter search or a speaker’s name.') : 'The confirmed programme could not be displayed. Please check back shortly.'}
                 </p>
                 ${filteredState ? html`<button @click=${() => this.reset()}>Show all sessions</button>` : nothing}
               </div>`

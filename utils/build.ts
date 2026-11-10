@@ -45,9 +45,9 @@ const getData = (): Data => {
 
   return settingsFiles.reduce(combineSettings, {
     NODE_ENV: NODE_ENV || 'production',
-    SPEAKERS_PREVIEW: ['1', 'review', 'comparison', 'tomek'].includes(
-      process.env['SPEAKERS_PREVIEW'] || '',
-    ),
+    SPEAKERS_PREVIEW:
+      ['1', 'review', 'comparison', 'tomek'].includes(process.env['SPEAKERS_PREVIEW'] || '') ||
+      process.env['AGENDA_PREVIEW'] === '1',
     SPEAKERS_REVIEW: ['review', 'comparison', 'tomek'].includes(
       process.env['SPEAKERS_PREVIEW'] || '',
     ),

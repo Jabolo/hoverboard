@@ -9,7 +9,7 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "npm run validate:programme && npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs",
+    "build": "npm run validate:programme && npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs && node scripts/verify-agenda-isolation.mjs",
     "clean": "rm -rf dist",
     "deploy": "npm run build && NODE_ENV=production firebase deploy",
     "firestore:copy": "ts-node-script ./scripts/firestore-copy",
@@ -34,6 +34,8 @@
     "verify:live": "node ./scripts/verify-live-status.mjs",
     "preview:speakers": "node scripts/preview-speakers.mjs",
     "build:speakers-review": "node scripts/build-speakers-review.mjs",
+    "build:agenda-preview": "npm run validate:programme && rm -rf dist-agenda-preview && AGENDA_PREVIEW=1 NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript",
+    "serve:agenda-preview": "node scripts/serve-agenda-preview.mjs",
     "build:speakers-comparison": "node scripts/build-speakers-review.mjs --comparison",
     "build:speakers-tomek": "node scripts/build-speakers-review.mjs --tomek",
     "validate:programme": "node scripts/validate-programme.mjs"

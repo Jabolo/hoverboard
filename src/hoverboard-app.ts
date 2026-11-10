@@ -51,6 +51,7 @@ import './utils/icons';
 import './utils/media-query';
 import { Stickied } from './utils/stickied';
 import { scrollToElement } from './utils/scrolling';
+import { isAgendaPreviewEnabled } from './utils/agenda-preview-mode';
 
 setPassiveTouchGestures(true);
 setRemoveNestedTemplates(true);
@@ -297,7 +298,7 @@ export class HoverboardApp extends PolymerElement {
       <video-dialog></video-dialog>
 
       <sticky-countdown></sticky-countdown>
-      <cookie-consent></cookie-consent>
+      <cookie-consent hidden$="[[hideAgendaPreviewConsent(routeName)]]"></cookie-consent>
 
       <snack-bar></snack-bar>
     `;
@@ -458,7 +459,8 @@ export class HoverboardApp extends PolymerElement {
     if (this.main) {
       this.main.setAttribute('tabindex', '-1');
       this.main.focus();
-      this.main.scrollIntoView({ behavior: 'smooth' });
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.main.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
     }
   }
 
@@ -500,5 +502,9 @@ export class HoverboardApp extends PolymerElement {
 
   private getAriaCurrent(routeName: string, navRoute: string): string | undefined {
     return routeName === navRoute ? 'page' : undefined;
+  }
+
+  private hideAgendaPreviewConsent(routeName: string): boolean {
+    return routeName === 'schedule' && isAgendaPreviewEnabled(window.location.hostname);
   }
 }

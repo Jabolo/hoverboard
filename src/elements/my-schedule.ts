@@ -1,9 +1,10 @@
 import { customElement, property } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import { Day } from '../models/day';
-import { RootState } from '../store';
+import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
-import { selectFeaturedSchedule } from '../store/schedule/selectors';
+import { selectLocalFavoritesSchedule } from '../store/schedule/selectors';
+import { isSessionFavorite, subscribeSessionFavorites } from '../utils/session-favorites';
 import './schedule-day';
 import './shared-styles';
 
@@ -43,8 +44,22 @@ export class MySchedule extends ReduxMixin(PolymerElement) {
 
   @property({ type: Array })
   private featuredSchedule: Day[] = [];
+  private unsubscribeFavorites: (() => void) | undefined;
+
+  override connectedCallback() {
+    super.connectedCallback();
+    this.unsubscribeFavorites = subscribeSessionFavorites(() =>
+      this.stateChanged(store.getState()),
+    );
+  }
+
+  override disconnectedCallback() {
+    this.unsubscribeFavorites?.();
+    this.unsubscribeFavorites = undefined;
+    super.disconnectedCallback();
+  }
 
   override stateChanged(state: RootState) {
-    this.featuredSchedule = selectFeaturedSchedule(state);
+    this.featuredSchedule = selectLocalFavoritesSchedule(state, isSessionFavorite);
   }
 }

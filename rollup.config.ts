@@ -17,15 +17,20 @@ const speakersTomek = previewMode === 'tomek';
 const speakersComparison = previewMode === 'comparison';
 const speakersReview = previewMode === 'review' || speakersComparison || speakersTomek;
 const speakersPreview = speakersReview || previewMode === '1';
-const outputDir = speakersTomek
-  ? 'dist-review-tomek'
-  : speakersComparison
-    ? 'dist-review-v2'
-    : speakersReview
-      ? 'dist-review'
-      : speakersPreview
-        ? 'dist-preview'
-        : 'dist';
+const agendaPreview = process.env['AGENDA_PREVIEW'] === '1';
+if (agendaPreview && speakersPreview)
+  throw new Error('Agenda and legacy speaker previews cannot be combined');
+const outputDir = agendaPreview
+  ? 'dist-agenda-preview'
+  : speakersTomek
+    ? 'dist-review-tomek'
+    : speakersComparison
+      ? 'dist-review-v2'
+      : speakersReview
+        ? 'dist-review'
+        : speakersPreview
+          ? 'dist-preview'
+          : 'dist';
 const previewFlag = {
   name: 'speakers-preview-flag',
   transform(code: string, id: string) {
@@ -39,6 +44,27 @@ const previewFlag = {
     };
   },
 };
+const agendaFlag = {
+  name: 'agenda-preview-flag',
+  transform(code: string, id: string) {
+    if (!id.endsWith('/utils/agenda-preview-mode.ts')) return null;
+    return {
+      code: code.replace("'__AGENDA_PREVIEW_BUILD__'", JSON.stringify(agendaPreview ? '1' : '0')),
+      map: null,
+    };
+  },
+};
+// The preview element has registration side effects, so omit its import entirely
+// from non-preview bundles instead of relying on runtime host checks.
+const agendaIsolation = {
+  name: 'agenda-preview-isolation',
+  transform(code: string, id: string) {
+    if (agendaPreview || !id.endsWith('/pages/schedule-page.ts')) return null;
+    const previewImport = "import '../components/agenda-preview';";
+    if (!code.includes(previewImport)) throw new Error('Agenda preview import was not found');
+    return { code: code.replace(previewImport, ''), map: null };
+  },
+};
 
 const config: RollupOptions[] = [
   {
@@ -50,6 +76,7 @@ const config: RollupOptions[] = [
     },
     plugins: [
       previewFlag,
+      agendaFlag,
       nodeResolve(),
       typescript({
         noEmitOnError: true,
@@ -69,6 +96,8 @@ const config: RollupOptions[] = [
     },
     plugins: [
       previewFlag,
+      agendaFlag,
+      agendaIsolation,
       nodeResolve(),
       json(),
       typescript({
@@ -99,13 +128,16 @@ const config: RollupOptions[] = [
             dest: `${outputDir}/data`,
             transform: compileBufferTemplate,
           },
+          ...(agendaPreview
+            ? [{ src: 'preview/agenda-draft-2026.json', dest: `${outputDir}/data` }]
+            : []),
         ],
       }),
-      production && !speakersPreview && generateSW(workboxConfig),
+      production && !speakersPreview && !agendaPreview && generateSW(workboxConfig),
       production && terser(),
       watch && livereload({ watch: 'dist' }),
     ],
   },
 ];
 
-export default speakersPreview ? config.slice(1) : config;
+export default speakersPreview || agendaPreview ? config.slice(1) : config;

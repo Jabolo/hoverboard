@@ -5,6 +5,7 @@ import '@polymer/paper-progress';
 import { html, PolymerElement } from '@polymer/polymer';
 import { RouterLocation } from '@vaadin/router';
 import '../components/hero/hero-block';
+import '../components/agenda-preview';
 import '../elements/content-loader';
 import '../elements/filter-menu';
 import '../elements/header-bottom-toolbar';
@@ -24,10 +25,12 @@ import { fetchSpeakers } from '../store/speakers/actions';
 import { initialSpeakersState, SpeakersState } from '../store/speakers/state';
 import { contentLoaders, heroSettings, scheduleBlock } from '../utils/data';
 import { updateMetadata } from '../utils/metadata';
+import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
 
 @customElement('schedule-page')
 export class SchedulePage extends ReduxMixin(PolymerElement) {
   private speakersPreview = speakersPreview;
+  private agendaPreview = isAgendaPreviewEnabled(window.location.hostname);
 
   static get template() {
     return html`
@@ -90,59 +93,63 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <hero-block
-        background-image="[[heroSettings.background.image]]"
-        background-color="[[heroSettings.background.color]]"
-        font-color="[[heroSettings.fontColor]]"
-      >
-        <h1 class="hero-title">[[heroSettings.title]]</h1>
-        <p class="hero-description">[[heroSettings.description]]</p>
-        <sticky-element slot="bottom">
-          <header-bottom-toolbar location="[[location]]"></header-bottom-toolbar>
-        </sticky-element>
-      </hero-block>
-
-      <paper-progress indeterminate hidden$="[[!pending]]"></paper-progress>
-
-      <template is="dom-if" if="[[showFilters]]">
-        <filter-menu
-          filter-groups="[[filterGroups]]"
-          selected-filters="[[selectedFilters]]"
-        ></filter-menu>
-      </template>
-
-      <div class="container" hidden$="[[showEmptyState]]">
-        <content-loader
-          card-padding="15px"
-          card-margin="16px 0"
-          card-height="140px"
-          avatar-size="0"
-          avatar-circle="0"
-          title-top-position="20px"
-          title-height="42px"
-          title-width="70%"
-          load-from="-20%"
-          load-to="80%"
-          blur-width="300px"
-          items-count="[[contentLoaders.itemsCount]]"
-          hidden$="[[!pending]]"
-          layout
+      <template is="dom-if" if="[[!agendaPreview]]">
+        <hero-block
+          background-image="[[heroSettings.background.image]]"
+          background-color="[[heroSettings.background.color]]"
+          font-color="[[heroSettings.fontColor]]"
         >
-        </content-loader>
-
-        <slot></slot>
-      </div>
-
-      <template is="dom-if" if="[[showEmptyState]]">
-        <div class="container">
-          <section class="empty-state" aria-labelledby="programme-ready-title">
-            <h2 id="programme-ready-title">The talks are ready. The clock can wait.</h2>
-            <p>[[scheduleBlock.emptyState]]</p>
-            <a class="sessions-link" href="/sessions/">Explore sessions →</a>
-          </section>
-        </div>
+          <h1 class="hero-title">[[heroSettings.title]]</h1>
+          <p class="hero-description">[[heroSettings.description]]</p>
+          <sticky-element slot="bottom">
+            <header-bottom-toolbar location="[[location]]"></header-bottom-toolbar>
+          </sticky-element>
+        </hero-block>
       </template>
 
+      <template is="dom-if" if="[[agendaPreview]]"><agenda-preview></agenda-preview></template>
+      <template is="dom-if" if="[[!agendaPreview]]">
+        <paper-progress indeterminate hidden$="[[!pending]]"></paper-progress>
+
+        <template is="dom-if" if="[[showFilters]]">
+          <filter-menu
+            filter-groups="[[filterGroups]]"
+            selected-filters="[[selectedFilters]]"
+          ></filter-menu>
+        </template>
+
+        <div class="container" hidden$="[[showEmptyState]]">
+          <content-loader
+            card-padding="15px"
+            card-margin="16px 0"
+            card-height="140px"
+            avatar-size="0"
+            avatar-circle="0"
+            title-top-position="20px"
+            title-height="42px"
+            title-width="70%"
+            load-from="-20%"
+            load-to="80%"
+            blur-width="300px"
+            items-count="[[contentLoaders.itemsCount]]"
+            hidden$="[[!pending]]"
+            layout
+          >
+          </content-loader>
+
+          <slot></slot>
+        </div>
+
+        <template is="dom-if" if="[[showEmptyState]]">
+          <div class="container">
+            <section class="empty-state" aria-labelledby="programme-ready-title">
+              <h2 id="programme-ready-title">The talks are ready. The clock can wait.</h2>
+              <p>[[scheduleBlock.emptyState]]</p>
+              <a class="sessions-link" href="/sessions/">Explore sessions →</a>
+            </section>
+          </div>
+        </template>
+      </template>
       <footer-block></footer-block>
     `;
   }

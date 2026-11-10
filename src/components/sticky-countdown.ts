@@ -2,6 +2,7 @@ import { css, html, LitElement, nothing } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { startDate, title } from '../utils/data';
 import { getCountdownValues } from './event-countdown';
+import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
 
 @customElement('sticky-countdown')
 export class StickyCountdown extends LitElement {
@@ -96,7 +97,11 @@ export class StickyCountdown extends LitElement {
       .querySelector('hoverboard-app')
       ?.shadowRoot?.querySelector('main home-page');
     const heroTimer = home?.shadowRoot?.querySelector('event-countdown');
+    const localAgenda =
+      isAgendaPreviewEnabled(window.location.hostname) &&
+      /^\/schedule(?:\/|$)/.test(window.location.pathname);
     this.visible =
+      !localAgenda &&
       !this.values.complete &&
       (window.location.pathname !== '/' ||
         (heroTimer ? heroTimer.getBoundingClientRect().bottom <= 0 : window.scrollY > 300));

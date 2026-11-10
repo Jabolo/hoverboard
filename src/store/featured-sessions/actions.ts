@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { store } from '..';
 import { db } from '../../firebase';
 import { bookmarked } from '../../utils/data';
+import { importLegacySessionFavorites } from '../../utils/legacy-session-favorites';
 import { queueSnackbar } from '../snackbars';
 import { selectUserId } from '../user/selectors';
 import { FeaturedSessions } from './state';
@@ -23,21 +24,33 @@ const getFeaturedSessions = async (userId: string): Promise<FeaturedSessions> =>
   return snapshot.data() || {};
 };
 
+let fetchGeneration = 0;
+
+/** Discard requests started under an earlier authentication state. */
+export const invalidateFeaturedSessionsRequests = () => {
+  fetchGeneration += 1;
+};
+
 export const fetchUserFeaturedSessions = async (dispatch: Dispatch<FeaturedSessionsActions>) => {
   const userId = selectUserId(store.getState()) as string;
 
   if (!userId) return;
+  const generation = ++fetchGeneration;
 
   dispatch({
     type: FETCH_USER_FEATURED_SESSIONS,
   });
 
   try {
+    const featuredSessions = await getFeaturedSessions(userId);
+    if (generation !== fetchGeneration || selectUserId(store.getState()) !== userId) return;
+    importLegacySessionFavorites(userId, featuredSessions);
     dispatch({
       type: FETCH_USER_FEATURED_SESSIONS_SUCCESS,
-      payload: await getFeaturedSessions(userId),
+      payload: featuredSessions,
     });
   } catch (error) {
+    if (generation !== fetchGeneration || selectUserId(store.getState()) !== userId) return;
     dispatch({
       type: FETCH_USER_FEATURED_SESSIONS_FAILURE,
       payload: error as Error,

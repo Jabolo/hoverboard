@@ -23,25 +23,39 @@ export const selectFeaturedSchedule = createSelector(
   selectSchedule,
   selectFeaturedSessions,
   (schedule: Day[], featuredSessions: FeaturedSessions): Day[] => {
-    // TODO: Cleanup
-    return schedule.map((day: Day) => {
-      return {
-        ...day,
-        timeslots: day.timeslots.map((timeslot: Timeslot) => {
-          return {
-            ...timeslot,
-            sessions: timeslot.sessions.map((sessionBlock: Time) => {
-              const items = (sessionBlock.items as TempAny as Session[]).filter(
-                (session: Session): boolean => Boolean(featuredSessions[session.id]),
-              );
-              return {
-                ...sessionBlock,
-                items,
-              };
-            }),
-          };
-        }),
-      };
-    });
+    return filterScheduleByFavorites(schedule, (id) => Boolean(featuredSessions[id]));
   },
 );
+
+/** Filter a schedule using its actual session IDs, independent of where favourites are stored. */
+export function filterScheduleByFavorites(
+  schedule: Day[],
+  isFavorite: (id: string) => boolean,
+): Day[] {
+  return schedule.map((day: Day) => {
+    return {
+      ...day,
+      timeslots: day.timeslots.map((timeslot: Timeslot) => {
+        return {
+          ...timeslot,
+          sessions: timeslot.sessions.map((sessionBlock: Time) => {
+            const items = (sessionBlock.items as TempAny as Session[]).filter(
+              (session: Session): boolean => isFavorite(session.id),
+            );
+            return {
+              ...sessionBlock,
+              items,
+            };
+          }),
+        };
+      }),
+    };
+  });
+}
+
+export function selectLocalFavoritesSchedule(
+  state: RootState,
+  isFavorite: (id: string) => boolean,
+): Day[] {
+  return filterScheduleByFavorites(selectSchedule(state), isFavorite);
+}

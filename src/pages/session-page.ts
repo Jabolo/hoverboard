@@ -1,13 +1,13 @@
 import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
-import { computed, customElement, observe, property } from '@polymer/decorators';
+import { customElement, observe, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
-import '@polymer/paper-fab';
 import '@polymer/paper-progress';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import { RouterLocation } from '@vaadin/router';
 import '../components/hero/simple-hero';
+import '../components/session-favorite';
 import '../components/speaker-affiliations';
 import '../components/markdown/short-markdown';
 import '../elements/feedback-block';
@@ -16,24 +16,13 @@ import { Session } from '../models/session';
 import { Speaker } from '../models/speaker';
 import { router } from '../router';
 import { RootState, store } from '../store';
-import { initialAuthState } from '../store/auth/state';
-import { openSigninDialog } from '../store/dialogs/actions';
-import {
-  fetchUserFeaturedSessions,
-  setUserFeaturedSessions,
-} from '../store/featured-sessions/actions';
-import { initialFeaturedSessionsState } from '../store/featured-sessions/state';
 import { ReduxMixin } from '../store/mixin';
 import { fetchSessions } from '../store/sessions/actions';
 import { selectSession } from '../store/sessions/selectors';
 import { initialSessionsState, SessionsState } from '../store/sessions/state';
-import { queueComplexSnackbar } from '../store/snackbars';
 import { openVideoDialog } from '../store/ui/actions';
-import { initialUiState } from '../store/ui/state';
-import { initialUserState } from '../store/user/state';
-import { UserState } from '../store/user/types';
 import { TempAny } from '../temp-any';
-import { disabledSchedule, feedback, schedule, sessionDetails } from '../utils/data';
+import { disabledSchedule, feedback, sessionDetails } from '../utils/data';
 import { acceptingFeedback } from '../utils/feedback';
 import '../utils/icons';
 import { updateImageMetadata } from '../utils/metadata';
@@ -91,10 +80,8 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           margin-top: 8px;
         }
 
-        .float-button {
-          position: fixed;
-          right: 24px;
-          bottom: 24px;
+        .favorite-action {
+          margin-top: 12px;
         }
 
         .content {
@@ -208,12 +195,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           .header-content {
             min-height: 160px;
           }
-
-          .float-button {
-            position: absolute;
-            bottom: -60px;
-            transform: translate(50%, 50%);
-          }
         }
 
         .section {
@@ -250,17 +231,11 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
             </template>
           </div>
 
-          <div
-            class="float-button"
-            style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
-            hidden$="[[!contentLoaderVisibility]]"
-          >
-            <paper-fab
-              style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
-              icon="hoverboard:[[featuredSessionIcon]]"
-              hidden$="[[!viewport.isLaptopPlus]]"
-              on-click="toggleFeaturedSession"
-            ></paper-fab>
+          <div class="favorite-action" hidden$="[[!contentLoaderVisibility]]">
+            <session-favorite
+              session-id$="[[session.id]]"
+              session-title$="[[session.title]]"
+            ></session-favorite>
           </div>
         </div>
       </simple-hero>
@@ -279,18 +254,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
       ></content-loader>
 
       <div class="container content">
-        <div
-          class="float-button"
-          style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
-          hidden$="[[!contentLoaderVisibility]]"
-        >
-          <paper-fab
-            style$="[[bookmarkActionsStyle(speakersPreview, disabledSchedule)]]"
-            icon="hoverboard:[[featuredSessionIcon]]"
-            hidden$="[[viewport.isLaptopPlus]]"
-            on-click="toggleFeaturedSession"
-          ></paper-fab>
-        </div>
         <h3 class="meta-info" hidden$="[[disabledSchedule]]">
           [[session.dateReadable]], [[session.startTime]] - [[session.endTime]]
         </h3>
@@ -389,10 +352,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
     `;
   }
 
-  private bookmarkActionsStyle(preview: boolean, scheduleDisabled: boolean) {
-    return preview || scheduleDisabled ? 'display:none' : '';
-  }
-
   private previewActionsStyle(preview: boolean) {
     return preview ? 'display:none' : '';
   }
@@ -420,15 +379,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
   session: Session | undefined;
   @property({ type: String })
   sessionId: string | undefined;
-  @property({ type: Object })
-  featuredSessions = initialFeaturedSessionsState;
-  @property({ type: Object })
-  user = initialUserState;
-  @property({ type: Object })
-  auth = initialAuthState;
-
-  @property({ type: Object })
-  private viewport = initialUiState.viewport;
   @property({ type: Boolean })
   private disabledSchedule: boolean = disabledSchedule;
   @property({ type: Boolean })
@@ -439,10 +389,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
   override stateChanged(state: RootState) {
     super.stateChanged(state);
     this.sessions = state.sessions;
-    this.user = state.user;
-    this.auth = state.auth;
-    this.featuredSessions = state.featuredSessions;
-    this.viewport = state.ui.viewport;
   }
 
   override connectedCallback() {
@@ -450,13 +396,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
     if (this.sessions instanceof Initialized) {
       store.dispatch(fetchSessions);
-    }
-  }
-
-  @observe('user')
-  private onUser(user: UserState) {
-    if (user instanceof Success && this.featuredSessions instanceof Initialized) {
-      store.dispatch(fetchUserFeaturedSessions);
     }
   }
 
@@ -474,19 +413,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
     this.acceptingFeedback = this.session !== undefined && acceptingFeedback(this.session);
   }
 
-  @computed('featuredSessions', 'sessionId')
-  private get featuredSessionIcon() {
-    if (
-      this.featuredSessions instanceof Success &&
-      this.sessionId &&
-      this.featuredSessions.data[this.sessionId]
-    ) {
-      return 'bookmark-check';
-    } else {
-      return 'bookmark-plus';
-    }
-  }
-
   @observe('sessions', 'sessionId')
   private onSessionsAndSessionId(sessions: SessionsState, sessionId: string) {
     if (sessionId && sessions instanceof Success) {
@@ -501,36 +427,6 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           imageAlt: speaker.name,
         });
       }
-    }
-  }
-
-  private toggleFeaturedSession(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (speakersPreview || disabledSchedule) return;
-
-    if (!(this.user instanceof Success)) {
-      store.dispatch(
-        queueComplexSnackbar({
-          label: schedule.saveSessionsSignedOut,
-          action: {
-            title: 'Sign in',
-            callback: () => openSigninDialog(),
-          },
-        }),
-      );
-      return;
-    }
-
-    if (this.user instanceof Success && this.featuredSessions instanceof Success && this.session) {
-      const bookmarked = !this.featuredSessions.data[this.session.id];
-      const sessions = {
-        ...this.featuredSessions.data,
-        [this.session.id]: bookmarked,
-      };
-
-      store.dispatch(setUserFeaturedSessions(this.user.data.uid, sessions, bookmarked));
     }
   }
 

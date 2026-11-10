@@ -1,26 +1,19 @@
-import { Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
 import '../components/text-truncate';
+import '../components/session-favorite';
 import { Session } from '../models/session';
 import { router } from '../router';
-import { RootState, store } from '../store';
-import { openFeedbackDialog, openSigninDialog } from '../store/dialogs/actions';
-import { setUserFeaturedSessions } from '../store/featured-sessions/actions';
-import { initialFeaturedSessionsState } from '../store/featured-sessions/state';
-import { ReduxMixin } from '../store/mixin';
-import { queueComplexSnackbar } from '../store/snackbars';
-import { initialUserState } from '../store/user/state';
-import { schedule } from '../utils/data';
+import { openFeedbackDialog } from '../store/dialogs/actions';
 import { acceptingFeedback } from '../utils/feedback';
 import '../utils/icons';
 import { getVariableColor } from '../utils/styles';
 import './shared-styles';
 
 @customElement('session-element')
-export class SessionElement extends ReduxMixin(PolymerElement) {
+export class SessionElement extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
@@ -40,6 +33,19 @@ export class SessionElement extends ReduxMixin(PolymerElement) {
 
         .session:hover {
           background-color: var(--additional-background-color);
+        }
+        .session-link {
+          display: block;
+          flex: 1;
+          color: inherit;
+          text-decoration: none;
+        }
+        .session-actions {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 12px;
+          padding: 0 16px 12px;
         }
 
         .session-icon {
@@ -74,16 +80,10 @@ export class SessionElement extends ReduxMixin(PolymerElement) {
           padding-bottom: 40px;
         }
 
-        .bookmark-session,
         .feedback-action {
           color: var(--secondary-text-color);
         }
 
-        .session[featured] .bookmark-session {
-          color: var(--default-primary-color);
-        }
-
-        .bookmark-session:hover,
         .feedback-action:hover {
           color: var(--default-primary-color);
         }
@@ -158,112 +158,83 @@ export class SessionElement extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <a
-        class="session"
-        href$="[[sessionUrl(session.id)]]"
-        featured$="[[isFeatured]]"
-        layout
-        vertical
-        relative
-      >
-        <iron-icon icon="hoverboard:[[session.icon]]" class="session-icon"></iron-icon>
+      <div class="session" layout vertical relative>
+        <a class="session-link" href$="[[sessionUrl(session.id)]]">
+          <iron-icon icon="hoverboard:[[session.icon]]" class="session-icon"></iron-icon>
 
-        <div class="session-header" layout horizontal justified>
-          <div flex>
-            <h3 class="session-title">[[session.title]]</h3>
-            <text-truncate lines="3">
-              <div class="session-description">[[summary]]</div>
-            </text-truncate>
-          </div>
-          <span class="language">[[slice(session.language, 2)]]</span>
-        </div>
-
-        <div class="session-content" flex layout horizontal justified>
-          <div class="session-meta">
-            <div hidden$="[[!session.complexity]]">[[session.complexity]]</div>
-          </div>
-          <div class="session-actions">
-            <iron-icon
-              icon="hoverboard:insert-comment"
-              class="feedback-action"
-              hidden="[[!acceptingFeedback()]]"
-              on-click="toggleFeedback"
-            ></iron-icon>
-            <iron-icon
-              icon="hoverboard:[[icon]]"
-              class="bookmark-session"
-              hidden="[[acceptingFeedback()]]"
-              on-click="toggleFeaturedSession"
-            ></iron-icon>
-          </div>
-        </div>
-
-        <div class="session-footer">
-          <div layout horizontal justified center-aligned>
-            <div class="session-meta" flex>
-              <span hidden$="[[!session.duration.hh]]">
-                [[session.duration.hh]] hour[[getEnding(session.duration.hh)]]
-              </span>
-              <span hidden$="[[!session.duration.mm]]">
-                [[session.duration.mm]] min[[getEnding(session.duration.mm)]]
-              </span>
+          <div class="session-header" layout horizontal justified>
+            <div flex>
+              <h3 class="session-title">[[session.title]]</h3>
+              <text-truncate lines="3">
+                <div class="session-description">[[summary]]</div>
+              </text-truncate>
             </div>
-            <div class="tags" hidden$="[[!session.tags.length]]">
-              <template is="dom-repeat" items="[[session.tags]]" as="tag">
-                <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+            <span class="language">[[slice(session.language, 2)]]</span>
+          </div>
+
+          <div class="session-content" flex layout horizontal justified>
+            <div class="session-meta">
+              <div hidden$="[[!session.complexity]]">[[session.complexity]]</div>
+            </div>
+          </div>
+
+          <div class="session-footer">
+            <div layout horizontal justified center-aligned>
+              <div class="session-meta" flex>
+                <span hidden$="[[!session.duration.hh]]">
+                  [[session.duration.hh]] hour[[getEnding(session.duration.hh)]]
+                </span>
+                <span hidden$="[[!session.duration.mm]]">
+                  [[session.duration.mm]] min[[getEnding(session.duration.mm)]]
+                </span>
+              </div>
+              <div class="tags" hidden$="[[!session.tags.length]]">
+                <template is="dom-repeat" items="[[session.tags]]" as="tag">
+                  <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+                </template>
+              </div>
+            </div>
+
+            <div class="speakers" hidden$="[[!session.speakers.length]]">
+              <template is="dom-repeat" items="[[session.speakers]]" as="speaker">
+                <div class="speaker" layout horizontal center>
+                  <lazy-image
+                    class="speaker-photo"
+                    src="[[speaker.photoUrl]]"
+                    alt="[[speaker.name]]"
+                  ></lazy-image>
+
+                  <div class="speaker-details" flex>
+                    <div class="speaker-name">[[speaker.name]]</div>
+                    <div class="speaker-title">[[join(speaker.company, speaker.country)]]</div>
+                  </div>
+                </div>
               </template>
             </div>
           </div>
-
-          <div class="speakers" hidden$="[[!session.speakers.length]]">
-            <template is="dom-repeat" items="[[session.speakers]]" as="speaker">
-              <div class="speaker" layout horizontal center>
-                <lazy-image
-                  class="speaker-photo"
-                  src="[[speaker.photoUrl]]"
-                  alt="[[speaker.name]]"
-                ></lazy-image>
-
-                <div class="speaker-details" flex>
-                  <div class="speaker-name">[[speaker.name]]</div>
-                  <div class="speaker-title">[[join(speaker.company, speaker.country)]]</div>
-                </div>
-              </div>
-            </template>
-          </div>
+        </a>
+        <div class="session-actions">
+          <iron-icon
+            icon="hoverboard:insert-comment"
+            class="feedback-action"
+            hidden="[[!acceptingFeedback()]]"
+            on-click="toggleFeedback"
+          ></iron-icon>
+          <session-favorite
+            session-id$="[[session.id]]"
+            session-title$="[[session.title]]"
+          ></session-favorite>
         </div>
-      </a>
+      </div>
     `;
   }
 
   @property({ type: Object })
-  user = initialUserState;
-  @property({ type: Object })
   session: Session | undefined;
-  @property({ type: Object })
-  featuredSessions = initialFeaturedSessionsState;
   @property({ type: String })
   private queryParams: string | undefined;
   @property({ type: String })
   private dayName: string | undefined;
-
-  override stateChanged(state: RootState) {
-    this.user = state.user;
-    this.featuredSessions = state.featuredSessions;
-  }
-
-  @computed('featuredSessions', 'session')
-  get isFeatured(): boolean {
-    if (this.featuredSessions instanceof Success && this.session?.id) {
-      return this.featuredSessions.data[this.session.id] ?? false;
-    }
-    return false;
-  }
-
-  @computed('isFeatured')
-  private get icon() {
-    return this.isFeatured ? 'bookmark-check' : 'bookmark-plus';
-  }
 
   private getEnding(number: number) {
     return number > 1 ? 's' : '';
@@ -279,34 +250,6 @@ export class SessionElement extends ReduxMixin(PolymerElement) {
       description.length,
     ].filter((index) => index > 0);
     return description.slice(0, Math.min(...indexes));
-  }
-
-  private toggleFeaturedSession(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!(this.user instanceof Success)) {
-      store.dispatch(
-        queueComplexSnackbar({
-          label: schedule.saveSessionsSignedOut,
-          action: {
-            title: 'Sign in',
-            callback: () => openSigninDialog(),
-          },
-        }),
-      );
-      return;
-    }
-
-    if (this.user instanceof Success && this.featuredSessions instanceof Success && this.session) {
-      const bookmarked = !this.featuredSessions.data[this.session.id];
-      const sessions = {
-        ...this.featuredSessions.data,
-        [this.session.id]: bookmarked,
-      };
-
-      store.dispatch(setUserFeaturedSessions(this.user.data.uid, sessions, bookmarked));
-    }
   }
 
   private toggleFeedback(event: MouseEvent) {

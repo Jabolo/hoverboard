@@ -16,6 +16,11 @@ import { FirebaseUser } from '../../models/user';
 import { logLogin } from '../../utils/analytics';
 import { getFederatedProvider, getFederatedProviderClass, PROVIDER } from '../../utils/providers';
 import { FeaturedSessionsActions, REMOVE_USER_FEATURED_SESSIONS } from '../featured-sessions/types';
+import {
+  fetchUserFeaturedSessions,
+  invalidateFeaturedSessionsRequests,
+} from '../featured-sessions/actions';
+import { Initialized } from '@abraham/remotedata';
 import { unsubscribeFromFeedback } from '../feedback';
 import { resetSubscribed } from '../subscribe/actions';
 import { removeUser, setUser } from '../user/actions';
@@ -31,6 +36,7 @@ import {
 // TODO: show login prompt on my-schedule
 
 const auth = getAuth(firebaseApp);
+let currentUserId: string | undefined;
 
 export const signIn = async (providerId: PROVIDER) => {
   assertPreviewWritesDisabled();
@@ -82,9 +88,20 @@ export const onUser = () => {
   if (speakersPreview) return;
   onAuthStateChanged(auth, (user: FirebaseUser | null) => {
     if (user) {
+      const changed = currentUserId !== user.uid;
+      if (changed) invalidateFeaturedSessionsRequests();
       setUser(user);
+      if (changed) {
+        currentUserId = user.uid;
+        store.dispatch<FeaturedSessionsActions>({ type: REMOVE_USER_FEATURED_SESSIONS });
+      }
+      if (store.getState().featuredSessions instanceof Initialized) {
+        store.dispatch(fetchUserFeaturedSessions);
+      }
       logLogin();
     } else {
+      currentUserId = undefined;
+      invalidateFeaturedSessionsRequests();
       unAuth();
       removeUser();
       resetSubscribed();

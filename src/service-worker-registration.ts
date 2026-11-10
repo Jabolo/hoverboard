@@ -1,4 +1,5 @@
 import { speakersPreview } from './utils/speakers-preview';
+import { isAgendaPreviewEnabled } from './utils/agenda-preview-mode';
 import { register } from 'register-service-worker';
 import { store } from './store';
 import { queueComplexSnackbar, queueSnackbar } from './store/snackbars';
@@ -19,7 +20,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
   }
 });
 
-if (!speakersPreview)
+if (!speakersPreview && !isAgendaPreviewEnabled(window.location.hostname))
   register('service-worker.js', {
     registrationOptions: { scope: getConfig(CONFIG.BASEPATH) },
     updated(registration) {

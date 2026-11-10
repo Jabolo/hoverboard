@@ -18,6 +18,7 @@ export default [
     ignores: [
       'dist/**',
       'dist-preview/**',
+      'dist-agenda-preview/**',
       'dist-review/**',
       'dist-review-v2/**',
       'dist-review-tomek/**',

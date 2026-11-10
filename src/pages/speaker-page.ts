@@ -9,6 +9,7 @@ import '@power-elements/lazy-image';
 import { RouterLocation } from '@vaadin/router';
 import '../components/hero/simple-hero';
 import '../components/speaker-affiliations';
+import '../components/session-favorite';
 import '../components/markdown/short-markdown';
 import '../elements/content-loader';
 import '../elements/previous-speakers-block';
@@ -117,10 +118,6 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           content: ',';
         }
 
-        .section {
-          cursor: pointer;
-        }
-
         .tags {
           display: flex;
           flex-wrap: wrap;
@@ -164,7 +161,7 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
         }
 
         .action:focus-visible,
-        .section:focus-visible {
+        .section-link:focus-visible {
           outline: 2px solid var(--google-blue);
           outline-offset: 4px;
         }
@@ -175,13 +172,26 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
 
         .section {
           margin-top: 16px;
-          display: block;
+          display: flex;
+          align-items: center;
+          gap: 12px;
           padding: 16px;
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
           background: var(--secondary-background-color);
           color: var(--primary-text-color);
           transition: border-color var(--animation);
+        }
+
+        .section-link {
+          flex: 1;
+          min-width: 0;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .section-details {
+          overflow-wrap: anywhere;
         }
 
         .section:hover {
@@ -303,33 +313,39 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           <h3>[[speakerDetails.sessions]]</h3>
 
           <template is="dom-repeat" items="[[speaker.sessions]]" as="session">
-            <a href$="[[sessionUrl(session.id)]]" class="section">
-              <div layout horizontal center>
-                <div class="section-details" flex>
-                  <div class="section-primary-text">[[session.title]]</div>
-                  <template is="dom-if" if="[[panelRole(session.id, speaker.sessionRoles)]]">
-                    <div class="panel-role">[[panelRole(session.id, speaker.sessionRoles)]]</div>
-                  </template>
-                  <div
-                    class="section-secondary-text"
-                    hidden$="[[hideTimetable(disabledSchedule, session.dateReadable)]]"
-                  >
-                    [[session.dateReadable]], [[session.startTime]] - [[session.endTime]]
-                  </div>
-                  <div
-                    class="section-secondary-text"
-                    hidden$="[[hideTimetable(disabledSchedule, session.track.title)]]"
-                  >
-                    [[session.track.title]]
-                  </div>
-                  <div class="tags" hidden$="[[!session.tags.length]]">
-                    <template is="dom-repeat" items="[[session.tags]]" as="tag">
-                      <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+            <div class="section">
+              <a href$="[[sessionUrl(session.id)]]" class="section-link">
+                <div layout horizontal center>
+                  <div class="section-details" flex>
+                    <div class="section-primary-text">[[session.title]]</div>
+                    <template is="dom-if" if="[[panelRole(session.id, speaker.sessionRoles)]]">
+                      <div class="panel-role">[[panelRole(session.id, speaker.sessionRoles)]]</div>
                     </template>
+                    <div
+                      class="section-secondary-text"
+                      hidden$="[[hideTimetable(disabledSchedule, session.dateReadable)]]"
+                    >
+                      [[session.dateReadable]], [[session.startTime]] - [[session.endTime]]
+                    </div>
+                    <div
+                      class="section-secondary-text"
+                      hidden$="[[hideTimetable(disabledSchedule, session.track.title)]]"
+                    >
+                      [[session.track.title]]
+                    </div>
+                    <div class="tags" hidden$="[[!session.tags.length]]">
+                      <template is="dom-repeat" items="[[session.tags]]" as="tag">
+                        <span class="tag" style$="color: [[getVariableColor(tag)]]">[[tag]]</span>
+                      </template>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
+              </a>
+              <session-favorite
+                session-id$="[[session.id]]"
+                session-title$="[[session.title]]"
+              ></session-favorite>
+            </div>
           </template>
         </div>
       </div>
