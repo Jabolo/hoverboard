@@ -1,5 +1,5 @@
 import { speakersPreview } from '../utils/speakers-preview';
-import { Failure, Initialized, Success } from '@abraham/remotedata';
+import { Failure, Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/iron-icon';
 import '@material/web/button/filled-button.js';
@@ -102,7 +102,7 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         </paper-input>
         <label class="consent">
           <md-checkbox
-            checked="{{consentGiven}}"
+            checked="[[consentGiven]]"
             aria-label="[[subscribeBlock.consentLabel]]"
             on-change="consentChanged"
           ></md-checkbox>
@@ -110,6 +110,9 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         </label>
         <div class="consent-error" hidden$="[[!consentError]]">
           [[subscribeBlock.consentRequired]]
+        </div>
+        <div class="consent-error" role="alert" hidden$="[[!failure]]">
+          [[subscribeBlock.generalError]]
         </div>
         <md-filled-button on-click="subscribe" disabled$="[[disabled]]" layout self-end>
           [[ctaLabel]]
@@ -150,7 +153,8 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
     }
   }
 
-  private consentChanged() {
+  private consentChanged(event: Event) {
+    this.consentGiven = (event.currentTarget as HTMLElement & { checked: boolean }).checked;
     if (this.consentGiven) {
       this.consentError = false;
     }
@@ -165,7 +169,12 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
 
   @computed('email', 'consentGiven', 'subscribed')
   private get disabled() {
-    return !this.email || !this.consentGiven || this.subscribed instanceof Success;
+    return (
+      !this.email ||
+      !this.consentGiven ||
+      this.subscribed instanceof Pending ||
+      this.subscribed instanceof Success
+    );
   }
 
   @computed('subscribed')

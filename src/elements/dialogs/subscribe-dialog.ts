@@ -127,7 +127,7 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
         <label class="consent">
           <md-checkbox
             id="consentInput"
-            checked="{{marketingConsent}}"
+            checked="[[marketingConsent]]"
             aria-label="[[subscribeBlock.consentLabel]]"
             on-change="consentChanged"
           ></md-checkbox>
@@ -261,6 +261,7 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
 
   private subscribe() {
     if (this.dialog instanceof Success && this.dialog.data.name === DIALOG.SUBSCRIBE) {
+      this.errorOccurred = false;
       if (
         !this.firstFieldInput.validate() ||
         !this.validateField(this.firstFieldInput.value || '')
@@ -294,7 +295,8 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
     }
   }
 
-  private consentChanged() {
+  private consentChanged(event: Event) {
+    this.marketingConsent = (event.currentTarget as HTMLElement & { checked: boolean }).checked;
     if (this.marketingConsent) {
       this.consentError = false;
     }
