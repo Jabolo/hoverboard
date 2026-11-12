@@ -271,8 +271,8 @@ export class EveneaEmbed extends PolymerElement {
                 Continue with your <strong>[[selectedTicketName]]</strong> ticket below.
               </div>
               <p>
-                Complete your details below. If the ticket list appears, select your ticket and
-                click <span class="join-label">JOIN / DOŁĄCZAM!</span> to continue.
+                Complete your details below. If the ticket list appears, select your ticket and use
+                the button below the ticket list to continue.
               </p>
             </div>
           </template>
@@ -281,10 +281,7 @@ export class EveneaEmbed extends PolymerElement {
             <div class="guide-copy">
               <div class="guide-kicker">Start here</div>
               <div class="guide-title">Choose your ticket in the Evenea form below.</div>
-              <p>
-                Set the quantity, then click
-                <span class="join-label">JOIN / DOŁĄCZAM!</span> to continue.
-              </p>
+              <p>Set the quantity, then use the button below the ticket list to continue.</p>
             </div>
           </template>
         </div>

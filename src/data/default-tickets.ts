@@ -14,7 +14,7 @@ export const initialConferenceTickets: Ticket[] = [
     regular: true,
     soldOut: false,
     starts: '',
-    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
   },
   {
     available: false,
@@ -29,7 +29,7 @@ export const initialConferenceTickets: Ticket[] = [
     regular: true,
     soldOut: true,
     starts: '',
-    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
   },
   {
     available: true,
@@ -44,7 +44,7 @@ export const initialConferenceTickets: Ticket[] = [
     regular: true,
     soldOut: false,
     starts: 'November 7, 2026',
-    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
   },
   {
     available: true,
@@ -59,7 +59,7 @@ export const initialConferenceTickets: Ticket[] = [
     regular: false,
     soldOut: false,
     starts: '',
-    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
   },
   {
     available: true,
@@ -74,6 +74,6 @@ export const initialConferenceTickets: Ticket[] = [
     regular: false,
     soldOut: false,
     starts: '',
-    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+    url: 'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
   },
 ];

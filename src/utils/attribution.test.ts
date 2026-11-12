@@ -58,7 +58,7 @@ describe('attribution', () => {
 
     const destination = new URL(
       buildAttributedUrl(
-        'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe',
+        'https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en',
       ),
     );
 
@@ -67,5 +67,6 @@ describe('attribution', () => {
     expect(destination.searchParams.get('utm_campaign')).toBe('devfest_warsaw_2026');
     expect(destination.searchParams.get('source')).toBe('Bevy-GDG-Community');
     expect(destination.searchParams.get('out')).toBe('1');
+    expect(destination.searchParams.get('lang')).toBe('en');
   });
 });

@@ -493,8 +493,8 @@
     "description": "Choose a ticket and complete registration securely in the embedded Evenea form below.",
     "published": true,
     "requiresAccessCode": false,
-    "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/",
-    "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe",
+    "draftUrl": "https://app.evenea.pl/event/devfestwarsaw2026/?lang=en",
+    "iframeSrc": "https://app.evenea.pl/event/devfestwarsaw2026/?out=1&source=event_iframe&lang=en",
     "resizerScriptSrc": "https://app.evenea.pl/js/iframe/new/iframeResizer2.js"
   }
 }
