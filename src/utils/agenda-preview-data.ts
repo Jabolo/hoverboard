@@ -116,7 +116,7 @@ export function progressAt(
 
 export function eventState(now: number): 'before' | 'during' | 'after' {
   if (now < eventInstant('09:00')) return 'before';
-  return now < eventInstant('21:00') ? 'during' : 'after';
+  return now < eventInstant('21:30') ? 'during' : 'after';
 }
 
 export function warsawTime(now: number): string {

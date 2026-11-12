@@ -28,7 +28,7 @@ export const EVENT_SCHEMA = {
       description:
         'A one-day, community-led technology conference bringing developers, designers, entrepreneurs, engineers, researchers, and students together at Google for Startups Campus Warsaw. Theme: Real Work, Real Lessons.',
       startDate: '2026-11-21T09:00:00+01:00',
-      endDate: '2026-11-21T21:00:00+01:00',
+      endDate: '2026-11-21T21:30:00+01:00',
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       image: ['https://warsaw.devfest.pl/images/backgrounds/home-2026-social.jpg'],

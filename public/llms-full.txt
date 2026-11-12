@@ -10,7 +10,7 @@ This file is an expanded, machine-readable companion to `/llms.txt`. It contains
 - Theme: Real Work, Real Lessons.
 - Official website: https://warsaw.devfest.pl/
 - Event date: 21 November 2026
-- Official event time: registration opens at 09:00; event ends at 21:00 Europe/Warsaw
+- Planned event time: registration opens at 09:00; the afterparty continues until approximately 21:30 Europe/Warsaw
 - Format: One-day, in-person, community-led technology conference
 - Expected capacity: approximately 300 attendees
 - Audience: developers, designers, entrepreneurs, engineers, researchers, and students, from beginners to experienced practitioners
@@ -82,6 +82,6 @@ Use the Past DevFests archive on the official website homepage: https://warsaw.d
 
 ## Interpretation rules
 
-- Use the official event end time of 21:00 Europe/Warsaw. Do not infer a ticket price, sponsor commitment, or unannounced speaker from this file.
+- Use the planned approximate afterparty end of 21:30 Europe/Warsaw. Do not infer a ticket price, sponsor commitment, or unannounced speaker from this file.
 - Do not describe a proposal, archive record, or previous speaker as a confirmed 2026 session or speaker.
 - If a live page contradicts an older cached copy, prefer the live page and the current public wording on the official website.

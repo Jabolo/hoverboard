@@ -83,29 +83,36 @@
     },
     {
       "id": "CFP-028",
-      "start": "16:15",
-      "end": "16:45",
+      "start": "16:10",
+      "end": "16:40",
       "space": "auditorium",
       "kind": "session"
     },
     {
       "id": "CFP-015",
-      "start": "16:15",
-      "end": "17:15",
+      "start": "16:10",
+      "end": "16:55",
       "space": "classroom",
       "kind": "workshop"
     },
     {
       "id": "scaling-hugging-face-hub",
-      "start": "17:00",
-      "end": "17:30",
+      "start": "17:05",
+      "end": "17:35",
       "space": "auditorium",
       "kind": "session"
     },
     {
+      "id": "INVITED-003",
+      "start": "17:05",
+      "end": "17:50",
+      "space": "classroom",
+      "kind": "workshop"
+    },
+    {
       "id": "INVITED-002",
       "start": "18:00",
-      "end": "18:30",
+      "end": "18:45",
       "space": "auditorium",
       "kind": "session"
     },
@@ -118,19 +125,19 @@
     },
     {
       "id": "closing",
-      "start": "19:00",
-      "end": "19:30",
+      "start": "18:55",
+      "end": "19:15",
       "space": "auditorium",
       "kind": "activity",
       "title": "Closing, results & awards"
     },
     {
       "id": "networking",
-      "start": "19:30",
-      "end": "21:00",
+      "start": "19:15",
+      "end": "21:30",
       "space": "both",
       "kind": "activity",
-      "title": "Networking"
+      "title": "Afterparty & networking (until approximately 21:30)"
     }
   ]
 }

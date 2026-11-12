@@ -18,7 +18,7 @@ const items = () => buildAgenda(draft as DraftAgenda, programme as PreviewSource
 describe('published agenda', () => {
   it('matches the scheduled sessions and common event blocks', () => {
     const all = items();
-    expect(all.filter((item) => item.href)).toHaveLength(13);
+    expect(all.filter((item) => item.href)).toHaveLength(14);
     expect(
       all.filter((item) => item.href).map(({ id, start, end, space }) => [id, start, end, space]),
     ).toEqual([
@@ -30,10 +30,11 @@ describe('published agenda', () => {
       ['CFP-050', '12:00', '13:00', 'classroom'],
       ['CFP-034', '13:00', '13:45', 'auditorium'],
       ['PANEL-01', '15:00', '16:00', 'auditorium'],
-      ['CFP-028', '16:15', '16:45', 'auditorium'],
-      ['CFP-015', '16:15', '17:15', 'classroom'],
-      ['scaling-hugging-face-hub', '17:00', '17:30', 'auditorium'],
-      ['INVITED-002', '18:00', '18:30', 'auditorium'],
+      ['CFP-028', '16:10', '16:40', 'auditorium'],
+      ['CFP-015', '16:10', '16:55', 'classroom'],
+      ['scaling-hugging-face-hub', '17:05', '17:35', 'auditorium'],
+      ['INVITED-003', '17:05', '17:50', 'classroom'],
+      ['INVITED-002', '18:00', '18:45', 'auditorium'],
       ['INVITED-001', '18:00', '18:45', 'classroom'],
     ]);
     expect(all.some((item) => item.kind === 'open')).toBe(false);
@@ -43,8 +44,8 @@ describe('published agenda', () => {
       space: 'classroom',
     });
     expect(all.find(({ id }) => id === 'CFP-015')).toMatchObject({
-      start: '16:15',
-      end: '17:15',
+      start: '16:10',
+      end: '16:55',
       speakers: [
         expect.objectContaining({
           id: 'ivan-lapa',
@@ -66,11 +67,27 @@ describe('published agenda', () => {
     expect(all.find(({ id }) => id === 'lunch')).toMatchObject({ start: '14:00', end: '15:00' });
     expect(all.find(({ id }) => id === 'registration')).toMatchObject({ start: '09:00' });
     expect(all.find(({ id }) => id === 'registration')?.end).toBeUndefined();
-    expect(all.find(({ id }) => id === 'closing')).toMatchObject({ start: '19:00', end: '19:30' });
+    expect(all.find(({ id }) => id === 'closing')).toMatchObject({ start: '18:55', end: '19:15' });
     expect(all.find(({ id }) => id === 'networking')).toMatchObject({
-      start: '19:30',
-      end: '21:00',
+      start: '19:15',
+      end: '21:30',
     });
+  });
+
+  it('aligns the evening blocks and keeps ten minutes between classroom workshops', () => {
+    const all = items();
+    for (const start of ['16:10', '17:05', '18:00']) {
+      expect(groupAgenda(all, 'all').find((group) => group.start === start)?.items).toHaveLength(2);
+    }
+    const workshops = ['CFP-015', 'INVITED-003', 'INVITED-001'].map((id) =>
+      all.find((item) => item.id === id)!,
+    );
+    for (let i = 1; i < workshops.length; i++) {
+      expect(eventInstant(workshops[i]!.start) - eventInstant(workshops[i - 1]!.end!)).toBe(
+        10 * 60 * 1000,
+      );
+    }
+    expect(eventInstant('18:55') - eventInstant('18:45')).toBe(10 * 60 * 1000);
   });
 
   it('keeps parallel sessions together and filters spaces without inventing Vibe Zone times', () => {
@@ -101,7 +118,8 @@ describe('published agenda', () => {
     expect(eventState(Date.parse('2026-11-21T07:59:59Z'))).toBe('before');
     expect(eventState(Date.parse('2026-11-21T08:00:00Z'))).toBe('during');
     expect(progressAt({ start: '09:00' }, eventInstant('09:15'))).toBeNull();
-    expect(eventState(Date.parse('2026-11-21T20:00:00Z'))).toBe('after');
+    expect(eventState(Date.parse('2026-11-21T20:00:00Z'))).toBe('during');
+    expect(eventState(Date.parse('2026-11-21T20:30:00Z'))).toBe('after');
     const noon = Date.parse('2026-11-21T11:15:00Z');
     expect(warsawTime(noon)).toBe('12:15');
     expect(all.filter((item) => progressAt(item, noon) !== null).map(({ id }) => id)).toEqual([

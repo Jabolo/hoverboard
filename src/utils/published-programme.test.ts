@@ -54,7 +54,7 @@ describe('approved programme publication', () => {
     const adrian = data.generatedSessions.find(({ id }) => id === 'INVITED-001');
     expect(ivan?.sessions.map(({ id }) => id).sort()).toEqual(['CFP-014', 'CFP-015']);
     expect(workshop?.speakers.map(({ id }) => id)).toEqual(['ivan-lapa']);
-    expect(workshop?.description).toContain('60-minute workshop');
+    expect(workshop?.description).toContain('45-minute workshop');
     expect(adrian?.description).toContain('45-minute workshop');
     expect(data.generatedSchedule).toEqual([]);
   });
