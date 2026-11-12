@@ -513,6 +513,28 @@
           "link": "https://www.linkedin.com/in/kasper-kulikowski/"
         }
       ]
+    },
+    "greg-radzio": {
+      "name": "Greg Radzio",
+      "bio": "Last 2 years super deep on Agentic AI: Harness, FDE, Agents, Contexts, Tools, Deployments, Evals...\nLast 8 years in Founder / CTO roles building teams from 0 to 20-30 employees as well as serving clients...\nSpent over 20 years building IT systems full stack. Hands on always, tinkerer at heart...",
+      "shortBio": "Agentic AI · Evaluations · Founder / CTO",
+      "company": "",
+      "title": "",
+      "country": "",
+      "featured": false,
+      "order": 17,
+      "photo": "/images/speakers/2026/greg-radzio.7b503f39.webp",
+      "photoUrl": "/images/speakers/2026/greg-radzio.7b503f39.webp",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/greg-radzio/"
+        }
+      ],
+      "companyLogo": "",
+      "companyLogoUrl": "",
+      "badges": []
     }
   },
   "sessions": {
@@ -626,6 +648,13 @@
       "description": "For the past 30 years, websites have been engineered exclusively for human users. Today, we are entering the agentic era. The Agentic Web is here! Users start offloading their heavy lifting to autonomous AI Agents. If your website is not built to speak the language of these agents, it risks broken workflows and missed conversions.\n\nThis session moves past the AI hype to provide a pragmatic engineering playbook for preparing your application for autonomous workflows. We will examine exactly how an AI agent \"sees\" and navigates a website. We will explore WebMCP, a proposed web standard, and tools that can help developers make their websites agent-ready.",
       "speakers": ["kasper-kulikowski"],
       "tags": ["AI", "Web - AI for Web Developers"],
+      "language": "English"
+    },
+    "INVITED-003": {
+      "title": "Closing the Data Fly Wheel loop",
+      "description": "Building an agent is easy. Making it better requires a repeatable process and evidence that your changes actually help. In this hands-on workshop, we’ll explore the Agent Development Life Cycle (ADLC) through a local assistant agent, using Gemini CLI as our harness of choice. We’ll start in AI Studio to get an API key, connect a Gemini Flash model, and build an assistant around real tasks, MCP tools, and the file system. We’ll shape its context and memory through Skills and a Wiki, and use harness hooks to plug in guardrails that govern how it operates. Then we’ll turn everyday use into a data flywheel: Build → Test → Observe → Refactor. We’ll use Harbor to run task-based evaluations and Google Cloud Trace to inspect execution, understand failures, and identify what needs to change. Each useful failure becomes a test case; each refactor is checked against those tests before the cycle begins again. You’ll learn how to decide whether an agent needs a better tool, clearer instructions, different context, more useful memory, or a stronger guardrail and how to measure whether the change worked. You’ll leave with a practical workflow for continuously improving a local assistant agent, grounded in real tasks, observable behaviour, and repeatable evaluations.\n\nRequirements: Docker; basic knowledge of prompting, evaluations, and traces.",
+      "speakers": ["greg-radzio"],
+      "tags": ["AI", "Agents", "Evaluations"],
       "language": "English"
     }
   }

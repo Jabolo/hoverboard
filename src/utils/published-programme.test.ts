@@ -8,7 +8,7 @@ const source = () => JSON.parse(JSON.stringify(fixture)) as PreviewSource;
 describe('approved programme publication', () => {
   it('publishes only the approved sessions and reciprocal links with one shared panel', () => {
     const data = generatePublishedProgramme(source());
-    expect(data.generatedSpeakers).toHaveLength(16);
+    expect(data.generatedSpeakers).toHaveLength(17);
     expect(data.generatedSessions.map(({ id }) => id).sort()).toEqual([
       'CFP-002',
       'CFP-012',
@@ -21,6 +21,7 @@ describe('approved programme publication', () => {
       'CFP-050',
       'INVITED-001',
       'INVITED-002',
+      'INVITED-003',
       'PANEL-01',
       'scaling-hugging-face-hub',
     ]);
@@ -58,6 +59,18 @@ describe('approved programme publication', () => {
     expect(data.generatedSchedule).toEqual([]);
   });
 
+  it('links Greg to his workshop without private contact or schedule', () => {
+    const data = generatePublishedProgramme(source());
+    const speaker = data.generatedSpeakers.find(({ id }) => id === 'greg-radzio');
+    const workshop = data.generatedSessions.find(({ id }) => id === 'INVITED-003');
+    expect(speaker?.photoUrl).toBe('/images/speakers/2026/greg-radzio.7b503f39.webp');
+    expect(speaker?.sessions.map(({ id }) => id)).toEqual(['INVITED-003']);
+    expect(workshop?.speakers.map(({ id }) => id)).toEqual(['greg-radzio']);
+    expect(workshop?.description).toContain('Requirements: Docker');
+    expect(workshop).not.toHaveProperty('startTime');
+    expect(JSON.stringify({ speaker, workshop })).not.toContain('grzegorz@lowgular.io');
+  });
+
   it('replaces Sergiy with Igor on the shared panel', () => {
     const data = generatePublishedProgramme(source());
     expect(data.generatedSpeakers.map(({ id }) => id)).not.toContain('sergiy-mokiyenko');
@@ -70,7 +83,7 @@ describe('approved programme publication', () => {
     const stale = source();
     delete stale.speakers['michal-tajchert'];
     delete stale.sessions['CFP-043'];
-    expect(() => generatePublishedProgramme(stale)).toThrow('16 confirmed');
+    expect(() => generatePublishedProgramme(stale)).toThrow('17 confirmed');
     const preview = source();
     preview.speakers['ivan-lapa']!.photoUrl = '/preview/speakers/ivan.jpg';
     expect(() => generatePublishedProgramme(preview)).toThrow('Portrait must be local');

@@ -47,7 +47,7 @@ for (const [id, session] of Object.entries(programme.sessions)) {
     fallbackParagraphs: [
       plainText(session.description),
       `Speakers: ${session.speakers.map((id) => programme.speakers[id].name).join(', ')}`,
-      'The timetable is not yet published.',
+      'Explore the event schedule.',
     ],
   };
 }
