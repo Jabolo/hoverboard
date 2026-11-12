@@ -93,6 +93,8 @@ describe('local agenda presentation', () => {
     expect(welcome.querySelector('.space')).toBeNull();
     expect(root.textContent).not.toContain('Working draft.');
     expect(root.textContent).toContain('Times may change');
+    expect(root.textContent).toContain('Afterparty · Networking · Disco Party');
+    expect(root.textContent).toContain('Planned until approximately 21:30.');
     expect(root.querySelectorAll('session-favorite')).toHaveLength(14);
     expect(root.querySelector('h2')?.textContent).toContain('09:00');
     const registration = root.querySelector('.registration')!;

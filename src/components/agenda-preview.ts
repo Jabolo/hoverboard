@@ -35,7 +35,7 @@ const agendaTitle = (item: AgendaItem): string =>
   item.id === 'opening'
     ? 'Welcome to DevFest!'
     : item.id === 'networking'
-      ? 'Networking · Disco Party'
+      ? 'Afterparty · Networking · Disco Party'
       : item.title;
 
 /** Timetable built from the published agenda and programme data. */
@@ -972,7 +972,7 @@ export class AgendaPreview extends ThemedElement {
                 </div>`
             : nothing
         }
-        ${party ? html`<p class="party-copy">Good people, good vibes, and a little 2000s sparkle.</p>` : nothing}
+        ${party ? html`<p class="party-copy">Good people, good vibes, and a little 2000s sparkle. Planned until approximately 21:30.</p>` : nothing}
         ${
           item.speakers.length
             ? html`<ul class="speakers">
