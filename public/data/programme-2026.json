@@ -514,6 +514,29 @@
         }
       ]
     },
+    "julia-rapczynska": {
+      "name": "Julia Rapczyńska",
+      "bio": "Full Stack Engineer with a strong frontend and architectural focus, specializing in Angular, TypeScript, and Nx. I work on scalable Design Systems in large codebases and complex organizations, building reusable UI foundations, federated frontend infrastructure, and automation that reduces manual work across teams. I’m particularly interested in the intersection of architecture and AI-assisted engineering — using LLM-supported workflows, structured documentation systems, and developer tooling to make codebase easier to govern, scale, and maintain. Alongside hands-on development, I also share knowledge through training and public speaking.",
+      "shortBio": "Angular · TypeScript · Local-first AI",
+      "company": "PushBased",
+      "title": "Full Stack Software Developer",
+      "country": "",
+      "featured": false,
+      "order": 18,
+      "photo": "/images/speakers/2026/julia-rapczynska.ac6c4b48.webp",
+      "photoUrl": "/images/speakers/2026/julia-rapczynska.ac6c4b48.webp",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/rapczynska/"
+        }
+      ],
+      "companyLogo": "/images/speaker-companies/2026/pushbased.8d949ecc.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/pushbased.8d949ecc.svg",
+      "companyLogoBackground": "light",
+      "badges": []
+    },
     "greg-radzio": {
       "name": "Greg Radzio",
       "bio": "Last 2 years super deep on Agentic AI: Harness, FDE, Agents, Contexts, Tools, Deployments, Evals...\nLast 8 years in Founder / CTO roles building teams from 0 to 20-30 employees as well as serving clients...\nSpent over 20 years building IT systems full stack. Hands on always, tinkerer at heart...",
@@ -649,6 +672,14 @@
       "speakers": ["kasper-kulikowski"],
       "tags": ["AI", "Web - AI for Web Developers"],
       "language": "English"
+    },
+    "INVITED-004": {
+      "title": "AI at Zero Token Cost: Local-First Browser AI and Prompt API",
+      "description": "Build AI features with no per-token bill. In this 40-minute workshop, explore local-first browser AI with the Angular reference app Nano Cinema, using live demos and hands-on exercises.\n\nThe wider material covers when to use local, cloud or hybrid AI; capability detection and the Gemini Nano model download lifecycle; Prompt API sessions, streaming, structured output, context management and image input; and built-in APIs for summarization, translation, language detection and writing. The exact topics covered in this session depend on the time available.\n\nZero token cost is not zero cost: on-device AI has trade-offs in download size, disk space, memory, battery, model size and fallbacks.\n\nRequirements: Bring your own laptop with Windows 10+, macOS 13+, Linux, or ChromeOS on a Chromebook Plus. Install Chrome Stable 157+, Node.js 24.15+ (or 22.22.3+), pnpm 11 and git. Intermediate level: knowledge of TypeScript and one component framework; no machine-learning experience is needed. No AI service accounts or API keys are required.\n\nFor Chrome’s on-device foundation models, check [Chrome’s hardware requirements](https://developer.chrome.com/docs/ai/get-started): at least 22 GB of free storage; a GPU with more than 4 GB VRAM, or at least 16 GB RAM and four CPU cores; and an unmetered connection for the initial model download.",
+      "speakers": ["julia-rapczynska"],
+      "tags": ["AI", "Web", "Angular"],
+      "language": "English",
+      "complexity": "Intermediate"
     },
     "INVITED-003": {
       "title": "Closing the Data Fly Wheel loop",

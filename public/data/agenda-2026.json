@@ -36,9 +36,7 @@
       "start": "10:15",
       "end": "10:55",
       "space": "classroom",
-      "kind": "workshop",
-      "title": "Workshop with Julia Rapczyńska",
-      "detailsPending": true
+      "kind": "workshop"
     },
     {
       "id": "CFP-002",

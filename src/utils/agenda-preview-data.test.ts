@@ -18,11 +18,12 @@ const items = () => buildAgenda(draft as DraftAgenda, programme as PreviewSource
 describe('published agenda', () => {
   it('matches the scheduled sessions and common event blocks', () => {
     const all = items();
-    expect(all.filter((item) => item.href)).toHaveLength(14);
+    expect(all.filter((item) => item.href)).toHaveLength(15);
     expect(
       all.filter((item) => item.href).map(({ id, start, end, space }) => [id, start, end, space]),
     ).toEqual([
       ['CFP-021', '10:15', '10:45', 'auditorium'],
+      ['INVITED-004', '10:15', '10:55', 'classroom'],
       ['CFP-002', '11:00', '11:45', 'auditorium'],
       ['CFP-012', '11:00', '11:45', 'classroom'],
       ['CFP-014', '12:00', '12:45', 'auditorium'],
@@ -42,9 +43,8 @@ describe('published agenda', () => {
       end: '10:55',
       space: 'classroom',
       kind: 'workshop',
-      title: 'Workshop with Julia Rapczyńska',
-      detailsPending: true,
-      href: null,
+      title: 'AI at Zero Token Cost: Local-First Browser AI and Prompt API',
+      href: '/sessions/INVITED-004/',
     });
     expect(all.some((item) => item.kind === 'open')).toBe(false);
     expect(all.find(({ id }) => id === 'CFP-050')).toMatchObject({

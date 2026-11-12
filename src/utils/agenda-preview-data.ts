@@ -11,7 +11,6 @@ export interface DraftAgendaItem {
   space: AgendaSpace;
   kind: AgendaKind;
   title?: string;
-  detailsPending?: boolean;
 }
 export interface DraftAgenda {
   date: string;
@@ -66,9 +65,7 @@ export function buildAgenda(draft: DraftAgenda, programme: PreviewSource): Agend
       const start = eventInstant(item.start);
       if (!item.end && item.kind !== 'activity') throw new Error('Missing end time');
       if (item.end && eventInstant(item.end) <= start) throw new Error('Invalid time range');
-      if (item.detailsPending && item.kind !== 'workshop')
-        throw new Error('Only workshops can have pending details');
-      if (item.kind === 'activity' || item.kind === 'open' || item.detailsPending) {
+      if (item.kind === 'activity' || item.kind === 'open') {
         if (!item.title?.trim()) throw new Error('Missing activity title');
         return { ...item, title: item.title, speakers: [], href: null };
       }
