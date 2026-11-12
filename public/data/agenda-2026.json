@@ -26,10 +26,19 @@
     },
     {
       "id": "CFP-043",
-      "start": "10:15",
-      "end": "10:45",
+      "start": "13:00",
+      "end": "13:30",
       "space": "classroom",
       "kind": "session"
+    },
+    {
+      "id": "INVITED-004",
+      "start": "10:15",
+      "end": "10:55",
+      "space": "classroom",
+      "kind": "workshop",
+      "title": "Workshop with Julia Rapczyńska",
+      "detailsPending": true
     },
     {
       "id": "CFP-002",

@@ -960,6 +960,7 @@ export class AgendaPreview extends ThemedElement {
           <h3>${item.href ? html`<a href=${item.href}>${title}</a>` : title}</h3>
           ${item.href ? html`<session-favorite session-id=${item.id} session-title=${item.title}></session-favorite>` : nothing}
         </div>
+        ${item.detailsPending ? html`<p class="activity-copy">Workshop title and details coming soon.</p>` : nothing}
         ${registration ? html`<p class="activity-copy">Grab a coffee and a croissant, meet the community, and jump into the games.</p>` : nothing}
         ${opening ? html`<p class="activity-copy">Let’s kick off a day of ideas, community and inspiration.</p>` : nothing}
         ${

@@ -23,12 +23,12 @@ describe('published agenda', () => {
       all.filter((item) => item.href).map(({ id, start, end, space }) => [id, start, end, space]),
     ).toEqual([
       ['CFP-021', '10:15', '10:45', 'auditorium'],
-      ['CFP-043', '10:15', '10:45', 'classroom'],
       ['CFP-002', '11:00', '11:45', 'auditorium'],
       ['CFP-012', '11:00', '11:45', 'classroom'],
       ['CFP-014', '12:00', '12:45', 'auditorium'],
       ['CFP-050', '12:00', '13:00', 'classroom'],
       ['CFP-034', '13:00', '13:45', 'auditorium'],
+      ['CFP-043', '13:00', '13:30', 'classroom'],
       ['PANEL-01', '15:00', '16:00', 'auditorium'],
       ['CFP-028', '16:10', '16:40', 'auditorium'],
       ['CFP-015', '16:10', '16:55', 'classroom'],
@@ -37,6 +37,15 @@ describe('published agenda', () => {
       ['INVITED-002', '18:00', '18:45', 'auditorium'],
       ['INVITED-001', '18:00', '18:45', 'classroom'],
     ]);
+    expect(all.find(({ id }) => id === 'INVITED-004')).toMatchObject({
+      start: '10:15',
+      end: '10:55',
+      space: 'classroom',
+      kind: 'workshop',
+      title: 'Workshop with Julia Rapczyńska',
+      detailsPending: true,
+      href: null,
+    });
     expect(all.some((item) => item.kind === 'open')).toBe(false);
     expect(all.find(({ id }) => id === 'CFP-050')).toMatchObject({
       start: '12:00',
