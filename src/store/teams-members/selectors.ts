@@ -19,6 +19,7 @@ const mergeMembers = (team: TeamWithoutMembers, possibleMembers: Member[]): Team
           {
             ...member,
             name: selected.name,
+            photoUrl: selected.photoUrl || member.photoUrl,
             order,
             socials: [
               { icon: 'gdg', name: 'GDG profile', link: selected.profileUrl },

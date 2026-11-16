@@ -21,6 +21,10 @@ describe('DevFest event team', () => {
     expect(result).toBeInstanceOf(Success);
     if (!(result instanceof Success)) throw new Error('Team did not load');
     expect(result.data).toHaveLength(1);
+    expect(result.data[0]!.members[0]!.photoUrl).toBe(
+      '/images/team/michal-jablonski-linkedin-2026.jpg',
+    );
+    expect(result.data[0]!.members[1]!.photoUrl).toBe(members[1]!.photoUrl);
     expect(result.data[0]!.members.map((member) => member.name)).toEqual([
       'Michał Jabłoński',
       'Vatsal Patel',
