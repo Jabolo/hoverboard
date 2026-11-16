@@ -10,6 +10,8 @@ import '../components/google-developers-brand';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import '../elements/about-organizer-block';
+import '../elements/cloud-credit-block';
+import '../elements/linkedin-updates-block';
 import '../elements/schedule-block';
 import '../elements/visit-block';
 import '../elements/footer-block';
@@ -506,7 +508,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <button
             class="scroll-down"
             type="button"
-            aria-label="Scroll to speakers"
+            aria-label="Scroll to event details"
             on-click="scrollNextBlock"
           >
             <svg
@@ -573,6 +575,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
+      <cloud-credit-block></cloud-credit-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
@@ -582,6 +585,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
+      <linkedin-updates-block></linkedin-updates-block>
       <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>
       <past-devfests-block></past-devfests-block>

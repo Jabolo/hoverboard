@@ -25,6 +25,10 @@
     ],
     "rewrites": [
       {
+        "source": "/api/cloud-credit",
+        "function": { "functionId": "cloudCredit", "region": "us-central1" }
+      },
+      {
         "source": "/sessions",
         "destination": "/index.html"
       },

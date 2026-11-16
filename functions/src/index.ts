@@ -1,6 +1,7 @@
 // https://github.com/import-js/eslint-plugin-import/issues/1810
 
 import { initializeApp } from 'firebase-admin/app';
+import { cloudCredit } from './cloud-credit.js';
 import {
   scheduleWrite,
   sessionsWrite,
@@ -20,6 +21,7 @@ import { scheduleNotifications } from './schedule-notifications.js';
 initializeApp();
 
 export {
+  cloudCredit,
   sendGeneralNotification,
   scheduleNotifications,
   optimizeImages,
