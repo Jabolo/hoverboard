@@ -1,7 +1,7 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
-import { location, visitBlock } from '../utils/data';
+import { location, mailto, visitBlock } from '../utils/data';
 
 @customElement('visit-block')
 export class VisitBlock extends ThemedElement {
@@ -153,6 +153,7 @@ export class VisitBlock extends ThemedElement {
   }
 
   override render() {
+    const accessibilityEmail = `mailto:${mailto}?subject=${encodeURIComponent('DevFest Warsaw 2026 - accessibility adjustment')}`;
     const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location.address)}`;
 
     return html`
@@ -181,7 +182,7 @@ export class VisitBlock extends ThemedElement {
               <li>${visitBlock.wifi}</li>
               <li>${visitBlock.cloakroom}</li>
             </ul>
-            <a class="help" href="mailto:hello@gdgwarsaw.pl">${visitBlock.accessibilityHelp}</a>
+            <a class="help" href=${accessibilityEmail}>${visitBlock.accessibilityHelp}</a>
           </section>
         </div>
       </section>

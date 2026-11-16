@@ -558,6 +558,28 @@
       "companyLogo": "",
       "companyLogoUrl": "",
       "badges": []
+    },
+    "bruno-sienkiewicz": {
+      "name": "Bruno Sienkiewicz",
+      "bio": "Bruno Sienkiewicz is a Site Reliability Engineer at Google Cloud on the Vertex AI Platform SRE team, working with distributed systems and Kubernetes to keep AI serving infrastructure reliable at scale. Alongside industry work, Bruno researches the explainability and interpretability of machine learning models at Warsaw University of Technology. That background gives a view of AI systems from both sides: how models make decisions, and how to keep them running for millions of users.",
+      "shortBio": "Vertex AI Platform SRE · Reliable AI infrastructure at scale.",
+      "company": "Google Cloud",
+      "title": "Site Reliability Engineer",
+      "country": "",
+      "featured": false,
+      "order": 19,
+      "photo": "/images/speakers/2026/bruno-sienkiewicz.da21937f.webp",
+      "photoUrl": "/images/speakers/2026/bruno-sienkiewicz.da21937f.webp",
+      "companyLogo": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoUrl": "/images/speaker-companies/2026/google.42afe7d2.svg",
+      "companyLogoBackground": "light",
+      "socials": [
+        {
+          "icon": "linkedin",
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/bruno-sienkiewicz"
+        }
+      ]
     }
   },
   "sessions": {
@@ -687,6 +709,14 @@
       "speakers": ["greg-radzio"],
       "tags": ["AI", "Agents", "Evaluations"],
       "language": "English"
+    },
+    "INVITED-005": {
+      "title": "SRE for AI: How Google Keeps AI Systems Reliable and Performant",
+      "description": "In the AI era, most of the effort goes into shipping new features and deploying the best models, and overall system quality often comes second. How do large tech companies handle this when they serve hundreds of millions of users worldwide?\n\nIn this interactive session, you take on the role of a Google Site Reliability Engineer. After a short introduction to SRE (what SREs do day to day, and how SLIs, SLOs and error budgets decide how much reliability you actually need), you will brainstorm what makes AI systems harder to run than ordinary services. Then you compare your ideas with what Google SREs see in production.\n\nThen you go on call. We replay a real, publicly reported Gemini API incident step by step. You see the symptoms, suggest what to check, how to mitigate, and write the action items. After each step you see what the on-call engineers actually did.\n\nFinally, you review four designs of an AI serving system and look for the reliability problems in each one. For each design, we then show how Google fixes it.\n\nYou will leave with practices you can apply to your own systems right away.\n\nFormat: 60-minute interactive session.\n\nRequirements for attendees: No laptop, accounts or installed software needed. Basic familiarity with how web services run in production helps but isn't required.",
+      "speakers": ["bruno-sienkiewicz"],
+      "tags": ["AI", "Google Cloud", "SRE", "Reliability"],
+      "language": "English",
+      "complexity": "Beginner, Intermediate"
     }
   }
 }

@@ -89,6 +89,13 @@
       "kind": "panel"
     },
     {
+      "id": "INVITED-005",
+      "start": "15:00",
+      "end": "16:00",
+      "space": "classroom",
+      "kind": "workshop"
+    },
+    {
       "id": "CFP-028",
       "start": "16:10",
       "end": "16:40",

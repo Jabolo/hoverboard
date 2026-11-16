@@ -342,7 +342,7 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
   private emptyMessage(preview: boolean) {
     return preview
       ? 'Confirmed speaker preview unavailable.'
-      : 'Call for Papers is closed, and we’re reviewing submissions. Speaker profiles and sessions will appear here as confirmations are made.';
+      : 'The complete speaker lineup could not be loaded. Please reload to try again.';
   }
 
   private heroSettings = heroSettings.speakers;

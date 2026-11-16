@@ -1021,7 +1021,7 @@ export class AgendaPreview extends ThemedElement {
           </div>
           <div>
             <div class="date">Saturday, 21 November · Warsaw</div>
-            <div class="date-note">Schedule is being finalized · Times may change</div>
+            <div class="date-note">Complete programme · All speaking slots are filled</div>
           </div>
         </div>
         <fieldset class="filters">

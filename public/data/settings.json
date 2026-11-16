@@ -56,12 +56,13 @@
   ],
   "heroSettings": {
     "home": {
-      "description": "Real Work, Real Lessons. Join GDG Warsaw for practical talks, workshops and conversations with the people building technology.",
+      "description": "Practical AI. Real-world lessons. A full day of talks, workshops and conversations. Plan your day at DevFest Warsaw.",
       "background": {
         "color": "#071426",
         "image": "/images/backgrounds/home-2026.webp"
       },
-      "fontColor": "#FFF"
+      "fontColor": "#FFF",
+      "attendanceClaim": "250+ already in!"
     },
     "blog": {
       "title": "Blog",
@@ -74,7 +75,7 @@
     "speakers": {
       "title": "Speakers",
       "metaDescription": "Speakers and sessions for GDG DevFest Warsaw 2026",
-      "description": "Meet the confirmed 2026 speakers and explore their sessions and the event schedule.",
+      "description": "Meet the complete 2026 lineup: 19 speakers across 16 talks, workshops and a panel. All speaking slots are filled.",
       "background": {
         "color": "#070C14"
       },

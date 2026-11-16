@@ -5,10 +5,17 @@ export const PROGRAMME_URL = '/data/programme-2026.json';
 /** Hosting publishes this reviewed snapshot atomically with its portrait assets. */
 export function generatePublishedProgramme(source: PreviewSource): PreviewCollections {
   const data = generateProgrammeData(source, 'published');
-  if (data.generatedSpeakers.length !== 18 || data.generatedSessions.length !== 15) {
-    throw new Error('Expected 18 confirmed speakers and 15 sessions');
+  if (data.generatedSpeakers.length !== 19 || data.generatedSessions.length !== 16) {
+    throw new Error('Expected 19 confirmed speakers and 16 sessions');
   }
   return data;
+}
+
+/** Counts come from the same reviewed snapshot used by the speaker and session pages. */
+export function getProgrammeSummary(
+  data: Pick<PreviewCollections, 'generatedSpeakers' | 'generatedSessions'>,
+): string {
+  return `${data.generatedSpeakers.length} speakers / ${data.generatedSessions.length} sessions`;
 }
 
 let loaded: Promise<PreviewCollections> | undefined;

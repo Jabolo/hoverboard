@@ -2,6 +2,16 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
 import { scheduleBlock } from '../utils/data';
+import agenda from '../../public/data/agenda-2026.json';
+
+const firstSession = agenda.items
+  .filter(({ kind }) => kind === 'session' || kind === 'workshop')
+  .sort((a, b) => a.start.localeCompare(b.start))[0];
+const highlights = [
+  { item: agenda.items.find(({ id }) => id === 'registration'), label: 'Registration' },
+  { item: firstSession, label: 'Sessions begin' },
+  { item: agenda.items.find(({ id }) => id === 'networking'), label: 'Networking' },
+];
 
 @customElement('schedule-block')
 export class ScheduleBlock extends ThemedElement {
@@ -14,133 +24,71 @@ export class ScheduleBlock extends ThemedElement {
           border-bottom: 1px solid var(--divider-color);
           background: var(--primary-background-color);
         }
-
         .container {
-          position: relative;
-          padding-top: 64px;
-          padding-bottom: 48px;
+          padding-top: 40px;
+          padding-bottom: 40px;
         }
-
-        .kicker {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--google-red);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
+        .heading-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 16px;
         }
-
-        h2,
-        .time,
-        .milestone {
-          margin: 0;
-          font-family: var(--font-mono, monospace);
-        }
-
         h2 {
+          margin: 0;
           color: var(--primary-text-color);
-          font-size: clamp(30px, 5vw, 52px);
+          font-family: var(--font-mono, monospace);
+          font-size: clamp(28px, 4vw, 40px);
           letter-spacing: -0.025em;
-          line-height: 1.02;
+          line-height: 1.1;
         }
-
-        .intro {
-          max-width: 640px;
-          margin: 18px 0 0;
-          color: var(--secondary-text-color);
-          font-size: 17px;
-          line-height: 1.7;
-        }
-
-        .stages {
-          display: grid;
-          gap: 14px;
-          max-width: 760px;
+        .highlights {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px 32px;
           margin: 24px 0 0;
           padding: 0;
           list-style: none;
         }
-
-        .stage-name {
-          color: var(--primary-text-color);
-          font-weight: 700;
+        li {
+          display: flex;
+          align-items: baseline;
+          gap: 12px;
         }
-
-        .stage-description {
-          margin: 4px 0 0;
-          color: var(--secondary-text-color);
-          line-height: 1.5;
-        }
-
-        @media (min-width: 640px) {
-          .stages {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 24px;
-          }
-        }
-
-        .milestone-row {
-          display: grid;
-          gap: 14px;
-          width: min(100%, 620px);
-          margin-top: 28px;
-          padding: 14px 0;
-          border-top: 1px solid var(--divider-color);
-          border-bottom: 1px solid var(--divider-color);
-        }
-
-        .time {
+        time {
           color: var(--terminal-green);
-          font-size: 24px;
+          font-family: var(--font-mono, monospace);
+          font-size: 20px;
           font-weight: 700;
-          letter-spacing: 0.02em;
-          line-height: 1.1;
         }
-
-        .milestone {
-          align-self: end;
+        .label {
           color: var(--terminal-copy);
-          font-size: 17px;
-          font-weight: 700;
-          line-height: 1.25;
+          font-size: 16px;
         }
-
-        .sessions-link {
+        .schedule-link {
           display: inline-flex;
           align-items: center;
           justify-content: center;
           min-height: 48px;
-          margin-top: 20px;
-          padding: 0 20px;
+          padding: 0 18px;
           border: 1px solid var(--google-blue);
           border-radius: 4px;
           color: var(--primary-text-color);
           font-weight: 700;
           text-decoration: none;
         }
-        .sessions-link:hover {
+        .schedule-link:hover {
           background: var(--secondary-background-color);
         }
-        .sessions-link:focus-visible {
+        .schedule-link:focus-visible {
           outline: 2px solid var(--google-blue);
           outline-offset: 4px;
         }
-
-        .note {
-          max-width: 580px;
-          margin: 22px 0 0;
-          color: var(--terminal-muted);
-          font-size: 14px;
-          line-height: 1.6;
-        }
-
-        @media (min-width: 640px) {
-          .milestone-row {
-            grid-template-columns: 100px minmax(0, 1fr);
-            align-items: end;
-            padding: 16px 0;
+        @media (max-width: 600px) {
+          .highlights {
+            flex-direction: column;
+            gap: 12px;
           }
         }
       `,
@@ -150,29 +98,20 @@ export class ScheduleBlock extends ThemedElement {
   override render() {
     return html`
       <section id="schedule" class="container" aria-labelledby="schedule-title">
-        <span class="kicker">${scheduleBlock.kicker}</span>
-        <h2 id="schedule-title">${scheduleBlock.title}</h2>
-        <p class="intro">${scheduleBlock.intro}</p>
-        <ul class="stages" aria-label="Event stages">
-          <li>
-            <span class="stage-name">Auditorium</span>
-            <p class="stage-description">Talks and a panel discussion.</p>
-          </li>
-          <li>
-            <span class="stage-name">Classroom</span>
-            <p class="stage-description">Talks and hands-on workshops.</p>
-          </li>
-          <li>
-            <span class="stage-name">Vibe Zone</span>
-            <p class="stage-description">Community-led challenges and activities.</p>
-          </li>
-        </ul>
-        <div class="milestone-row" aria-label="Confirmed schedule milestone">
-          <p class="time">${scheduleBlock.time}</p>
-          <p class="milestone">${scheduleBlock.milestone}</p>
+        <div class="heading-row">
+          <h2 id="schedule-title">${scheduleBlock.title}</h2>
+          <a class="schedule-link" href="/schedule/">View full schedule →</a>
         </div>
-        <p class="note">Explore the day by space and save the sessions you want to attend.</p>
-        <a class="sessions-link" href="/schedule">Explore the schedule →</a>
+        <ul class="highlights" aria-label="Day highlights, Warsaw time">
+          ${highlights.map(({ item, label }) =>
+            item
+              ? html`<li>
+                  <time datetime=${`${agenda.date}T${item.start}`}>${item.start}</time>
+                  <span class="label">${label}</span>
+                </li>`
+              : null,
+          )}
+        </ul>
       </section>
     `;
   }

@@ -41,6 +41,36 @@ export class FooterNav extends ThemedElement {
           text-align: left;
         }
 
+        .credits {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0 6px;
+          margin: 0 0 6px;
+          font-size: 12px;
+        }
+
+        .linkedin {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          padding: 0;
+        }
+
+        .linkedin svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
+        }
+
+        a:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
+          border-radius: 2px;
+        }
+
         .footer-brands {
           display: flex;
           flex-wrap: wrap;
@@ -95,11 +125,41 @@ export class FooterNav extends ThemedElement {
         </div>
 
         <div class="copyright">
-          Based on
-          <a href="https://github.com/gdg-x/hoverboard" target="_blank" rel="noopener noreferrer"
-            >Project Hoverboard</a
-          >
-          · <a class="coc" href="/coc">${this.codeOfConduct}</a> ·
+          <p class="credits">
+            <span
+              >Made by
+              <a
+                class="author"
+                href="https://michaljablonski.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Michał Jabłoński</a
+              ></span
+            >
+            <a
+              class="linkedin"
+              href="https://www.linkedin.com/in/m-jab/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Michał Jabłoński on LinkedIn (opens in a new tab)"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+            <span
+              >· based on
+              <a
+                href="https://github.com/gdg-x/hoverboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Project Hoverboard</a
+              ></span
+            >
+          </p>
+          <a class="coc" href="/coc">${this.codeOfConduct}</a> ·
           <a class="coc" href="/privacy">Privacy &amp; newsletter</a>
         </div>
       </div>

@@ -18,7 +18,7 @@ const items = () => buildAgenda(draft as DraftAgenda, programme as PreviewSource
 describe('published agenda', () => {
   it('matches the scheduled sessions and common event blocks', () => {
     const all = items();
-    expect(all.filter((item) => item.href)).toHaveLength(15);
+    expect(all.filter((item) => item.href)).toHaveLength(16);
     expect(
       all.filter((item) => item.href).map(({ id, start, end, space }) => [id, start, end, space]),
     ).toEqual([
@@ -31,6 +31,7 @@ describe('published agenda', () => {
       ['CFP-034', '13:00', '13:45', 'auditorium'],
       ['CFP-043', '13:00', '13:30', 'classroom'],
       ['PANEL-01', '15:00', '16:00', 'auditorium'],
+      ['INVITED-005', '15:00', '16:00', 'classroom'],
       ['CFP-028', '16:10', '16:40', 'auditorium'],
       ['CFP-015', '16:10', '16:55', 'classroom'],
       ['scaling-hugging-face-hub', '17:05', '17:35', 'auditorium'],

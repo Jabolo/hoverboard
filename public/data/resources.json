@@ -15,18 +15,18 @@
   "buyTicket": "Get your ticket",
   "ticketingPreview": "View registration",
   "cfpBlock": {
-    "title": "Call for Papers closed.",
-    "kicker": "> cfp --under-review",
-    "description": "Thank you for sharing your ideas with DevFest Warsaw. Submissions are now closed, and we’re reviewing the talks and workshops to shape this year’s programme.",
-    "openTo": "Submissions closed",
-    "formats": "Talks and workshops under review",
-    "platform": "Programme planning in progress",
-    "status": "Submissions under review",
+    "title": "The full programme is here.",
+    "kicker": "> programme --complete",
+    "description": "Meet our complete speaker lineup and plan your day. All speaking slots are filled; no additional submissions or sessions will be added.",
+    "openTo": "All speaking slots filled",
+    "formats": "Talks, workshops and a panel",
+    "platform": "Programme complete",
+    "status": "Speaker lineup complete",
     "participation": "In-person",
     "languages": "English & Polish",
-    "cta": "View speaker updates",
-    "link": "/speakers",
-    "note": "Meet the confirmed speakers and explore their sessions and the event schedule."
+    "cta": "Explore the full programme",
+    "link": "/schedule",
+    "note": "19 speakers across 16 talks, workshops and a panel."
   },
   "pastDevFestsBlock": {
     "title": "Built together over the years.",
@@ -98,11 +98,11 @@
   "scheduleBlock": {
     "title": "Schedule",
     "kicker": "> schedule --ready",
-    "intro": "Three stages across Google for Startups Campus Warsaw: Auditorium, Classroom and Vibe Zone.",
+    "intro": "The complete programme: 16 talks, workshops and a panel across Auditorium and Classroom, plus the Vibe Zone.",
     "time": "09:00",
     "milestone": "Registration & Morning Coffee",
-    "note": "15-minute fire talks, 30-minute standard sessions, and up to 1-hour interactive workshops.",
-    "emptyState": "Call for Papers is closed. We’re reviewing submissions across practical AI/ML, Cloud, Web, Mobile, Firebase, Open Source, and engineering culture. Full timetable coming soon."
+    "note": "All speaking slots are filled. Explore the full timetable and choose your sessions.",
+    "emptyState": "The complete programme could not be loaded. Please reload to try again."
   },
   "signIn": "Sign in",
   "signOut": "Sign out",
@@ -261,7 +261,7 @@
         "number": "1"
       },
       "sessions": {
-        "label": "Stages",
+        "label": "Spaces",
         "number": "3"
       },
       "tracks": {
@@ -312,7 +312,7 @@
     "previousYear": "Year"
   },
   "speakersBlock": {
-    "title": "Speakers",
+    "title": "Meet the 2026 lineup",
     "callToAction": {
       "label": "Meet all speakers",
       "link": "/speakers"

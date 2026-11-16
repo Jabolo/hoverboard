@@ -1,14 +1,29 @@
 import { describe, expect, it, jest } from '@jest/globals';
 import fixture from '../../public/data/programme-2026.json';
-import { generatePublishedProgramme, loadPublishedProgramme } from './published-programme';
+import {
+  generatePublishedProgramme,
+  getProgrammeSummary,
+  loadPublishedProgramme,
+} from './published-programme';
 import { isReleaseReviewHost, PreviewSource } from './speakers-preview-data';
 
 const source = () => JSON.parse(JSON.stringify(fixture)) as PreviewSource;
 
 describe('approved programme publication', () => {
+  it('derives homepage counts from programme data rather than fixed copy', () => {
+    const data = generatePublishedProgramme(source());
+    expect(getProgrammeSummary(data)).toBe('19 speakers / 16 sessions');
+    expect(
+      getProgrammeSummary({
+        generatedSpeakers: data.generatedSpeakers.slice(0, 5),
+        generatedSessions: data.generatedSessions.slice(0, 3),
+      }),
+    ).toBe('5 speakers / 3 sessions');
+  });
+
   it('publishes only the approved sessions and reciprocal links with one shared panel', () => {
     const data = generatePublishedProgramme(source());
-    expect(data.generatedSpeakers).toHaveLength(18);
+    expect(data.generatedSpeakers).toHaveLength(19);
     expect(data.generatedSessions.map(({ id }) => id).sort()).toEqual([
       'CFP-002',
       'CFP-012',
@@ -23,6 +38,7 @@ describe('approved programme publication', () => {
       'INVITED-002',
       'INVITED-003',
       'INVITED-004',
+      'INVITED-005',
       'PANEL-01',
       'scaling-hugging-face-hub',
     ]);
@@ -46,6 +62,17 @@ describe('approved programme publication', () => {
       expect(speaker.country).toBe('');
       expect(speaker.photoUrl).toMatch(/^\/images\/speakers\/2026\//);
     }
+  });
+
+  it('includes Bruno and the final SRE session without organizational contact details', () => {
+    const data = generatePublishedProgramme(source());
+    const speaker = data.generatedSpeakers.find(({ id }) => id === 'bruno-sienkiewicz');
+    const session = data.generatedSessions.find(({ id }) => id === 'INVITED-005');
+    expect(speaker?.name).toBe('Bruno Sienkiewicz');
+    expect(speaker?.sessions.map(({ id }) => id)).toEqual(['INVITED-005']);
+    expect(session?.description).toContain('No laptop, accounts or installed software');
+    expect(session?.language).toBe('English');
+    expect(JSON.stringify(speaker)).not.toContain('bsienkiewicz@');
   });
 
   it('links Ivan to both sessions and presents Adrian’s session as a workshop', () => {
@@ -94,7 +121,7 @@ describe('approved programme publication', () => {
     const stale = source();
     delete stale.speakers['michal-tajchert'];
     delete stale.sessions['CFP-043'];
-    expect(() => generatePublishedProgramme(stale)).toThrow('18 confirmed');
+    expect(() => generatePublishedProgramme(stale)).toThrow('19 confirmed');
     const preview = source();
     preview.speakers['ivan-lapa']!.photoUrl = '/preview/speakers/ivan.jpg';
     expect(() => generatePublishedProgramme(preview)).toThrow('Portrait must be local');

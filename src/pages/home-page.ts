@@ -44,6 +44,7 @@ import '../utils/icons';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
 import { initialTicketsState, TicketsState } from '../store/tickets/state';
+import { getProgrammeSummary, loadPublishedProgramme } from '../utils/published-programme';
 
 @customElement('home-page')
 export class HomePage extends ReduxMixin(PolymerElement) {
@@ -207,8 +208,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .scroll-down .scroller,
-          .terminal-command .cursor {
+          .scroll-down .scroller {
             animation: none;
           }
         }
@@ -319,8 +319,8 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .terminal-command {
           display: flex;
           align-items: center;
-          min-height: 40px;
-          padding: 0 10px;
+          min-height: 48px;
+          padding: 0 12px;
           border: 1px solid rgb(126 242 165 / 36%);
           border-radius: 6px;
           background: rgb(126 242 165 / 8%);
@@ -329,18 +329,18 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           font-size: 11px;
         }
 
-        .terminal-command .cursor {
-          width: 6px;
-          height: 14px;
-          margin-left: 7px;
-          background: var(--terminal-green);
-          animation: blink 1.1s steps(2, start) infinite;
+        .terminal-command {
+          text-decoration: none;
+          font-weight: 700;
         }
 
-        @keyframes blink {
-          50% {
-            opacity: 0;
-          }
+        .terminal-command:hover {
+          background: rgb(126 242 165 / 15%);
+        }
+
+        .terminal-command:focus-visible {
+          outline: 2px solid var(--terminal-green);
+          outline-offset: 4px;
         }
 
         @media (min-height: 500px) {
@@ -473,33 +473,33 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   <div class="terminal-line">
                     <span></span
                     ><span
-                      ><span class="key">stages:</span> Auditorium, Classroom and Vibe Zone</span
+                      ><span class="key">spaces:</span> Auditorium, Classroom and Vibe Zone</span
                     >
-                  </div>
-                  <div class="terminal-line">
-                    <span></span><span><span class="key">capacity:</span> 300_attendees</span>
-                  </div>
-                  <hr />
-                  <div class="terminal-line">
-                    <span class="prompt">$</span><span>./cfp --status</span>
                   </div>
                   <div class="terminal-line">
                     <span></span
                     ><span
-                      ><span class="key">call_for_papers:</span>
-                      <span class="green">closed</span></span
+                      ><span class="blue">attendees</span>:
+                      <span class="green">[[heroSettings.attendanceClaim]]</span></span
                     >
                   </div>
+                  <hr />
                   <div class="terminal-line">
-                    <span></span><span><span class="key">review:</span> in_progress</span>
+                    <span class="prompt">$</span><span>./programme --status</span>
                   </div>
                   <div class="terminal-line">
-                    <span></span><span><span class="key">ethos:</span> zero_corporate_pitches</span>
+                    <span></span><span><span class="key">lineup:</span> complete</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">programme:</span> [[programmeSummary]]</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">focus:</span> practical_ai / real_world_lessons</span>
                   </div>
                   <hr />
-                  <div class="terminal-command">
-                    $ ./countdown --next <span class="cursor"></span>
-                  </div>
+                  <a class="terminal-command" href="/schedule/">View full programme →</a>
                 </div>
               </div>
             </div>
@@ -596,6 +596,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     `;
   }
 
+  @property({ type: String })
+  private programmeSummary = 'Loading programme…';
+
   private siteTitle = title;
   private eventDate = eventDate;
   private viewHighlights = viewHighlights;
@@ -667,6 +670,14 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     super.connectedCallback();
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
+    void loadPublishedProgramme().then(
+      (programme) => {
+        this.programmeSummary = getProgrammeSummary(programme);
+      },
+      () => {
+        this.programmeSummary = 'Programme unavailable';
+      },
+    );
     this.checkHashAndScroll();
     window.addEventListener('hashchange', this.onHashChange);
     window.addEventListener('click', this.onPartnerLinkClick);
