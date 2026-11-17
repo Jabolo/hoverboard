@@ -26,7 +26,8 @@ export const closeVideoDialog = () => {
   });
 };
 
-export const openVideoDialog = (payload: Omit<VideoDialog, 'open'>) => {
+export const openVideoDialog = async (payload: Omit<VideoDialog, 'open'>) => {
+  await import('../../elements/dialogs/video-dialog');
   store.dispatch({
     type: TOGGLE_VIDEO_DIALOG,
     payload: {

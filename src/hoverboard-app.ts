@@ -21,15 +21,6 @@ import './elements/footer-block';
 import './elements/header-toolbar';
 import './elements/shared-styles';
 
-let dialogsLoaded = false;
-export const loadDialogs = () => {
-  if (dialogsLoaded) return;
-  dialogsLoaded = true;
-  import('./elements/dialogs/feedback-dialog');
-  import('./elements/dialogs/signin-dialog');
-  import('./elements/dialogs/subscribe-dialog');
-  import('./elements/dialogs/video-dialog');
-};
 import { selectRouteName, startRouter } from './router';
 import { RootState, store } from './store';
 import { onUser } from './store/auth/actions';
@@ -367,12 +358,6 @@ export class HoverboardApp extends PolymerElement {
   stateChanged(state: RootState) {
     this.tickets = state.tickets;
     this.routeName = selectRouteName(window.location.pathname);
-    if (
-      state.dialogs instanceof Success ||
-      (state.ui && state.ui.videoDialog && state.ui.videoDialog.open)
-    ) {
-      loadDialogs();
-    }
   }
 
   constructor() {
@@ -398,15 +383,6 @@ export class HoverboardApp extends PolymerElement {
     this.removeAttribute('unresolved');
     startRouter(this.main);
     onUser();
-    if ('requestIdleCallback' in window) {
-      (
-        window as Window & {
-          requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => void;
-        }
-      ).requestIdleCallback(loadDialogs, { timeout: 3000 });
-    } else {
-      setTimeout(loadDialogs, 1500);
-    }
   }
 
   override disconnectedCallback() {
