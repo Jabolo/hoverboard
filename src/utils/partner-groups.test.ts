@@ -13,7 +13,6 @@ describe('visible partner groups', () => {
       'meet.js',
       'Legimi',
       'Pixelore',
-      'Kol.ski',
     ]);
     expect(groups[1]!.items[2]!.description).not.toMatch(/three|\b3\b/i);
   });
@@ -59,7 +58,15 @@ describe('visible partner groups', () => {
       communityPartners,
     ]);
     expect(result[0]!.items[0]!.name).toBe('Google for Startups');
-    expect(result[2]!.items).toHaveLength(7);
-    expect(communityPartners.items).toHaveLength(7);
+    expect(result[2]!.items).toHaveLength(6);
+    expect(communityPartners.items).toHaveLength(6);
+  });
+
+  it('does not restore Kol.ski to Community Partners from older database data', () => {
+    const oldEntry = { ...communityPartners.items[0]!, id: 'kol-ski', name: 'Kol.ski' };
+    const groups = visiblePartnerGroups([{ ...communityPartners, items: [oldEntry] }]);
+    expect(groups.flatMap((group) => group.items).map((partner) => partner.name)).not.toContain(
+      'Kol.ski',
+    );
   });
 });

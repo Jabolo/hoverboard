@@ -62,15 +62,6 @@ export const communityPartners: PartnerGroup = {
       logoUrl: '/images/partners/pixelore-logo-dark.svg',
       description: 'Pixelore is the photography partner for DevFest Warsaw 2026.',
     },
-    {
-      id: 'kol-ski',
-      parentId: 'community-partners',
-      name: 'Kol.ski',
-      order: 7,
-      url: 'https://kol.ski/',
-      logoUrl: '/images/partners/kolski-wordmark-white.svg',
-      description: 'Kol.ski is a Community Partner of DevFest Warsaw 2026.',
-    },
   ],
 };
 
@@ -106,7 +97,11 @@ export function visiblePartnerGroups(groups: PartnerGroup[]): PartnerGroup[] {
   );
   const existing = groups.map((group) => ({
     ...group,
-    items: group.items.filter((partner) => !approvedNames.has(partner.name.toLowerCase())),
+    items: group.items.filter(
+      (partner) =>
+        !approvedNames.has(partner.name.toLowerCase()) &&
+        !(group.title === 'Community Partners' && partner.name.toLowerCase() === 'kol.ski'),
+    ),
   }));
   const merged = approvedGroups.map((approved) => {
     const group = existing.find((candidate) => candidate.title === approved.title);
