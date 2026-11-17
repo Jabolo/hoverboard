@@ -446,14 +446,64 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         .community-program .block-title {
           margin-bottom: 12px;
         }
+
+        .organizer-logos {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .organizer-logo {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          box-sizing: border-box;
+          min-height: 56px;
+          padding: 8px 14px;
+          border: 1px solid var(--divider-color);
+          border-radius: 5px;
+          background: var(--terminal-panel);
+        }
+
+        .organizer-logo:focus-visible {
+          outline: 3px solid var(--google-blue);
+          outline-offset: 3px;
+        }
+
+        .organizer-logo img {
+          display: block;
+          width: 190px;
+          max-width: 100%;
+          height: 48px;
+          object-fit: contain;
+        }
       </style>
 
       <div class="container">
         <h2 class="container-title">[[partnersBlock.title]]</h2>
 
         <div class="community-program">
-          <h3 class="block-title">Developer community</h3>
-          <google-developers-brand></google-developers-brand>
+          <h3 class="block-title">Co-Organizers</h3>
+          <div class="organizer-logos">
+            <google-developers-brand></google-developers-brand>
+            <a
+              class="organizer-logo"
+              href="https://kol.ski/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/partners/kolski-wordmark-animated.svg" alt="Kol.ski" />
+            </a>
+            <a
+              class="organizer-logo"
+              href="https://gdg.community.dev/gdg-warszawa/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/logos/gdg-warsaw-white.svg" alt="GDG Warszawa" />
+            </a>
+          </div>
         </div>
 
         <template is="dom-if" if="[[pending]]">
