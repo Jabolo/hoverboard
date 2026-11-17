@@ -10,7 +10,6 @@ import { html, PolymerElement } from '@polymer/polymer';
 import { Hero } from '../models/hero';
 import { selectRouteName } from '../router';
 import { RootState } from '../store';
-import { signOut as signOutAction } from '../store/auth/actions';
 import { closeDialog, openSigninDialog } from '../store/dialogs/actions';
 import { selectIsDialogOpen } from '../store/dialogs/selectors';
 import { DIALOG } from '../store/dialogs/types';
@@ -370,7 +369,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
   }
 
   private signOut() {
-    signOutAction();
+    void import('../store/auth/actions').then(({ signOut }) => signOut());
   }
 
   private requestRegistration(e: Event) {

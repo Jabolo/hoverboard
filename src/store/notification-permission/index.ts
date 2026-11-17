@@ -1,7 +1,6 @@
 import { speakersPreview } from '../../utils/speakers-preview';
 import { Failure, Initialized, Pending, RemoteData, Success } from '@abraham/remotedata';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getMessaging, getToken } from 'firebase/messaging';
 import { firebaseApp } from '../../firebase';
 
 export enum PROMPT_USER {
@@ -28,6 +27,7 @@ export const requestNotificationPermission = createAsyncThunk<string | undefined
 
     if (permission === 'granted') {
       try {
+        const { getMessaging, getToken } = await import('firebase/messaging');
         const messaging = getMessaging(firebaseApp);
         return await getToken(messaging);
       } catch (_error) {

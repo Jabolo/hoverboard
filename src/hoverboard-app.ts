@@ -23,7 +23,6 @@ import './elements/shared-styles';
 
 import { selectRouteName, startRouter } from './router';
 import { RootState, store } from './store';
-import { onUser } from './store/auth/actions';
 import { queueSnackbar } from './store/snackbars';
 import { fetchTickets } from './store/tickets/actions';
 import { initialTicketsState } from './store/tickets/state';
@@ -382,7 +381,9 @@ export class HoverboardApp extends PolymerElement {
     console.log('Hoverboard is ready!');
     this.removeAttribute('unresolved');
     startRouter(this.main);
-    onUser();
+    // Authentication is independent of the initial page shell. Load it after
+    // the router starts so Firebase Auth does not block the first render.
+    void import('./store/auth/actions').then(({ onUser }) => onUser());
   }
 
   override disconnectedCallback() {
