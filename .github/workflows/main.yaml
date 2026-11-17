@@ -63,6 +63,9 @@ jobs:
       - name: Running tests
         run: npm run test
 
+      - name: Test live-status diagnostic
+        run: npm run verify:live:test
+
   build:
     name: Build
     runs-on: ubuntu-latest

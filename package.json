@@ -32,6 +32,7 @@
     "start:rollup": "mkdir -p dist && rollup --config rollup.config.ts --configPlugin typescript --watch",
     "test": "jest",
     "verify:live": "node ./scripts/verify-live-status.mjs",
+    "verify:live:test": "node --test ./scripts/verify-live-status-checks.mjs",
     "preview:speakers": "node scripts/preview-speakers.mjs",
     "build:speakers-review": "node scripts/build-speakers-review.mjs",
     "build:agenda-preview": "npm run validate:programme && rm -rf dist-agenda-preview && AGENDA_PREVIEW=1 NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript",
