@@ -46,7 +46,10 @@ describe('hero-block', () => {
     expect(element.fontColor).toBe('#fff');
     expect(element.hideLogo).toBe(true);
     expect(shadowRoot.querySelector<HTMLDivElement>('.hero-overlay')).toHaveAttribute('show');
-    expect(shadowRoot.querySelector<HTMLDivElement>('.hero-image')).not.toBeNull();
+    const image = shadowRoot.querySelector<HTMLImageElement>('img.hero-image');
+    expect(image).toHaveAttribute('src', '/example.jpg');
+    expect(image).toHaveAttribute('fetchpriority', 'high');
+    expect(image).toHaveAttribute('alt', '');
   });
 
   it('displays slot elements', async () => {

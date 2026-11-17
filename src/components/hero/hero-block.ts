@@ -1,5 +1,4 @@
 // import { PropertyValues } from '@lit/reactive-element';
-import '@power-elements/lazy-image';
 import { css, html, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -85,7 +84,9 @@ export class HeroBlock extends ThemedElement {
           filter: saturate(0.8) contrast(1.05);
           transition: background-color 0.3s;
           position: absolute;
-          --lazy-image-fit: cover;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
 
         .container {
@@ -173,14 +174,15 @@ export class HeroBlock extends ThemedElement {
 
   private get image() {
     return html`
-      <lazy-image
+      <img
         class="hero-image"
         src="${this.backgroundImage}"
         alt=""
         role="presentation"
+        fetchpriority="high"
         style="${styleMap({ backgroundColor: this.backgroundColor })}"
         fit
-      ></lazy-image>
+      />
     `;
   }
 

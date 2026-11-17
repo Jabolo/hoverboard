@@ -7,7 +7,6 @@ import {
   persistentMultipleTabManager,
 } from 'firebase/firestore';
 import { connectFunctionsEmulator, getFunctions, Functions } from 'firebase/functions';
-import { getPerformance, initializePerformance } from 'firebase/performance';
 import { speakersPreview } from './utils/speakers-preview';
 
 /**
@@ -70,5 +69,14 @@ if (speakersPreview) {
 export const readOnlyDb = speakersPreview
   ? initializeFirestore(initializeApp(firebaseConfig, 'preview-read-only'), {})
   : db;
-export const performance = speakersPreview ? undefined : getPerformance(firebaseApp);
-if (!speakersPreview) initializePerformance(firebaseApp);
+// Performance monitoring is not needed to render the page. Keep it enabled,
+// but load the SDK after the document has finished loading.
+if (!speakersPreview) {
+  const startPerformanceMonitoring = () => {
+    void import('firebase/performance')
+      .then(({ getPerformance }) => getPerformance(firebaseApp))
+      .catch((error: unknown) => console.warn('Performance monitoring unavailable:', error));
+  };
+  if (document.readyState === 'complete') startPerformanceMonitoring();
+  else window.addEventListener('load', startPerformanceMonitoring, { once: true });
+}

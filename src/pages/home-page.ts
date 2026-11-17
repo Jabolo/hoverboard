@@ -61,6 +61,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           text-align: center;
         }
 
+        linkedin-updates-block,
+        previous-speakers-block,
+        past-devfests-block,
+        about-organizer-block,
+        map-block,
+        visit-block {
+          content-visibility: auto;
+          contain-intrinsic-size: auto 600px;
+        }
+
         .home-content {
           width: min(100%, 980px);
           padding: 24px 20px 52px;
