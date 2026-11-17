@@ -4,25 +4,10 @@ import '@polymer/iron-icon';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
-import '../components/about-block';
 import '../components/event-countdown';
 import '../components/google-developers-brand';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
-import '../elements/about-organizer-block';
-import '../elements/cloud-credit-block';
-import '../elements/linkedin-updates-block';
-import '../elements/schedule-block';
-import '../elements/visit-block';
-import '../elements/footer-block';
-import '../elements/fork-me-block';
-import '../elements/map-block';
-import '../elements/partners-block';
-import '../elements/past-devfests-block';
-import '../elements/previous-speakers-block';
-import '../elements/speakers-block';
-import '../elements/subscribe-block';
-import '../elements/tickets-block';
 import { firebaseApp } from '../firebase';
 import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
@@ -45,6 +30,33 @@ import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
 import { initialTicketsState, TicketsState } from '../store/tickets/state';
 import { getProgrammeSummary, loadPublishedProgramme } from '../utils/published-programme';
+
+// Let the browser paint the hero before loading the remaining page sections.
+// Loading begins on the next frame rather than waiting for a scroll, so deep
+// links and keyboard navigation continue to find the full page promptly.
+let sectionsLoading: Promise<unknown> | undefined;
+function loadHomeSections() {
+  sectionsLoading ??= Promise.all([
+    import('../components/about-block'),
+    import('../elements/about-organizer-block'),
+    import('../elements/cloud-credit-block'),
+    import('../elements/linkedin-updates-block'),
+    import('../elements/schedule-block'),
+    import('../elements/visit-block'),
+    import('../elements/footer-block'),
+    import('../elements/map-block'),
+    import('../elements/partners-block'),
+    import('../elements/past-devfests-block'),
+    import('../elements/previous-speakers-block'),
+    import('../elements/speakers-block'),
+    import('../elements/subscribe-block'),
+    import('../elements/tickets-block'),
+  ]).catch((error: unknown) => {
+    sectionsLoading = undefined;
+    console.error('Unable to load home page sections:', error);
+  });
+  return sectionsLoading;
+}
 
 @customElement('home-page')
 export class HomePage extends ReduxMixin(PolymerElement) {
@@ -653,13 +665,17 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   }
 
   private scrollToTickets() {
-    const element = (this.$['registration'] || this.shadowRoot?.querySelector('#tickets')) as
-      HTMLElement | undefined;
-    if (element) {
-      scrollToElement(element);
-    } else {
-      store.dispatch(queueSnackbar('Error scrolling to section.'));
-    }
+    void loadHomeSections().then(() => {
+      requestAnimationFrame(() => {
+        const element = (this.$['registration'] || this.shadowRoot?.querySelector('#tickets')) as
+          HTMLElement | undefined;
+        if (element) {
+          scrollToElement(element);
+        } else {
+          store.dispatch(queueSnackbar('Error scrolling to section.'));
+        }
+      });
+    });
   }
 
   private scrollNextBlock() {
@@ -678,6 +694,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   override connectedCallback() {
     super.connectedCallback();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => void loadHomeSections());
+    });
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
     void loadPublishedProgramme().then(
@@ -719,10 +738,12 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   private checkHashAndScroll() {
     if (window.location.hash === '#partners') {
-      window.setTimeout(() => {
-        const partners = this.shadowRoot?.querySelector<HTMLElement>('#partners');
-        if (partners) scrollToElement(partners);
-      }, 50);
+      void loadHomeSections().then(() => {
+        requestAnimationFrame(() => {
+          const partners = this.shadowRoot?.querySelector<HTMLElement>('#partners');
+          if (partners) scrollToElement(partners);
+        });
+      });
     }
     if (window.location.hash === '#tickets' || window.location.hash === '#registration') {
       window.setTimeout(() => this.scrollToTickets(), 50);
