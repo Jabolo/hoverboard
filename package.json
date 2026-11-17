@@ -9,7 +9,7 @@
     "npm": "10"
   },
   "scripts": {
-    "build": "npm run validate:programme && npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs && node scripts/verify-agenda-isolation.mjs",
+    "build": "npm run validate:programme && npm run clean && NODE_ENV=production rollup --config rollup.config.ts --configPlugin typescript && node scripts/generate-static-seo-pages.mjs && node scripts/generate-offline-snapshot.mjs && node scripts/verify-agenda-isolation.mjs",
     "clean": "rm -rf dist",
     "deploy": "npm run build && NODE_ENV=production firebase deploy",
     "firestore:copy": "ts-node-script ./scripts/firestore-copy",

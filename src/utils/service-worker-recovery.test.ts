@@ -55,4 +55,15 @@ describe('service worker cache recovery', () => {
     expect(result.navigate).not.toHaveBeenCalled();
     expect(result.remove).not.toHaveBeenCalled();
   });
+
+  it('removes old offline snapshots but preserves the current and unrelated caches', async () => {
+    const result = await activate([
+      'devfest-offline-old',
+      'devfest-offline-__OFFLINE_SNAPSHOT_VERSION__',
+      'images-cache',
+    ]);
+    expect(result.remove).toHaveBeenCalledTimes(1);
+    expect(result.remove).toHaveBeenCalledWith('devfest-offline-old');
+    expect(result.navigate).not.toHaveBeenCalled();
+  });
 });
