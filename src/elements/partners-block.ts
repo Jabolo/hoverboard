@@ -4,7 +4,6 @@ import '@polymer/iron-icon';
 import '@material/web/button/text-button.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import '@power-elements/lazy-image';
-import '../components/google-developers-brand';
 import { RootState } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { PartnerGroupsState, selectPartnerGroups } from '../store/partners';
@@ -486,7 +485,14 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
         <div class="community-program">
           <h3 class="block-title">Co-Organizers</h3>
           <div class="organizer-logos">
-            <google-developers-brand></google-developers-brand>
+            <a
+              class="organizer-logo"
+              href="https://developers.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/logos/google-for-developers-dark.svg" alt="Google for Developers" />
+            </a>
             <a
               class="organizer-logo"
               href="https://kol.ski/"
