@@ -187,6 +187,18 @@ export class LinkedInUpdatesBlock extends ThemedElement {
         .story-copy {
           padding: 20px;
         }
+
+        .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+          border: 0;
+        }
         img {
           display: block;
           width: 100%;
@@ -298,13 +310,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
           ${PAGE_STORIES.map(
             (story) => html`
               <article>
-                <a
-                  class="story-link"
-                  href=${story.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label=${`Read ${story.name}’s post on LinkedIn (opens in a new tab)`}
-                >
+                <a class="story-link" href=${story.href} target="_blank" rel="noopener noreferrer">
                   <img
                     src=${story.image}
                     alt=${story.alt}
@@ -318,6 +324,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
                     <h3>${story.name}</h3>
                     <p>${story.summary}</p>
                     <span class="read-post">Read the story ↗</span>
+                    <span class="visually-hidden"> (opens on LinkedIn in a new tab)</span>
                   </div>
                 </a>
               </article>
