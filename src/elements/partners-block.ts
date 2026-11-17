@@ -477,6 +477,21 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           height: 48px;
           object-fit: contain;
         }
+
+        .organizer-logo.gdg-organizer {
+          gap: 10px;
+          width: 220px;
+          min-height: 66px;
+          color: #fff;
+          font-size: 16px;
+          font-weight: 600;
+          white-space: nowrap;
+        }
+
+        .organizer-logo.gdg-organizer img {
+          width: 44px;
+          height: 30px;
+        }
       </style>
 
       <div class="container">
@@ -502,12 +517,13 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
               <img src="/images/partners/kolski-wordmark-animated.svg" alt="Kol.ski" />
             </a>
             <a
-              class="organizer-logo"
+              class="organizer-logo gdg-organizer"
               href="https://gdg.community.dev/gdg-warszawa/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/images/logos/gdg-warsaw-white.svg" alt="GDG Warszawa" />
+              <img src="/images/logos/gdg.svg" alt="" />
+              <span>GDG Warszawa</span>
             </a>
           </div>
         </div>
