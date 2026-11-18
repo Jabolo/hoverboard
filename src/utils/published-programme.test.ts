@@ -75,6 +75,30 @@ describe('approved programme publication', () => {
     expect(JSON.stringify(speaker)).not.toContain('bsienkiewicz@');
   });
 
+  it('publishes Dominika’s workshop setup without exposing private contact details', () => {
+    const data = generatePublishedProgramme(source());
+    const workshop = data.generatedSessions.find(({ id }) => id === 'CFP-050');
+    expect(workshop?.description).toContain('“Works on my machine” doesn’t count as debugging.');
+    for (const requirement of [
+      '## Setup before the workshop',
+      '15 minutes',
+      'Node.js 22 LTS',
+      'v20.19+ or v22.12+',
+      'Node 18 will not work',
+      'git --version',
+      'Google Chrome',
+      'https://antigravity.google',
+      'logged in',
+      'docs/client-configurations.md',
+      'restart your agent',
+      'take a screenshot and list the network requests',
+      'repository will be shared at the start',
+    ]) {
+      expect(workshop?.description).toContain(requirement);
+    }
+    expect(workshop?.description).not.toContain('dominikazajac00@gmail.com');
+  });
+
   it('links Ivan to both sessions and presents Adrian’s session as a workshop', () => {
     const data = generatePublishedProgramme(source());
     const ivan = data.generatedSpeakers.find(({ id }) => id === 'ivan-lapa');
