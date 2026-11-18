@@ -617,8 +617,8 @@
       "complexity": "Advance, Intermediate, Beginner"
     },
     "CFP-015": {
-      "title": "Creating a Custom AI Code Reviewer with GitHub Actions, MCP, UI, and OpenRouter",
-      "description": "In this 45-minute workshop, Ivan explores how to build a custom AI code reviewer using GitHub Actions, MCP and OpenRouter, bringing repository context and structured review comments into a development workflow.",
+      "title": "Building a Custom AI Code Reviewer with GitHub Actions and MCP",
+      "description": "In this 45-minute workshop, Ivan explores how to build a custom AI code reviewer using GitHub Actions, MCP and a model routing service, bringing repository context and structured review comments into a development workflow.",
       "speakers": ["ivan-lapa"],
       "tags": ["AI", "AI - Agent Development Kit (ADK)"],
       "language": "English",
