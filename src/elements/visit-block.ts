@@ -33,7 +33,7 @@ export class VisitBlock extends ThemedElement {
         }
 
         h2,
-        h2 {
+        h3 {
           margin: 0;
           font-family: var(--font-mono, monospace);
         }
@@ -69,7 +69,7 @@ export class VisitBlock extends ThemedElement {
           border-top: 1px solid var(--divider-color);
         }
 
-        h2 {
+        h3 {
           color: var(--terminal-green);
           font-size: 15px;
           letter-spacing: 0.02em;
@@ -158,13 +158,22 @@ export class VisitBlock extends ThemedElement {
 
     return html`
       <section class="container" aria-labelledby="visit-title">
-        <span class="kicker">${visitBlock.kicker}</span>
-        <h2 id="visit-title">${visitBlock.title}</h2>
-        <p class="intro">${visitBlock.intro}</p>
+        <h2 id="visit-title">On site at DevFest.</h2>
+        <p class="intro">Useful information for your day at the venue.</p>
 
         <div class="details">
+          <section class="column" aria-labelledby="on-site-title">
+            <h3 id="on-site-title">${visitBlock.onSiteTitle}</h3>
+            <ul>
+              <li>${visitBlock.accessibility}</li>
+              <li>${visitBlock.wifi}</li>
+              <li>${visitBlock.cloakroom}</li>
+            </ul>
+            <a class="help" href=${accessibilityEmail}>${visitBlock.accessibilityHelp}</a>
+          </section>
+
           <section class="column" aria-labelledby="travel-title">
-            <h2 id="travel-title">${visitBlock.travelTitle}</h2>
+            <h3 id="travel-title">${visitBlock.travelTitle}</h3>
             <ul>
               <li>${visitBlock.metro}</li>
               <li>${visitBlock.surface}</li>
@@ -173,16 +182,6 @@ export class VisitBlock extends ThemedElement {
             <a class="directions" href="${directionsUrl}" target="_blank" rel="noopener noreferrer">
               ${visitBlock.directions}
             </a>
-          </section>
-
-          <section class="column" aria-labelledby="on-site-title">
-            <h2 id="on-site-title">${visitBlock.onSiteTitle}</h2>
-            <ul>
-              <li>${visitBlock.accessibility}</li>
-              <li>${visitBlock.wifi}</li>
-              <li>${visitBlock.cloakroom}</li>
-            </ul>
-            <a class="help" href=${accessibilityEmail}>${visitBlock.accessibilityHelp}</a>
           </section>
         </div>
       </section>

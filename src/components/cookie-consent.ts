@@ -1,6 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { getAnalyticsConsent, setAnalyticsConsent } from '../utils/analytics';
+import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
 
 @customElement('cookie-consent')
 export class CookieConsent extends LitElement {
@@ -100,6 +101,11 @@ export class CookieConsent extends LitElement {
       button {
         width: 100%;
       }
+
+      /* The mounted page footer provides the same control without covering content. */
+      :host([data-cookie-footer]) .settings {
+        display: none;
+      }
     }
   `;
 
@@ -109,10 +115,59 @@ export class CookieConsent extends LitElement {
   @state()
   private settingsOpen = this.consent === null;
 
+  private readonly mountedFooters = new Set<HTMLElement>();
+  private returnFocusTo: HTMLElement | null = null;
+  private restoreFocusOnClose = false;
+
+  private readonly onFooterAvailability = (event: Event) => {
+    if (isAgendaPreviewEnabled(window.location.hostname)) return;
+    const detail = (event as CustomEvent<{ footer: HTMLElement; mounted: boolean }>).detail;
+    if (!detail?.footer) return;
+    if (detail.mounted) this.mountedFooters.add(detail.footer);
+    else this.mountedFooters.delete(detail.footer);
+    this.toggleAttribute('data-cookie-footer', this.mountedFooters.size > 0);
+  };
+
+  private readonly onFooterSettings = (event: Event) => {
+    if (this.hidden) return;
+    const trigger = (event as CustomEvent<{ trigger?: HTMLElement }>).detail?.trigger;
+    void this.openSettings(trigger);
+  };
+
+  private readonly onSettingsClick = () => {
+    void this.openSettings(this.shadowRoot?.querySelector<HTMLButtonElement>('button.settings'));
+  };
+
+  override connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('devfest-cookie-footer', this.onFooterAvailability);
+    window.addEventListener('devfest-cookie-settings', this.onFooterSettings);
+    // The page may already have mounted before this component connected.
+    const root = this.getRootNode();
+    if (root instanceof ShadowRoot && !isAgendaPreviewEnabled(window.location.hostname)) {
+      const page = root.querySelector('main')?.firstElementChild;
+      const footer = page?.shadowRoot?.querySelector<HTMLElement>('footer-block');
+      if (footer?.isConnected) {
+        this.mountedFooters.add(footer);
+        this.toggleAttribute('data-cookie-footer', true);
+      }
+    }
+  }
+
+  override disconnectedCallback() {
+    window.removeEventListener('devfest-cookie-footer', this.onFooterAvailability);
+    window.removeEventListener('devfest-cookie-settings', this.onFooterSettings);
+    this.mountedFooters.clear();
+    this.removeAttribute('data-cookie-footer');
+    super.disconnectedCallback();
+  }
+
   override render() {
     if (!this.settingsOpen) {
       return html`
-        <button class="settings" type="button" @click=${this.openSettings}>Cookie settings</button>
+        <button class="settings" type="button" @click=${this.onSettingsClick}>
+          Cookie settings
+        </button>
       `;
     }
 
@@ -139,13 +194,30 @@ export class CookieConsent extends LitElement {
     `;
   }
 
-  private openSettings() {
+  private async openSettings(trigger?: HTMLElement | null) {
+    this.returnFocusTo = trigger ?? null;
+    this.restoreFocusOnClose = true;
     this.settingsOpen = true;
+    await this.updateComplete;
+    this.shadowRoot?.querySelector<HTMLButtonElement>('.actions button')?.focus();
   }
 
   private async choose(consent: 'granted' | 'denied') {
     this.consent = consent;
     this.settingsOpen = false;
+    await this.updateComplete;
+    const target = this.returnFocusTo;
+    const restoreFocus = this.restoreFocusOnClose;
+    this.returnFocusTo = null;
+    this.restoreFocusOnClose = false;
+    if (restoreFocus) {
+      const footer = [...this.mountedFooters].find((item) => item.isConnected);
+      const footerButton = footer?.shadowRoot?.querySelector<HTMLButtonElement>('.cookie-settings');
+      if (target?.isConnected && getComputedStyle(target).display !== 'none') target.focus();
+      else if (footerButton && getComputedStyle(footerButton).display !== 'none')
+        footerButton.focus();
+      else this.shadowRoot?.querySelector<HTMLButtonElement>('button.settings')?.focus();
+    }
     await setAnalyticsConsent(consent);
   }
 }

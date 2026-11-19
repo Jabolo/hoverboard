@@ -462,6 +462,34 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           outline: 2px solid var(--terminal-green);
           outline-offset: 4px;
         }
+        /* The event-day homepage gives the programme priority over promotion. */
+        .event-description,
+        event-countdown {
+          display: none;
+        }
+        @media (max-width: 811px) {
+          /* Put the programme within reach for attendees already on site. */
+          .terminal-column,
+          .scroll-down {
+            display: none;
+          }
+          .home-content {
+            padding-bottom: 16px;
+          }
+        }
+        @media (min-width: 812px) {
+          hero-block {
+            height: auto;
+            max-height: none;
+          }
+          .home-content {
+            margin-top: 0;
+            padding-bottom: 32px;
+          }
+          .scroll-down {
+            display: none;
+          }
+        }
       </style>
 
       <hero-block
@@ -501,11 +529,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     [[viewHighlights]]
                   </md-outlined-button>
                 </template>
-                <md-outlined-button href="/schedule/">View programme</md-outlined-button>
-                <md-filled-button on-click="scrollToTickets">
+                <md-filled-button href="/schedule/">View programme</md-filled-button>
+                <md-outlined-button on-click="scrollToTickets">
                   <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
                   [[ticketActionLabel]]
-                </md-filled-button>
+                </md-outlined-button>
               </div>
             </div>
 
@@ -637,25 +665,18 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
+      <schedule-block></schedule-block>
       <nav class="attendee-links" aria-label="Event day links">
         <div class="attendee-links-inner">
-          <a class="attendee-link" href="/sessions/">Explore sessions</a>
-          <a
-            class="attendee-link"
-            href="https://www.google.com/maps/dir/?api=1&amp;destination=Plac%20Konesera%2010%2C%2003-736%20Warszawa"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Directions</a
-          >
           <button class="attendee-link" type="button" on-click="scrollToPhotos">
             Community photos
           </button>
           <button class="attendee-link" type="button" on-click="scrollToVisit">
-            Practical information
+            On-site information
           </button>
+          <a class="attendee-link" href="/sessions/">Explore sessions</a>
         </div>
       </nav>
-      <schedule-block></schedule-block>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
       <cloud-credit-block></cloud-credit-block>

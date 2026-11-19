@@ -104,7 +104,10 @@ export class StickyCountdown extends LitElement {
       !localAgenda &&
       !this.values.complete &&
       (window.location.pathname !== '/' ||
-        (heroTimer ? heroTimer.getBoundingClientRect().bottom <= 0 : window.scrollY > 300));
+        (heroTimer
+          ? window.getComputedStyle(heroTimer).display !== 'none' &&
+            heroTimer.getBoundingClientRect().bottom <= 0
+          : window.scrollY > 300));
     this.toggleAttribute('active', this.visible);
     this.requestUpdate();
     if (this.values.complete && this.timer !== undefined) {

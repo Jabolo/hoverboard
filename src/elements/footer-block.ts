@@ -1,8 +1,9 @@
-import { customElement } from '@polymer/decorators';
+import { customElement, property } from '@polymer/decorators';
 import '@polymer/paper-fab';
 import { html, PolymerElement } from '@polymer/polymer';
 import '../utils/icons';
 import { scrollToTop } from '../utils/scrolling';
+import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
 import '../components/footer-nav';
 import './footer-rel';
 import './footer-social';
@@ -67,6 +68,32 @@ export class FooterBlock extends PolymerElement {
           z-index: 1;
         }
 
+        .cookie-settings {
+          display: none;
+          min-height: 44px;
+          margin: 12px 16px 0;
+          padding: 8px 12px;
+          border: 1px solid var(--divider-color);
+          border-radius: 3px;
+          background: var(--terminal-panel);
+          color: var(--terminal-copy);
+          font: inherit;
+          font-size: 12px;
+          cursor: pointer;
+        }
+
+        .cookie-settings:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
+        }
+
+        @media (max-width: 640px) {
+          .cookie-settings:not([hidden]) {
+            display: inline-flex;
+            align-items: center;
+          }
+        }
+
         @media (min-width: 640px) {
           .container {
             padding: 15px 36px calc(15px + var(--footer-countdown-space, 0px));
@@ -88,8 +115,38 @@ export class FooterBlock extends PolymerElement {
         <footer-social layout flex flex-auto horizontal wrap></footer-social>
         <footer-rel></footer-rel>
         <footer-nav layout horizontal wrap justified center></footer-nav>
+        <button
+          class="cookie-settings"
+          type="button"
+          hidden$="[[hideCookieSettings]]"
+          on-click="openCookieSettings"
+        >
+          Cookie settings
+        </button>
       </div>
     `;
+  }
+
+  @property({ type: Boolean })
+  private hideCookieSettings = isAgendaPreviewEnabled(window.location.hostname);
+
+  override connectedCallback() {
+    super.connectedCallback();
+    window.dispatchEvent(
+      new CustomEvent('devfest-cookie-footer', { detail: { footer: this, mounted: true } }),
+    );
+  }
+
+  override disconnectedCallback() {
+    window.dispatchEvent(
+      new CustomEvent('devfest-cookie-footer', { detail: { footer: this, mounted: false } }),
+    );
+    super.disconnectedCallback();
+  }
+
+  private openCookieSettings() {
+    const trigger = this.shadowRoot?.querySelector<HTMLElement>('.cookie-settings');
+    window.dispatchEvent(new CustomEvent('devfest-cookie-settings', { detail: { trigger } }));
   }
 
   backToTop() {
