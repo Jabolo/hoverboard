@@ -474,7 +474,21 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             display: none;
           }
           .home-content {
-            padding-bottom: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+          .hero-community {
+            margin-top: 8px;
+            --google-developers-brand-width: 150px;
+          }
+          .event-details {
+            margin-top: 16px;
+          }
+          .action-buttons md-filled-button,
+          .action-buttons md-outlined-button {
+            margin: 4px;
+            font-size: 11px;
+            letter-spacing: 0;
           }
         }
         @media (min-width: 812px) {

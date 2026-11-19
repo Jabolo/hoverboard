@@ -53,13 +53,30 @@ export function homeAgendaAt(items: AgendaItem[], now: number) {
     const nextStart = ordered.find((candidate) => candidate.start > item.start)?.start;
     return nextStart ? now < eventInstant(nextStart) : true;
   });
-  const next = ordered.find((item) => eventInstant(item.start) > now)?.start;
+  // A slot is a start time, not an individual room. Keep every live room,
+  // even if parallel activities started at different times, then fill the
+  // remaining places with the nearest distinct upcoming starts.
+  const activeStarts = new Set([...current, ...started].map((item) => item.start));
+  const futureStarts = [
+    ...new Set(ordered.filter((item) => eventInstant(item.start) > now).map((item) => item.start)),
+  ].slice(0, Math.max(0, 3 - activeStarts.size));
   return {
     state,
     current,
     started,
-    upcoming: next ? ordered.filter((item) => item.start === next) : [],
+    upcoming: ordered.filter((item) => futureStarts.includes(item.start)),
   };
+}
+
+/** Consecutive start times form one slot each, with every parallel room retained. */
+function groupByStart(items: AgendaItem[]): AgendaItem[][] {
+  const groups: AgendaItem[][] = [];
+  for (const item of items) {
+    const lastGroup = groups[groups.length - 1];
+    if (lastGroup?.[0]?.start === item.start) lastGroup.push(item);
+    else groups.push([item]);
+  }
+  return groups;
 }
 
 @customElement('schedule-block')
@@ -168,6 +185,7 @@ export class ScheduleBlock extends ThemedElement {
           color: var(--primary-text-color);
           font-weight: 700;
           text-decoration: none;
+          margin-top: 24px;
         }
         .schedule-link:hover {
           background: var(--secondary-background-color);
@@ -267,8 +285,24 @@ export class ScheduleBlock extends ThemedElement {
         }
         @media (max-width: 600px) {
           .container {
-            padding-top: 40px;
+            padding-top: 28px;
             padding-bottom: 40px;
+          }
+          h2 {
+            font-size: 26px;
+          }
+          .intro {
+            margin-top: 8px;
+            font-size: 13px;
+          }
+          .programme {
+            margin-top: 20px;
+          }
+          .group {
+            padding-top: 16px;
+          }
+          h3 {
+            margin-bottom: 8px;
           }
           .heading-row {
             align-items: start;
@@ -308,13 +342,13 @@ export class ScheduleBlock extends ThemedElement {
 
   override render() {
     const selection = homeAgendaAt(this.items, this.now);
+    const upcomingGroups = groupByStart(selection.upcoming);
     return html` <section id="schedule" class="container" aria-labelledby="schedule-title">
       <div class="heading-row">
         <div>
           <h2 id="schedule-title">The programme</h2>
-          <p class="intro">21 November · Warsaw time · based on your device clock</p>
+          <p class="intro">21 November · Warsaw time · device clock</p>
         </div>
-        <a class="schedule-link" href="/schedule/">View full schedule →</a>
       </div>
       <div class="programme" aria-live="polite">
         ${this.status === 'loading' ? html`<p class="message">Loading the programme…</p>` : nothing}
@@ -349,21 +383,31 @@ export class ScheduleBlock extends ThemedElement {
                     : nothing
                 }
                 ${
-                  selection.upcoming.length
-                    ? html`<div class="group">
-                        <h3>
-                          ${selection.state === 'before' ? 'Coming up on 21 November' : 'Up next'}
-                        </h3>
-                        <ul>
-                          ${selection.upcoming.map((item) => this.renderItem(item))}
-                        </ul>
-                      </div>`
+                  upcomingGroups.length
+                    ? html`${upcomingGroups.map(
+                        (group, index) =>
+                          html`<div class="group">
+                            <h3>
+                              ${
+                                selection.state === 'before' && index === 0
+                                  ? 'Coming up on 21 November'
+                                  : index === 0
+                                    ? 'Up next'
+                                    : `Then · ${group[0]!.start}`
+                              }
+                            </h3>
+                            <ul>
+                              ${group.map((item) => this.renderItem(item))}
+                            </ul>
+                          </div>`,
+                      )}`
                     : nothing
                 }
               `
             : nothing
         }
       </div>
+      <a class="schedule-link" href="/schedule/">View full schedule →</a>
     </section>`;
   }
 }
