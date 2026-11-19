@@ -2,6 +2,7 @@
 
 import { initializeApp } from 'firebase-admin/app';
 import { cloudCredit } from './cloud-credit.js';
+import { concierge } from './concierge.js';
 import {
   scheduleWrite,
   sessionsWrite,
@@ -22,6 +23,7 @@ initializeApp();
 
 export {
   cloudCredit,
+  concierge,
   sendGeneralNotification,
   scheduleNotifications,
   optimizeImages,

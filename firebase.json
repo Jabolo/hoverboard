@@ -56,6 +56,13 @@
         }
       },
       {
+        "source": "/api/concierge",
+        "function": {
+          "functionId": "concierge",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "/sessions",
         "destination": "/index.html"
       },

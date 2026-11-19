@@ -43,6 +43,7 @@ function loadHomeSections() {
     import('../elements/about-organizer-block'),
     import('../elements/attendee-photos-block'),
     import('../elements/cloud-credit-block'),
+    import('../elements/devfest-concierge'),
     import('../elements/linkedin-updates-block'),
     import('../elements/schedule-block'),
     import('../elements/visit-block'),
@@ -196,6 +197,14 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           --md-outlined-button-label-text-color: #fff;
           --md-outlined-button-hover-label-text-color: #fff;
           --md-outlined-button-outline-color: #fff;
+        }
+
+        .action-buttons .concierge-button {
+          color: var(--terminal-green);
+          --md-outlined-button-label-text-color: var(--terminal-green);
+          --md-outlined-button-hover-label-text-color: #fff;
+          --md-outlined-button-outline-color: var(--terminal-green);
+          --md-outlined-button-hover-state-layer-color: var(--terminal-green);
         }
 
         .action-buttons iron-icon {
@@ -605,6 +614,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   </md-outlined-button>
                 </template>
                 <md-filled-button href="/schedule/">View programme</md-filled-button>
+                <md-outlined-button class="concierge-button" on-click="openConcierge">
+                  Ask Concierge
+                </md-outlined-button>
                 <md-outlined-button on-click="scrollToTickets">
                   <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
                   [[ticketActionLabel]]
@@ -665,6 +677,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     ><span><span class="key">focus:</span> practical_ai / real_world_lessons</span>
                   </div>
                   <hr />
+                  <a class="terminal-command" href="/#concierge" on-click="openConcierge">
+                    $ ./concierge --ask →
+                  </a>
                   <a class="terminal-command" href="/schedule/">View full programme →</a>
                   <a class="terminal-command" href$="[[huntLinks.activities]]">
                     Y2K Vibe Lab &amp; Arcade →
@@ -744,9 +759,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
+      <devfest-concierge id="concierge" style="scroll-margin-top: 80px;"></devfest-concierge>
       <schedule-block></schedule-block>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
-      <cloud-credit-block></cloud-credit-block>
+      <cloud-credit-block id="cloud-credit" style="scroll-margin-top: 80px;"></cloud-credit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
@@ -858,6 +874,22 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     });
   }
 
+  private openConcierge(e?: Event) {
+    e?.preventDefault();
+    void loadHomeSections().then(() => {
+      requestAnimationFrame(() => {
+        const concierge = this.shadowRoot?.querySelector('#concierge') as
+          (HTMLElement & { openAndFocus?: (initialIntent?: string) => void }) | null | undefined;
+        if (concierge) {
+          scrollToElement(concierge);
+          concierge.openAndFocus?.();
+        } else {
+          store.dispatch(queueSnackbar('Error opening concierge.'));
+        }
+      });
+    });
+  }
+
   private scrollNextBlock() {
     scrollToElement(this.hero, POSITION.BOTTOM);
   }
@@ -910,9 +942,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .some(
           (node) =>
             node instanceof HTMLAnchorElement &&
-            ['/#partners', '/#visit', huntSiteLinks.activities].includes(
-              node.getAttribute('href') ?? '',
-            ) &&
+            [
+              '/#partners',
+              '/#visit',
+              '/#concierge',
+              '/#cloud-credit',
+              huntSiteLinks.activities,
+            ].includes(node.getAttribute('href') ?? '') &&
             node.getAttribute('href') === `/${window.location.hash}`,
         )
     ) {
@@ -922,7 +958,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   private checkHashAndScroll() {
     const { hash } = window.location;
-    if (hash === '#partners' || hash === '#visit' || hash === '#y2k-activities') {
+    if (
+      hash === '#partners' ||
+      hash === '#visit' ||
+      hash === '#y2k-activities' ||
+      hash === '#concierge' ||
+      hash === '#cloud-credit'
+    ) {
       void loadHomeSections().then(() => {
         requestAnimationFrame(() => {
           const section = this.shadowRoot?.querySelector<HTMLElement>(hash);
@@ -930,6 +972,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             scrollToElement(section);
             if (hash === '#y2k-activities') {
               section.querySelector<HTMLElement>('#y2k-heading')?.focus({ preventScroll: true });
+            } else if (hash === '#concierge') {
+              (
+                section as HTMLElement & { openAndFocus?: (initialIntent?: string) => void }
+              ).openAndFocus?.();
             }
           }
         });
