@@ -3,6 +3,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
 import { updateMetadata } from '../utils/metadata';
 import '../hunt/signal-game.js';
+import '../hunt/experiments.js';
 import '../elements/footer-block';
 
 const prompts = [
@@ -498,7 +499,7 @@ export class Y2kPage extends ThemedElement {
             <div class="eyebrow">01 / A little warm-up</div>
             <h2>Insert coin? Nah. Just play.</h2>
             <p class="lede">
-              Two tiny games to get you in the mood. These are playground demos, not competition
+              Five tiny games to get you in the mood. These are playground demos, not competition
               entries. Scores stay here and do not enter you into a prize draw.
             </p>
             <div class="split">
@@ -533,6 +534,7 @@ export class Y2kPage extends ThemedElement {
                 <p class="small">A new game resets this board. No account or leaderboard.</p>
               </div>
             </div>
+            <y2k-experiments></y2k-experiments>
           </section>
           <section id="discover" tabindex="-1">
             <div class="eyebrow">02 / Keep your eyes open</div>
@@ -638,7 +640,7 @@ export class Y2kPage extends ThemedElement {
               target="_blank"
               rel="noopener noreferrer"
               >Piotr Prus’s holographic scratch card ↗</a
-            >.
+            >. DevFest Quest idea: <strong>Vika</strong> (a separate activity).
           </div>
         </div>
       </div>

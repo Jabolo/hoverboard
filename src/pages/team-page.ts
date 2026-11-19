@@ -1,3 +1,4 @@
+import '../hunt/clue.js';
 import { Failure, Pending } from '@abraham/remotedata';
 import { computed, customElement, property } from '@polymer/decorators';
 import '@polymer/paper-icon-button';
@@ -63,6 +64,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           margin-bottom: 32px;
         }
 
+        .crew-find { grid-column:1 / -1; justify-self:center; width:100%; }
         .member {
           min-width: 0;
           padding: 16px 12px;
@@ -186,11 +188,11 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           <p>Error loading teams.</p>
         </template>
 
-        <template is="dom-repeat" items="[[teamsMembers.data]]" as="team">
+        <template is="dom-repeat" items="[[teamsMembers.data]]" as="team" index-as="teamIndex">
           <h2 class="team-title">[[team.title]]</h2>
 
           <div class="team-block">
-            <template is="dom-repeat" items="[[team.members]]" as="member">
+            <template is="dom-repeat" items="[[team.members]]" as="member" index-as="memberIndex">
               <div class="member" layout horizontal>
                 <lazy-image
                   class="photo"
@@ -215,6 +217,18 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                   </div>
                 </div>
               </div>
+              <template
+                is="dom-if"
+                if="[[isCrewMiddle(memberIndex, team.members.length, teamIndex)]]"
+              >
+                <hunt-clue
+                  class="crew-find"
+                  href="/hunt/c/cr3w8up/"
+                  label="Crew cache discovered"
+                  hint="The team left a little something between the tabs."
+                  glyph="💿"
+                ></hunt-clue>
+              </template>
             </template>
           </div>
         </template>
@@ -222,6 +236,10 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
 
       <footer-block></footer-block>
     `;
+  }
+
+  private isCrewMiddle(index: number, count: number, teamIndex: number) {
+    return teamIndex === 0 && index === Math.max(0, Math.ceil(count / 2) - 1);
   }
 
   private heroSettings = heroSettings.team;

@@ -6,6 +6,42 @@ const groups = [
 ];
 
 const webCards = [
+  {
+    id: 'b055win',
+    group: 'play',
+    title: 'Professional Pop-up Closer',
+    text: 'Three shields, zero unwanted toolbars. The pop-up from 2002 is finally closed. This is a souvenir of your Arcade adventure, not a prize or competition entry.',
+  },
+  {
+    id: 'bug5afe',
+    group: 'play',
+    title: 'Paperclip Containment Unit',
+    text: 'It looks like you are trying to contain a paperclip. Would you like help with that? Too late. You already did. A playful Arcade souvenir, not a prize or competition entry.',
+  },
+  {
+    id: 'cd2002x',
+    group: 'play',
+    title: 'World Wide Weird Restored',
+    text: 'Your download is finally 100% complete. The glitter cursor is loose and the guestbook is open. Welcome back to 2002. A playful Arcade souvenir, not a prize or competition entry.',
+  },
+  {
+    id: 'cr3w8up',
+    group: 'web',
+    title: 'Crew Cache',
+    text: 'Behind every smooth event is a team with 47 browser tabs open. Say hello to someone making today happen. No quest required, just good vibes.',
+  },
+  {
+    id: 'f00t3rx',
+    group: 'web',
+    title: 'End Credits',
+    text: 'You scrolled past the end. The internet awards you one imaginary floppy disk. Please do not save over your homework.',
+  },
+  {
+    id: 'p3ek7up',
+    group: 'web',
+    title: 'Shy Browser Tab',
+    text: 'You pulled me out of the sidebar! I was hiding from the 99 other tabs. Build a browser tab that asks for a tiny holiday.',
+  },
   // Website entry and deliberate Easter eggs.
   {
     id: 'y6597cd',

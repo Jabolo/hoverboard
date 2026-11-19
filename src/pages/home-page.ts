@@ -1,3 +1,4 @@
+import '../hunt/peek-card.js';
 import { Success } from '@abraham/remotedata';
 import { computed, customElement, property, query } from '@polymer/decorators';
 import '@polymer/iron-icon';
@@ -65,6 +66,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     return html`
       <style include="shared-styles flex flex-alignment">
         :host {
+          position: relative;
           display: block;
           height: 100%;
         }
@@ -483,6 +485,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
+      <hunt-peek-card></hunt-peek-card>
       <hero-block
         id="hero"
         background-image="[[heroSettings.background.image]]"

@@ -1,3 +1,4 @@
+import '../hunt/clue.js';
 import { speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Success } from '@abraham/remotedata';
 import { customElement, observe, property } from '@polymer/decorators';
@@ -279,7 +280,12 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
         <short-markdown class="description" content="[[session.description]]"></short-markdown>
 
         <template is="dom-if" if="[[hasDebugSignal(session.id)]]" restamp>
-          <a class="debug-signal" href="/hunt/c/2ejjjgf/">Inspect debug signal</a>
+          <hunt-clue
+            href="/hunt/c/2ejjjgf/"
+            label="Inspect debug signal"
+            hint="Stop guessing. Start scratching. There’s a card in this glitch."
+            glyph="⌘"
+          ></hunt-clue>
         </template>
 
         <div class="actions" layout horizontal>

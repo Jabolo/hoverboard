@@ -1,3 +1,4 @@
+import '../hunt/clue.js';
 import { legacyProgrammePreview, speakersPreview } from '../utils/speakers-preview';
 import { Initialized, Pending, Success } from '@abraham/remotedata';
 import { computed, customElement, observe, property } from '@polymer/decorators';
@@ -76,10 +77,16 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
           outline-offset: 4px;
         }
         .programme-extras {
+          flex-wrap: wrap;
+          padding: 16px;
+          max-width: 1100px;
           display: flex;
           justify-content: center;
           gap: 12px;
           margin: 0 auto;
+        }
+        .programme-extras hunt-clue {
+          flex: 1 1 280px;
         }
         .programme-extras a {
           display: inline-flex;
@@ -170,8 +177,18 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
         </template>
       </template>
       <div class="programme-extras">
-        <a href="/hunt/c/wkyb3kc/" aria-label="Check the 00:00 programme clock">◷ 00:00</a>
-        <a href="/hunt/c/jwvxcv9/">Check the frequency</a>
+        <hunt-clue
+          href="/hunt/c/wkyb3kc/"
+          label="Check the 00:00 programme clock"
+          hint="This clock is hiding a holographic card. Take a peek."
+          glyph="◷"
+        ></hunt-clue>
+        <hunt-clue
+          href="/hunt/c/jwvxcv9/"
+          label="Check the frequency"
+          hint="A little signal is waiting between the sessions."
+          glyph="📡"
+        ></hunt-clue>
       </div>
       <footer-block></footer-block>
     `;

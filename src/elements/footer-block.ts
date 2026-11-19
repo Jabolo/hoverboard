@@ -1,3 +1,4 @@
+import '../hunt/clue.js';
 import { customElement } from '@polymer/decorators';
 import '@polymer/paper-fab';
 import { html, PolymerElement } from '@polymer/polymer';
@@ -86,6 +87,12 @@ export class FooterBlock extends PolymerElement {
           ></paper-fab>
         </div>
         <footer-social layout flex flex-auto horizontal wrap></footer-social>
+        <hunt-clue
+          href="/hunt/c/f00t3rx/"
+          label="You found the end credits"
+          hint="Still scrolling? There’s one more card down here."
+          glyph="💾"
+        ></hunt-clue>
         <footer-rel></footer-rel>
         <footer-nav layout horizontal wrap justified center></footer-nav>
       </div>

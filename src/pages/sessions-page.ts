@@ -1,3 +1,4 @@
+import '../hunt/clue.js';
 /**
  * THESIS: A searchable reading shelf for confirmed talks, never a timetable.
  * OWN-WORLD: Inherit DevFest's dark terminal surfaces, blue focus and green links.
@@ -542,7 +543,12 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         >
           ${filtered.map((item) => this.sessionItem(item))}
         </ul>
-        <a class="random-access" href="/hunt/c/auxq7ah/">Random access</a>
+        <hunt-clue
+          href="/hunt/c/auxq7ah/"
+          label="Random access"
+          hint="Not another session. A holographic detour. Scratch to discover."
+          glyph="💾"
+        ></hunt-clue>
       </section>
       <footer-block></footer-block>`;
   }

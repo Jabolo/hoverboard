@@ -534,7 +534,7 @@ export class HuntPage extends ThemedElement {
               href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
               aria-label="Piotr Prus’s scratch card repository (opens in a new tab)"
               >Piotr Prus’s scratch card</a
-            >.
+            >. DevFest Quest idea: <strong>Vika</strong> (a separate activity).
           </p>
         </footer>
       </div>

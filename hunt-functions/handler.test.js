@@ -37,8 +37,8 @@ test('collection exposes group counts and broad hints without card records', () 
   assert.deepEqual(
     body.groups.map(({ id, count }) => ({ id, count })),
     [
-      { id: 'web', count: 5 },
-      { id: 'play', count: 2 },
+      { id: 'web', count: 8 },
+      { id: 'play', count: 5 },
       { id: 'venue', count: 0 },
       { id: 'mystery', count: 1 },
     ],
@@ -142,5 +142,26 @@ test('catalog config refuses duplicate codes and values without a complete offse
     [{ ...timedCard, opensAt: timedCard.closesAt }],
   ]) {
     assert.throws(() => readPhysicalCards(JSON.stringify(cards)));
+  }
+});
+
+test('three new website cards reveal without exposing answers in collection or open responses', () => {
+  const handler = createHuntHandler();
+  for (const id of ['cr3w8up', 'f00t3rx', 'p3ek7up']) {
+    const open = request(handler, `/api/hunt/card/${id}`).body;
+    assert.equal(open.status, 'open');
+    assert.equal(open.card.text, undefined);
+    const earned = request(handler, `/api/hunt/card/${id}`, 'POST').body;
+    assert.equal(earned.status, 'earned');
+    assert.ok(earned.card.text.length);
+    assert.ok(!JSON.stringify(request(handler, '/api/hunt/collection').body).includes(id));
+  }
+});
+
+test('arcade souvenir routes use the same find and reveal contract', () => {
+  const handler = createHuntHandler();
+  for (const id of ['b055win', 'bug5afe', 'cd2002x']) {
+    assert.equal(request(handler, `/api/hunt/card/${id}`).body.status, 'open');
+    assert.equal(request(handler, `/api/hunt/card/${id}`, 'POST').body.status, 'earned');
   }
 });
