@@ -98,7 +98,7 @@ try {
     assert.equal(await hub.evaluate((el) => el.turns), 0);
     const game = hub.locator('hunt-signal-game');
     await game.getByRole('button', { name: 'Start game', exact: true }).click();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       for (
         let n = 0;
         n < 5 && !(await game.getByText('Clear signal', { exact: true }).count());
@@ -107,7 +107,7 @@ try {
         await game.getByRole('button', { name: 'Next signal' }).click();
       await game.getByRole('button', { name: 'Catch signal' }).click();
     }
-    await game.getByRole('heading', { name: 'Bonus transmission · 5/5' }).waitFor();
+    await game.getByRole('heading', { name: 'Bonus transmission' }).waitFor();
     assert.equal(
       await page.evaluate(() => localStorage.getItem('devfest-warsaw-2026-hunt-v1:perfect:')),
       null,

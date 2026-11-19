@@ -13,6 +13,14 @@ const prompts = [
   'A tiny pixel maze where the treasure is the last working Wi-Fi router.',
   'Pong with a personality: the ball gives increasingly dramatic commentary.',
   'A browser loading screen that becomes the game at 99%.',
+  'A recycling bin that holds an emotional farewell ceremony for every deleted file.',
+  'A weather app for your tabs: sunny inbox, scattered notifications, chance of chaos.',
+  'A pixel pigeon delivering packets across a very unreliable internet.',
+  'A digital aquarium where every fish is an unfinished side project.',
+  'A CAPTCHA that asks you to prove you are a mildly confused human.',
+  'A music player that judges your playlist with tiny dramatic facial expressions.',
+  'A calendar where meetings escape and you gently herd them back into the week.',
+  'A space invaders game where the invaders are cookie consent banners.',
 ];
 const symbols = ['💿', '💾', '🕹️', '📡'];
 
@@ -795,10 +803,6 @@ export class Y2kPage extends ThemedElement {
                 <div class="cartridge-slot" aria-hidden="true"></div>
                 <div class="cartridge-label">
                   <h3 id="idea-heading">Idea cartridge</h3>
-                  <span
-                    >${String(this.promptIndex + 1).padStart(2, '0')} /
-                    ${String(prompts.length).padStart(2, '0')}</span
-                  >
                 </div>
                 <p class="prompt" aria-live="polite">${prompts[this.promptIndex]}</p>
                 <button

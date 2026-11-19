@@ -325,7 +325,7 @@ export class HuntPage extends ThemedElement {
                 >
                 ${
                   state === 'earned' && hasHuntPerfect(card.id)
-                    ? html`<span class="perfect-stamp">5/5 Signal</span>`
+                    ? html`<span class="perfect-stamp">Signal stamp</span>`
                     : nothing
                 }
               `;

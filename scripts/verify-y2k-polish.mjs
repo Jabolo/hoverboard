@@ -50,7 +50,7 @@ try {
       'cartridge is not stretched to rules height',
     );
     const ideas = new Set();
-    for (let n = 0; n < 6; n++) {
+    for (let n = 0; n < 14; n++) {
       ideas.add(await cartridge.locator('.prompt').innerText());
       await cartridge.getByRole('button', { name: 'Load another idea', exact: true }).click();
       assert.equal(
@@ -58,7 +58,7 @@ try {
         true,
       );
     }
-    assert.equal(ideas.size, 6);
+    assert.equal(ideas.size, 14);
     await cartridge.screenshot({ path: `/tmp/y2k-cartridge-${width}.png` });
     const sticker = p
       .locator('y2k-page footer-block')

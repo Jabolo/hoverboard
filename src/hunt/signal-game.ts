@@ -4,12 +4,24 @@ import { ThemedElement } from '../components/themed-element';
 import { hasHuntPerfect, rememberHuntPerfect } from './hunt-store.js';
 
 const signals = ['Noise', 'Clear signal', 'Busy tone', 'Interference'];
-const rounds = 5;
+const normalGoal = 4;
+const duration = 30_000;
+const bestKey = 'devfest-signal-hardcore-best:v1';
+let sessionBest = 0;
 
 @customElement('hunt-signal-game')
 export class HuntSignalGame extends ThemedElement {
   @property({ attribute: false }) cardId = '';
   @state() private running = false;
+  @state() private mode: 'normal' | 'hardcore' = 'normal';
+  @state() private target = 1;
+  @state() private remaining = duration;
+  @state() private best = 0;
+  @state() private storageUnavailable = false;
+  @state() private completed = false;
+  private deadline = 0;
+  private lastCatch = -Infinity;
+  private clockTimer: number | undefined;
   @state() private stepMode = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   @state() private attempts = 0;
   @state() private score = 0;
@@ -60,10 +72,33 @@ export class HuntSignalGame extends ThemedElement {
         }
         .lamp {
           display: block;
-          width: 12px;
-          height: 12px;
+          width: 22px;
+          height: 22px;
           border: 1px solid #b7a5cc;
           border-radius: 50%;
+        }
+        .lamp.clear {
+          border: 3px solid #e7f778;
+        }
+        .scoreboard {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px 22px;
+          font: 700 16px monospace;
+        }
+        .modes {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .modes button[aria-pressed='true'] {
+          border-color: #e7f778;
+          color: #151023;
+          background: #e7f778;
+        }
+        button:disabled {
+          opacity: 0.6;
+          cursor: default;
         }
         .lamp.active {
           background: #e2c9ff;
@@ -162,22 +197,95 @@ export class HuntSignalGame extends ThemedElement {
     ];
   }
 
+  override connectedCallback() {
+    super.connectedCallback();
+    this.best = sessionBest;
+    try {
+      const saved = Number(window.localStorage.getItem(bestKey));
+      if (Number.isSafeInteger(saved) && saved > this.best && saved <= 1000) this.best = saved;
+    } catch {
+      this.storageUnavailable = true;
+    }
+    document.addEventListener('visibilitychange', this.tickClock);
+  }
+
   override disconnectedCallback() {
-    window.clearInterval(this.timer);
+    if (this.running) this.finish(`Run stopped when you left. ${this.score} signals caught.`);
+    this.clearTimers();
+    document.removeEventListener('visibilitychange', this.tickClock);
     super.disconnectedCallback();
   }
 
-  private readonly nextSignal = () => {
-    this.signal = (this.signal + 1) % signals.length;
+  private clearTimers() {
+    window.clearInterval(this.timer);
+    window.clearInterval(this.clockTimer);
+    this.timer = undefined;
+    this.clockTimer = undefined;
+  }
+
+  private get speed() {
+    return this.mode === 'hardcore' ? Math.max(280, 720 - this.attempts * 35) : 720;
+  }
+
+  private saveBest() {
+    if (this.mode !== 'hardcore') return;
+    let record = Math.max(this.best, sessionBest);
+    try {
+      const saved = Number(window.localStorage.getItem(bestKey));
+      if (Number.isSafeInteger(saved) && saved >= 0 && saved <= 1000)
+        record = Math.max(record, saved);
+    } catch {
+      this.storageUnavailable = true;
+    }
+    this.best = Math.max(record, this.score);
+    sessionBest = this.best;
+    try {
+      window.localStorage.setItem(bestKey, String(this.best));
+    } catch {
+      this.storageUnavailable = true;
+    }
+  }
+
+  private finish(message: string) {
+    this.clearTimers();
+    this.running = false;
+    this.saveBest();
+    this.feedback = message;
+  }
+
+  private readonly tickClock = () => {
+    if (!this.running || this.mode !== 'hardcore') return;
+    this.remaining = Math.max(0, this.deadline - performance.now());
+    if (this.remaining === 0)
+      this.finish(`Time! ${this.score} signals caught. Go again and beat your best!`);
   };
 
+  private readonly nextSignal = () => {
+    this.tickClock();
+    if (this.running) this.signal = (this.signal + 1) % signals.length;
+  };
+
+  private setSignalTimer() {
+    window.clearInterval(this.timer);
+    if (this.mode === 'hardcore' || !this.stepMode)
+      this.timer = window.setInterval(this.nextSignal, this.speed);
+  }
+
   private start() {
+    this.clearTimers();
     this.score = 0;
     this.attempts = 0;
-    this.feedback = '';
-    this.signal = Math.floor(Math.random() * signals.length);
+    this.completed = false;
+    this.feedback =
+      this.mode === 'hardcore' ? 'Watch the outlined target. How many can you catch?' : '';
+    this.target = this.mode === 'hardcore' ? Math.floor(Math.random() * 4) : 1;
+    this.signal = (this.target + 1 + Math.floor(Math.random() * 3)) % 4;
+    this.lastCatch = -Infinity;
+    this.remaining = duration;
+    this.deadline = performance.now() + duration;
     this.running = true;
-    if (!this.stepMode) this.timer = window.setInterval(this.nextSignal, 720);
+    this.setSignalTimer();
+    if (this.mode === 'hardcore') this.clockTimer = window.setInterval(this.tickClock, 100);
   }
 
   private readonly play = () => {
@@ -185,79 +293,120 @@ export class HuntSignalGame extends ThemedElement {
       this.start();
       return;
     }
-
-    const caught = this.signal === 1;
+    this.tickClock();
+    if (!this.running) return;
+    const now = performance.now();
+    if (this.mode === 'hardcore' && now - this.lastCatch < 250) return;
+    this.lastCatch = now;
+    const caught = this.signal === this.target;
     this.attempts++;
     if (caught) this.score++;
-
-    if (this.attempts === rounds) {
-      window.clearInterval(this.timer);
-      this.running = false;
-      if (this.score === rounds) {
-        if (this.cardId) rememberHuntPerfect(this.cardId);
-        this.feedback = 'Perfect signal. Bonus transmission unlocked.';
-      } else {
-        this.feedback = `Game over. You caught ${this.score} of ${rounds} signals.`;
+    if (this.mode === 'normal') {
+      if (this.score === normalGoal) {
+        this.completed = true;
+        if (this.attempts === normalGoal && this.cardId) rememberHuntPerfect(this.cardId);
+        this.finish(
+          `All four caught in ${this.attempts} tries! ${this.attempts === normalGoal ? 'Perfect signal. Bonus transmission unlocked.' : 'Try a clean four for the bonus transmission.'}`,
+        );
+        return;
       }
-      return;
+      this.feedback = `${caught ? 'Signal caught' : 'Missed it. Try again'}. ${normalGoal - this.score} more to catch.`;
+      this.nextSignal();
+    } else {
+      this.saveBest();
+      if (!caught) this.deadline -= 2000;
+      this.tickClock();
+      if (!this.running) return;
+      this.feedback = caught
+        ? `${this.score} caught! Target moved. Keep the streak alive!`
+        : 'Missed! −2 seconds. Find the new target.';
+      this.target = (this.target + 1 + Math.floor(Math.random() * 3)) % 4;
+      this.signal = (this.target + 1 + Math.floor(Math.random() * 3)) % 4;
     }
-
-    this.feedback = `${caught ? 'Signal caught' : 'Missed that signal'}. ${rounds - this.attempts} left.`;
-    this.nextSignal();
+    this.setSignalTimer();
   };
 
   private readonly changeMode = (event: Event) => {
-    const input = event.currentTarget as HTMLInputElement;
-    this.stepMode = input.checked;
+    this.stepMode = (event.currentTarget as HTMLInputElement).checked;
   };
 
+  private chooseMode(mode: 'normal' | 'hardcore') {
+    if (this.running) return;
+    this.mode = mode;
+    this.score = 0;
+    this.attempts = 0;
+    this.completed = false;
+    this.feedback = '';
+    this.remaining = duration;
+  }
+
   protected override render() {
-    return html`
-      <section aria-labelledby="signal-title">
-        <h2 id="signal-title">Signal Catch</h2>
-        <p>Catch the clear signal before it moves. You get ${rounds} tries.</p>
-        <div class="dial" aria-live=${this.stepMode ? 'polite' : 'off'}>
-          <div class="lamps" aria-hidden="true">
-            ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${index === 1 ? 'clear' : ''}"></span>`)}
-          </div>
-          <strong>${this.running ? signals[this.signal] : 'Ready when you are'}</strong>
+    const perfect = this.mode === 'normal' && this.completed && this.attempts === normalGoal;
+    return html` <section aria-labelledby="signal-title">
+      <h2 id="signal-title">Signal Catch</h2>
+      <div class="modes" role="group" aria-label="Game mode">
+        <button
+          class="secondary"
+          aria-pressed=${this.mode === 'normal'}
+          ?disabled=${this.running}
+          @click=${() => this.chooseMode('normal')}
+        >
+          Normal
+        </button>
+        <button
+          class="secondary"
+          aria-pressed=${this.mode === 'hardcore'}
+          ?disabled=${this.running}
+          @click=${() => this.chooseMode('hardcore')}
+        >
+          Hardcore
+        </button>
+      </div>
+      <p>
+        ${this.mode === 'normal' ? 'Catch four clear signals to finish. Misses are practice. Choose step mode for an untimed game.' : '30 seconds. Catch as many as you can! The outlined target moves after every try and the signal gets faster. Misses cost 2 seconds.'}
+      </p>
+      <div class="scoreboard" aria-label="Game statistics">
+        <span>Score: ${this.score}${this.mode === 'normal' ? ' / 4' : ''}</span>
+        ${this.mode === 'hardcore' ? html`<span>Time: ${Math.ceil(this.remaining / 1000)}s</span><span>Best: ${this.best}</span>` : nothing}
+      </div>
+      <div class="dial" aria-live=${this.mode === 'normal' && this.stepMode ? 'polite' : 'off'}>
+        <div class="lamps" aria-hidden="true">
+          ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${index === this.target ? 'clear' : ''}"></span>`)}
         </div>
-        <div class="control">
-          <button type="button" @click=${this.play}>
-            ${this.running ? 'Catch signal' : this.attempts ? 'Play again' : 'Start game'}
-          </button>
-          ${
-            this.running && this.stepMode
-              ? html`<button class="secondary" type="button" @click=${this.nextSignal}>
-                  Next signal
-                </button>`
-              : nothing
-          }
-        </div>
-        ${
-          !this.running
-            ? html`<label
-                ><input type="checkbox" .checked=${this.stepMode} @change=${this.changeMode} /> Step
-                mode (no timer)</label
-              >`
-            : nothing
-        }
-        <p class="feedback" role="status">${this.feedback}</p>
-        ${
-          !this.running && (this.score === rounds || (this.cardId && hasHuntPerfect(this.cardId)))
-            ? html`<div class="transmission ${this.score === rounds ? 'perfect' : ''}">
-                <h3>Bonus transmission · 5/5</h3>
-                <p>
-                  ${this.cardId ? 'The Warsaw arcade received your signal. Your card now carries the 5/5 stamp.' : 'The Warsaw arcade received your signal. A perfect 5/5 run!'}
-                </p>
-                <p>
-                  Bonus build prompt: make a loading screen that gets impatient with the person
-                  using it.
-                </p>
-              </div>`
-            : nothing
-        }
-      </section>
-    `;
+        <strong
+          >${this.running ? (this.signal === this.target ? 'Clear signal' : signals.filter((_, index) => index !== 1)[this.signal % 3]) : 'Ready when you are'}</strong
+        >
+      </div>
+      <div class="control">
+        <button
+          type="button"
+          @keydown=${(event: KeyboardEvent) => {
+            if (event.repeat) event.preventDefault();
+          }}
+          @click=${this.play}
+        >
+          ${this.running ? 'Catch signal' : this.attempts || this.feedback ? 'Play again' : 'Start game'}
+        </button>
+        ${this.running && this.mode === 'normal' && this.stepMode ? html`<button class="secondary" type="button" @click=${this.nextSignal}>Next signal</button>` : nothing}
+        ${this.running ? html`<button class="secondary" @click=${() => this.finish(`Run stopped. ${this.score} signals caught.`)}>Stop game</button>` : nothing}
+      </div>
+      ${!this.running && this.mode === 'normal' ? html`<label><input type="checkbox" .checked=${this.stepMode} @change=${this.changeMode} /> Step mode (no timer)</label>` : nothing}
+      ${this.mode === 'hardcore' ? html`<p>Best is saved ${this.storageUnavailable ? 'for this visit only (browser storage unavailable)' : 'on this browser only'}. No online leaderboard. For untimed play, choose Normal.</p>` : nothing}
+      <p class="feedback" role="status">${this.feedback}</p>
+      ${
+        !this.running && (perfect || (this.cardId && hasHuntPerfect(this.cardId)))
+          ? html`<div class="transmission ${perfect ? 'perfect' : ''}">
+              <h3>Bonus transmission</h3>
+              <p>
+                ${this.cardId ? 'Your collection keeps its Signal stamp.' : 'Four clean catches. Perfect reception!'}
+              </p>
+              <p>
+                Bonus build prompt: make a loading screen that gets impatient with the person using
+                it.
+              </p>
+            </div>`
+          : nothing
+      }
+    </section>`;
   }
 }
