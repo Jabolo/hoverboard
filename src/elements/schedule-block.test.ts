@@ -136,6 +136,23 @@ describe('on-site homepage programme', () => {
     element.remove();
   });
 
+  it('starts the pre-event list without the redundant green date heading', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('09:00') - 1000);
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    expect(element.shadowRoot?.textContent).not.toContain('Coming up on 21 November');
+    expect(element.shadowRoot?.querySelector('.group')?.textContent).toContain('Registration');
+  });
+
   it('automatically advances the live programme when a session begins', async () => {
     jest.useFakeTimers().setSystemTime(eventInstant('10:15') - 5000);
     globalThis.fetch = jest.fn<typeof fetch>(

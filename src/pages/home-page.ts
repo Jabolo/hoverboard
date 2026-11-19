@@ -693,11 +693,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <schedule-block></schedule-block>
       <nav class="attendee-links" aria-label="Event day links">
         <div class="attendee-links-inner">
-          <button class="attendee-link" type="button" on-click="scrollToPhotos">
-            Community photos
-          </button>
           <button class="attendee-link" type="button" on-click="scrollToVisit">
             On-site information
+          </button>
+          <button class="attendee-link" type="button" on-click="scrollToPhotos">
+            Community photos
           </button>
           <a class="attendee-link" href="/sessions/">Explore sessions</a>
         </div>

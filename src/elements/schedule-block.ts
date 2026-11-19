@@ -387,15 +387,13 @@ export class ScheduleBlock extends ThemedElement {
                     ? html`${upcomingGroups.map(
                         (group, index) =>
                           html`<div class="group">
-                            <h3>
-                              ${
-                                selection.state === 'before' && index === 0
-                                  ? 'Coming up on 21 November'
-                                  : index === 0
-                                    ? 'Up next'
-                                    : `Then · ${group[0]!.start}`
-                              }
-                            </h3>
+                            ${
+                              selection.state === 'before' && index === 0
+                                ? nothing
+                                : html`<h3>
+                                    ${index === 0 ? 'Up next' : `Then · ${group[0]!.start}`}
+                                  </h3>`
+                            }
                             <ul>
                               ${group.map((item) => this.renderItem(item))}
                             </ul>

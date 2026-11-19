@@ -4,9 +4,9 @@ import { ThemedElement } from '../components/themed-element';
 
 // Generated with Core Image's QR encoder from the album URL below. The SVG
 // includes a four-module quiet zone and does not depend on a third-party service.
-const albumUrl = 'https://photos.app.goo.gl/QbodNU6v6xyAS9J7';
+const albumUrl = 'https://photos.app.goo.gl/QbodNU6v6xyAS9zJ7';
 const qrPath =
-  'M5 5h7v1h-7zM13 5h2v1h-2zM16 5h2v1h-2zM19 5h1v1h-1zM23 5h4v1h-4zM28 5h1v1h-1zM30 5h1v1h-1zM32 5h1v1h-1zM5 6h1v1h-1zM11 6h1v1h-1zM15 6h1v1h-1zM18 6h1v1h-1zM20 6h2v1h-2zM24 6h3v1h-3zM29 6h2v1h-2zM32 6h1v1h-1zM5 7h1v1h-1zM7 7h3v1h-3zM11 7h1v1h-1zM13 7h4v1h-4zM18 7h1v1h-1zM21 7h4v1h-4zM28 7h1v1h-1zM31 7h1v1h-1zM33 7h1v1h-1zM5 8h1v1h-1zM7 8h3v1h-3zM11 8h1v1h-1zM13 8h1v1h-1zM15 8h1v1h-1zM17 8h3v1h-3zM21 8h1v1h-1zM25 8h2v1h-2zM28 8h3v1h-3zM33 8h1v1h-1zM5 9h1v1h-1zM7 9h3v1h-3zM11 9h1v1h-1zM15 9h1v1h-1zM17 9h1v1h-1zM22 9h1v1h-1zM25 9h5v1h-5zM31 9h3v1h-3zM5 10h1v1h-1zM11 10h1v1h-1zM13 10h1v1h-1zM15 10h2v1h-2zM18 10h3v1h-3zM25 10h1v1h-1zM29 10h2v1h-2zM5 11h7v1h-7zM13 11h1v1h-1zM15 11h1v1h-1zM17 11h2v1h-2zM24 11h2v1h-2zM27 11h1v1h-1zM29 11h2v1h-2zM32 11h1v1h-1zM13 12h2v1h-2zM16 12h2v1h-2zM19 12h3v1h-3zM23 12h3v1h-3zM29 12h5v1h-5zM6 13h1v1h-1zM8 13h8v1h-8zM22 13h10v1h-10zM8 14h3v1h-3zM15 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM21 14h3v1h-3zM25 14h1v1h-1zM27 14h3v1h-3zM31 14h1v1h-1zM5 15h1v1h-1zM7 15h1v1h-1zM9 15h3v1h-3zM13 15h1v1h-1zM16 15h3v1h-3zM20 15h2v1h-2zM23 15h1v1h-1zM27 15h1v1h-1zM29 15h1v1h-1zM31 15h1v1h-1zM7 16h2v1h-2zM10 16h1v1h-1zM16 16h1v1h-1zM20 16h2v1h-2zM23 16h1v1h-1zM28 16h1v1h-1zM30 16h3v1h-3zM6 17h1v1h-1zM10 17h4v1h-4zM16 17h1v1h-1zM21 17h5v1h-5zM28 17h3v1h-3zM32 17h1v1h-1zM6 18h3v1h-3zM14 18h1v1h-1zM16 18h2v1h-2zM19 18h1v1h-1zM21 18h1v1h-1zM24 18h2v1h-2zM27 18h2v1h-2zM32 18h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM10 19h4v1h-4zM15 19h1v1h-1zM17 19h2v1h-2zM21 19h4v1h-4zM27 19h3v1h-3zM31 19h3v1h-3zM6 20h2v1h-2zM10 20h1v1h-1zM12 20h1v1h-1zM16 20h3v1h-3zM20 20h2v1h-2zM24 20h1v1h-1zM26 20h2v1h-2zM31 20h3v1h-3zM11 21h2v1h-2zM16 21h3v1h-3zM20 21h4v1h-4zM28 21h1v1h-1zM30 21h2v1h-2zM5 22h2v1h-2zM12 22h1v1h-1zM14 22h2v1h-2zM18 22h3v1h-3zM25 22h2v1h-2zM28 22h1v1h-1zM33 22h1v1h-1zM10 23h2v1h-2zM13 23h1v1h-1zM17 23h3v1h-3zM22 23h2v1h-2zM26 23h3v1h-3zM31 23h2v1h-2zM7 24h1v1h-1zM10 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM19 24h1v1h-1zM22 24h8v1h-8zM33 24h1v1h-1zM5 25h1v1h-1zM7 25h2v1h-2zM10 25h3v1h-3zM15 25h1v1h-1zM18 25h2v1h-2zM22 25h2v1h-2zM27 25h1v1h-1zM30 25h1v1h-1zM32 25h2v1h-2zM13 26h4v1h-4zM20 26h5v1h-5zM5 27h7v1h-7zM13 27h1v1h-1zM15 27h1v1h-1zM17 27h1v1h-1zM19 27h1v1h-1zM21 27h1v1h-1zM23 27h1v1h-1zM25 27h1v1h-1zM27 27h7v1h-7zM5 28h1v1h-1zM11 28h1v1h-1zM14 28h1v1h-1zM16 28h1v1h-1zM18 28h1v1h-1zM21 28h5v1h-5zM27 28h1v1h-1zM33 28h1v1h-1zM5 29h1v1h-1zM7 29h3v1h-3zM11 29h1v1h-1zM14 29h1v1h-1zM16 29h2v1h-2zM19 29h4v1h-4zM24 29h1v1h-1zM27 29h1v1h-1zM29 29h3v1h-3zM33 29h1v1h-1zM5 30h1v1h-1zM7 30h3v1h-3zM11 30h1v1h-1zM13 30h2v1h-2zM16 30h2v1h-2zM19 30h1v1h-1zM21 30h2v1h-2zM24 30h1v1h-1zM27 30h1v1h-1zM29 30h3v1h-3zM33 30h1v1h-1zM5 31h1v1h-1zM7 31h3v1h-3zM11 31h1v1h-1zM15 31h2v1h-2zM18 31h2v1h-2zM21 31h1v1h-1zM25 31h1v1h-1zM27 31h1v1h-1zM29 31h3v1h-3zM33 31h1v1h-1zM5 32h1v1h-1zM11 32h1v1h-1zM13 32h1v1h-1zM15 32h1v1h-1zM17 32h1v1h-1zM19 32h1v1h-1zM23 32h1v1h-1zM27 32h1v1h-1zM33 32h1v1h-1zM5 33h7v1h-7zM13 33h1v1h-1zM15 33h5v1h-5zM21 33h4v1h-4zM27 33h7v1h-7z';
+  'M5 5h7v1h-7zM13 5h3v1h-3zM17 5h1v1h-1zM21 5h2v1h-2zM24 5h3v1h-3zM28 5h1v1h-1zM30 5h2v1h-2zM33 5h3v1h-3zM5 6h1v1h-1zM11 6h1v1h-1zM14 6h2v1h-2zM17 6h1v1h-1zM22 6h1v1h-1zM25 6h1v1h-1zM28 6h1v1h-1zM32 6h2v1h-2zM37 6h1v1h-1zM5 7h1v1h-1zM7 7h3v1h-3zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM19 7h3v1h-3zM25 7h2v1h-2zM31 7h2v1h-2zM35 7h1v1h-1zM5 8h1v1h-1zM7 8h3v1h-3zM11 8h1v1h-1zM13 8h2v1h-2zM19 8h1v1h-1zM21 8h2v1h-2zM24 8h1v1h-1zM27 8h1v1h-1zM32 8h1v1h-1zM35 8h3v1h-3zM5 9h1v1h-1zM7 9h3v1h-3zM11 9h1v1h-1zM15 9h2v1h-2zM18 9h1v1h-1zM20 9h4v1h-4zM27 9h7v1h-7zM35 9h2v1h-2zM5 10h1v1h-1zM11 10h1v1h-1zM13 10h1v1h-1zM15 10h2v1h-2zM18 10h2v1h-2zM21 10h3v1h-3zM28 10h2v1h-2zM33 10h3v1h-3zM37 10h1v1h-1zM5 11h7v1h-7zM13 11h2v1h-2zM18 11h1v1h-1zM22 11h3v1h-3zM26 11h1v1h-1zM28 11h2v1h-2zM31 11h1v1h-1zM33 11h1v1h-1zM13 12h5v1h-5zM21 12h1v1h-1zM24 12h6v1h-6zM33 12h2v1h-2zM36 12h2v1h-2zM5 13h1v1h-1zM7 13h1v1h-1zM10 13h4v1h-4zM18 13h2v1h-2zM21 13h2v1h-2zM24 13h1v1h-1zM27 13h8v1h-8zM37 13h1v1h-1zM6 14h1v1h-1zM8 14h3v1h-3zM13 14h2v1h-2zM17 14h1v1h-1zM19 14h2v1h-2zM23 14h1v1h-1zM25 14h1v1h-1zM28 14h1v1h-1zM30 14h1v1h-1zM34 14h1v1h-1zM37 14h1v1h-1zM7 15h1v1h-1zM11 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM23 15h3v1h-3zM28 15h1v1h-1zM31 15h2v1h-2zM34 15h4v1h-4zM5 16h1v1h-1zM13 16h1v1h-1zM15 16h2v1h-2zM19 16h3v1h-3zM25 16h7v1h-7zM34 16h2v1h-2zM37 16h1v1h-1zM6 17h2v1h-2zM9 17h1v1h-1zM11 17h3v1h-3zM15 17h2v1h-2zM21 17h1v1h-1zM27 17h3v1h-3zM33 17h3v1h-3zM6 18h1v1h-1zM8 18h2v1h-2zM15 18h1v1h-1zM17 18h2v1h-2zM22 18h3v1h-3zM27 18h1v1h-1zM29 18h3v1h-3zM33 18h1v1h-1zM36 18h2v1h-2zM9 19h5v1h-5zM20 19h2v1h-2zM23 19h1v1h-1zM26 19h1v1h-1zM31 19h3v1h-3zM35 19h1v1h-1zM5 20h6v1h-6zM13 20h1v1h-1zM15 20h2v1h-2zM20 20h1v1h-1zM25 20h1v1h-1zM27 20h3v1h-3zM31 20h1v1h-1zM33 20h2v1h-2zM37 20h1v1h-1zM5 21h7v1h-7zM16 21h1v1h-1zM18 21h1v1h-1zM23 21h1v1h-1zM25 21h7v1h-7zM33 21h1v1h-1zM35 21h1v1h-1zM5 22h1v1h-1zM8 22h3v1h-3zM14 22h1v1h-1zM17 22h2v1h-2zM20 22h1v1h-1zM23 22h1v1h-1zM26 22h1v1h-1zM28 22h1v1h-1zM30 22h3v1h-3zM35 22h1v1h-1zM7 23h2v1h-2zM10 23h4v1h-4zM15 23h1v1h-1zM17 23h3v1h-3zM22 23h5v1h-5zM29 23h1v1h-1zM31 23h3v1h-3zM35 23h1v1h-1zM6 24h2v1h-2zM9 24h2v1h-2zM12 24h2v1h-2zM17 24h1v1h-1zM19 24h1v1h-1zM25 24h2v1h-2zM28 24h1v1h-1zM30 24h1v1h-1zM32 24h1v1h-1zM36 24h1v1h-1zM5 25h1v1h-1zM7 25h2v1h-2zM10 25h3v1h-3zM14 25h2v1h-2zM19 25h3v1h-3zM25 25h3v1h-3zM29 25h1v1h-1zM34 25h1v1h-1zM36 25h1v1h-1zM13 26h2v1h-2zM16 26h1v1h-1zM20 26h3v1h-3zM25 26h3v1h-3zM29 26h1v1h-1zM31 26h2v1h-2zM34 26h1v1h-1zM36 26h2v1h-2zM6 27h1v1h-1zM9 27h1v1h-1zM11 27h1v1h-1zM13 27h3v1h-3zM18 27h1v1h-1zM23 27h1v1h-1zM26 27h3v1h-3zM31 27h4v1h-4zM36 27h2v1h-2zM7 28h3v1h-3zM13 28h2v1h-2zM16 28h1v1h-1zM18 28h1v1h-1zM21 28h5v1h-5zM28 28h1v1h-1zM31 28h2v1h-2zM34 28h4v1h-4zM5 29h1v1h-1zM7 29h2v1h-2zM10 29h3v1h-3zM15 29h8v1h-8zM26 29h3v1h-3zM31 29h1v1h-1zM34 29h1v1h-1zM36 29h2v1h-2zM13 30h2v1h-2zM16 30h1v1h-1zM19 30h6v1h-6zM27 30h1v1h-1zM29 30h1v1h-1zM5 31h7v1h-7zM13 31h1v1h-1zM15 31h1v1h-1zM17 31h1v1h-1zM19 31h1v1h-1zM21 31h1v1h-1zM23 31h1v1h-1zM25 31h1v1h-1zM27 31h1v1h-1zM29 31h1v1h-1zM31 31h7v1h-7zM5 32h1v1h-1zM11 32h1v1h-1zM17 32h7v1h-7zM26 32h3v1h-3zM31 32h1v1h-1zM37 32h1v1h-1zM5 33h1v1h-1zM7 33h3v1h-3zM11 33h1v1h-1zM14 33h2v1h-2zM17 33h1v1h-1zM21 33h1v1h-1zM23 33h1v1h-1zM27 33h3v1h-3zM31 33h1v1h-1zM33 33h3v1h-3zM37 33h1v1h-1zM5 34h1v1h-1zM7 34h3v1h-3zM11 34h1v1h-1zM13 34h4v1h-4zM23 34h2v1h-2zM26 34h1v1h-1zM28 34h2v1h-2zM31 34h1v1h-1zM33 34h3v1h-3zM37 34h1v1h-1zM5 35h1v1h-1zM7 35h3v1h-3zM11 35h1v1h-1zM14 35h1v1h-1zM16 35h1v1h-1zM18 35h3v1h-3zM23 35h1v1h-1zM25 35h1v1h-1zM28 35h2v1h-2zM31 35h1v1h-1zM33 35h3v1h-3zM37 35h1v1h-1zM5 36h1v1h-1zM11 36h1v1h-1zM13 36h1v1h-1zM15 36h1v1h-1zM19 36h1v1h-1zM21 36h2v1h-2zM28 36h2v1h-2zM31 36h1v1h-1zM37 36h1v1h-1zM5 37h7v1h-7zM13 37h3v1h-3zM21 37h1v1h-1zM23 37h6v1h-6zM31 37h7v1h-7z';
 
 @customElement('attendee-photos-block')
 export class AttendeePhotosBlock extends ThemedElement {
@@ -80,8 +80,8 @@ export class AttendeePhotosBlock extends ThemedElement {
         .scan svg {
           display: block;
           flex: none;
-          width: 117px;
-          height: 117px;
+          width: 129px;
+          height: 129px;
           background: #fff;
           shape-rendering: crispEdges;
         }
@@ -106,8 +106,8 @@ export class AttendeePhotosBlock extends ThemedElement {
             text-align: center;
           }
           .scan svg {
-            width: 156px;
-            height: 156px;
+            width: 172px;
+            height: 172px;
           }
         }
       `,
@@ -131,8 +131,8 @@ export class AttendeePhotosBlock extends ThemedElement {
             >
           </div>
           <div class="scan">
-            <svg viewBox="0 0 39 39" aria-hidden="true" focusable="false">
-              <rect width="39" height="39" fill="#fff"></rect>
+            <svg viewBox="0 0 43 43" aria-hidden="true" focusable="false">
+              <rect width="43" height="43" fill="#fff"></rect>
               <path d=${qrPath} fill="#000"></path>
             </svg>
             <p>Scan to open the album on your phone.</p>
