@@ -584,8 +584,8 @@ export class Y2kPage extends ThemedElement {
             <div>
               <h2 id="party-heading">Meet the mood makers.</h2>
               <p>
-                Big love to Angel, Maryna and Vika for bringing the Y2K energy to DevFest. Get ready
-                for the afterparty and networking from <strong>19:15</strong>.
+                Big love to Angel, Maryna and Viktoriia for bringing the Y2K energy to DevFest. Get
+                ready for the afterparty and networking from <strong>19:15</strong>.
               </p>
               <div class="party-names" aria-label="Meet the organizers">
                 <a
@@ -606,8 +606,8 @@ export class Y2kPage extends ThemedElement {
                   href="https://www.linkedin.com/in/viktoriia-vinnykova/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Vika on LinkedIn (opens in a new tab)"
-                  >Vika ↗</a
+                  aria-label="Viktoriia on LinkedIn (opens in a new tab)"
+                  >Viktoriia ↗</a
                 >
               </div>
             </div>
@@ -615,7 +615,7 @@ export class Y2kPage extends ThemedElement {
               <div class="party-artwork">
                 <img
                   src="/images/y2k/party-crew-1.webp"
-                  alt="Y2K-style illustration celebrating Angel, Maryna and Vika together"
+                  alt="Y2K-style illustration celebrating Angel, Maryna and Viktoriia together"
                   width="1440"
                   height="810"
                   loading="lazy"
@@ -706,37 +706,63 @@ export class Y2kPage extends ThemedElement {
           </section>
           <section id="build" tabindex="-1">
             <div class="eyebrow">03 / Make the internet weird again</div>
-            <h2>The Vibe Coding Game Challenge</h2>
+            <h2>The Y2K Vibe Coding Challenge</h2>
             <p class="lede">
-              Bring back the golden age of browser games. Build a fun, playable game inspired by the
-              2000s, or give an old favourite a very modern twist. AI coding assistants, frameworks
-              and templates are welcome.
+              Make something wonderfully weird for the web. Choose a playful frontend experiment or
+              a browser game, then give everyone a public link they can actually try. The Y2K Vibe
+              Zone is developed by Viktoriia.
             </p>
             <div class="split">
               <div>
+                <h3>Choose your playground</h3>
+                <p>
+                  <strong>Y2K Vibe Lab:</strong> build a functional interactive frontend: a
+                  component, mini-site, app, animation, visual experiment or playful tool. Think a
+                  dramatic age picker, a chaotic button, a nostalgic loading screen or a website
+                  straight out of the 2000s. Bring imagination and make it work.
+                </p>
+                <p>
+                  <strong>Y2K Arcade:</strong> build an actual playable browser game. Remix Snake or
+                  Pong, raise a tiny virtual pet, or make a quiz, platformer or reaction game. Bring
+                  originality, nostalgia and a game people enjoy playing.
+                </p>
+                <h3>How to take part</h3>
                 <ol class="steps">
                   <li>
-                    <strong>Make it fun and playable.</strong> A tiny game with a good idea beats an
-                    unfinished giant.
+                    <strong>Build with whatever helps.</strong> AI coding assistants, frameworks,
+                    libraries and templates are welcome. Handwritten code is not a requirement.
                   </li>
                   <li>
-                    <strong>Put it on the web.</strong> Share a public link that opens in a browser.
-                    No downloads or complicated setup.
+                    <strong>Publish something people can try.</strong> Your project needs a public
+                    URL. Arcade games must run in the browser without downloads, installation or
+                    complicated setup.
                   </li>
                   <li>
-                    <strong>Explain the controls.</strong> Include the objective and how to play on
-                    your game’s page.
+                    <strong>Put instructions on your project page.</strong> For a game, explain the
+                    goal, controls and how to win or make progress. Let a new player get started
+                    without needing you beside them.
+                  </li>
+                  <li>
+                    <strong>Have your project name and link ready.</strong> Submission access will
+                    appear here once confirmed. Start building now; there is no live submission form
+                    on this page yet.
                   </li>
                 </ol>
-                <p>
-                  Prefer playful interfaces to games? The <strong>Y2K Vibe Lab</strong> is for
-                  strange components, interactive experiments and nostalgic mini-sites.
+                <p class="note">
+                  <strong>Prizes &amp; results:</strong> DevFest swag prizes, with winners announced
+                  at the closing presentation. The submission deadline, voting process and detailed
+                  selection rules are still to be confirmed here.
+                </p>
+                <p class="small">
+                  The planned showcase will display project names and public project links.
+                  Participant names supplied for registration will remain private. Submission and
+                  voting features are not open yet.
                 </p>
                 <p class="note">
-                  The GDG Warsaw LinkedIn community will choose the winners, with results at the
-                  closing presentation and DevFest swag for winners. The submission link and
-                  detailed voting instructions will appear here once confirmed. For now, start
-                  building and keep your playable link handy.
+                  <strong>Different activities, different adventures.</strong> Viktoriia’s DevFest
+                  Quest is a separate initiative. Michał’s scratch-card Card Hunt is separate too:
+                  collecting cards or playing the demo games above does not submit a project, cast a
+                  vote or enter you into the challenge.
                 </p>
               </div>
               <div class="panel">
@@ -768,7 +794,8 @@ export class Y2kPage extends ThemedElement {
               target="_blank"
               rel="noopener noreferrer"
               >Piotr Prus’s holographic scratch card ↗</a
-            >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>.
+            >. Separately, the Y2K Vibe Zone and DevFest Quest are developed by
+            <strong>Viktoriia</strong>.
           </div>
         </div>
       </div>

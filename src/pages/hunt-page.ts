@@ -534,7 +534,8 @@ export class HuntPage extends ThemedElement {
               href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
               aria-label="Piotr Prus’s scratch card repository (opens in a new tab)"
               >Piotr Prus’s scratch card</a
-            >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>.
+            >. The Y2K Vibe Zone and DevFest Quest are separate initiatives developed by
+            <strong>Viktoriia</strong>.
           </p>
         </footer>
       </div>
