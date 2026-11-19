@@ -701,6 +701,24 @@ export class Y2kPage extends ThemedElement {
               </div>
             </div>
           </section>
+          <aside class="panel pin-hunt-note" aria-labelledby="pin-hunt-heading">
+            <div class="eyebrow">Out in the real world</div>
+            <h3 id="pin-hunt-heading">Meet Pin Hunt.</h3>
+            <p>
+              A separate hunt for physical pins around DevFest. Check the Pin Hunt site for how to
+              play and when it starts.
+            </p>
+            <div class="actions">
+              <a
+                class="button"
+                href="https://pinhunt.gdgwarsaw.pl/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Explore Pin Hunt (opens in a new tab)"
+                >Explore Pin Hunt ↗</a
+              >
+            </div>
+          </aside>
           <section id="play" tabindex="-1">
             <div class="eyebrow">02 / A little warm-up</div>
             <h2>Insert coin? Nah. Just play.</h2>

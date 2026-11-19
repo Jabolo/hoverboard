@@ -378,6 +378,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           background: var(--terminal-panel, var(--secondary-background-color));
         }
 
+        .pin-hunt-note {
+          margin-top: 28px;
+          padding-top: 24px;
+          border-top: 1px solid var(--divider-color);
+        }
+        .pin-hunt-note h3 {
+          margin: 0;
+          font-size: 22px;
+        }
+
         .y2k-inner {
           max-width: 980px;
           margin: 0 auto;
@@ -685,6 +695,21 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             <a class="y2k-link" href="/hunt/c/pvbusdb/">Open the Vibe Lab prompt</a>
             <a class="y2k-link" href="/hunt/c/rmz75w8/">Play at the Arcade</a>
           </div>
+          <aside class="pin-hunt-note" aria-labelledby="pin-hunt-heading">
+            <h3 id="pin-hunt-heading">Meet Pin Hunt.</h3>
+            <p>
+              A separate hunt for physical pins around DevFest. Check the Pin Hunt site for how to
+              play and when it starts.
+            </p>
+            <a
+              class="y2k-link"
+              href="https://pinhunt.gdgwarsaw.pl/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Explore Pin Hunt (opens in a new tab)"
+              >Explore Pin Hunt ↗</a
+            >
+          </aside>
         </div>
       </section>
       <linkedin-updates-block></linkedin-updates-block>

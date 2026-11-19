@@ -85,6 +85,27 @@ try {
       await h.locator('#discover').evaluate((el) => el === el.getRootNode().activeElement),
       true,
     );
+    for (const route of ['/y2k/', '/']) {
+      await p.goto(base + route);
+      const link = p.getByRole('link', {
+        name: 'Explore Pin Hunt (opens in a new tab)',
+        exact: true,
+      });
+      await link.scrollIntoViewIfNeeded();
+      assert.equal(await link.getAttribute('href'), 'https://pinhunt.gdgwarsaw.pl/');
+      assert.equal(await link.getAttribute('target'), '_blank');
+      assert.match(await link.getAttribute('rel'), /noopener/);
+      assert.ok((await link.boundingBox()).height >= 44);
+      await link.focus();
+      assert.equal(await link.evaluate((el) => el === el.getRootNode().activeElement), true);
+      await p
+        .locator('.pin-hunt-note')
+        .screenshot({ path: `/tmp/pin-hunt-${route === '/' ? 'home' : 'y2k'}-${width}.png` });
+      assert.equal(
+        await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+        true,
+      );
+    }
     assert.deepEqual(errors, []);
     console.log(
       'PASS order, real first-card reveal+save, keyboard anchors, mobile targets and overflow',
