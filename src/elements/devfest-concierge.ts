@@ -170,6 +170,9 @@ export class DevfestConcierge extends ThemedElement {
       css`
         :host {
           display: block;
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
           container-type: inline-size;
           --_bg: var(--primary-background-color, #070c14);
           --_panel: var(--terminal-panel, #0d1727);
@@ -209,14 +212,19 @@ export class DevfestConcierge extends ThemedElement {
 
         /* Compact 1-bar inline launcher */
         .launcher-shell {
+          width: 100%;
           max-width: 1216px;
+          min-width: 0;
           margin: 0 auto;
           padding: 10px 16px;
         }
 
         .launcher-frame {
           display: grid;
+          grid-template-columns: minmax(0, 1fr);
           gap: 8px;
+          width: 100%;
+          min-width: 0;
           padding: 10px 12px;
           border: 1px solid var(--_line);
           border-radius: 10px;
@@ -228,6 +236,8 @@ export class DevfestConcierge extends ThemedElement {
           grid-template-columns: minmax(0, 1fr) auto;
           gap: 8px;
           align-items: center;
+          width: 100%;
+          min-width: 0;
         }
 
         .input-wrap {
@@ -308,6 +318,9 @@ export class DevfestConcierge extends ThemedElement {
           display: flex;
           flex-wrap: nowrap;
           gap: 8px;
+          width: 100%;
+          min-width: 0;
+          max-width: 100%;
           overflow-x: auto;
           scroll-snap-type: x proximity;
           scrollbar-width: none;
@@ -352,9 +365,7 @@ export class DevfestConcierge extends ThemedElement {
           }
 
           .launcher-frame {
-            grid-template-columns: minmax(280px, 1fr) auto;
-            align-items: center;
-            gap: 12px;
+            padding: 12px 14px;
           }
         }
 
@@ -473,7 +484,9 @@ export class DevfestConcierge extends ThemedElement {
 
         .dialog-controls {
           display: grid;
+          grid-template-columns: minmax(0, 1fr);
           gap: 8px;
+          min-width: 0;
           padding: 10px 14px;
           border-bottom: 1px solid var(--_line);
           background: var(--_panel);
@@ -482,8 +495,11 @@ export class DevfestConcierge extends ThemedElement {
         .dialog-body {
           flex: 1 1 auto;
           overflow-y: auto;
+          min-width: 0;
           padding: 14px 14px max(16px, env(safe-area-inset-bottom, 0px));
           display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          align-content: start;
           gap: 14px;
         }
 
