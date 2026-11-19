@@ -20,6 +20,19 @@ on hold until their separate physical-production gate is lifted.
   history for its value. Secret creation, IAM changes and versioning are
   production changes requiring separate approval. This task has not performed
   them.
+- Provision a separate `HUNT_ACCESS_CODE_PRODUCTION` secret: 32
+  cryptographically random bytes encoded as unpadded base64url (43 characters).
+  Share the code with authorized testers through an agreed private channel;
+  keep it out of URLs, QR codes, logs, screenshots and source control. Locked
+  is the default; do not set `HUNT_ACCESS_MODE=open` during restricted testing.
+  With the gate deployed, server time opens access automatically at 08:00 on
+  21 November 2026 Europe/Warsaw (07:00 UTC), even without any further action.
+  The separate Early Bird and lunch card windows continue to apply.
+- The gate protects the normal Y2K/Card Hunt interface and the production API.
+  Static frontend assets and generated HTML are public and can expose content;
+  the already deployed separate preview also remains accessible and exposes
+  its own catalog. Agree how to handle that preview before claiming secrecy.
+  Previously cached pages and installed service workers can retain old assets.
 - Production and preview use distinct configuration. The dedicated preview
   deliberately does not route Cloud credit requests to the live backend.
   Generic PR previews omit the production Hunt API rewrite; their Hunt UI
@@ -38,7 +51,8 @@ on hold until their separate physical-production gate is lifted.
    npx firebase deploy --only functions:hunt-preview:y2kCardHunt --project gdg-warsaw-devfest26-web
    ```
 
-   Verify the deployment and runtime secret access before releasing Hosting.
+   Verify both secrets and confirm the direct function rejects unauthenticated
+   card requests before releasing Hosting.
    Do not deploy all functions: the preview and existing functions have their
    own configuration and lifecycle.
 
@@ -46,7 +60,8 @@ on hold until their separate physical-production gate is lifted.
    frontend and Hosting configuration using the existing main release workflow.
    Pushing to main triggers production Hosting; it does not deploy Functions.
 4. Verify `/y2k/`, `/hunt/`, direct card links with and without trailing slash,
-   API catalog and card responses, preview-only IDs being rejected, and the
+   API catalog and card responses (including blocked and unlocked states),
+   preview-only IDs being rejected, and the
    existing `/api/cloud-credit` route. Test the approved time windows at both
    boundaries and verify all 12 private mappings without publishing the list.
    Use appropriate authorized test data and do not claim or consume any
@@ -55,6 +70,15 @@ on hold until their separate physical-production gate is lifted.
    checks, produce and decode a real-size QR proof and write one NFC sample;
    validate both phones before a batch. The preview URL expires and must not
    be encoded for the event.
+
+6. Confirm the server-time transition at 08:00 Warsaw on 21 November in a
+   controlled test before production release, then verify the automatic opening
+   at event time from fresh and existing browsers, including direct function
+   access. `HUNT_ACCESS_MODE=open` is an explicit early-open override that
+   requires its own deployment and authorization. Both bound secrets must
+   remain available. The temporary `/y2k` noindex Hosting headers do not change
+   automatically at 08:00; coordinate their later removal if search indexing is
+   desired. Backend and Hosting changes are separate operations.
 
 ## Rollback
 

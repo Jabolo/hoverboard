@@ -38,6 +38,13 @@ test('production routes and both function codebases are configured without remov
     );
     assert.ok(headers.some(({ key, value }) => key === 'Cache-Control' && value === 'no-store'));
   }
+  for (const source of ['/y2k', '/y2k/**']) {
+    const headers = config.hosting.headers.find((rule) => rule.source === source).headers;
+    assert.ok(
+      headers.some(({ key, value }) => key === 'X-Robots-Tag' && value === 'noindex, nofollow'),
+    );
+    assert.ok(headers.some(({ key, value }) => key === 'Cache-Control' && value === 'no-store'));
+  }
 });
 
 test('PR preview strips the production hunt function while retaining other routing', () => {

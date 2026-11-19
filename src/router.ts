@@ -34,9 +34,9 @@ export const selectRouteName = (pathname: string): string => {
 const ROUTES: Route[] = [
   {
     path: '/y2k',
-    component: 'y2k-page',
+    component: 'hunt-access-page',
     action: async () => {
-      await import('./pages/y2k-page.js');
+      await import('./pages/hunt-access-page.js');
     },
   },
   {
@@ -48,16 +48,16 @@ const ROUTES: Route[] = [
   },
   {
     path: '/hunt',
-    component: 'hunt-page',
+    component: 'hunt-access-page',
     action: async () => {
-      await import('./pages/hunt-page.js');
+      await import('./pages/hunt-access-page.js');
     },
   },
   {
     path: '/hunt/c/:token',
-    component: 'hunt-page',
+    component: 'hunt-access-page',
     action: async () => {
-      await import('./pages/hunt-page.js');
+      await import('./pages/hunt-access-page.js');
     },
   },
   {

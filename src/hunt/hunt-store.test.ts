@@ -3,6 +3,7 @@ import {
   getHuntProgress,
   HUNT_STORAGE_KEY,
   huntStorageAvailable,
+  huntGroups,
   normalizeHuntCode,
   rememberHuntCard,
   requestHuntCard,
@@ -48,4 +49,40 @@ describe('browser card collection', () => {
     expect(normalizeHuntCode('../../test001')).toBe('');
     await expect(requestHuntCard('not a code')).resolves.toEqual({ status: 'invalid' });
   });
+});
+
+it('sends the same-origin session on collection, card, and reveal requests', async () => {
+  const originalFetch = global.fetch;
+  const fetchMock = jest.fn<typeof fetch>().mockResolvedValue({
+    ok: true,
+    json: async () => ({}),
+  } as Response);
+  global.fetch = fetchMock;
+  try {
+    await huntGroups();
+    await requestHuntCard('test001');
+    await requestHuntCard('test001', 'POST');
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    for (const [, options] of fetchMock.mock.calls) {
+      expect(options).toEqual(
+        expect.objectContaining({ credentials: 'same-origin', cache: 'no-store' }),
+      );
+    }
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+it('notifies the gate when a card session has expired', async () => {
+  const originalFetch = global.fetch;
+  global.fetch = jest.fn<typeof fetch>().mockResolvedValue({ ok: false, status: 401 } as Response);
+  const listener = jest.fn();
+  window.addEventListener('hunt-access-expired', listener);
+  try {
+    await expect(requestHuntCard('test001')).resolves.toEqual({ status: 'unavailable' });
+    expect(listener).toHaveBeenCalledTimes(1);
+  } finally {
+    window.removeEventListener('hunt-access-expired', listener);
+    global.fetch = originalFetch;
+  }
 });

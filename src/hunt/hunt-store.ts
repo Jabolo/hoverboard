@@ -149,11 +149,12 @@ async function huntRequest(path: string, method: 'GET' | 'POST', signal?: AbortS
   try {
     const response = await fetch(path, {
       method,
-      credentials: 'omit',
+      credentials: 'same-origin',
       cache: 'no-store',
       headers: { Accept: 'application/json' },
       signal: signal ?? null,
     });
+    if (response.status === 401) window.dispatchEvent(new Event('hunt-access-expired'));
     if (!response.ok && response.status !== 404) return null;
     const data: unknown = await response.json();
     return record(data) ? data : null;
