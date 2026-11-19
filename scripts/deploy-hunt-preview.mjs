@@ -22,7 +22,7 @@ const config = {
     {
       source: 'hunt-functions',
       codebase: 'hunt-preview',
-      ignore: ['node_modules', '.git', '.env*', '*.test.js'],
+      ignore: ['node_modules', '.git', '.env*', '.secret*', '*.test.js'],
     },
   ],
   hosting: {
@@ -30,7 +30,7 @@ const config = {
     rewrites: [
       { source: apiSource, function: { functionId: 'y2kCardHuntPreview', region: 'us-central1' } },
       ...huntPaths.map((source) => ({ source, destination: '/index.html' })),
-      ...base.rewrites.filter((rule) => !rule.function),
+      ...base.rewrites.filter((rule) => !rule.function && !huntPaths.includes(rule.source)),
     ],
     headers: [
       ...base.headers,
@@ -61,7 +61,7 @@ const configPath = `.env.firebase-hunt-preview-${process.pid}.json`;
 writeFileSync(configPath, JSON.stringify(config), { flag: 'wx' });
 const firebaseArgs =
   mode === 'api'
-    ? ['deploy', '--only', 'functions:hunt-preview']
+    ? ['deploy', '--only', 'functions:hunt-preview:y2kCardHuntPreview']
     : mode === 'hosting'
       ? ['hosting:channel:deploy', channel, '--expires', '14d', '--no-authorized-domains']
       : ['emulators:start', '--only', 'hosting,functions'];

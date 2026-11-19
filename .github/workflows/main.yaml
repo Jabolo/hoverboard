@@ -63,6 +63,12 @@ jobs:
       - name: Running tests
         run: npm run test
 
+      - name: Install Card Hunt function dependencies
+        run: npm ci --prefix hunt-functions --ignore-scripts
+
+      - name: Test Card Hunt function and routing
+        run: npm test --prefix hunt-functions
+
       - name: Test live-status diagnostic
         run: npm run verify:live:test
 

@@ -3,10 +3,19 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "functions": {
-    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
-    "source": "functions"
-  },
+  "functions": [
+    {
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"],
+      "source": "functions",
+      "codebase": "default",
+      "ignore": ["node_modules", ".git", ".secret*"]
+    },
+    {
+      "source": "hunt-functions",
+      "codebase": "hunt-preview",
+      "ignore": ["node_modules", ".git", ".env*", ".secret*", "*.test.js"]
+    }
+  ],
   "hosting": {
     "site": "gdg-warsaw-devfest26-web",
     "public": "dist",
@@ -25,8 +34,26 @@
     ],
     "rewrites": [
       {
+        "source": "/api/hunt/**",
+        "function": {
+          "functionId": "y2kCardHunt",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/hunt",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/hunt/**",
+        "destination": "/index.html"
+      },
+      {
         "source": "/api/cloud-credit",
-        "function": { "functionId": "cloudCredit", "region": "us-central1" }
+        "function": {
+          "functionId": "cloudCredit",
+          "region": "us-central1"
+        }
       },
       {
         "source": "/sessions",
@@ -196,6 +223,40 @@
           {
             "key": "Cache-Control",
             "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/hunt",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "no-referrer"
+          },
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "source": "/hunt/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "no-referrer"
+          },
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
           }
         ]
       }

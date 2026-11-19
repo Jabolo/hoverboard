@@ -24,5 +24,7 @@ jobs:
           project_id: gdg-warsaw-devfest26-web
           workload_identity_provider: projects/94592063137/locations/global/workloadIdentityPools/github-actions/providers/hoverboard
           service_account: github-actions-hosting@gdg-warsaw-devfest26-web.iam.gserviceaccount.com
+      - name: Generate isolated preview configuration
+        run: node scripts/generate-pr-preview-config.mjs
       - name: Deploy Firebase Hosting preview
-        run: npx --no-install firebase hosting:channel:deploy "pr-${{ github.event.number }}" --project gdg-warsaw-devfest26-web --expires 7d
+        run: npx --no-install firebase hosting:channel:deploy "pr-${{ github.event.number }}" --project gdg-warsaw-devfest26-web --expires 7d --config .env.firebase-pr-preview.json
