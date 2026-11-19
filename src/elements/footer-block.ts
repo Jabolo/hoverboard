@@ -1,4 +1,3 @@
-import '../hunt/clue.js';
 import { customElement } from '@polymer/decorators';
 import '@polymer/paper-fab';
 import { html, PolymerElement } from '@polymer/polymer';
@@ -60,6 +59,28 @@ export class FooterBlock extends PolymerElement {
           outline-offset: 3px;
         }
 
+        .footer-token {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          margin: 12px 20px 4px;
+          border: 1px solid #998ca7;
+          border-radius: 8px;
+          color: #302840;
+          background: linear-gradient(130deg, #c4cedb, #ddc5d5 48%, #bdd8cc);
+          transform: rotate(-5deg);
+          text-decoration: none;
+        }
+        .footer-token:hover {
+          transform: rotate(0deg);
+        }
+        .footer-token:focus-visible {
+          outline: 3px solid #eaf87f;
+          outline-offset: 4px;
+        }
+
         .fab {
           position: absolute;
           right: 25px;
@@ -87,12 +108,17 @@ export class FooterBlock extends PolymerElement {
           ></paper-fab>
         </div>
         <footer-social layout flex flex-auto horizontal wrap></footer-social>
-        <hunt-clue
-          href="/hunt/c/f00t3rx/"
-          label="You found the end credits"
-          hint="Still scrolling? There’s one more card down here."
-          glyph="💾"
-        ></hunt-clue>
+        <a class="footer-token" href="/hunt/c/f00t3rx/" aria-label="Inspect the floppy disk">
+          <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" focusable="false">
+            <path d="M6 3h17l6 6v20H3V3z" fill="none" stroke="currentColor" stroke-width="2" />
+            <path
+              d="M9 3v10h13V3M8 29V18h16v11M17 5v5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+          </svg>
+        </a>
         <footer-rel></footer-rel>
         <footer-nav layout horizontal wrap justified center></footer-nav>
       </div>

@@ -380,11 +380,60 @@ export class Y2kPage extends ThemedElement {
         .score {
           min-height: 26px;
         }
+        .idea-cartridge {
+          align-self: start;
+          padding: clamp(22px, 3vw, 32px);
+          border: 1px solid #75648c;
+          border-radius: 14px 14px 28px 14px;
+          background: linear-gradient(145deg, #30233f, #211a35 80%);
+          box-shadow:
+            inset 0 1px 0 #ddcfe922,
+            0 7px 0 #0c0818;
+        }
+        .cartridge-slot {
+          width: 58%;
+          height: 7px;
+          margin: 0 auto 26px;
+          border: 1px solid #59476b;
+          border-radius: 4px;
+          background: #120d20;
+        }
+        .cartridge-label {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          color: #d8cae5;
+          font: 12px monospace;
+        }
+        .cartridge-label h3 {
+          margin: 0;
+          font: inherit;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .cartridge-label span {
+          white-space: nowrap;
+          color: #eaf87f;
+        }
         .prompt {
-          font-size: 24px;
-          line-height: 1.45;
-          min-height: 138px;
+          font-size: clamp(23px, 2.4vw, 29px);
+          line-height: 1.4;
+          min-height: 7em;
+          margin: 24px 0;
           color: #fff8ec !important;
+        }
+        .idea-cartridge button {
+          width: 100%;
+          background: #eaf87f;
+          color: #21193a;
+          border-color: #eaf87f;
+        }
+        .idea-cartridge button:hover {
+          background: #f5ffa9;
+        }
+        .idea-cartridge .small {
+          margin: 16px 0 0;
         }
         .steps {
           counter-reset: step;
@@ -493,7 +542,14 @@ export class Y2kPage extends ThemedElement {
         .credit {
           padding: 28px 0 48px;
           font-size: 13px;
-          color: #ccbbdf;
+          line-height: 1.65;
+          color: #bfb0ce;
+        }
+        .credit p {
+          margin: 6px 0;
+        }
+        .credit a {
+          text-decoration-color: #75648c;
         }
         @media (max-width: 760px) {
           .wrap {
@@ -683,8 +739,7 @@ export class Y2kPage extends ThemedElement {
             <h2>The Y2K Vibe Coding Challenge</h2>
             <p class="lede">
               Make something wonderfully weird for the web. Choose a playful frontend experiment or
-              a browser game, then give everyone a public link they can actually try. The Y2K Vibe
-              Zone is developed by Viktoriia.
+              a browser game, then give everyone a public link they can actually try.
             </p>
             <div class="split">
               <div>
@@ -732,30 +787,29 @@ export class Y2kPage extends ThemedElement {
                   Participant names supplied for registration will remain private. Submission and
                   voting features are not open yet.
                 </p>
-                <p class="note">
-                  <strong>Different activities, different adventures.</strong> Viktoriia’s DevFest
-                  Quest is a separate initiative. Michał’s scratch-card Card Hunt is separate too:
-                  collecting cards or playing the demo games above does not submit a project, cast a
-                  vote or enter you into the challenge.
+                <p class="small">
+                  Playing the demos or collecting cards does not submit a challenge entry.
                 </p>
               </div>
-              <div class="panel">
-                <div class="eyebrow">
-                  Idea cartridge / ${String(this.promptIndex + 1).padStart(2, '0')}
+              <aside class="idea-cartridge" aria-labelledby="idea-heading">
+                <div class="cartridge-slot" aria-hidden="true"></div>
+                <div class="cartridge-label">
+                  <h3 id="idea-heading">Idea cartridge</h3>
+                  <span
+                    >${String(this.promptIndex + 1).padStart(2, '0')} /
+                    ${String(prompts.length).padStart(2, '0')}</span
+                  >
                 </div>
-                <h3>Need a starting point?</h3>
                 <p class="prompt" aria-live="polite">${prompts[this.promptIndex]}</p>
                 <button
                   @click=${() => {
                     this.promptIndex = (this.promptIndex + 1) % prompts.length;
                   }}
                 >
-                  Load another idea ↻
+                  Load another idea
                 </button>
-                <p class="small">
-                  These are inspiration, not assigned tasks. Bring your own weird idea.
-                </p>
-              </div>
+                <p class="small">Remix it. Make it yours. Or bring a completely different idea.</p>
+              </aside>
             </div>
           </section>
           <div class="party-spotlight" aria-labelledby="party-heading">
@@ -802,17 +856,19 @@ export class Y2kPage extends ThemedElement {
             </div>
           </div>
           <div class="credit">
-            Card Hunt prepared by
-            <a href="https://www.linkedin.com/in/m-jab/" target="_blank" rel="noopener noreferrer"
-              >Michał Jabłoński ↗</a
-            >, inspired by
-            <a
-              href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
-              target="_blank"
-              rel="noopener noreferrer"
-              >Piotr Prus’s holographic scratch card ↗</a
-            >. Separately, the Y2K Vibe Zone and DevFest Quest are developed by
-            <strong>Viktoriia</strong>.
+            <p>
+              Card Hunt by
+              <a href="https://www.linkedin.com/in/m-jab/" target="_blank" rel="noopener noreferrer"
+                >Michał Jabłoński</a
+              >. Scratch inspiration:
+              <a
+                href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Piotr Prus</a
+              >.
+            </p>
+            <p>Y2K Vibe Zone &amp; DevFest Quest: Viktoriia.</p>
           </div>
         </div>
       </div>

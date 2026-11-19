@@ -145,7 +145,7 @@ try {
       ['/sessions/', 'Random access', 'auxq7ah'],
       ['/sessions/CFP-050/', 'Inspect debug signal', '2ejjjgf'],
       ['/team/', 'Crew cache discovered', 'cr3w8up'],
-      ['/y2k/', 'You found the end credits', 'f00t3rx'],
+      ['/y2k/', 'Inspect the floppy disk', 'f00t3rx'],
     ]) {
       await page.goto(base + route);
       const link = page.getByRole('link', { name, exact: true }).first();
@@ -174,7 +174,7 @@ try {
     // Earned cards restore locally before the remote catalog finishes loading.
     await hunt.locator('li.unknown').nth(21).waitFor({ state: 'attached' });
     assert.equal(await hunt.locator('li.unknown').count(), 22, '25 total minus 3 new earned cards');
-    await hunt.getByText('DevFest Quest idea:', { exact: false }).waitFor();
+    await hunt.getByText('Viktoriia', { exact: true }).waitFor();
     await page.reload();
     await hunt.getByRole('button', { name: /Shy Browser Tab Scratch again/ }).waitFor();
     assert.deepEqual(errors, []);

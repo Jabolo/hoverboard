@@ -19,9 +19,10 @@ for (const rule of [
   'Participant names',
   'will remain private',
   'not open yet',
-  'separate initiative',
+  'does not submit a challenge entry',
 ])
   assert.ok(page.includes(rule), rule);
+assert.doesNotMatch(page, /Different activities, different adventures/);
 assert.doesNotMatch(page, /LinkedIn community will choose|docs\.google\.com\/document/);
 assert.match(page, /deadline, voting process and[\s\S]*?still to be confirmed/);
 console.log(
