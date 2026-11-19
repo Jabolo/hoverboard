@@ -690,6 +690,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
+      <cloud-credit-block></cloud-credit-block>
       <schedule-block></schedule-block>
       <nav class="attendee-links" aria-label="Event day links">
         <div class="attendee-links-inner">
@@ -704,7 +705,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       </nav>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
-      <cloud-credit-block></cloud-credit-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
