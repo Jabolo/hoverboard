@@ -640,8 +640,9 @@ export class Y2kPage extends ThemedElement {
               target="_blank"
               rel="noopener noreferrer"
               >Piotr Prus’s holographic scratch card ↗</a
-            >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>, with visual
-            inspiration from <strong>Angel</strong>’s mood board.
+            >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>.
+            <strong>Angel</strong>
+            shared the visual mood board and proposed the duck decorating challenge.
           </div>
         </div>
       </div>
