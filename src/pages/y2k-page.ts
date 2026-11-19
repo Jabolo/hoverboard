@@ -19,7 +19,6 @@ const symbols = ['💿', '💾', '🕹️', '📡'];
 @customElement('y2k-page')
 export class Y2kPage extends ThemedElement {
   @state() private promptIndex = 0;
-  @state() private partyArt = 0;
   @state() private deck = this.shuffle();
   @state() private flipped: number[] = [];
   @state() private matched: number[] = [];
@@ -484,28 +483,6 @@ export class Y2kPage extends ThemedElement {
             transform: translateX(100%);
           }
         }
-        .party-options {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 6px;
-          margin-top: 10px;
-        }
-        .party-options span {
-          margin-right: 4px;
-          color: #d8c8e5;
-          font-size: 13px;
-        }
-        .party-options button {
-          min-width: 44px;
-          min-height: 44px;
-          padding: 8px 12px;
-        }
-        .party-options button[aria-pressed='true'] {
-          background: #eaf87f;
-          color: #21193a;
-          border-color: #eaf87f;
-        }
         .credit {
           padding: 28px 0 48px;
           font-size: 13px;
@@ -637,29 +614,12 @@ export class Y2kPage extends ThemedElement {
             <div>
               <div class="party-artwork">
                 <img
-                  src="/images/y2k/party-crew-${this.partyArt + 1}.webp"
+                  src="/images/y2k/party-crew-1.webp"
                   alt="Y2K-style illustration celebrating Angel, Maryna and Vika together"
                   width="1440"
                   height="810"
                   loading="lazy"
                 />
-              </div>
-              <div class="party-options" role="group" aria-label="Choose illustration">
-                <span>Choose a look</span>
-                ${[0, 1, 2, 3].map(
-                  (index) => html`
-                    <button
-                      type="button"
-                      aria-label=${`Show illustration ${index + 1}`}
-                      aria-pressed=${this.partyArt === index}
-                      @click=${() => {
-                      this.partyArt = index;
-                    }}
-                    >
-                      ${index + 1}
-                    </button>
-                  `,
-                )}
               </div>
             </div>
           </div>
