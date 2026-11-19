@@ -80,6 +80,7 @@ try {
     assert.equal(await game.getByRole('button', { name: 'Next signal', exact: true }).count(), 0);
     assert.match(await game.locator('.scoreboard').innerText(), /Time: 30s/);
     assert.equal(await game.locator('.lamp.clear').count(), 0);
+    assert.equal(await game.locator('.lamp.hit, strong.clear').count(), 0);
     assert.equal(await game.locator('.lamps').getAttribute('aria-hidden'), 'true');
     await game.screenshot({ path: `/tmp/signal-no-hint-${width}.png` });
     for (let n = 0; n < 3; n++) {
@@ -91,6 +92,13 @@ try {
         await p.clock.runFor(await game.evaluate((el) => el.speed));
       assert.equal(await game.locator('.lamp.clear').count(), 0);
       assert.equal(await game.locator('.lamp.active').count(), 1);
+      assert.equal(await game.locator('.lamp.active.hit').count(), 1);
+      assert.equal(await game.locator('strong.clear').innerText(), 'Clear signal');
+      assert.equal(
+        await game.locator('.lamp.hit').evaluate((el) => getComputedStyle(el).backgroundColor),
+        await game.locator('strong.clear').evaluate((el) => getComputedStyle(el).color),
+      );
+      await game.screenshot({ path: `/tmp/signal-green-${width}.png` });
       const before = await game.evaluate((el) => ({ target: el.target, speed: el.speed }));
       await game.getByRole('button', { name: 'Catch signal', exact: true }).click();
       assert.equal(await game.evaluate((el) => el.score), n + 1);

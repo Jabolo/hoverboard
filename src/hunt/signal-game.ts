@@ -103,6 +103,12 @@ export class HuntSignalGame extends ThemedElement {
         .lamp.active {
           background: #e2c9ff;
         }
+        .dial strong.clear {
+          color: #8df3a9;
+        }
+        .lamp.active.hit {
+          background: #8df3a9;
+        }
         .lamp.active.clear {
           background: #e7f778;
         }
@@ -373,9 +379,10 @@ export class HuntSignalGame extends ThemedElement {
       </div>
       <div class="dial" aria-live=${this.mode === 'normal' && this.stepMode ? 'polite' : 'off'}>
         <div class="lamps" aria-hidden="true">
-          ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${this.mode === 'normal' && index === this.target ? 'clear' : ''}"></span>`)}
+          ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${this.mode === 'normal' && index === this.target ? 'clear' : ''} ${this.mode === 'hardcore' && this.running && this.signal === this.target && index === this.signal ? 'hit' : ''}"></span>`)}
         </div>
         <strong
+          class=${this.mode === 'hardcore' && this.running && this.signal === this.target ? 'clear' : ''}
           >${this.running ? (this.signal === this.target ? 'Clear signal' : signals.filter((_, index) => index !== 1)[this.signal % 3]) : 'Ready when you are'}</strong
         >
       </div>

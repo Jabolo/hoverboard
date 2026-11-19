@@ -9,7 +9,9 @@ import { fileURLToPath } from 'node:url';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 import { createHuntHandler } from '../hunt-functions/handler.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const env = parseEnv(await readFile(root + '/hunt-functions/.env', 'utf8'));
+const env = parseEnv(
+  await readFile(process.env.HUNT_ENV_FILE || root + '/hunt-functions/.env', 'utf8'),
+);
 const handler = createHuntHandler({
   includePreview: true,
   physicalCards: JSON.parse(env.HUNT_PHYSICAL_CARDS),

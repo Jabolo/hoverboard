@@ -740,6 +740,49 @@ export class Y2kPage extends ThemedElement {
                 <p class="small">A new game resets this board. No account or leaderboard.</p>
               </div>
             </div>
+            <div class="party-spotlight" aria-labelledby="party-heading">
+              <div>
+                <h2 id="party-heading">Meet the mood makers.</h2>
+                <p>
+                  Big love to Angel, Maryna and Viktoriia for bringing the Y2K energy to DevFest.
+                  Get ready for the afterparty and networking from <strong>19:15</strong>.
+                </p>
+                <div class="party-names" aria-label="Meet the organizers">
+                  <a
+                    href="https://www.linkedin.com/in/anhelina-sudenkova/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Angel on LinkedIn (opens in a new tab)"
+                    >Angel ↗</a
+                  >
+                  <a
+                    href="https://www.linkedin.com/in/kamienieva"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Maryna on LinkedIn (opens in a new tab)"
+                    >Maryna ↗</a
+                  >
+                  <a
+                    href="https://www.linkedin.com/in/viktoriia-vinnykova/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Viktoriia on LinkedIn (opens in a new tab)"
+                    >Viktoriia ↗</a
+                  >
+                </div>
+              </div>
+              <div>
+                <div class="party-artwork">
+                  <img
+                    src="/images/y2k/party-crew-1.webp"
+                    alt="Y2K-style illustration celebrating Angel, Maryna and Viktoriia together"
+                    width="1440"
+                    height="810"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
             <y2k-experiments></y2k-experiments>
           </section>
           <section id="build" tabindex="-1">
@@ -816,49 +859,6 @@ export class Y2kPage extends ThemedElement {
               </aside>
             </div>
           </section>
-          <div class="party-spotlight" aria-labelledby="party-heading">
-            <div>
-              <h2 id="party-heading">Meet the mood makers.</h2>
-              <p>
-                Big love to Angel, Maryna and Viktoriia for bringing the Y2K energy to DevFest. Get
-                ready for the afterparty and networking from <strong>19:15</strong>.
-              </p>
-              <div class="party-names" aria-label="Meet the organizers">
-                <a
-                  href="https://www.linkedin.com/in/anhelina-sudenkova/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Angel on LinkedIn (opens in a new tab)"
-                  >Angel ↗</a
-                >
-                <a
-                  href="https://www.linkedin.com/in/kamienieva"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Maryna on LinkedIn (opens in a new tab)"
-                  >Maryna ↗</a
-                >
-                <a
-                  href="https://www.linkedin.com/in/viktoriia-vinnykova/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Viktoriia on LinkedIn (opens in a new tab)"
-                  >Viktoriia ↗</a
-                >
-              </div>
-            </div>
-            <div>
-              <div class="party-artwork">
-                <img
-                  src="/images/y2k/party-crew-1.webp"
-                  alt="Y2K-style illustration celebrating Angel, Maryna and Viktoriia together"
-                  width="1440"
-                  height="810"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
           <div class="credit">
             <p>
               Card Hunt by

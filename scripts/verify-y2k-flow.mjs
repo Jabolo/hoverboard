@@ -45,9 +45,15 @@ try {
     await c.waitFor();
     assert.equal(await c.getAttribute('href'), '/hunt/c/y6597cd/');
     const ys = await h.evaluate((el) =>
-      ['.hero', '#discover', '#play', '#build', '.party-spotlight', '.credit'].map(
-        (s) => el.shadowRoot.querySelector(s).getBoundingClientRect().top,
-      ),
+      [
+        '.hero',
+        '#discover',
+        '#play',
+        '.party-spotlight',
+        'y2k-experiments',
+        '#build',
+        '.credit',
+      ].map((s) => el.shadowRoot.querySelector(s).getBoundingClientRect().top),
     );
     assert.ok(ys.every((y, i) => i === 0 || y > ys[i - 1]));
     assert.equal(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
