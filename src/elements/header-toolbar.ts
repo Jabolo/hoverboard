@@ -215,6 +215,7 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
             icon="hoverboard:menu"
             hidden$="[[viewport.isLaptopPlus]]"
             aria-label="Open navigation menu"
+            aria-expanded$="[[getDrawerAriaExpanded(drawerOpened)]]"
             on-click="openDrawer"
           ></paper-icon-button>
         </div>
@@ -362,6 +363,10 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
 
   private openDrawer() {
     this.drawerOpened = true;
+  }
+
+  private getDrawerAriaExpanded(opened: boolean): string {
+    return opened ? 'true' : 'false';
   }
 
   private signIn() {

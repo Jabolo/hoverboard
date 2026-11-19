@@ -33,25 +33,12 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .container {
-          position: relative;
-          padding-top: 76px;
-          padding-bottom: 56px;
-        }
-
-        .container::before {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--google-blue);
-          content: '> speakers --featured';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
+          padding-top: 48px;
+          padding-bottom: 48px;
         }
 
         .speakers-wrapper {
-          margin: 40px 0 32px;
+          margin: 28px 0 24px;
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           grid-gap: 32px 16px;
@@ -59,28 +46,27 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
 
         .speakers-wrapper[curated-lineup] {
           grid-template-columns: minmax(0, 1fr);
+          gap: 0;
         }
 
         .speakers-wrapper[curated-lineup] .photo {
-          --lazy-image-width: 128px;
-          --lazy-image-height: 128px;
+          --lazy-image-width: 72px;
+          --lazy-image-height: 72px;
         }
 
         .speaker {
           position: relative;
-          padding: 16px 12px;
-          border: 1px solid var(--divider-color);
-          border-radius: var(--border-radius);
-          background: var(--secondary-background-color);
-          text-align: center;
-          transition:
-            border-color var(--animation),
-            box-shadow var(--animation),
-            transform var(--animation);
+          min-width: 0;
+          padding: 20px 0;
+          border-bottom: 1px solid var(--divider-color);
+          text-align: left;
         }
 
         .speaker-link {
-          display: block;
+          display: grid;
+          grid-template-columns: 72px minmax(0, 1fr);
+          align-items: start;
+          gap: 16px;
           color: inherit;
           text-decoration: none;
         }
@@ -88,12 +74,6 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         .speaker-link:focus-visible {
           outline: 2px solid var(--google-blue);
           outline-offset: 4px;
-        }
-
-        .speaker:hover {
-          border-color: var(--google-blue);
-          box-shadow: var(--box-shadow-primary-color);
-          transform: translateY(-3px);
         }
 
         .photo {
@@ -115,11 +95,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .name {
-          margin-top: 8px;
+          margin: 0;
           color: var(--terminal-copy, var(--primary-text-color));
-          font-family: var(--font-mono, monospace);
+          font-size: 20px;
           font-weight: 700;
-          line-height: 1.1;
+          line-height: 1.25;
         }
 
         .professional-role {
@@ -174,15 +154,11 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
         @media (min-width: 640px) {
           .speakers-wrapper[curated-lineup] {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
-          .photo {
-            --lazy-image-width: 128px;
-            --lazy-image-height: 128px;
+            gap: 0 32px;
           }
 
           .name {
-            font-size: 24px;
+            font-size: 21px;
           }
         }
 
@@ -191,16 +167,8 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
             grid-template-columns: repeat(3, 1fr);
           }
 
-          .speaker:last-of-type {
-            display: none;
-          }
-
           .speakers-wrapper[curated-lineup] {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
-          .speakers-wrapper[curated-lineup] .speaker:last-of-type {
-            display: block;
           }
 
           .badges {
@@ -234,7 +202,7 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
           }
 
           .speakers-wrapper[curated-lineup] {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }
       </style>
@@ -274,6 +242,8 @@ export class SpeakersBlock extends ReduxMixin(PolymerElement) {
                 </div>
               </a>
               <speaker-affiliations
+                align="start"
+                compact
                 company="[[speaker.company]]"
                 logo-url="[[speaker.companyLogoUrl]]"
                 logo-background="[[speaker.companyLogoBackground]]"

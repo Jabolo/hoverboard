@@ -16,20 +16,8 @@ export class PastDevFestsBlock extends ThemedElement {
         }
 
         .container {
-          position: relative;
-          padding-top: 76px;
-          padding-bottom: 56px;
-        }
-
-        .kicker {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--terminal-green);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
+          padding-top: 48px;
+          padding-bottom: 48px;
         }
 
         .intro {
@@ -43,69 +31,67 @@ export class PastDevFestsBlock extends ThemedElement {
 
         .archive-grid {
           display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-          margin-top: 32px;
+          grid-template-columns: minmax(0, 1fr);
+          margin-top: 24px;
+          border-top: 1px solid var(--divider-color);
         }
 
         .archive-card {
           display: grid;
-          align-content: space-between;
-          gap: 18px;
-          min-height: 136px;
-          padding: 16px;
-          border: 1px solid var(--divider-color);
-          border-radius: var(--border-radius);
-          background: var(--secondary-background-color);
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: center;
+          gap: 4px 12px;
+          min-height: 68px;
+          padding: 12px 4px;
+          border-bottom: 1px solid var(--divider-color);
           color: var(--primary-text-color);
           text-decoration: none;
-          transition:
-            border-color var(--animation),
-            box-shadow var(--animation),
-            transform var(--animation);
         }
 
-        .archive-card:hover {
-          border-color: var(--google-blue);
-          box-shadow: var(--box-shadow-primary-color);
-          transform: translateY(-2px);
+        .archive-card:hover .name {
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+
+        .archive-card:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 2px;
         }
 
         .card-meta {
           display: flex;
           align-items: baseline;
-          justify-content: space-between;
-          gap: 8px;
+          gap: 12px;
         }
 
         .year {
           color: var(--google-yellow);
           font-family: var(--font-mono, monospace);
-          font-size: 28px;
+          font-size: 16px;
           font-weight: 800;
           line-height: 1;
         }
 
         .speakers-badge {
           color: var(--secondary-text-color);
-          font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 500;
           letter-spacing: 0.02em;
         }
 
         .name {
           color: var(--terminal-copy, var(--primary-text-color));
-          font-family: var(--font-mono, monospace);
           font-size: 14px;
-          font-weight: 700;
+          font-weight: 600;
           line-height: 1.35;
         }
 
         .link-label {
           color: var(--google-blue);
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          grid-column: 2;
+          grid-row: 1 / span 2;
+          font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -113,13 +99,8 @@ export class PastDevFestsBlock extends ThemedElement {
 
         @media (min-width: 768px) {
           .archive-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-          }
-        }
-
-        @media (max-width: 420px) {
-          .archive-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 32px;
           }
         }
       `,
@@ -129,7 +110,6 @@ export class PastDevFestsBlock extends ThemedElement {
   override render() {
     return html`
       <div class="container">
-        <span class="kicker">${pastDevFestsBlock.kicker}</span>
         <div class="intro">
           <h2 class="container-title">${pastDevFestsBlock.title}</h2>
           <p>${pastDevFestsBlock.description}</p>

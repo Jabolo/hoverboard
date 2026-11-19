@@ -148,7 +148,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .event-location {
           color: var(--terminal-muted);
           font-family: var(--font-mono);
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
@@ -198,6 +198,24 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .action-buttons iron-icon {
           --iron-icon-fill-color: currentColor;
           margin-right: 8px;
+        }
+
+        .visit-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 44px;
+          padding: 0 12px;
+          color: #fff;
+          font-size: 15px;
+          font-weight: 600;
+          text-decoration: underline;
+          text-underline-offset: 4px;
+        }
+
+        .visit-link:focus-visible {
+          outline: 2px solid var(--terminal-green);
+          outline-offset: 2px;
         }
 
         .scroll-down {
@@ -449,7 +467,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           .action-buttons md-filled-button,
           .action-buttons md-outlined-button {
             margin: 4px;
-            font-size: 11px;
+            font-size: 13px;
             letter-spacing: 0;
           }
         }
@@ -490,7 +508,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <h1 class="sr-only">[[siteTitle]]</h1>
           <div class="home-grid">
             <div class="home-intro" layout vertical center>
-              <div class="hero-command">&gt; devfest.init</div>
               <div class="brand-lockup">
                 <img
                   class="devfest-lockup"
@@ -522,6 +539,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   [[ticketActionLabel]]
                 </md-outlined-button>
               </div>
+              <a class="visit-link" href="/#visit">Plan your visit</a>
             </div>
 
             <div class="terminal-column">
@@ -652,9 +670,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
-      <cloud-credit-block></cloud-credit-block>
       <schedule-block></schedule-block>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
+      <cloud-credit-block></cloud-credit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
@@ -765,27 +783,30 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     );
     this.checkHashAndScroll();
     window.addEventListener('hashchange', this.onHashChange);
-    window.addEventListener('click', this.onPartnerLinkClick);
+    window.addEventListener('click', this.onHomeAnchorClick);
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('hashchange', this.onHashChange);
-    window.removeEventListener('click', this.onPartnerLinkClick);
+    window.removeEventListener('click', this.onHomeAnchorClick);
   }
 
   private onHashChange = () => {
     this.checkHashAndScroll();
   };
 
-  private onPartnerLinkClick = (event: MouseEvent) => {
+  private onHomeAnchorClick = (event: MouseEvent) => {
     // A repeated click on the same fragment does not emit hashchange. The
     // target is inside a shadow root, so native fragment scrolling cannot help.
     if (
       event
         .composedPath()
         .some(
-          (node) => node instanceof HTMLAnchorElement && node.getAttribute('href') === '/#partners',
+          (node) =>
+            node instanceof HTMLAnchorElement &&
+            ['/#partners', '/#visit'].includes(node.getAttribute('href') ?? '') &&
+            node.getAttribute('href') === `/${window.location.hash}`,
         )
     ) {
       this.checkHashAndScroll();
@@ -793,11 +814,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   };
 
   private checkHashAndScroll() {
-    if (window.location.hash === '#partners') {
+    if (window.location.hash === '#partners' || window.location.hash === '#visit') {
       void loadHomeSections().then(() => {
         requestAnimationFrame(() => {
-          const partners = this.shadowRoot?.querySelector<HTMLElement>('#partners');
-          if (partners) scrollToElement(partners);
+          const target = this.shadowRoot?.querySelector<HTMLElement>(window.location.hash);
+          if (target) scrollToElement(target);
         });
       });
     }

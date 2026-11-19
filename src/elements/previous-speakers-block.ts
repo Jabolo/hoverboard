@@ -24,7 +24,7 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
     return html`
       <style include="shared-styles flex flex-alignment positioning">
         :host {
-          margin: 32px auto;
+          margin: 24px auto;
           display: block;
           text-align: center;
         }
@@ -41,8 +41,8 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 8px 12px;
-          margin: 20px auto 0;
+          gap: 6px 16px;
+          margin: 16px auto 0;
           padding: 0 16px;
           max-width: 720px;
         }
@@ -50,14 +50,8 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
         .stat-pill {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          padding: 4px 12px;
-          border: 1px solid var(--divider-color);
-          border-radius: 14px;
-          background: var(--secondary-background-color);
-          font-family: var(--font-mono, monospace);
+          gap: 4px;
           font-size: 13px;
-          letter-spacing: 0.02em;
         }
 
         .stat-year {
@@ -71,7 +65,7 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
         }
 
         .speakers-wrapper {
-          margin: 32px -8px 32px;
+          margin: 24px -8px 16px;
           position: relative;
           display: flex;
           flex-wrap: wrap;
@@ -81,6 +75,13 @@ export class PreviousSpeakersBlock extends ReduxMixin(PolymerElement) {
 
         .speaker {
           margin: 8px;
+          min-width: 44px;
+          min-height: 44px;
+        }
+
+        .speaker:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 4px;
         }
 
         .empty-state {
