@@ -498,7 +498,18 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
           .home-content {
             margin-top: 0;
-            padding-bottom: 32px;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+          .terminal-body {
+            padding-top: 12px;
+            padding-bottom: 12px;
+          }
+          .terminal-line + .terminal-line {
+            margin-top: 4px;
+          }
+          .terminal-body hr {
+            margin: 8px 0;
           }
           .scroll-down {
             display: none;
