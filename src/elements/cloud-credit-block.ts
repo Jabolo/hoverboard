@@ -2,13 +2,23 @@ import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
+import { isReleaseReviewHost } from '../utils/speakers-preview-data';
+
+const localHosts = ['localhost', '127.0.0.1', '[::1]', '::1'];
+
+/** Hosted review channels have no credit function; loopback can run its own test endpoint. */
+export function isHostedCreditReview(hostname: string): boolean {
+  return !localHosts.includes(hostname) && isReleaseReviewHost(hostname);
+}
 
 @customElement('cloud-credit-block')
 export class CloudCreditBlock extends ThemedElement {
-  @state() private claimState: 'loading' | 'upcoming' | 'open' | 'closed' | 'error' = 'loading';
+  @state() private claimState:
+    'loading' | 'upcoming' | 'open' | 'closed' | 'error' | 'preview-unavailable' = 'loading';
   private refreshTimer?: ReturnType<typeof setTimeout>;
+  private readonly hostedReviewPreview = isHostedCreditReview(window.location.hostname);
   private readonly previewMode =
-    ['localhost', '127.0.0.1', '[::1]', '::1'].includes(window.location.hostname) &&
+    localHosts.includes(window.location.hostname) &&
     new URLSearchParams(window.location.search).get('creditPreview') === 'open';
 
   override connectedCallback() {
@@ -26,6 +36,10 @@ export class CloudCreditBlock extends ThemedElement {
   }
 
   private async refreshClaimState() {
+    if (this.hostedReviewPreview) {
+      this.claimState = 'preview-unavailable';
+      return;
+    }
     let delay = 30_000;
     try {
       const response = await fetch(this.endpoint, { cache: 'no-store' });
@@ -169,7 +183,9 @@ export class CloudCreditBlock extends ThemedElement {
                       ? html`<p>
                           Claim status is temporarily unavailable. Please check back shortly.
                         </p>`
-                      : html`<p>Checking claim availability…</p>`
+                      : this.claimState === 'preview-unavailable'
+                        ? html`<p>Claim status is unavailable in this preview.</p>`
+                        : html`<p>Checking claim availability…</p>`
             }
           </div>
         </div>

@@ -500,7 +500,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           align-items: center;
           justify-content: space-between;
           gap: 18px;
-          min-height: 56px;
+          min-height: 52px;
           padding: 0 4px;
           border-bottom: 1px solid #526783;
           color: #fff;
