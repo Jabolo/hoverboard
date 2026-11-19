@@ -141,26 +141,6 @@ export class ScheduleBlock extends ThemedElement {
           padding-top: 56px;
           padding-bottom: 56px;
         }
-        .heading-row {
-          display: flex;
-          align-items: end;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 20px;
-        }
-        h2 {
-          margin: 0;
-          font-family: var(--font-mono, monospace);
-          font-size: clamp(28px, 4vw, 40px);
-          letter-spacing: -0.025em;
-          line-height: 1.1;
-        }
-        .intro {
-          margin: 12px 0 0;
-          color: var(--terminal-muted);
-          font-size: 15px;
-          line-height: 1.5;
-        }
         .schedule-link {
           display: inline-flex;
           align-items: center;
@@ -183,7 +163,6 @@ export class ScheduleBlock extends ThemedElement {
           outline-offset: 4px;
         }
         .programme {
-          margin-top: 30px;
           border-top: 1px solid var(--terminal-line);
         }
         .group {
@@ -319,24 +298,11 @@ export class ScheduleBlock extends ThemedElement {
             padding-top: 28px;
             padding-bottom: 40px;
           }
-          h2 {
-            font-size: 26px;
-          }
-          .intro {
-            margin-top: 8px;
-            font-size: 13px;
-          }
-          .programme {
-            margin-top: 20px;
-          }
           .group {
             padding-top: 16px;
           }
           h3 {
             margin-bottom: 8px;
-          }
-          .heading-row {
-            align-items: start;
           }
           .row {
             grid-template-columns: 1fr;
@@ -388,13 +354,7 @@ export class ScheduleBlock extends ThemedElement {
 
   override render() {
     const selection = homeAgendaAt(this.items, this.now);
-    return html` <section id="schedule" class="container" aria-labelledby="schedule-title">
-      <div class="heading-row">
-        <div>
-          <h2 id="schedule-title">The programme</h2>
-          <p class="intro">21 November · Warsaw time · device clock</p>
-        </div>
-      </div>
+    return html` <section id="schedule" class="container" aria-label="Programme">
       <div class="programme" aria-live="polite">
         ${this.status === 'loading' ? html`<p class="message">Loading the programme…</p>` : nothing}
         ${this.status === 'error' ? html`<p class="message">The programme couldn’t be loaded. <a href="/schedule/">Open the full schedule</a> or try again when you’re online.</p>` : nothing}

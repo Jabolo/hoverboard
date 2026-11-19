@@ -126,7 +126,7 @@ describe('on-site homepage programme', () => {
     );
     expect(root.querySelector('a[href="/sessions/CFP-021/"]')).not.toBeNull();
     expect(root.querySelector('a[href="/schedule/"]')).not.toBeNull();
-    expect(root.textContent).toContain('Warsaw time');
+    expect(root.querySelector('section')?.getAttribute('aria-label')).toBe('Programme');
     element.remove();
   });
 
@@ -257,7 +257,7 @@ describe('on-site homepage programme', () => {
     await element.updateComplete;
     const root = element.shadowRoot!;
     expect(root.textContent).not.toContain('TEST VIEW');
-    expect(root.querySelector('.intro')?.textContent).toContain('device clock');
+    expect(root.textContent).not.toContain('device clock');
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
     expect(root.textContent).not.toContain('Started · end time not listed');
     const bars = [...root.querySelectorAll<HTMLProgressElement>('progress')];

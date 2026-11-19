@@ -424,44 +424,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
         }
 
-        .attendee-links {
-          background: var(--terminal-panel);
-          border-bottom: 1px solid var(--divider-color);
-        }
-        .attendee-links-inner {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          max-width: 1216px;
-          margin: 0 auto;
-          padding: 20px 24px;
-        }
-        .attendee-link {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 48px;
-          padding: 0 16px;
-          border: 1px solid var(--terminal-line);
-          border-radius: 4px;
-          background: var(--primary-background-color);
-          color: var(--terminal-copy);
-          font-family: var(--font-mono);
-          font-size: 12px;
-          font-weight: 700;
-          line-height: 1.35;
-          text-align: center;
-          text-decoration: none;
-          cursor: pointer;
-        }
-        .attendee-link:hover {
-          border-color: var(--terminal-green);
-          color: var(--terminal-green);
-        }
-        .attendee-link:focus-visible {
-          outline: 2px solid var(--terminal-green);
-          outline-offset: 4px;
-        }
         /* The event-day homepage gives the programme priority over promotion. */
         .event-description,
         event-countdown {
@@ -692,17 +654,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       </hero-block>
       <cloud-credit-block></cloud-credit-block>
       <schedule-block></schedule-block>
-      <nav class="attendee-links" aria-label="Event day links">
-        <div class="attendee-links-inner">
-          <button class="attendee-link" type="button" on-click="scrollToVisit">
-            On-site information
-          </button>
-          <button class="attendee-link" type="button" on-click="scrollToPhotos">
-            Community photos
-          </button>
-          <a class="attendee-link" href="/sessions/">Explore sessions</a>
-        </div>
-      </nav>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
@@ -780,20 +731,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           store.dispatch(queueSnackbar('Error scrolling to section.'));
         }
       });
-    });
-  }
-
-  private scrollToPhotos() {
-    void loadHomeSections().then(() => {
-      const photos = this.shadowRoot?.querySelector<HTMLElement>('#photos');
-      if (photos) scrollToElement(photos);
-    });
-  }
-
-  private scrollToVisit() {
-    void loadHomeSections().then(() => {
-      const visit = this.shadowRoot?.querySelector<HTMLElement>('#visit');
-      if (visit) scrollToElement(visit);
     });
   }
 
