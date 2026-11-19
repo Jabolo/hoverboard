@@ -424,128 +424,43 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           }
         }
 
-        /* An event-day companion: useful links before the long-form story. */
-        hero-block {
-          height: auto;
-          min-height: 0;
+        .attendee-links {
+          background: var(--terminal-panel);
+          border-bottom: 1px solid var(--divider-color);
         }
-        .home-content {
-          width: min(100%, 1100px);
-          padding: 10px 0 42px;
-        }
-        .home-grid {
-          gap: 36px;
-          align-items: end;
-          text-align: left;
-        }
-        .home-intro {
-          align-items: flex-start;
-          text-align: left;
-        }
-        .brand-lockup {
-          width: min(100%, 340px);
-        }
-        .hero-community {
-          margin-top: 12px;
-          --google-developers-brand-width: 145px;
-        }
-        .companion-heading {
-          margin: 24px 0 0;
-          max-width: 12ch;
-          color: #fff;
-          font-family: var(--font-family);
-          font-size: clamp(42px, 7vw, 76px);
-          font-weight: 800;
-          letter-spacing: -0.035em;
-          line-height: 1.02;
-        }
-        .event-details {
-          margin-top: 16px;
-          gap: 8px;
-        }
-        .event-date {
-          font-size: 18px;
-          letter-spacing: 0;
-        }
-        .event-location {
-          color: var(--terminal-copy);
-          font-size: 14px;
-          letter-spacing: 0;
-          text-transform: none;
-        }
-        .event-description {
-          max-width: 42ch;
-          font-family: var(--font-family);
-          font-size: 17px;
-        }
-        .action-buttons {
-          justify-content: flex-start;
-          margin: 16px -8px 0;
-        }
-        .action-buttons md-filled-button,
-        .action-buttons md-outlined-button {
-          font-family: var(--font-family);
-          font-size: 15px;
-          letter-spacing: 0;
-          text-transform: none;
-        }
-        .companion-links {
-          width: 100%;
-          display: grid;
-          gap: 0;
-          border-top: 1px solid #526783;
-        }
-        .companion-link {
+        .attendee-links-inner {
           display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          max-width: 1216px;
+          margin: 0 auto;
+          padding: 20px 24px;
+        }
+        .attendee-link {
+          display: inline-flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 18px;
-          min-height: 52px;
-          padding: 0 4px;
-          border-bottom: 1px solid #526783;
-          color: #fff;
-          text-align: left;
-          text-decoration: none;
-          font-family: var(--font-family);
-          font-size: 17px;
+          justify-content: center;
+          min-height: 48px;
+          padding: 0 16px;
+          border: 1px solid var(--terminal-line);
+          border-radius: 4px;
+          background: var(--primary-background-color);
+          color: var(--terminal-copy);
+          font-family: var(--font-mono);
+          font-size: 12px;
           font-weight: 700;
-        }
-        .companion-link:hover {
-          color: var(--terminal-green);
-        }
-        button.companion-link {
-          width: 100%;
-          background: transparent;
-          border: 0;
-          border-bottom: 1px solid #526783;
+          line-height: 1.35;
+          text-align: center;
+          text-decoration: none;
           cursor: pointer;
         }
-        .companion-link:focus-visible {
-          outline: 2px solid #8ab4f8;
-          outline-offset: 3px;
+        .attendee-link:hover {
+          border-color: var(--terminal-green);
+          color: var(--terminal-green);
         }
-        .companion-link svg {
-          width: 22px;
-          height: 22px;
-          flex: none;
-          stroke: currentColor;
-          fill: none;
-          stroke-width: 2;
-        }
-        @media (min-width: 812px) {
-          hero-block {
-            height: auto;
-          }
-          .home-content {
-            padding: 12px 0 48px;
-          }
-          .home-grid {
-            grid-template-columns: minmax(0, 1fr) minmax(250px, 0.52fr);
-            gap: clamp(36px, 8vw, 110px);
-          }
-          .companion-links {
-            margin-bottom: 16px;
-          }
+        .attendee-link:focus-visible {
+          outline: 2px solid var(--terminal-green);
+          outline-offset: 4px;
         }
       </style>
 
@@ -557,8 +472,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         hide-logo
       >
         <div class="home-content" layout vertical center>
+          <h1 class="sr-only">[[siteTitle]]</h1>
           <div class="home-grid">
-            <div class="home-intro" layout vertical>
+            <div class="home-intro" layout vertical center>
+              <div class="hero-command">&gt; devfest.init</div>
               <div class="brand-lockup">
                 <img
                   class="devfest-lockup"
@@ -566,58 +483,178 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   alt="DevFest 2026"
                 />
               </div>
+
               <google-developers-brand class="hero-community"></google-developers-brand>
-              <h1 class="companion-heading">Your day at DevFest.</h1>
+
               <div class="event-details">
                 <div class="event-date">[[eventDate]]</div>
-                <div class="event-location">Google for Startups Campus · Warsaw</div>
-                <p class="event-description">
-                  Talks, workshops and conversations. Find what you need for the day.
-                </p>
+                <div class="event-location">Google for Startups Campus / Warsaw</div>
+                <p class="event-description">[[heroSettings.description]]</p>
               </div>
-              <div class="action-buttons" layout horizontal wrap>
-                <md-filled-button href="/schedule/">View programme</md-filled-button>
-                <md-outlined-button on-click="scrollToTickets"
-                  >[[ticketActionLabel]]</md-outlined-button
-                >
+
+              <event-countdown></event-countdown>
+
+              <div class="action-buttons" layout horizontal center-justified wrap>
                 <template is="dom-if" if="[[hasHighlights]]">
-                  <md-outlined-button class="watch-video" on-click="playVideo"
-                    >[[viewHighlights]]</md-outlined-button
-                  >
+                  <md-outlined-button class="watch-video" on-click="playVideo">
+                    <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
+                    [[viewHighlights]]
+                  </md-outlined-button>
                 </template>
+                <md-outlined-button href="/schedule/">View programme</md-outlined-button>
+                <md-filled-button on-click="scrollToTickets">
+                  <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
+                  [[ticketActionLabel]]
+                </md-filled-button>
               </div>
             </div>
-            <nav class="companion-links" aria-label="Event essentials">
-              <a class="companion-link" href="/sessions/">
-                <span>Speakers &amp; sessions</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              </a>
-              <a
-                class="companion-link"
-                href="https://www.google.com/maps/dir/?api=1&amp;destination=Plac%20Konesera%2010%2C%2003-736%20Warszawa"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>Directions to the venue</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M7 6h11v11" /></svg>
-              </a>
-              <a
-                class="companion-link"
-                href="https://photos.app.goo.gl/QbodNU6v6xyAS9J7"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>Community photo album</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M7 6h11v11" /></svg>
-              </a>
-              <button class="companion-link" type="button" on-click="scrollToVisit">
-                <span>Practical information</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-              </button>
-            </nav>
+
+            <div class="terminal-column">
+              <div class="terminal-window" aria-label="Event status">
+                <div class="terminal-bar"><i></i><i></i><i></i><span>devfest-status.sh</span></div>
+                <div class="terminal-body">
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span>./event --status</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">status:</span> <span class="green">confirmed</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">date:</span> <span class="blue">Nov 21, 2026</span></span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">theme:</span> real_work / real_lessons</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="key">spaces:</span> Auditorium, Classroom and Vibe Zone</span
+                    >
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span
+                      ><span class="blue">attendees</span>:
+                      <span class="green">[[heroSettings.attendanceClaim]]</span></span
+                    >
+                  </div>
+                  <hr />
+                  <div class="terminal-line">
+                    <span class="prompt">$</span><span>./programme --status</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span><span><span class="key">lineup:</span> complete</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">programme:</span> [[programmeSummary]]</span>
+                  </div>
+                  <div class="terminal-line">
+                    <span></span
+                    ><span><span class="key">focus:</span> practical_ai / real_world_lessons</span>
+                  </div>
+                  <hr />
+                  <a class="terminal-command" href="/schedule/">View full programme →</a>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <button
+            class="scroll-down"
+            type="button"
+            aria-label="Scroll to event details"
+            on-click="scrollNextBlock"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              id="Layer_2"
+              x="0px"
+              y="0px"
+              viewBox="0 0 25.166666 37.8704414"
+              enable-background="new 0 0 25.166666 37.8704414"
+              xml:space="preserve"
+              aria-hidden="true"
+            >
+              <path
+                class="stroke"
+                fill="none"
+                stroke="#c7c4b8"
+                stroke-width="2.5"
+                stroke-miterlimit="10"
+                d="M12.5833445
+                36.6204414h-0.0000229C6.3499947
+                36.6204414
+                1.25
+                31.5204487
+                1.25
+                25.2871208V12.5833216C1.25
+                6.3499947
+                6.3499951
+                1.25
+                12.5833216
+                1.25h0.0000229c6.2333269
+                0
+                11.3333216
+                5.0999947
+                11.3333216
+                11.3333216v12.7037992C23.916666
+                31.5204487
+                18.8166714
+                36.6204414
+                12.5833445
+                36.6204414z"
+              ></path>
+              <path
+                class="scroller"
+                fill="#c7c4b8"
+                d="M13.0833359
+                19.2157116h-0.9192753c-1.0999985
+                0-1.9999971-0.8999996-1.9999971-1.9999981v-5.428606c0-1.0999994
+                0.8999987-1.9999981
+                1.9999971-1.9999981h0.9192753c1.0999985
+                0
+                1.9999981
+                0.8999987
+                1.9999981
+                1.9999981v5.428606C15.083334
+                18.315712
+                14.1833344
+                19.2157116
+                13.0833359
+                19.2157116z"
+              ></path>
+            </svg>
+            <i class="icon icon-arrow-down"></i>
+          </button>
         </div>
       </hero-block>
+      <nav class="attendee-links" aria-label="Event day links">
+        <div class="attendee-links-inner">
+          <a class="attendee-link" href="/sessions/">Explore sessions</a>
+          <a
+            class="attendee-link"
+            href="https://www.google.com/maps/dir/?api=1&amp;destination=Plac%20Konesera%2010%2C%2003-736%20Warszawa"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Directions</a
+          >
+          <button class="attendee-link" type="button" on-click="scrollToPhotos">
+            Community photos
+          </button>
+          <button class="attendee-link" type="button" on-click="scrollToVisit">
+            Practical information
+          </button>
+        </div>
+      </nav>
       <schedule-block></schedule-block>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
       <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
@@ -697,6 +734,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           store.dispatch(queueSnackbar('Error scrolling to section.'));
         }
       });
+    });
+  }
+
+  private scrollToPhotos() {
+    void loadHomeSections().then(() => {
+      const photos = this.shadowRoot?.querySelector<HTMLElement>('#photos');
+      if (photos) scrollToElement(photos);
     });
   }
 

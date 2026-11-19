@@ -16,41 +16,40 @@ export class AttendeePhotosBlock extends ThemedElement {
       css`
         :host {
           display: block;
-          color: var(--terminal-copy, #eaf2ff);
-          background: var(--primary-background-color, #080f1a);
+          border-bottom: 1px solid var(--divider-color);
+          background: var(--primary-background-color);
+          color: var(--terminal-copy);
           scroll-margin-top: 80px;
         }
-        section {
-          box-sizing: border-box;
-          display: grid;
-          gap: 28px;
-          max-width: 1216px;
-          margin: 0 auto;
-          padding: 52px 24px;
+        .container {
+          padding-top: 40px;
+          padding-bottom: 40px;
         }
         .panel {
           display: grid;
-          gap: 32px;
-          padding: clamp(28px, 5vw, 52px);
-          border-radius: 16px;
-          background: #172e50;
+          gap: 28px;
+          padding: 24px;
+          border: 1px solid var(--terminal-line);
+          border-radius: 4px;
+          background: var(--terminal-panel);
         }
         .content {
           align-self: center;
         }
         h2 {
-          max-width: 18ch;
+          max-width: 24ch;
           margin: 0;
-          color: #fff;
-          font-size: clamp(30px, 4vw, 48px);
-          line-height: 1.08;
+          color: var(--primary-text-color);
+          font-family: var(--font-mono, monospace);
+          font-size: clamp(28px, 4vw, 40px);
           letter-spacing: -0.025em;
+          line-height: 1.1;
         }
         p {
           max-width: 48ch;
           margin: 16px 0 0;
-          color: #eaf2ff;
-          font-size: 17px;
+          color: var(--terminal-muted);
+          font-size: 16px;
           line-height: 1.6;
         }
         .album-link {
@@ -59,19 +58,18 @@ export class AttendeePhotosBlock extends ThemedElement {
           justify-content: center;
           min-height: 48px;
           margin-top: 24px;
-          padding: 0 20px;
-          border-radius: 8px;
-          background: #fff;
-          color: #10223d;
-          font-size: 16px;
+          padding: 0 18px;
+          border: 1px solid var(--google-blue);
+          border-radius: 4px;
+          color: var(--primary-text-color);
           font-weight: 700;
           text-decoration: none;
         }
         .album-link:hover {
-          background: #d9e9ff;
+          background: var(--secondary-background-color);
         }
         .album-link:focus-visible {
-          outline: 3px solid #8fbdff;
+          outline: 2px solid var(--google-blue);
           outline-offset: 4px;
         }
         .scan {
@@ -82,26 +80,25 @@ export class AttendeePhotosBlock extends ThemedElement {
         .scan svg {
           display: block;
           flex: none;
-          width: 112px;
-          height: 112px;
-          border-radius: 8px;
+          width: 117px;
+          height: 117px;
           background: #fff;
           shape-rendering: crispEdges;
         }
         .scan p {
           max-width: 15ch;
           margin: 0;
-          font-size: 14px;
-          line-height: 1.4;
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          line-height: 1.5;
         }
         @media (min-width: 760px) {
-          section {
-            padding: 72px 24px;
-          }
           .panel {
             grid-template-columns: minmax(0, 1fr) auto;
             align-items: center;
-            gap: 56px;
+            gap: 48px;
+            padding: 32px;
           }
           .scan {
             flex-direction: column;
@@ -109,8 +106,8 @@ export class AttendeePhotosBlock extends ThemedElement {
             text-align: center;
           }
           .scan svg {
-            width: 160px;
-            height: 160px;
+            width: 156px;
+            height: 156px;
           }
         }
       `,
@@ -119,7 +116,7 @@ export class AttendeePhotosBlock extends ThemedElement {
 
   override render() {
     return html`
-      <section aria-labelledby="attendee-photos-title">
+      <section class="container" aria-labelledby="attendee-photos-title">
         <div class="panel">
           <div class="content">
             <h2 id="attendee-photos-title">See DevFest through everyone’s lens.</h2>
