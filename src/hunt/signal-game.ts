@@ -1,12 +1,14 @@
 import { css, html, nothing } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
+import { hasHuntPerfect, rememberHuntPerfect } from './hunt-store.js';
 
 const signals = ['Noise', 'Clear signal', 'Busy tone', 'Interference'];
 const rounds = 5;
 
 @customElement('hunt-signal-game')
 export class HuntSignalGame extends ThemedElement {
+  @property({ attribute: false }) cardId = '';
   @state() private running = false;
   @state() private stepMode = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   @state() private attempts = 0;
@@ -111,6 +113,51 @@ export class HuntSignalGame extends ThemedElement {
         .feedback {
           min-height: 1.45em;
         }
+        .transmission {
+          display: grid;
+          gap: 9px;
+          position: relative;
+          overflow: hidden;
+          padding: clamp(14px, 4vw, 22px);
+          border: 1px solid #aebb69;
+          border-radius: 10px;
+          color: #f1f6d5;
+          background: radial-gradient(ellipse at 95% 100%, #45425c, transparent 72%), #263025;
+        }
+        .transmission::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0;
+          background: linear-gradient(110deg, transparent 33%, #dbe78d55 50%, transparent 67%);
+        }
+        .transmission.perfect::after {
+          animation: signal-sweep 900ms ease-out;
+        }
+        @keyframes signal-sweep {
+          from {
+            transform: translateX(-100%);
+            opacity: 0.8;
+          }
+          to {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+        }
+        .transmission h3,
+        .transmission p {
+          margin: 0;
+          color: inherit;
+        }
+        .transmission h3 {
+          font-size: 1.16rem;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .transmission.perfect::after {
+            animation: none;
+          }
+        }
       `,
     ];
   }
@@ -146,7 +193,12 @@ export class HuntSignalGame extends ThemedElement {
     if (this.attempts === rounds) {
       window.clearInterval(this.timer);
       this.running = false;
-      this.feedback = `Game over. You caught ${this.score} of ${rounds} signals.`;
+      if (this.score === rounds) {
+        rememberHuntPerfect(this.cardId);
+        this.feedback = 'Perfect signal. Bonus transmission unlocked.';
+      } else {
+        this.feedback = `Game over. You caught ${this.score} of ${rounds} signals.`;
+      }
       return;
     }
 
@@ -191,6 +243,18 @@ export class HuntSignalGame extends ThemedElement {
             : nothing
         }
         <p class="feedback" role="status">${this.feedback}</p>
+        ${
+          !this.running && hasHuntPerfect(this.cardId)
+            ? html`<div class="transmission ${this.score === rounds ? 'perfect' : ''}">
+                <h3>Bonus transmission · 5/5</h3>
+                <p>The Warsaw arcade received your signal. Your card now carries the 5/5 stamp.</p>
+                <p>
+                  Bonus build prompt: make a loading screen that gets impatient with the person
+                  using it.
+                </p>
+              </div>`
+            : nothing
+        }
       </section>
     `;
   }

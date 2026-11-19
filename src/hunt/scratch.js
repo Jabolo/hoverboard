@@ -197,7 +197,7 @@ function automaticPermission(event) {
 }
 
 function unregisterFoil(foil) {
-  activeFoils.delete(foil);
+  if (!activeFoils.delete(foil)) return;
   foil.cleanup();
   if (activeFoils.size) return;
   stopSensors();
@@ -222,7 +222,45 @@ function registerFoil(foil) {
     removalObserver.observe(document.documentElement, { childList: true, subtree: true });
     document.addEventListener('visibilitychange', visibilityChanged);
   }
+  requestAnimationFrame(() => {
+    if (!activeFoils.has(foil)) return;
+    const root = foil.element.getRootNode();
+    if (root instanceof ShadowRoot)
+      removalObserver?.observe(root, { childList: true, subtree: true });
+  });
   if (motionOptedIn && (allowedMotion || allowedOrientation)) startSensors();
+}
+
+/**
+ * One sensor subscription moves the album's CSS foils together.
+ * @param {HTMLElement} element
+ * @param {(state: string) => void} onState
+ */
+export function bindAlbumMotion(element, onState) {
+  const entry = {
+    element,
+    syncMotion: onState,
+    cleanup() {
+      element.style.removeProperty('--album-rotate-x');
+      element.style.removeProperty('--album-rotate-y');
+      element.style.removeProperty('--album-sheen-x');
+    },
+    tilt(x, y) {
+      if (reducedMotion.matches) return;
+      const roll = clamp(x, -1, 1);
+      const pitch = clamp(y, -1, 1);
+      element.style.setProperty('--album-rotate-x', `${-pitch * 13}deg`);
+      element.style.setProperty('--album-rotate-y', `${roll * 16}deg`);
+      element.style.setProperty('--album-sheen-x', `${roll * 42}%`);
+    },
+  };
+  registerFoil(entry);
+  return () => unregisterFoil(entry);
+}
+
+export function enableAlbumMotion() {
+  autoPermissionAttempted = true;
+  requestTilt();
 }
 
 /** @param {{label?: string, content?: string, onReveal?: () => boolean | Promise<boolean>}} options */
@@ -564,7 +602,7 @@ export function scratch({ label, content, onReveal } = {}) {
         reveal.textContent = 'Reveal';
       }
     }
-    if (!approved || !wrapper.isConnected) return;
+    if (!approved) return;
     done = true;
     dragging = false;
     activePointerId = null;

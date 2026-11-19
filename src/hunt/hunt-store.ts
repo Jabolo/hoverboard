@@ -14,6 +14,26 @@ export const HUNT_STORAGE_KEY = 'devfest-warsaw-2026-hunt:v1';
 const codePattern = /^[a-z0-9]{7}$/;
 const memory = new Map<string, HuntProgressEntry>();
 let storageFailed = false;
+const perfectRuns = new Set<string>();
+
+export function hasHuntPerfect(id: string): boolean {
+  if (perfectRuns.has(id)) return true;
+  try {
+    return window.localStorage.getItem(`${HUNT_STORAGE_KEY}:perfect:${id}`) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function rememberHuntPerfect(id: string): void {
+  if (!codePattern.test(id)) return;
+  try {
+    window.localStorage.setItem(`${HUNT_STORAGE_KEY}:perfect:${id}`, 'true');
+  } catch {
+    perfectRuns.add(id);
+    storageFailed = true;
+  }
+}
 
 export function normalizeHuntCode(value: string): string {
   const code = value.trim().toLowerCase();

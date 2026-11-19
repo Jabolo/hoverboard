@@ -1,9 +1,11 @@
 import { Router, type RouterLocation } from '@vaadin/router';
 import { html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
 import { ThemedElement } from '../components/themed-element';
 import {
   getHuntProgress,
+  hasHuntPerfect,
   HUNT_STORAGE_KEY,
   huntCardPath,
   huntGroups,
@@ -20,7 +22,7 @@ import {
 import { huntStyles } from '../hunt/hunt-styles.js';
 import '../hunt/signal-game.js';
 import { huntSiteLinks } from '../hunt/site-links.js';
-import { scratch } from '../hunt/scratch.js';
+import { bindAlbumMotion, enableAlbumMotion, scratch } from '../hunt/scratch.js';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import '../elements/footer-block';
 
@@ -61,7 +63,14 @@ export class HuntPage extends ThemedElement {
   @state() private codeError = '';
   @state() private revealIssue = '';
   @state() private storageAvailable = true;
+  @state() private albumMotion = 'idle';
+  @state() private replay:
+    { card: EarnedHuntCard; foil: HTMLElement; revealed: boolean } | undefined;
   private routeRequest?: AbortController;
+  private unbindAlbumMotion?: () => void;
+  private replayTrigger: HTMLElement | undefined;
+  private readonly phoneInput =
+    navigator.maxTouchPoints > 0 || window.matchMedia('(any-pointer: coarse)').matches;
 
   override connectedCallback() {
     super.connectedCallback();
@@ -76,6 +85,7 @@ export class HuntPage extends ThemedElement {
   }
 
   onAfterEnter(location: RouterLocation) {
+    this.closeReplay();
     this.token = location.params?.['token']?.toString();
     this.codeError = '';
     this.refreshProgress();
@@ -202,6 +212,82 @@ export class HuntPage extends ThemedElement {
     Router.go(huntCardPath(code));
   };
 
+  private readonly bindAlbum = (element?: Element) => {
+    this.unbindAlbumMotion?.();
+    if (element instanceof HTMLElement && this.phoneInput) {
+      this.unbindAlbumMotion = bindAlbumMotion(element, (motion) => {
+        this.albumMotion = motion;
+      });
+    }
+  };
+
+  private readonly openReplay = async (card: EarnedHuntCard, event: Event) => {
+    if (event.currentTarget instanceof HTMLElement) this.replayTrigger = event.currentTarget;
+    this.replay = {
+      card,
+      foil: scratch({
+        label: 'Scratch again',
+        content: card.text,
+        onReveal: async () => {
+          if (this.replay?.card.id !== card.id) return false;
+          this.replay = { ...this.replay, revealed: true };
+          await this.updateComplete;
+          this.renderRoot.querySelector<HTMLElement>('#replay-reveal')?.focus();
+          return true;
+        },
+      }),
+      revealed: false,
+    };
+    await this.updateComplete;
+    const dialog = this.renderRoot.querySelector('dialog');
+    if (this.isConnected && dialog?.isConnected && !dialog.open) dialog.showModal();
+  };
+
+  private readonly closeReplay = () => {
+    this.renderRoot.querySelector('dialog')?.close();
+    this.replay = undefined;
+    this.replayTrigger?.focus({ preventScroll: true });
+    this.replayTrigger = undefined;
+  };
+
+  private renderReplay() {
+    const replay = this.replay;
+    if (!replay) return nothing;
+    return html`
+      <dialog aria-labelledby="replay-title" @close=${this.closeReplay}>
+        <article class="ticket replay-ticket">
+          <header class="replay-header">
+            <h2 id="replay-title">${replay.card.title}</h2>
+            <button type="button" class="close-replay" @click=${this.closeReplay} autofocus>
+              Close
+            </button>
+          </header>
+          ${
+            replay.revealed
+              ? html`
+                  <section class="reveal-result" aria-labelledby="replay-reveal">
+                    <h3 id="replay-reveal" tabindex="-1">Collected card</h3>
+                    <p>${replay.card.text}</p>
+                  </section>
+                `
+              : replay.foil
+          }
+          ${
+            this.token === undefined
+              ? html`<a
+                  class="replay-link"
+                  href=${huntCardPath(replay.card.id)}
+                  @click=${this.closeReplay}
+                >
+                  ${replay.card.game ? 'Play the mini-game' : 'Open collected card'}
+                </a>`
+              : nothing
+          }
+        </article>
+      </dialog>
+    `;
+  }
+
   private renderGroups() {
     const groups: HuntGroup[] = this.groups ? [...this.groups] : [];
     for (const entry of this.progress) {
@@ -218,7 +304,7 @@ export class HuntPage extends ThemedElement {
       const collected = entries.filter((entry) => entry.state === 'earned').length;
       const unknown = Math.max(0, group.count - entries.length);
       return html`
-        <section class="folder">
+        <section class="folder" data-group=${group.id}>
           <header class="folder-heading">
             <h2>${group.label}</h2>
             <p>${group.count ? `${collected} / ${group.count}` : collected} collected</p>
@@ -228,40 +314,47 @@ export class HuntPage extends ThemedElement {
               ? html`<p class="folder-hint">${group.hint}</p>`
               : nothing
           }
-          ${
-            entries.length
-              ? html`
-                  <ul class="finds" role="list">
-                    ${entries.map(
-                      ({ card, state }) => html`
-                        <li>
-                          <a class="find ${state}" href=${huntCardPath(card.id)}>
-                            <span class="find-icon" aria-hidden="true"
-                              >${state === 'earned' ? '✦' : '◇'}</span
-                            >
-                            <span class="find-title">${card.title}</span>
-                            <span class="find-action"
-                              >${state === 'earned' ? 'Open card' : 'Scratch card'}
-                              <span aria-hidden="true">↗</span></span
-                            >
-                          </a>
-                        </li>
-                      `,
-                    )}
-                  </ul>
-                `
-              : nothing
-          }
-          ${
-            unknown
-              ? html`
-                  <div class="unknown">
-                    <span class="unknown-icon" aria-hidden="true">?</span>
-                    <p>${unknown} undiscovered</p>
-                  </div>
-                `
-              : nothing
-          }
+          <ul class="finds" role="list">
+            ${entries.map((entry) => {
+              const { card, state } = entry;
+              const face = html`
+                <span class="foil-art" aria-hidden="true"></span>
+                <span class="find-title">${state === 'earned' ? card.title : 'Unopened card'}</span>
+                <span class="find-action"
+                  >${state === 'earned' ? 'Scratch again' : 'Scratch card'}</span
+                >
+                ${
+                  state === 'earned' && hasHuntPerfect(card.id)
+                    ? html`<span class="perfect-stamp">5/5 Signal</span>`
+                    : nothing
+                }
+              `;
+              return html`
+                <li>
+                  ${
+                    entry.state === 'earned'
+                      ? html`<button
+                          class="find earned"
+                          type="button"
+                          @click=${(event: Event) => this.openReplay(entry.card, event)}
+                        >
+                          ${face}
+                        </button>`
+                      : html`<a class="find found" href=${huntCardPath(card.id)}>${face}</a>`
+                  }
+                </li>
+              `;
+            })}
+            ${Array.from(
+              { length: unknown },
+              () => html`
+                <li class="find unknown" aria-hidden="true">
+                  <span class="foil-art"></span><span class="unknown-mark">?</span>
+                </li>
+              `,
+            )}
+          </ul>
+          ${unknown ? html`<p class="sr-only">${unknown} undiscovered</p>` : nothing}
         </section>
       `;
     });
@@ -278,47 +371,70 @@ export class HuntPage extends ThemedElement {
     const found = counted.length - earned;
     return html`
       <header class="collection-header">
-        <p class="kicker">Y2K Card Hunt</p>
-        <h1 id="hunt-heading" tabindex="-1">My Collection</h1>
-        <p>
-          Find cards on the DevFest site or pick them up from a link, QR or NFC tag at the venue.
-          Scratch the foil to keep each find.
-        </p>
-        <a class="hunt-link" href=${huntSiteLinks.activities}
-          >Explore Y2K activities <span aria-hidden="true">↗</span></a
-        >
-      </header>
-      <section class="collection-summary" aria-labelledby="progress-heading">
-        <h2 id="progress-heading">
-          <strong>${earned}${total ? html`<span> / ${total}</span>` : nothing}</strong> collected
-        </h2>
-        ${total ? html`<progress max=${total} value=${earned} aria-label="Collection progress"></progress>` : nothing}
-        <p>
-          ${found} ready to
-          scratch${total === undefined ? '' : ` · ${Math.max(0, total - counted.length)} undiscovered`}
-        </p>
-      </section>
-      <section class="code-panel">
-        <form @submit=${this.openCode} novalidate>
-          <label for="hunt-code">Have a card code?</label>
-          <div class="code-row">
-            <input
-              id="hunt-code"
-              name="code"
-              type="text"
-              autocomplete="off"
-              spellcheck="false"
-              autocapitalize="characters"
-              aria-describedby="code-help"
-              aria-invalid=${this.codeError ? 'true' : 'false'}
-            />
-            <button class="primary" type="submit">Open card</button>
-          </div>
-          <p id="code-help" role="status">
-            ${this.codeError || 'Use the code shown with a QR or NFC tag to open it in this browser.'}
+        <div>
+          <h1 id="hunt-heading" tabindex="-1">My Collection</h1>
+          <p>
+            Find cards on the DevFest site and around the venue. Scratch the foil to keep each find.
           </p>
-        </form>
-      </section>
+          <a class="hunt-link" href=${huntSiteLinks.activities}>Explore Y2K activities</a>
+        </div>
+        <section class="collection-summary" aria-labelledby="progress-heading">
+          <h2 id="progress-heading">
+            <strong>${earned}${total ? html`<span> / ${total}</span>` : nothing}</strong> collected
+          </h2>
+          ${total ? html`<progress max=${total} value=${earned} aria-label="Collection progress"></progress>` : nothing}
+          <p>
+            ${found} ready to
+            scratch${total === undefined ? '' : ` · ${Math.max(0, total - counted.length)} undiscovered`}
+          </p>
+        </section>
+      </header>
+      <div class="collection-tools">
+        <details class="code-panel">
+          <summary>Enter a card code</summary>
+          <form @submit=${this.openCode} novalidate>
+            <label for="hunt-code">Have a card code?</label>
+            <div class="code-row">
+              <input
+                id="hunt-code"
+                name="code"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                autocapitalize="characters"
+                aria-describedby="code-help"
+                aria-invalid=${this.codeError ? 'true' : 'false'}
+              />
+              <button class="primary" type="submit">Open card</button>
+            </div>
+            <p id="code-help" role="status">
+              ${this.codeError || 'Use the code shown with a QR or NFC tag to open it in this browser.'}
+            </p>
+          </form>
+        </details>
+        ${
+          this.phoneInput && this.groups
+            ? html`<div class="album-motion">
+                <button
+                  class="motion-button"
+                  type="button"
+                  ?disabled=${['requesting', 'waiting', 'active'].includes(this.albumMotion)}
+                  @click=${enableAlbumMotion}
+                >
+                  ${
+                    {
+                      requesting: 'Requesting motion…',
+                      waiting: 'Tilt your phone',
+                      active: 'Tilt active',
+                      denied: 'Try phone tilt again',
+                      unavailable: 'Try phone tilt again',
+                    }[this.albumMotion] ?? 'Enable phone tilt'
+                  }
+                </button>
+              </div>`
+            : nothing
+        }
+      </div>
       ${
         this.groups === undefined
           ? html`<p class="notice" role="status">Loading collection groups…</p>`
@@ -329,7 +445,7 @@ export class HuntPage extends ThemedElement {
               </div>`
             : nothing
       }
-      <div class="folders">${this.renderGroups()}</div>
+      <div class="folders" ${ref(this.bindAlbum)}>${this.renderGroups()}</div>
     `;
   }
 
@@ -346,15 +462,22 @@ export class HuntPage extends ThemedElement {
                   <p class="reveal-issue" role="status">${this.revealIssue}</p>`
               : html`
                   <section class="reveal-result" aria-labelledby="reveal-heading">
-                    <h2 id="reveal-heading" tabindex="-1">✦ Collected</h2>
+                    <h2 id="reveal-heading" tabindex="-1">Collected</h2>
                     <p>${view.card.text}</p>
+                    <button
+                      class="replay-action"
+                      type="button"
+                      @click=${(event: Event) => this.openReplay(view.card, event)}
+                    >
+                      Scratch again
+                    </button>
                   </section>
                 `
           }
         </article>
         ${
           view.status === 'earned' && view.card.game === 'signal'
-            ? html`<hunt-signal-game></hunt-signal-game>`
+            ? html`<hunt-signal-game .cardId=${view.card.id}></hunt-signal-game>`
             : nothing
         }
       `;
@@ -397,13 +520,25 @@ export class HuntPage extends ThemedElement {
         <footer class="hunt-credit">
           ${this.token === undefined ? html`<p>Your collection stays in this browser. Clearing site data can remove your finds.</p>` : nothing}
           <p>
-            Prepared by Michał Jabłoński. Inspired by
-            <a rel="noreferrer" href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
+            Prepared by
+            <a
+              href="https://www.linkedin.com/in/m-jab/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Michał Jabłoński on LinkedIn (opens in a new tab)"
+              >Michał Jabłoński</a
+            >. Inspired by
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/PiotrPrus/holographic-lottery-coupon-agsl"
+              aria-label="Piotr Prus’s scratch card repository (opens in a new tab)"
               >Piotr Prus’s scratch card</a
             >.
           </p>
         </footer>
       </div>
+      ${this.renderReplay()}
       <footer-block></footer-block>
     `;
   }
