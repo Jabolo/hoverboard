@@ -1162,6 +1162,14 @@ export async function handleConcierge(
     );
 
     if (!upstreamRes.ok) {
+      const bodySnippet =
+        typeof upstreamRes.text === 'function'
+          ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
+          : '';
+      console.error('concierge upstream non-OK', {
+        status: upstreamRes.status,
+        bodySnippet,
+      });
       response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
       return;
     }
@@ -1169,12 +1177,19 @@ export async function handleConcierge(
     const upstreamJson = (await upstreamRes.json()) as unknown;
     const rawText = extractModelJsonText(upstreamJson);
     if (!rawText) {
+      console.error('concierge empty model text', {
+        keys:
+          upstreamJson && typeof upstreamJson === 'object'
+            ? Object.keys(upstreamJson as Record<string, unknown>)
+            : [],
+      });
       response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
       return;
     }
 
     const plan = parseModelPlan(rawText);
     if (!plan) {
+      console.error('concierge invalid model plan', { rawSnippet: rawText.slice(0, 200) });
       response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
       return;
     }
@@ -1199,7 +1214,11 @@ export async function handleConcierge(
       cached: false,
       messages,
     });
-  } catch {
+  } catch (err) {
+    console.error('concierge upstream exception', {
+      name: err instanceof Error ? err.name : 'unknown',
+      message: err instanceof Error ? err.message : String(err),
+    });
     response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
   } finally {
     clearTimeout(timeoutId);
