@@ -19,17 +19,17 @@ describe('on-site homepage programme', () => {
     history.replaceState({}, '', '/');
   });
 
-  it('shows the first three published starting times before the event', () => {
+  it('shows only the first published starting time before the event', () => {
     const result = homeAgendaAt(items, eventInstant('09:00') - 1);
     expect(result.state).toBe('before');
-    expect(ids(result.upcoming)).toEqual(['registration', 'opening', 'CFP-021', 'INVITED-004']);
+    expect(ids(result.upcoming)).toEqual(['registration']);
     expect(result.current).toEqual([]);
   });
 
-  it('shows parallel rooms at their exact start and the next two time slots', () => {
+  it('shows all live parallel rooms without later slots at their exact start', () => {
     const result = homeAgendaAt(items, eventInstant('10:15'));
     expect(ids(result.current)).toEqual(['CFP-021', 'INVITED-004']);
-    expect(ids(result.upcoming)).toEqual(['CFP-002', 'CFP-012', 'CFP-014', 'CFP-050']);
+    expect(result.upcoming).toEqual([]);
   });
 
   it('handles missing end times and gaps without inventing a finish time', () => {
@@ -40,15 +40,11 @@ describe('on-site homepage programme', () => {
     expect(ids(homeAgendaAt(items, eventInstant('10:56')).upcoming)).toEqual([
       'CFP-002',
       'CFP-012',
-      'CFP-014',
-      'CFP-050',
-      'CFP-034',
-      'CFP-043',
     ]);
     expect(items.find((item) => item.id === 'registration')?.end).toBeUndefined();
   });
 
-  it('retains differently-started live sessions and all rooms in the remaining slot', () => {
+  it('retains differently-started live sessions without showing upcoming slots', () => {
     const template = items.find((item) => item.id === 'CFP-021')!;
     const revised = [
       { ...template, id: 'long-live', start: '10:15', end: '12:30' },
@@ -60,10 +56,7 @@ describe('on-site homepage programme', () => {
     ];
     const result = homeAgendaAt(revised, eventInstant('11:15'));
     expect(ids(result.current)).toEqual(['long-live', 'later-live']);
-    expect(ids(result.upcoming)).toEqual(['next-a', 'next-b']);
-    expect(
-      new Set([...result.current, ...result.started, ...result.upcoming].map((i) => i.start)).size,
-    ).toBe(3);
+    expect(result.upcoming).toEqual([]);
   });
 
   it('never hides a live room when over three start times overlap', () => {
@@ -122,10 +115,10 @@ describe('on-site homepage programme', () => {
     await element.updateComplete;
     const root = element.shadowRoot!;
     expect(root.textContent).toContain('Happening now');
-    expect(root.textContent).toContain('Up next');
+    expect(root.textContent).not.toContain('Up next');
     expect(
       [...root.querySelectorAll('.group h3')].map((heading) => heading.textContent?.trim()),
-    ).toEqual(['Happening now', 'Up next', 'Then · 12:00']);
+    ).toEqual(['Happening now']);
     expect(root.textContent).toContain('Auditorium');
     expect(root.textContent).toContain('Classroom');
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-021')?.title);
@@ -136,6 +129,50 @@ describe('on-site homepage programme', () => {
     expect(root.querySelector('a[href="/schedule/"]')).not.toBeNull();
     expect(root.textContent).toContain('Warsaw time');
     element.remove();
+  });
+
+  it('shows only the next start and its parallel rooms during a gap', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('16:05'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    const root = element.shadowRoot!;
+    expect(root.textContent).toContain('Up next');
+    expect(root.textContent).not.toContain('Happening now');
+    expect(root.querySelectorAll('.programme li')).toHaveLength(2);
+    expect(root.querySelector('a[href="/sessions/CFP-028/"]')).not.toBeNull();
+    expect(root.querySelector('a[href="/sessions/CFP-015/"]')).not.toBeNull();
+    expect(root.textContent).not.toContain('17:05');
+  });
+
+  it('keeps an untimed started activity distinct from the next timed item', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('09:30'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    const root = element.shadowRoot!;
+    expect(root.textContent).toContain('Started · end time not listed');
+    expect(root.textContent).toContain('Registration');
+    expect(root.textContent).toContain('Up next');
+    expect(root.textContent).toContain('Opening');
+    expect(root.textContent).not.toContain('Happening now');
+    expect(root.querySelectorAll('.programme li')).toHaveLength(2);
   });
 
   it('starts the pre-event list without the redundant green date heading', async () => {
@@ -193,18 +230,11 @@ describe('on-site homepage programme', () => {
     const selection = (time: string) =>
       homeAgendaAt(items, getScheduleTestTime('localhost', `?schedule-test=${time}`)!);
     expect(ids(selection('09:30').started)).toEqual(['registration']);
-    expect(ids(selection('09:30').upcoming)).toEqual(['opening', 'CFP-021', 'INVITED-004']);
+    expect(ids(selection('09:30').upcoming)).toEqual(['opening']);
     expect(ids(selection('11:05').current)).toEqual(['CFP-002', 'CFP-012']);
-    expect(ids(selection('11:05').upcoming)).toEqual(['CFP-014', 'CFP-050', 'CFP-034', 'CFP-043']);
+    expect(selection('11:05').upcoming).toEqual([]);
     expect(ids(selection('16:05').current)).toEqual([]);
-    expect(ids(selection('16:05').upcoming)).toEqual([
-      'CFP-028',
-      'CFP-015',
-      'scaling-hugging-face-hub',
-      'INVITED-003',
-      'INVITED-002',
-      'INVITED-001',
-    ]);
+    expect(ids(selection('16:05').upcoming)).toEqual(['CFP-028', 'CFP-015']);
   });
 
   it('labels simulated time and keeps it fixed as the real clock advances', async () => {

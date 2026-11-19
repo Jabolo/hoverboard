@@ -39,12 +39,12 @@ export function homeAgendaAt(items: AgendaItem[], now: number) {
   const state = now < firstStart ? 'before' : now < displayEnd ? 'during' : 'after';
   if (state === 'after') return { state, current: [], started: [], upcoming: [] };
   if (state === 'before') {
-    const firstStarts = [...new Set(ordered.map((item) => item.start))].slice(0, 3);
+    const firstStartTime = ordered[0]!.start;
     return {
       state,
       current: [],
       started: [],
-      upcoming: ordered.filter((item) => firstStarts.includes(item.start)),
+      upcoming: ordered.filter((item) => item.start === firstStartTime),
     };
   }
   const current = ordered.filter(
@@ -55,30 +55,16 @@ export function homeAgendaAt(items: AgendaItem[], now: number) {
     const nextStart = ordered.find((candidate) => candidate.start > item.start)?.start;
     return nextStart ? now < eventInstant(nextStart) : true;
   });
-  // A slot is a start time, not an individual room. Keep every live room,
-  // even if parallel activities started at different times, then fill the
-  // remaining places with the nearest distinct upcoming starts.
-  const activeStarts = new Set([...current, ...started].map((item) => item.start));
-  const futureStarts = [
-    ...new Set(ordered.filter((item) => eventInstant(item.start) > now).map((item) => item.start)),
-  ].slice(0, Math.max(0, 3 - activeStarts.size));
+  // Show all live rooms. During a gap, keep every room at the next start time.
+  const nextStart = current.length
+    ? undefined
+    : ordered.find((item) => eventInstant(item.start) > now)?.start;
   return {
     state,
     current,
     started,
-    upcoming: ordered.filter((item) => futureStarts.includes(item.start)),
+    upcoming: nextStart ? ordered.filter((item) => item.start === nextStart) : [],
   };
-}
-
-/** Consecutive start times form one slot each, with every parallel room retained. */
-function groupByStart(items: AgendaItem[]): AgendaItem[][] {
-  const groups: AgendaItem[][] = [];
-  for (const item of items) {
-    const lastGroup = groups[groups.length - 1];
-    if (lastGroup?.[0]?.start === item.start) lastGroup.push(item);
-    else groups.push([item]);
-  }
-  return groups;
 }
 
 @customElement('schedule-block')
@@ -401,7 +387,6 @@ export class ScheduleBlock extends ThemedElement {
 
   override render() {
     const selection = homeAgendaAt(this.items, this.now);
-    const upcomingGroups = groupByStart(selection.upcoming);
     const testTime = getScheduleTestTime(window.location.hostname, window.location.search);
     return html` <section id="schedule" class="container" aria-labelledby="schedule-title">
       <div class="heading-row">
@@ -443,16 +428,12 @@ export class ScheduleBlock extends ThemedElement {
             ? html`
                 ${selection.state === 'after' ? html`<p class="message">See the full programme for the day’s sessions.</p>` : nothing}
                 ${
-                  selection.state === 'during'
+                  selection.current.length
                     ? html`<div class="group">
                         <h3>Happening now</h3>
-                        ${
-                          selection.current.length
-                            ? html`<ul>
-                                ${selection.current.map((item) => this.renderItem(item))}
-                              </ul>`
-                            : html`<p class="message">No timed sessions are listed right now.</p>`
-                        }
+                        <ul>
+                          ${selection.current.map((item) => this.renderItem(item))}
+                        </ul>
                       </div>`
                     : nothing
                 }
@@ -467,22 +448,13 @@ export class ScheduleBlock extends ThemedElement {
                     : nothing
                 }
                 ${
-                  upcomingGroups.length
-                    ? html`${upcomingGroups.map(
-                        (group, index) =>
-                          html`<div class="group">
-                            ${
-                              selection.state === 'before' && index === 0
-                                ? nothing
-                                : html`<h3>
-                                    ${index === 0 ? 'Up next' : `Then · ${group[0]!.start}`}
-                                  </h3>`
-                            }
-                            <ul>
-                              ${group.map((item) => this.renderItem(item))}
-                            </ul>
-                          </div>`,
-                      )}`
+                  selection.upcoming.length
+                    ? html`<div class="group">
+                        ${selection.state === 'before' ? nothing : html`<h3>Up next</h3>`}
+                        <ul>
+                          ${selection.upcoming.map((item) => this.renderItem(item))}
+                        </ul>
+                      </div>`
                     : nothing
                 }
               `
