@@ -58,6 +58,12 @@ try {
     const handle = peek.getByRole('button');
     await handle.waitFor();
     assert.equal(await handle.getAttribute('aria-expanded'), 'false');
+    await handle.scrollIntoViewIfNeeded();
+    const closed = await handle.boundingBox();
+    assert.equal(closed.width, 44);
+    assert.equal(closed.height, 56);
+    assert.equal(await peek.evaluate((el) => el.previousElementSibling?.id), 'partners');
+    await page.screenshot({ path: `/tmp/y2k-peek-corner-${width}.png` });
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       true,

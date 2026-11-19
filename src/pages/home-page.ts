@@ -485,7 +485,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <hunt-peek-card></hunt-peek-card>
       <hero-block
         id="hero"
         background-image="[[heroSettings.background.image]]"
@@ -671,6 +670,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <div id="tickets" style="scroll-margin-top: 80px;"></div>
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
+      <hunt-peek-card></hunt-peek-card>
       <schedule-block></schedule-block>
       <section id="y2k-activities" class="y2k-activities" aria-labelledby="y2k-heading">
         <div class="y2k-inner">

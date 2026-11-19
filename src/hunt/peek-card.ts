@@ -11,10 +11,9 @@ export class HuntPeekCard extends LitElement {
 
   static override styles = css`
     :host {
-      position: absolute;
-      top: 110px;
-      right: 0;
-      z-index: 4;
+      position: relative;
+      margin: 8px 0 8px auto;
+      z-index: 1;
       display: block;
       width: min(300px, calc(100vw - 12px));
       overflow: hidden;
@@ -24,14 +23,23 @@ export class HuntPeekCard extends LitElement {
     }
     .card {
       display: grid;
-      grid-template-columns: 64px 1fr;
-      background: linear-gradient(125deg, #e2e6ff, #f8d8e4, #cef5e8);
+      grid-template-columns: 44px 1fr;
+      max-height: 56px;
+      overflow: hidden;
+      background: linear-gradient(125deg, #ffefd3, #dcc9e7 53%, #b8e9d8);
       color: #211830;
       border: 1px solid #fff8ec;
       border-radius: 14px 0 0 14px;
-      box-shadow: 0 6px 0 #291a3e;
+      box-shadow: 0 2px 0 #291a3e;
       pointer-events: auto;
       transition: transform 200ms ease-out;
+    }
+    .card:not(.open) button {
+      height: 56px;
+      align-self: start;
+    }
+    .card.open {
+      max-height: 320px;
     }
     .dragging {
       transition: none;
@@ -43,21 +51,21 @@ export class HuntPeekCard extends LitElement {
       border-right: 1px solid #8a7697;
       border-radius: 14px 0 0 14px;
       color: #211830;
-      background: #eaf87f;
-      padding: 12px 8px;
+      background: transparent;
+      padding: 8px 4px;
       font:
         700 12px 'Trebuchet MS',
         sans-serif;
-      min-width: 64px;
-      min-height: 100px;
+      min-width: 44px;
+      min-height: 56px;
     }
     button:active {
       cursor: grabbing;
     }
     .eyes {
       display: block;
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-size: 16px;
+      margin-bottom: 2px;
     }
     .copy {
       padding: 18px 16px;
@@ -88,11 +96,6 @@ export class HuntPeekCard extends LitElement {
     :is(button, a):focus-visible {
       outline: 3px solid #5b2d88;
       outline-offset: -4px;
-    }
-    @media (min-width: 900px) {
-      :host {
-        top: 155px;
-      }
     }
     @media (prefers-reduced-motion: reduce) {
       .card {
@@ -160,10 +163,10 @@ export class HuntPeekCard extends LitElement {
   };
   override render() {
     const offset = this.open
-      ? `clamp(0px, ${this.drag}px, calc(100% - 64px))`
-      : `clamp(0px, calc(100% - 64px + ${this.drag}px), calc(100% - 64px))`;
+      ? `clamp(0px, ${this.drag}px, calc(100% - 44px))`
+      : `clamp(0px, calc(100% - 44px + ${this.drag}px), calc(100% - 44px))`;
     return html`<aside
-      class="card ${this.dragged ? 'dragging' : ''}"
+      class="card ${this.open ? 'open' : ''} ${this.dragged ? 'dragging' : ''}"
       style=${`transform:translateX(${offset})`}
       @keydown=${this.key}
       aria-label="Peeking holographic card"
@@ -178,7 +181,7 @@ export class HuntPeekCard extends LitElement {
         @pointerup=${this.up}
         @pointercancel=${this.cancel}
       >
-        <span class="eyes" aria-hidden="true">👀</span>${this.open ? 'TUCK IN →' : '← PULL ME'}
+        <span class="eyes" aria-hidden="true">👀</span>${this.open ? '→' : '↖'}
       </button>
       <div id="peek-details" class="copy" ?inert=${!this.open}>
         <strong>Psst. I’m not a popup.</strong>
