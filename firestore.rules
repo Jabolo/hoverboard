@@ -29,6 +29,60 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Optional Y2K collection. This is a personal souvenir, not proof of attendance
+    // or a prize entry: clients can write their own records, so counts are indicative.
+    match /huntCollections/{userId} {
+      function owner() {
+        return request.auth != null && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == "google.com";
+      }
+      function validCard(card, state) {
+        return card is map
+          && card.keys().hasAll(["id", "title", "group"])
+          && card.id is string && card.id.matches("^[a-z0-9]{7}$")
+          && card.title is string && card.title.size() > 0 && card.title.size() <= 200
+          && card.group in ["web", "play", "venue", "mystery", "preview"]
+          && (state == "found"
+            ? card.keys().hasOnly(["id", "title", "group"])
+            : card.keys().hasAll(["text"])
+              && card.keys().hasOnly(["id", "title", "group", "text", "game"])
+              && card.text is string && card.text.size() <= 4000
+              && (!("game" in card) || card.game == "signal"));
+      }
+      function validEntry(entryId, data) {
+        return data.keys().hasAll(["state", "card", "foundAt"])
+          && data.state in ["found", "earned"]
+          && validCard(data.card, data.state)
+          && entryId == data.state + "_" + data.card.id
+          && data.foundAt is number && data.foundAt >= 0
+          && (data.state == "found"
+            ? data.keys().hasOnly(["state", "card", "foundAt"])
+            : data.keys().hasAll(["earnedAt"])
+              && data.keys().hasOnly(["state", "card", "foundAt", "earnedAt"])
+              && data.earnedAt is number && data.earnedAt >= 0);
+      }
+      function validEnvelope() {
+        return request.resource.data.keys().hasOnly(["entries", "changedKey"])
+          && request.resource.data.keys().hasAll(["entries", "changedKey"])
+          && request.resource.data.entries is map
+          && request.resource.data.entries.size() <= 64
+          && request.resource.data.changedKey is string
+          && request.resource.data.changedKey in request.resource.data.entries
+          && validEntry(request.resource.data.changedKey,
+                        request.resource.data.entries[request.resource.data.changedKey]);
+      }
+      function validCreate() {
+        return validEnvelope() && request.resource.data.entries.size() == 1;
+      }
+      function validUpdate() {
+        return validEnvelope() && request.resource.data.entries.diff(resource.data.entries)
+          .affectedKeys().hasOnly([request.resource.data.changedKey]);
+      }
+      allow get, list, delete: if owner();
+      allow create: if owner() && validCreate();
+      allow update: if owner() && validUpdate();
+    }
+
     match /notifications/{notificationId} {
       allow read, write: if false;
     }

@@ -4,7 +4,9 @@ import {
   HUNT_STORAGE_KEY,
   huntStorageAvailable,
   huntGroups,
+  mergeHuntProgress,
   normalizeHuntCode,
+  parseHuntProgressEntry,
   rememberHuntCard,
   requestHuntCard,
 } from './hunt-store';
@@ -49,6 +51,29 @@ describe('browser card collection', () => {
     expect(normalizeHuntCode('../../test001')).toBe('');
     await expect(requestHuntCard('not a code')).resolves.toEqual({ status: 'invalid' });
   });
+});
+
+it('combines devices without downgrading an earned card to an unopened find', () => {
+  const found = { state: 'found' as const, card: first, foundAt: 1 };
+  const earned = {
+    state: 'earned' as const,
+    card: { ...first, text: 'Found' },
+    foundAt: 1,
+    earnedAt: 2,
+  };
+  const other = { state: 'found' as const, card: second, foundAt: 3 };
+  expect(mergeHuntProgress([found, other], [earned])).toEqual([earned, other]);
+  expect(mergeHuntProgress([earned], [found, other])).toEqual([earned, other]);
+});
+
+it('rejects malformed records before they can appear in a synced collection', () => {
+  expect(
+    parseHuntProgressEntry({ state: 'earned', card: first, foundAt: 1, earnedAt: 2 }),
+  ).toBeNull();
+  expect(
+    parseHuntProgressEntry({ state: 'found', card: { ...first, id: '../oops' }, foundAt: 1 }),
+  ).toBeNull();
+  expect(parseHuntProgressEntry({ state: 'found', card: first, foundAt: Infinity })).toBeNull();
 });
 
 it('sends the same-origin session on collection, card, and reveal requests', async () => {

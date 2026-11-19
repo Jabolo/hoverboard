@@ -10,6 +10,7 @@ import {
   huntCardPath,
   huntGroups,
   huntStorageAvailable,
+  mergeHuntProgress,
   normalizeHuntCode,
   rememberHuntCard,
   requestHuntCard,
@@ -19,6 +20,7 @@ import {
   type HuntProgressEntry,
   type HuntResult,
 } from '../hunt/hunt-store.js';
+import type { CloudState } from '../hunt/hunt-cloud.js';
 import { huntStyles } from '../hunt/hunt-styles.js';
 import '../hunt/signal-game.js';
 import { huntSiteLinks } from '../hunt/site-links.js';
@@ -64,11 +66,17 @@ export class HuntPage extends ThemedElement {
   @state() private revealIssue = '';
   @state() private storageAvailable = true;
   @state() private albumMotion = 'idle';
+  @state() private cloud: CloudState = { status: 'local', progress: [], account: '', message: '' };
+  @state() private cloudReady = false;
+  @state() private cloudActionError = '';
   @state() private replay:
     { card: EarnedHuntCard; foil: HTMLElement; revealed: boolean } | undefined;
   private routeRequest?: AbortController;
   private unbindAlbumMotion?: () => void;
   private replayTrigger: HTMLElement | undefined;
+  private cloudModule?: typeof import('../hunt/hunt-cloud.js');
+  private unsubscribeCloud?: () => void;
+  private cloudLoadGeneration = 0;
   private readonly phoneInput =
     navigator.maxTouchPoints > 0 || window.matchMedia('(any-pointer: coarse)').matches;
 
@@ -76,11 +84,35 @@ export class HuntPage extends ThemedElement {
     super.connectedCallback();
     this.refreshProgress();
     window.addEventListener('storage', this.onStorage);
+    const generation = ++this.cloudLoadGeneration;
+    void import('../hunt/hunt-cloud.js')
+      .then(async (module) => {
+        await module.huntCloud.whenReady();
+        if (!this.isConnected || generation !== this.cloudLoadGeneration) return;
+        this.cloudModule = module;
+        this.cloudActionError = '';
+        this.unsubscribeCloud = module.huntCloud.subscribe((cloud) => {
+          this.cloud = cloud;
+          this.refreshProgress();
+          const saved = this.findEarnedCard(normalizeHuntCode(this.token ?? ''));
+          if (saved) this.cardView = { status: 'earned', card: saved };
+        });
+        this.cloudReady = true;
+      })
+      .catch(() => {
+        if (generation === this.cloudLoadGeneration)
+          this.cloudActionError =
+            'Cloud sync could not load. You can still collect in this browser.';
+      });
   }
 
   override disconnectedCallback() {
     this.routeRequest?.abort();
+    this.cloudLoadGeneration++;
     window.removeEventListener('storage', this.onStorage);
+    this.unsubscribeCloud?.();
+    this.cloud = { status: 'local', progress: [], account: '', message: '' };
+    this.cloudReady = false;
     super.disconnectedCallback();
   }
 
@@ -109,8 +141,92 @@ export class HuntPage extends ThemedElement {
   };
 
   private refreshProgress() {
-    this.progress = getHuntProgress();
+    this.progress = mergeHuntProgress(getHuntProgress(), this.cloud.progress);
     this.storageAvailable = huntStorageAvailable();
+  }
+
+  private readonly connectCloud = () => {
+    this.cloudActionError = '';
+    void this.cloudModule?.huntCloud.connect();
+  };
+
+  private readonly disconnectCloud = () => {
+    this.cloudActionError = '';
+    void this.cloudModule?.huntCloud.disconnect().catch(() => {
+      this.cloudActionError = 'Could not finish signing out. Please try again.';
+    });
+  };
+
+  private readonly retryCloud = () => {
+    this.cloudActionError = '';
+    this.cloudModule?.huntCloud.retry();
+  };
+
+  private readonly deleteCloud = () => {
+    if (
+      !window.confirm(
+        'Stop syncing on your other devices and tabs first. Delete your synced Card Hunt collection? Cards saved in this browser will stay here.',
+      )
+    )
+      return;
+    this.cloudActionError = '';
+    void this.cloudModule?.huntCloud.deleteCloudCollection().catch(() => {
+      this.cloudActionError = 'Could not confirm cloud deletion. Reconnect and check.';
+    });
+  };
+
+  private renderCloudSync() {
+    const { status, account, message } = this.cloud;
+    const active = ['syncing', 'synced', 'offline'].includes(status) || Boolean(account);
+    const label = {
+      local: 'Saved in this browser',
+      connecting: 'Working…',
+      syncing: 'Saving your cards…',
+      synced: 'Your cards are synced',
+      offline: 'Waiting for a connection',
+      error: 'Sync needs attention',
+    }[status];
+    return html`
+      <section class="cloud-panel" aria-labelledby="cloud-title">
+        <h2 id="cloud-title">Keep your cards on another device</h2>
+        <p>
+          Optional: sync this browser’s cards across devices with Google. No ticket number needed.
+        </p>
+        <p>
+          Your Google account, cards and collection times are stored in Firebase. Organizers may
+          count synced cards. Use a private device.
+          <a href="/privacy">Privacy &amp; data</a>
+        </p>
+        <div class="cloud-actions">
+          ${
+            active
+              ? html`${status === 'error' ? html`<button type="button" class="secondary" @click=${this.retryCloud}>Retry sync</button>` : nothing}<button
+                    type="button"
+                    class="secondary"
+                    @click=${this.disconnectCloud}
+                  >
+                    Stop syncing
+                  </button>
+                  <button type="button" class="secondary" @click=${this.deleteCloud}>
+                    Delete synced cards
+                  </button>`
+              : html`<button
+                  type="button"
+                  class="primary"
+                  ?disabled=${!this.cloudReady || status === 'connecting'}
+                  @click=${this.connectCloud}
+                >
+                  Sign in to sync
+                </button>`
+          }
+        </div>
+        <p role="status">
+          <strong>${label}</strong
+          >${account ? html` · ${account}` : nothing}${message ? html` · ${message}` : nothing}${this.cloudActionError ? html` · ${this.cloudActionError}` : nothing}
+        </p>
+        ${active ? html`<p>Stopping sync hides cloud-only cards here; sign in again to restore them. It does not delete the cloud copy.</p>` : nothing}
+      </section>
+    `;
   }
 
   private findEarnedCard(id: string) {
@@ -389,6 +505,7 @@ export class HuntPage extends ThemedElement {
           </p>
         </section>
       </header>
+      ${this.renderCloudSync()}
       <div class="collection-tools">
         <details class="code-panel">
           <summary>Enter a card code</summary>
@@ -518,7 +635,7 @@ export class HuntPage extends ThemedElement {
             : nothing
         }
         <footer class="hunt-credit">
-          ${this.token === undefined ? html`<p>Your collection stays in this browser. Clearing site data can remove your finds.</p>` : nothing}
+          ${this.token === undefined ? html`<p>Browser-saved cards can be removed when you clear site data. Cloud sync is optional.</p>` : nothing}
           <p>
             Prepared by
             <a
