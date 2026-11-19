@@ -165,6 +165,8 @@ try {
     await page.goto(base + '/hunt/');
     const hunt = page.locator('hunt-page');
     await hunt.getByRole('button', { name: /Shy Browser Tab Scratch again/ }).waitFor();
+    // Earned cards restore locally before the remote catalog finishes loading.
+    await hunt.locator('li.unknown').nth(21).waitFor({ state: 'attached' });
     assert.equal(await hunt.locator('li.unknown').count(), 22, '25 total minus 3 new earned cards');
     await hunt.getByText('DevFest Quest idea:', { exact: false }).waitFor();
     await page.reload();
