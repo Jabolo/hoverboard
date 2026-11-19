@@ -45,6 +45,7 @@ try {
     const game = h.locator('hunt-signal-game');
     await game.getByRole('button', { name: 'Normal', exact: true }).waitFor();
     await game.getByRole('button', { name: 'Start game', exact: true }).click();
+    assert.equal(await game.locator('.lamp.clear').count(), 1);
     // A miss does not consume one of the four successful catches.
     await game.getByRole('button', { name: 'Catch signal', exact: true }).click();
     assert.match(await game.locator('.scoreboard').innerText(), /Score: 0 \/ 4/);
@@ -78,6 +79,9 @@ try {
     await game.getByRole('button', { name: 'Start game', exact: true }).click();
     assert.equal(await game.getByRole('button', { name: 'Next signal', exact: true }).count(), 0);
     assert.match(await game.locator('.scoreboard').innerText(), /Time: 30s/);
+    assert.equal(await game.locator('.lamp.clear').count(), 0);
+    assert.equal(await game.locator('.lamps').getAttribute('aria-hidden'), 'true');
+    await game.screenshot({ path: `/tmp/signal-no-hint-${width}.png` });
     for (let n = 0; n < 3; n++) {
       for (
         let step = 0;
@@ -85,6 +89,8 @@ try {
         step++
       )
         await p.clock.runFor(await game.evaluate((el) => el.speed));
+      assert.equal(await game.locator('.lamp.clear').count(), 0);
+      assert.equal(await game.locator('.lamp.active').count(), 1);
       const before = await game.evaluate((el) => ({ target: el.target, speed: el.speed }));
       await game.getByRole('button', { name: 'Catch signal', exact: true }).click();
       assert.equal(await game.evaluate((el) => el.score), n + 1);

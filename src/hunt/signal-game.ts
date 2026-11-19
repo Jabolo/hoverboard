@@ -277,7 +277,9 @@ export class HuntSignalGame extends ThemedElement {
     this.attempts = 0;
     this.completed = false;
     this.feedback =
-      this.mode === 'hardcore' ? 'Watch the outlined target. How many can you catch?' : '';
+      this.mode === 'hardcore'
+        ? 'Wait for “Clear signal”, then catch it. How many can you catch?'
+        : '';
     this.target = this.mode === 'hardcore' ? Math.floor(Math.random() * 4) : 1;
     this.signal = (this.target + 1 + Math.floor(Math.random() * 3)) % 4;
     this.lastCatch = -Infinity;
@@ -363,7 +365,7 @@ export class HuntSignalGame extends ThemedElement {
         </button>
       </div>
       <p>
-        ${this.mode === 'normal' ? 'Catch four clear signals to finish. Misses are practice. Choose step mode for an untimed game.' : '30 seconds. Catch as many as you can! The outlined target moves after every try and the signal gets faster. Misses cost 2 seconds.'}
+        ${this.mode === 'normal' ? 'Catch four clear signals to finish. Misses are practice. Choose step mode for an untimed game.' : '30 seconds. Catch when the display says “Clear signal”! Its position changes after every try, with no target hint, and the signal gets faster. Misses cost 2 seconds.'}
       </p>
       <div class="scoreboard" aria-label="Game statistics">
         <span>Score: ${this.score}${this.mode === 'normal' ? ' / 4' : ''}</span>
@@ -371,7 +373,7 @@ export class HuntSignalGame extends ThemedElement {
       </div>
       <div class="dial" aria-live=${this.mode === 'normal' && this.stepMode ? 'polite' : 'off'}>
         <div class="lamps" aria-hidden="true">
-          ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${index === this.target ? 'clear' : ''}"></span>`)}
+          ${signals.map((_, index) => html`<span class="lamp ${this.running && index === this.signal ? 'active' : ''} ${this.mode === 'normal' && index === this.target ? 'clear' : ''}"></span>`)}
         </div>
         <strong
           >${this.running ? (this.signal === this.target ? 'Clear signal' : signals.filter((_, index) => index !== 1)[this.signal % 3]) : 'Ready when you are'}</strong
