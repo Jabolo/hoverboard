@@ -2,7 +2,7 @@ import { Failure, Initialized, Pending, RemoteData, Success } from '@abraham/rem
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { collection, onSnapshot, orderBy, query, Unsubscribe } from 'firebase/firestore';
 import { RootState, store } from '..';
-import { db } from '../../firebase';
+import { readOnlyDb } from '../../firebase';
 import { Partner } from '../../models/partner';
 import { PartnerGroup, PartnerGroupWithoutItems } from '../../models/partner-group';
 import { dataWithParentId, mergeDataAndId } from '../../utils/firestore';
@@ -34,7 +34,7 @@ const subscribeToPartners = () => {
   // A collectionGroup query spans unrelated items collections and is denied by
   // the scoped security rules. Subscribe only beneath known partner groups.
   const unsubscribeGroups = onSnapshot(
-    query(collection(db, 'partners'), orderBy('order')),
+    query(collection(readOnlyDb, 'partners'), orderBy('order')),
     (snapshot) => {
       const groupIds = new Set(snapshot.docs.map((group) => group.id));
       for (const [id, unsubscribe] of subscriptions) {
@@ -49,7 +49,7 @@ const subscribeToPartners = () => {
           subscriptions.set(
             id,
             onSnapshot(
-              query(collection(db, 'partners', id, 'items'), orderBy('order')),
+              query(collection(readOnlyDb, 'partners', id, 'items'), orderBy('order')),
               (partners) => {
                 items.set(id, partners.docs.map<Partner>(dataWithParentId));
                 publish();
@@ -71,7 +71,7 @@ const subscribeToPartners = () => {
 
 const subscribeToGroups = () => {
   return onSnapshot(
-    query(collection(db, 'partners'), orderBy('order')),
+    query(collection(readOnlyDb, 'partners'), orderBy('order')),
     (snapshot) => {
       store.dispatch(setGroupsSuccess(snapshot.docs.map<PartnerGroupWithoutItems>(mergeDataAndId)));
     },

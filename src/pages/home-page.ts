@@ -41,6 +41,7 @@ function loadHomeSections() {
   sectionsLoading ??= Promise.all([
     import('../components/about-block'),
     import('../elements/about-organizer-block'),
+    import('../elements/attendee-photos-block'),
     import('../elements/cloud-credit-block'),
     import('../elements/linkedin-updates-block'),
     import('../elements/schedule-block'),
@@ -493,6 +494,60 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             justify-self: end;
           }
         }
+
+        /* The event-day homepage gives the programme priority over promotion. */
+        .event-description,
+        event-countdown {
+          display: none;
+        }
+        @media (max-width: 811px) {
+          /* Put the programme within reach for attendees already on site. */
+          .terminal-column,
+          .scroll-down {
+            display: none;
+          }
+          .home-content {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+          .hero-community {
+            margin-top: 8px;
+            --google-developers-brand-width: 150px;
+          }
+          .event-details {
+            margin-top: 16px;
+          }
+          .action-buttons md-filled-button,
+          .action-buttons md-outlined-button {
+            margin: 4px;
+            font-size: 11px;
+            letter-spacing: 0;
+          }
+        }
+        @media (min-width: 812px) {
+          hero-block {
+            height: auto;
+            max-height: none;
+          }
+          .home-content {
+            margin-top: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+          .terminal-body {
+            padding-top: 12px;
+            padding-bottom: 12px;
+          }
+          .terminal-line + .terminal-line {
+            margin-top: 4px;
+          }
+          .terminal-body hr {
+            margin: 8px 0;
+          }
+          .scroll-down {
+            display: none;
+          }
+        }
       </style>
 
       <hero-block
@@ -532,11 +587,11 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                     [[viewHighlights]]
                   </md-outlined-button>
                 </template>
-                <md-outlined-button href="/sessions/">Explore sessions</md-outlined-button>
-                <md-filled-button on-click="scrollToTickets">
+                <md-filled-button href="/schedule/">View programme</md-filled-button>
+                <md-outlined-button on-click="scrollToTickets">
                   <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
                   [[ticketActionLabel]]
-                </md-filled-button>
+                </md-outlined-button>
               </div>
             </div>
 
@@ -672,6 +727,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         </div>
       </hero-block>
       <cloud-credit-block></cloud-credit-block>
+      <schedule-block></schedule-block>
+      <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
+      <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
       <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
       <template is="dom-if" if="{{showForkMeBlock}}">
         <fork-me-block></fork-me-block>
@@ -681,7 +739,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <hunt-peek-card></hunt-peek-card>
-      <schedule-block></schedule-block>
       <section id="y2k-activities" class="y2k-activities" aria-labelledby="y2k-heading">
         <div class="y2k-inner">
           <h2 id="y2k-heading" tabindex="-1">Y2K Vibe Lab &amp; Arcade</h2>
@@ -718,7 +775,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <past-devfests-block></past-devfests-block>
       <about-organizer-block></about-organizer-block>
       <map-block></map-block>
-      <visit-block></visit-block>
       <footer-block></footer-block>
     `;
   }

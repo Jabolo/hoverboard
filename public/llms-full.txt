@@ -25,7 +25,7 @@ This file is an expanded, machine-readable companion to `/llms.txt`. It contains
 
 ## Programme and topics
 
-The final 2026 programme and speaker lineup are published as they are confirmed. The current website describes talks, demos, practical sessions, and hands-on workshops. Proposed focus areas include:
+The 2026 programme and speaker lineup are published on the official website. The current website describes talks, demos, practical sessions, and hands-on workshops. Proposed focus areas include:
 
 - Practical AI & ML
 - Google Cloud
@@ -44,7 +44,7 @@ Other practical engineering, product, career, or community topics may also fit t
 
 - Platform: Advocu
 - Closed call (historical reference): https://app.advocu.com/public/gde/events/6a9e63804f57bc69c8b411c1?cfpid=6a9fd14f4f57bc69c8b577e0
-- Status: closed; submissions are under review and programme planning is underway
+- Status: closed; the programme and speaker lineup are published
 - Formats: talks, demos, workshops, panels, and other formats
 - Participation: in person
 - Published submission deadline (past): 4 October 2026 at 23:45 Europe/Warsaw
@@ -68,13 +68,13 @@ Developers, designers, entrepreneurs, engineers, researchers, and students, from
 
 The current focus areas include Cloud, Mobile, Web, ML & AI, UI & UX, developer tooling, performance, reliability, data, engineering culture, career growth, and the named 2026 focus areas on the website.
 
-### Where will the final schedule and speakers appear?
+### Where can I find the schedule and speakers?
 
-On the official website at https://warsaw.devfest.pl/schedule and https://warsaw.devfest.pl/speakers as confirmations are made.
+On the official website at https://warsaw.devfest.pl/schedule and https://warsaw.devfest.pl/speakers.
 
 ### Is the Call for Papers still open?
 
-The Call for Papers is closed. We’re reviewing submissions and planning the programme. Speaker announcements will follow as confirmations are made.
+The Call for Papers is closed. Explore the published programme and speaker lineup on the official website.
 
 ### Where can previous editions be found?
 

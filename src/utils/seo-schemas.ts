@@ -74,7 +74,7 @@ export const FAQ_SCHEMA = {
       name: 'What time does registration open?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Registration opens at 09:00. The complete timetable will be announced as sessions and workshops are confirmed.',
+        text: 'Registration opens at 09:00. See the published programme at https://warsaw.devfest.pl/schedule/.',
       },
     },
     {
@@ -98,7 +98,7 @@ export const FAQ_SCHEMA = {
       name: 'How can I speak at DevFest Warsaw?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The Call for Papers is closed. We’re reviewing submissions and planning the programme. Speaker announcements will follow as confirmations are made.',
+        text: 'The Call for Papers is closed. Explore the published programme and speaker lineup on the official website.',
       },
     },
   ],

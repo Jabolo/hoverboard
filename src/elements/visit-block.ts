@@ -21,19 +21,8 @@ export class VisitBlock extends ThemedElement {
           padding-bottom: 72px;
         }
 
-        .kicker {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--google-blue);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-        }
-
         h2,
-        h2 {
+        h3 {
           margin: 0;
           font-family: var(--font-mono, monospace);
         }
@@ -54,6 +43,11 @@ export class VisitBlock extends ThemedElement {
           line-height: 1.7;
         }
 
+        .intro strong {
+          color: var(--terminal-green);
+          font-family: var(--font-mono, monospace);
+        }
+
         .details {
           display: grid;
           gap: 0;
@@ -69,7 +63,21 @@ export class VisitBlock extends ThemedElement {
           border-top: 1px solid var(--divider-color);
         }
 
-        h2 {
+        .explore-copy {
+          max-width: 48ch;
+          margin: 22px 0 0;
+          color: var(--terminal-copy);
+          font-size: 15px;
+          line-height: 1.65;
+        }
+
+        .links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0 24px;
+        }
+
+        h3 {
           color: var(--terminal-green);
           font-size: 15px;
           letter-spacing: 0.02em;
@@ -147,6 +155,12 @@ export class VisitBlock extends ThemedElement {
           .column + .column {
             border-top: 0;
           }
+
+          .column.practical {
+            grid-column: 1 / -1;
+            margin-top: 32px;
+            border-top: 1px solid var(--divider-color);
+          }
         }
       `,
     ];
@@ -158,31 +172,42 @@ export class VisitBlock extends ThemedElement {
 
     return html`
       <section class="container" aria-labelledby="visit-title">
-        <span class="kicker">${visitBlock.kicker}</span>
-        <h2 id="visit-title">${visitBlock.title}</h2>
-        <p class="intro">${visitBlock.intro}</p>
+        <h2 id="visit-title">On site at DevFest.</h2>
+        <p class="intro"><strong>Doors open at 09:00.</strong> Here’s what to bring and explore.</p>
 
         <div class="details">
-          <section class="column" aria-labelledby="travel-title">
-            <h2 id="travel-title">${visitBlock.travelTitle}</h2>
+          <section class="column" aria-labelledby="bring-title">
+            <h3 id="bring-title">Bring along</h3>
             <ul>
-              <li>${visitBlock.metro}</li>
-              <li>${visitBlock.surface}</li>
-              <li>${visitBlock.parking}</li>
+              <li>Please bring a photo ID for security.</li>
+              <li>Bring your laptop (BYOD).</li>
+              <li>Bring your AI agents, too.</li>
             </ul>
-            <a class="directions" href="${directionsUrl}" target="_blank" rel="noopener noreferrer">
-              ${visitBlock.directions}
-            </a>
           </section>
 
-          <section class="column" aria-labelledby="on-site-title">
-            <h2 id="on-site-title">${visitBlock.onSiteTitle}</h2>
+          <section class="column" aria-labelledby="explore-title">
+            <h3 id="explore-title">Between sessions</h3>
+            <p class="explore-copy">Check out Pin Hunt, Scratch Cards, the Vibe Lounge and more.</p>
+          </section>
+
+          <section class="column practical" aria-labelledby="practical-title">
+            <h3 id="practical-title">At the venue</h3>
             <ul>
               <li>${visitBlock.accessibility}</li>
               <li>${visitBlock.wifi}</li>
               <li>${visitBlock.cloakroom}</li>
             </ul>
-            <a class="help" href=${accessibilityEmail}>${visitBlock.accessibilityHelp}</a>
+            <div class="links">
+              <a class="help" href=${accessibilityEmail}>${visitBlock.accessibilityHelp}</a>
+              <a
+                class="directions"
+                href="${directionsUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${visitBlock.directions}
+              </a>
+            </div>
           </section>
         </div>
       </section>
