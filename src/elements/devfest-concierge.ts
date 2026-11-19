@@ -564,7 +564,7 @@ export class DevfestConcierge extends ThemedElement {
           -webkit-overflow-scrolling: touch;
         }
 
-        @container (max-width: 34rem) {
+        @container (max-width: 28rem) {
           .chip-strip {
             padding-inline-end: 22px;
             -webkit-mask-image: linear-gradient(
@@ -607,6 +607,16 @@ export class DevfestConcierge extends ThemedElement {
           border-color: var(--_green);
           background: rgb(126 242 165 / 12%);
           color: var(--_green);
+        }
+
+        @container (min-width: 28.01rem) {
+          .chip-strip {
+            gap: 6px;
+          }
+
+          .intent-chip {
+            padding: 0 10px;
+          }
         }
 
         @container (min-width: 56rem) {
