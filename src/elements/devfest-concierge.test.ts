@@ -371,4 +371,92 @@ describe('devfest-concierge', () => {
     expect(root.querySelector('.surface-title')?.textContent).toBe('Slot Response #2');
     expect(callCount).toBe(2);
   });
+
+  it('opens dialog via Ctrl/Cmd+K shortcut and suppresses duplicate ComparisonGrid heading', async () => {
+    globalThis.fetch = mockBootstrapFetch();
+
+    const element = new DevfestConcierge();
+    element.variant = 'hero';
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    const dialog = root.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+    expect(dialog.hasAttribute('open')).toBe(false);
+
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, cancelable: true }),
+    );
+    await element.updateComplete;
+    expect(dialog.hasAttribute('open')).toBe(true);
+
+    // Trigger Rooms now (CalloutBanner + ComparisonGrid share the same title)
+    const roomsChip = root.querySelector<HTMLButtonElement>(
+      '.launcher-shell button[data-intent="compare-rooms"]',
+    )!;
+    roomsChip.click();
+    await flushRender(element);
+
+    expect(root.querySelector('.comparison-wrap h3')).toBeNull();
+    expect(root.querySelector('.callout-title')?.textContent).toBeTruthy();
+  });
+
+  it('renders loading skeleton while awaiting live /api/concierge and clears it on resolve', async () => {
+    let resolveResponse!: (res: Response) => void;
+    const pendingPromise = new Promise<Response>((resolve) => {
+      resolveResponse = resolve;
+    });
+    globalThis.fetch = mockBootstrapFetch(() => pendingPromise);
+
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    const input = root.querySelector<HTMLInputElement>('#concierge-input')!;
+    input.value = 'Custom query for loading state';
+    input.dispatchEvent(new Event('input'));
+    root
+      .querySelector<HTMLFormElement>('.launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await element.updateComplete;
+
+    expect(root.querySelector('.loading-surface')).not.toBeNull();
+
+    resolveResponse({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        cached: false,
+        messages: [
+          {
+            type: 'createSurface',
+            surfaceId: 'resolved-s',
+            title: 'Done',
+            source: 'gemini-3.5-flash-lite',
+            timestamp: Date.now(),
+          },
+          { type: 'updateDataModel', surfaceId: 'resolved-s', data: {} },
+          {
+            type: 'updateComponents',
+            surfaceId: 'resolved-s',
+            rootId: 'resolved-r',
+            components: [
+              {
+                id: 'resolved-r',
+                component: 'SurfaceContainer',
+                parentId: null,
+                children: [],
+                props: { title: 'Resolved Surface' },
+              },
+            ],
+          },
+        ],
+      }),
+    } as Response);
+    await flushRender(element);
+
+    expect(root.querySelector('.loading-surface')).toBeNull();
+    expect(root.querySelector('.surface-title')?.textContent).toBe('Resolved Surface');
+  });
 });

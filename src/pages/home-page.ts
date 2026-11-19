@@ -100,6 +100,9 @@ export class HomePage extends PolymerElement {
         }
 
         .home-intro {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           width: 100%;
           min-width: 0;
         }
@@ -302,6 +305,8 @@ export class HomePage extends PolymerElement {
         .terminal-command {
           display: flex;
           align-items: center;
+          justify-content: space-between;
+          gap: 10px;
           min-height: 48px;
           padding: 0 12px;
           border: 1px solid rgb(126 242 165 / 36%);
@@ -310,11 +315,32 @@ export class HomePage extends PolymerElement {
           color: var(--terminal-green);
           font-family: var(--font-mono);
           font-size: 11px;
-        }
-
-        .terminal-command {
           text-decoration: none;
           font-weight: 700;
+        }
+
+        .terminal-cmd-trailing {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex: 0 0 auto;
+        }
+
+        .terminal-kbd {
+          padding: 2px 6px;
+          border: 1px solid rgb(126 242 165 / 35%);
+          border-radius: 4px;
+          font-family: var(--font-mono);
+          font-size: 10px;
+          line-height: 1.2;
+          color: var(--terminal-green);
+          background: rgb(7 12 20 / 65%);
+        }
+
+        .terminal-arrow {
+          width: 14px;
+          height: 14px;
+          flex: 0 0 auto;
         }
 
         .terminal-command:hover {
@@ -519,7 +545,7 @@ export class HomePage extends PolymerElement {
         <div class="home-content" layout vertical center>
           <h1 class="sr-only">[[siteTitle]]</h1>
           <div class="home-grid">
-            <div class="home-intro" layout vertical center>
+            <div class="home-intro">
               <div class="brand-lockup">
                 <img
                   class="devfest-lockup"
@@ -594,11 +620,48 @@ export class HomePage extends PolymerElement {
                   </div>
                   <hr />
                   <a class="terminal-command" href="/#concierge" on-click="openConcierge">
-                    $ ./concierge --ask →
+                    <span>$ ./concierge --ask</span>
+                    <span class="terminal-cmd-trailing">
+                      <kbd class="terminal-kbd">⌘K</kbd>
+                      <svg
+                        class="terminal-arrow"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M3 8h10M9 4l4 4-4 4"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
                   </a>
-                  <a class="terminal-command" href="/schedule/">View full programme →</a>
+                  <a class="terminal-command" href="/schedule/">
+                    <span>View full programme</span>
+                    <svg class="terminal-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path
+                        d="M3 8h10M9 4l4 4-4 4"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </a>
                   <a class="terminal-command" href$="[[huntLinks.activities]]">
-                    Y2K Vibe Lab &amp; Arcade →
+                    <span>Y2K Vibe Lab &amp; Arcade</span>
+                    <svg class="terminal-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path
+                        d="M3 8h10M9 4l4 4-4 4"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
                   </a>
                 </div>
               </div>

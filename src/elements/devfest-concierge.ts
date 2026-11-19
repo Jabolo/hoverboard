@@ -1,5 +1,6 @@
 import { css, html, nothing, type TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
+import { repeat } from 'lit/directives/repeat.js';
 import { ThemedElement } from '../components/themed-element';
 import {
   ALLOWED_A2UI_COMPONENTS,
@@ -196,12 +197,68 @@ export class DevfestConcierge extends ThemedElement {
   private teamMembers: TeamMemberInfo[] = [];
   private unsubscribeFavorites: (() => void) | undefined;
   private liveRefreshTimer: number | undefined;
+  private spotlightRaf: number | undefined;
+  private pendingSpotPoint: { target: HTMLElement; x: number; y: number } | null = null;
+  private surfaceTransitionTick = 0;
   private requestCounter = 0;
 
   static override get styles() {
     return [
       ...super.styles,
       css`
+        @property --_beam-angle {
+          syntax: '<angle>';
+          inherits: false;
+          initial-value: 135deg;
+        }
+
+        @keyframes concierge-beam {
+          to {
+            --_beam-angle: 495deg;
+          }
+        }
+
+        @keyframes launcher-dot-pulse {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0 rgb(126 242 165 / 45%);
+          }
+          50% {
+            box-shadow: 0 0 0 4px rgb(126 242 165 / 0%);
+          }
+        }
+
+        @keyframes a2ui-materialize {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes loading-shimmer {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: -200% 0;
+          }
+        }
+
+        @keyframes spinner-rotate {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        ::selection {
+          background: rgb(126 242 165 / 24%);
+          color: var(--_copy);
+        }
+
         :host {
           display: block;
           width: 100%;
@@ -267,6 +324,8 @@ export class DevfestConcierge extends ThemedElement {
         }
 
         .launcher-frame {
+          position: relative;
+          overflow: hidden;
           display: grid;
           grid-template-columns: minmax(0, 1fr);
           gap: 8px;
@@ -278,12 +337,50 @@ export class DevfestConcierge extends ThemedElement {
           background: var(--_panel);
         }
 
+        .launcher-frame > * {
+          position: relative;
+          z-index: 1;
+        }
+
         :host([variant='hero']) .launcher-frame {
           padding: 10px 12px;
-          background: rgb(10 21 37 / 90%);
-          border-color: var(--_line);
-          box-shadow: 0 18px 42px rgb(0 0 0 / 34%);
+          border: 1px solid transparent;
+          background:
+            linear-gradient(rgb(10 21 37 / 92%), rgb(10 21 37 / 92%)) padding-box,
+            conic-gradient(
+                from var(--_beam-angle, 135deg),
+                rgb(38 61 94 / 75%) 0deg,
+                rgb(76 141 247 / 85%) 70deg,
+                rgb(126 242 165 / 92%) 115deg,
+                rgb(38 61 94 / 75%) 185deg,
+                rgb(38 61 94 / 75%) 360deg
+              )
+              border-box;
+          box-shadow: 0 18px 42px -12px rgb(0 0 0 / 55%);
           backdrop-filter: blur(8px);
+          animation: concierge-beam 10s linear infinite;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          :host([variant='hero']) .launcher-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 200ms ease-out;
+            background: radial-gradient(
+              260px circle at var(--_spot-x, 50%) var(--_spot-y, 0%),
+              rgb(76 141 247 / 13%),
+              transparent 72%
+            );
+          }
+
+          :host([variant='hero']) .launcher-frame:hover::before,
+          :host([variant='hero']) .launcher-frame:focus-within::before {
+            opacity: 1;
+          }
         }
 
         .launcher-header {
@@ -312,6 +409,14 @@ export class DevfestConcierge extends ThemedElement {
           flex: 0 0 auto;
           border-radius: 50%;
           background: var(--_green);
+          animation: launcher-dot-pulse 2.6s ease-out infinite;
+        }
+
+        .launcher-meta-group {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          flex: 0 0 auto;
         }
 
         .launcher-meta {
@@ -320,6 +425,25 @@ export class DevfestConcierge extends ThemedElement {
           font-family: var(--font-mono, monospace);
           font-size: 11px;
           white-space: nowrap;
+        }
+
+        .shortcut-kbd {
+          display: none;
+          padding: 1px 5px;
+          border: 1px solid var(--_line);
+          border-radius: 4px;
+          background: var(--_bg);
+          color: var(--_muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 10px;
+          line-height: 1.3;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+          .shortcut-kbd {
+            display: inline-flex;
+            align-items: center;
+          }
         }
 
         .launcher-form {
@@ -362,6 +486,7 @@ export class DevfestConcierge extends ThemedElement {
           border: 0;
           background: transparent;
           color: inherit;
+          caret-color: var(--_green);
           font: inherit;
           font-family: var(--font-mono, monospace);
           font-size: 13px;
@@ -378,10 +503,24 @@ export class DevfestConcierge extends ThemedElement {
           color: inherit;
         }
 
+        .btn-icon {
+          width: 14px;
+          height: 14px;
+          flex: 0 0 auto;
+        }
+
+        .spinner-icon {
+          width: 14px;
+          height: 14px;
+          flex: 0 0 auto;
+          animation: spinner-rotate 0.8s linear infinite;
+        }
+
         .go-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          gap: 6px;
           min-block-size: var(--_target);
           min-inline-size: var(--_target);
           padding: 0 14px;
@@ -394,6 +533,13 @@ export class DevfestConcierge extends ThemedElement {
           font-weight: 700;
           white-space: nowrap;
           cursor: pointer;
+          transition:
+            background-color 140ms ease,
+            transform 100ms ease;
+        }
+
+        .go-btn:active:not(:disabled) {
+          transform: scale(0.97);
         }
 
         .go-btn:hover:not(:disabled) {
@@ -416,6 +562,19 @@ export class DevfestConcierge extends ThemedElement {
           scroll-snap-type: x proximity;
           scrollbar-width: none;
           -webkit-overflow-scrolling: touch;
+        }
+
+        @container (max-width: 34rem) {
+          .chip-strip {
+            padding-inline-end: 22px;
+            -webkit-mask-image: linear-gradient(
+              to right,
+              #000 0,
+              #000 calc(100% - 24px),
+              transparent 100%
+            );
+            mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%);
+          }
         }
 
         .chip-strip::-webkit-scrollbar {
@@ -471,11 +630,47 @@ export class DevfestConcierge extends ThemedElement {
           max-width: 100%;
           max-height: 88dvh;
           overflow: visible;
+          opacity: 0;
+          transform: translateY(28px);
+          transition:
+            opacity 240ms cubic-bezier(0.22, 1, 0.36, 1),
+            transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+            overlay 280ms allow-discrete,
+            display 280ms allow-discrete;
+        }
+
+        dialog.concierge-dialog[open] {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        @starting-style {
+          dialog.concierge-dialog[open] {
+            opacity: 0;
+            transform: translateY(28px);
+          }
         }
 
         dialog.concierge-dialog::backdrop {
+          background: rgb(4 8 15 / 0%);
+          backdrop-filter: blur(0px);
+          transition:
+            background-color 220ms ease-out,
+            backdrop-filter 220ms ease-out,
+            overlay 220ms allow-discrete,
+            display 220ms allow-discrete;
+        }
+
+        dialog.concierge-dialog[open]::backdrop {
           background: rgb(4 8 15 / 72%);
-          backdrop-filter: blur(4px);
+          backdrop-filter: blur(6px);
+        }
+
+        @starting-style {
+          dialog.concierge-dialog[open]::backdrop {
+            background: rgb(4 8 15 / 0%);
+            backdrop-filter: blur(0px);
+          }
         }
 
         .dialog-panel {
@@ -487,7 +682,7 @@ export class DevfestConcierge extends ThemedElement {
           border-top: 1px solid var(--_line);
           border-radius: 16px 16px 0 0;
           background: var(--_panel);
-          box-shadow: 0 -12px 36px rgb(0 0 0 / 45%);
+          box-shadow: 0 -12px 36px -6px rgb(0 0 0 / 50%);
           overflow: hidden;
         }
 
@@ -497,13 +692,26 @@ export class DevfestConcierge extends ThemedElement {
             width: min(760px, calc(100vw - 32px));
             max-width: 760px;
             max-height: 82dvh;
+            transform: scale(0.96) translateY(8px);
+            transition-duration: 220ms;
+          }
+
+          dialog.concierge-dialog[open] {
+            transform: scale(1) translateY(0);
+          }
+
+          @starting-style {
+            dialog.concierge-dialog[open] {
+              opacity: 0;
+              transform: scale(0.96) translateY(8px);
+            }
           }
 
           .dialog-panel {
             max-height: 82dvh;
             border: 1px solid var(--_line);
             border-radius: 12px;
-            box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
+            box-shadow: 0 24px 60px -12px rgb(0 0 0 / 60%);
           }
         }
 
@@ -598,6 +806,56 @@ export class DevfestConcierge extends ThemedElement {
           gap: 14px;
         }
 
+        .dialog-body::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .dialog-body::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .dialog-body::-webkit-scrollbar-thumb {
+          background: var(--_line);
+          border-radius: 999px;
+        }
+
+        .loading-surface {
+          display: grid;
+          gap: 10px;
+          padding: 12px;
+          border: 1px solid var(--_line);
+          border-radius: 8px;
+          background: var(--_bg);
+        }
+
+        .loading-status {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0;
+          color: var(--_green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .loading-bar {
+          height: 14px;
+          border-radius: 4px;
+          background: linear-gradient(
+            90deg,
+            rgb(38 61 94 / 35%) 0%,
+            rgb(76 141 247 / 28%) 50%,
+            rgb(38 61 94 / 35%) 100%
+          );
+          background-size: 200% 100%;
+          animation: loading-shimmer 1.4s ease-in-out infinite;
+        }
+
+        .loading-bar.short {
+          width: 68%;
+        }
+
         .status-notice {
           margin: 0;
           padding: 8px 10px;
@@ -631,6 +889,12 @@ export class DevfestConcierge extends ThemedElement {
           grid-template-columns: minmax(0, 1fr);
           min-width: 0;
           gap: 12px;
+        }
+
+        .surface-node {
+          min-width: 0;
+          animation: a2ui-materialize 240ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+          animation-delay: calc(var(--_idx, 0) * 35ms);
         }
 
         .callout {
@@ -713,6 +977,7 @@ export class DevfestConcierge extends ThemedElement {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          gap: 6px;
           min-block-size: var(--_target);
           padding: 0 12px;
           border: 1px solid var(--_line);
@@ -723,6 +988,14 @@ export class DevfestConcierge extends ThemedElement {
           font-size: 12px;
           font-weight: 700;
           cursor: pointer;
+          transition:
+            border-color 140ms ease,
+            background-color 140ms ease,
+            transform 100ms ease;
+        }
+
+        .save-btn:active {
+          transform: scale(0.96);
         }
 
         .save-btn[aria-pressed='true'] {
@@ -742,7 +1015,8 @@ export class DevfestConcierge extends ThemedElement {
         .session-title a {
           color: var(--_copy);
           text-decoration: underline;
-          text-underline-offset: 3px;
+          text-underline-offset: 4px;
+          text-decoration-thickness: 1.5px;
           overflow-wrap: anywhere;
         }
 
@@ -793,19 +1067,23 @@ export class DevfestConcierge extends ThemedElement {
           }
         }
 
-        .compare-col,
-        .credit-card,
-        .logistics-card {
+        .compare-col {
+          display: grid;
+          gap: 6px;
+          align-content: start;
           padding: 12px;
           border: 1px solid var(--_line);
           border-radius: 8px;
           background: var(--_bg);
         }
 
-        .compare-col {
-          display: grid;
-          gap: 6px;
-          align-content: start;
+        .credit-card,
+        .logistics-card {
+          padding: 14px 0 0;
+          border: 0;
+          border-top: 1px solid var(--_line);
+          border-radius: 0;
+          background: transparent;
         }
 
         .compare-badge {
@@ -831,7 +1109,8 @@ export class DevfestConcierge extends ThemedElement {
         .compare-heading a {
           color: var(--_copy);
           text-decoration: underline;
-          text-underline-offset: 3px;
+          text-underline-offset: 4px;
+          text-decoration-thickness: 1.5px;
         }
 
         .compare-meta {
@@ -865,10 +1144,10 @@ export class DevfestConcierge extends ThemedElement {
 
         .fact-box,
         .logistics-item {
-          padding: 8px 10px;
+          padding: 10px 12px;
           border: 1px solid var(--_line);
           border-radius: 6px;
-          background: var(--_panel);
+          background: var(--_bg);
         }
 
         .fact-label,
@@ -924,13 +1203,15 @@ export class DevfestConcierge extends ThemedElement {
         .workshop-item a {
           color: var(--_blue);
           text-decoration: underline;
-          text-underline-offset: 3px;
+          text-underline-offset: 4px;
+          text-decoration-thickness: 1.5px;
         }
 
         .workshop-time {
           font-family: var(--font-mono, monospace);
           font-size: 12px;
           color: var(--_green);
+          font-variant-numeric: tabular-nums;
         }
 
         .card-links {
@@ -942,6 +1223,7 @@ export class DevfestConcierge extends ThemedElement {
         .jump-link {
           display: inline-flex;
           align-items: center;
+          gap: 6px;
           min-block-size: var(--_target);
           padding: 0 12px;
           border: 1px solid var(--google-blue, #4285f4);
@@ -983,6 +1265,7 @@ export class DevfestConcierge extends ThemedElement {
         .ai-upgrade-btn {
           display: inline-flex;
           align-items: center;
+          gap: 6px;
           min-block-size: var(--_target);
           padding: 0 12px;
           border: 1px solid rgb(126 242 165 / 45%);
@@ -1028,12 +1311,31 @@ export class DevfestConcierge extends ThemedElement {
           outline: 2px solid var(--_green);
           outline-offset: 2px;
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          :host([variant='hero']) .launcher-frame,
+          .launcher-dot,
+          .loading-bar,
+          .surface-node,
+          .spinner-icon {
+            animation: none;
+          }
+
+          dialog.concierge-dialog,
+          dialog.concierge-dialog::backdrop,
+          :host([variant='hero']) .launcher-frame::before,
+          .go-btn,
+          .save-btn {
+            transition: none;
+          }
+        }
       `,
     ];
   }
 
   override connectedCallback(): void {
     super.connectedCallback();
+    window.addEventListener('keydown', this.onGlobalKeydown);
     this.unsubscribeFavorites = subscribeSessionFavorites(() => {
       this.syncFavoritesIntoActiveSurface();
     });
@@ -1042,10 +1344,71 @@ export class DevfestConcierge extends ThemedElement {
 
   override disconnectedCallback(): void {
     super.disconnectedCallback();
+    window.removeEventListener('keydown', this.onGlobalKeydown);
+    if (this.spotlightRaf !== undefined) {
+      window.cancelAnimationFrame(this.spotlightRaf);
+      this.spotlightRaf = undefined;
+    }
+    this.pendingSpotPoint = null;
     this.clearLiveRefreshTimer();
     this.unsubscribeFavorites?.();
     this.unsubscribeFavorites = undefined;
   }
+
+  private readonly onGlobalKeydown = (event: KeyboardEvent): void => {
+    const isCmdK =
+      (event.metaKey || event.ctrlKey) &&
+      !event.altKey &&
+      !event.shiftKey &&
+      event.key.toLowerCase() === 'k';
+    if (isCmdK) {
+      event.preventDefault();
+      this.openAndFocus();
+      return;
+    }
+
+    if (
+      event.key === '/' &&
+      !this.dialogOpen &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.altKey
+    ) {
+      const target = event.composedPath()[0];
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
+      event.preventDefault();
+      this.openAndFocus();
+    }
+  };
+
+  private readonly onLauncherPointerMove = (event: PointerEvent): void => {
+    if (this.variant !== 'hero' || event.pointerType !== 'mouse') return;
+    const frame = event.currentTarget;
+    if (!(frame instanceof HTMLElement)) return;
+    const rect = frame.getBoundingClientRect();
+    this.pendingSpotPoint = {
+      target: frame,
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+    if (this.spotlightRaf === undefined) {
+      this.spotlightRaf = window.requestAnimationFrame(() => {
+        this.spotlightRaf = undefined;
+        const point = this.pendingSpotPoint;
+        this.pendingSpotPoint = null;
+        if (!point || !this.isConnected) return;
+        point.target.style.setProperty('--_spot-x', `${Math.round(point.x)}px`);
+        point.target.style.setProperty('--_spot-y', `${Math.round(point.y)}px`);
+      });
+    }
+  };
 
   private clearLiveRefreshTimer(): void {
     if (this.liveRefreshTimer !== undefined) {
@@ -1246,6 +1609,7 @@ export class DevfestConcierge extends ThemedElement {
     const messages = generateLocalConciergeMessages(req);
     this.processor.processBatch(messages);
     this.originLabel = 'local';
+    this.surfaceTransitionTick++;
     this.renderTick++;
     this.scheduleLiveRefreshIfNeeded();
   }
@@ -1286,6 +1650,7 @@ export class DevfestConcierge extends ThemedElement {
     );
     const cached = readClientCache(cacheKey, now);
     if (cached) {
+      this.surfaceTransitionTick++;
       this.processor.processBatch(cached);
       this.syncFavoritesIntoActiveSurface();
       this.originLabel = 'cached';
@@ -1315,6 +1680,7 @@ export class DevfestConcierge extends ThemedElement {
           const messages = payload.messages as A2UIMessage[];
           const expiresAt = computeClientCacheExpiresAt(trimmed, intent ?? '', now);
           writeClientCache(cacheKey, messages, expiresAt);
+          this.surfaceTransitionTick++;
           this.processor.processBatch(messages);
           this.syncFavoritesIntoActiveSurface();
           this.originLabel = payload.cached ? 'cached' : 'live';
@@ -1358,9 +1724,69 @@ export class DevfestConcierge extends ThemedElement {
     }
   };
 
+  private renderArrowRightIcon() {
+    return html`
+      <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `;
+  }
+
+  private renderExternalArrowIcon() {
+    return html`
+      <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M6 3h7v7M13 3L5 11"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `;
+  }
+
+  private renderBookmarkIcon(saved: boolean) {
+    return html`
+      <svg class="btn-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M4 2.5h8v11l-4-2.8-4 2.8v-11z"
+          fill=${saved ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    `;
+  }
+
+  private renderSpinnerIcon() {
+    return html`
+      <svg class="spinner-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle
+          cx="8"
+          cy="8"
+          r="5.5"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-dasharray="22 12"
+          stroke-linecap="round"
+        />
+      </svg>
+    `;
+  }
+
   private renderSurfaceNode(
     node: A2UIComponentNode,
     surface: SurfaceState,
+    suppressedTitle = '',
   ): TemplateResult | typeof nothing {
     if (!ALLOWED_A2UI_COMPONENTS.has(node.component)) {
       return nothing;
@@ -1379,9 +1805,24 @@ export class DevfestConcierge extends ThemedElement {
             <h2 class="surface-title">${title}</h2>
             ${subtitle ? html`<p class="surface-subtitle">${subtitle}</p>` : nothing}
           </div>
-          <div class="surface-children">
-            ${children.map((child) => this.renderSurfaceNode(child, surface))}
-          </div>
+          ${repeat(
+            [this.surfaceTransitionTick],
+            (tick) => tick,
+            () => html`
+              <div class="surface-children">
+                ${children.map((child, idx) => {
+                  const prevChild = idx > 0 ? children[idx - 1] : undefined;
+                  const prevTitle =
+                    prevChild?.component === 'CalloutBanner'
+                      ? asString(prevChild.props['title'])
+                      : '';
+                  return html`<div class="surface-node" style="--_idx: ${idx}">
+                    ${this.renderSurfaceNode(child, surface, prevTitle)}
+                  </div>`;
+                })}
+              </div>
+            `,
+          )}
         `;
       }
 
@@ -1447,7 +1888,8 @@ export class DevfestConcierge extends ThemedElement {
                           setSessionFavorite(sessionId, !selected);
                         }}
                       >
-                        ${selected ? 'Saved' : 'Save'}
+                        ${this.renderBookmarkIcon(selected)}
+                        <span>${selected ? 'Saved' : 'Save'}</span>
                       </button>
                     `
                   : nothing
@@ -1475,11 +1917,12 @@ export class DevfestConcierge extends ThemedElement {
 
       case 'ComparisonGrid': {
         const title = asString(node.props['title']);
+        const showHeading = Boolean(title) && title !== suppressedTitle;
         const columns = asRecordArray(node.props['columns']);
 
         return html`
           <section class="comparison-wrap">
-            ${title ? html`<h3>${title}</h3>` : nothing}
+            ${showHeading ? html`<h3>${title}</h3>` : nothing}
             <div class="comparison-grid">
               ${columns.map((col) => {
                 const colBadge = asString(col['badge']);
@@ -1517,7 +1960,8 @@ export class DevfestConcierge extends ThemedElement {
                                 setSessionFavorite(colSessionId, !colSaved);
                               }}
                             >
-                              ${colSaved ? 'Saved' : 'Save'}
+                              ${this.renderBookmarkIcon(colSaved)}
+                              <span>${colSaved ? 'Saved' : 'Save'}</span>
                             </button>
                           `
                         : nothing
@@ -1597,7 +2041,8 @@ export class DevfestConcierge extends ThemedElement {
                 href="/#cloud-credit"
                 @click=${(e: Event) => this.scrollToAnchor(e, '#cloud-credit')}
               >
-                Go to $5 Cloud Credit Claim →
+                <span>Go to $5 Cloud Credit Claim</span>
+                ${this.renderArrowRightIcon()}
               </a>
             </div>
           </section>
@@ -1639,7 +2084,8 @@ export class DevfestConcierge extends ThemedElement {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Google Maps Directions ↗
+                        <span>Google Maps Directions</span>
+                        ${this.renderExternalArrowIcon()}
                       </a>
                     `
                   : nothing
@@ -1652,7 +2098,8 @@ export class DevfestConcierge extends ThemedElement {
                   else this.closeDialog();
                 }}
               >
-                ${isTeamLink ? 'View team page →' : 'Plan your visit →'}
+                <span>${isTeamLink ? 'Meet the organizing team' : 'Plan your visit'}</span>
+                ${this.renderArrowRightIcon()}
               </a>
             </div>
           </section>
@@ -1750,7 +2197,7 @@ export class DevfestConcierge extends ThemedElement {
 
     return html`
       <section class="launcher-shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
-        <div class="launcher-frame">
+        <div class="launcher-frame" @pointermove=${this.onLauncherPointerMove}>
           ${
             this.variant === 'hero'
               ? html`
@@ -1759,7 +2206,10 @@ export class DevfestConcierge extends ThemedElement {
                       <span class="launcher-dot" aria-hidden="true"></span>
                       <span>devfest-concierge</span>
                     </span>
-                    <span class="launcher-meta">Instant + AI</span>
+                    <span class="launcher-meta-group">
+                      <span class="launcher-meta">Instant + AI</span>
+                      <kbd class="shortcut-kbd" aria-hidden="true">⌘K</kbd>
+                    </span>
                   </div>
                 `
               : nothing
@@ -1776,8 +2226,17 @@ export class DevfestConcierge extends ThemedElement {
                 placeholder="Ask AI: talks, rooms, $5 credits, venue…"
               />
             </div>
-            <button type="submit" class="go-btn" ?disabled=${this.isLoading}>
-              ${this.isLoading ? '…' : 'Ask →'}
+            <button
+              type="submit"
+              class="go-btn"
+              aria-label=${this.isLoading ? 'Sending query' : 'Ask concierge'}
+              ?disabled=${this.isLoading}
+            >
+              ${
+                this.isLoading
+                  ? this.renderSpinnerIcon()
+                  : html`<span>Ask</span>${this.renderArrowRightIcon()}`
+              }
             </button>
           </form>
 
@@ -1831,8 +2290,17 @@ export class DevfestConcierge extends ThemedElement {
                   placeholder="Ask AI anything about DevFest Warsaw 2026…"
                 />
               </div>
-              <button type="submit" class="go-btn" ?disabled=${this.isLoading}>
-                ${this.isLoading ? '…' : 'Ask →'}
+              <button
+                type="submit"
+                class="go-btn"
+                aria-label=${this.isLoading ? 'Sending query' : 'Ask concierge'}
+                ?disabled=${this.isLoading}
+              >
+                ${
+                  this.isLoading
+                    ? this.renderSpinnerIcon()
+                    : html`<span>Ask</span>${this.renderArrowRightIcon()}`
+                }
               </button>
             </form>
             ${this.renderChipStrip()}
@@ -1845,11 +2313,22 @@ export class DevfestConcierge extends ThemedElement {
                 : nothing
             }
             ${
-              surface && rootNode
-                ? this.renderSurfaceNode(rootNode, surface)
-                : this.dataReady
-                  ? html`<p class="surface-subtitle">Ask a question or pick a topic above.</p>`
-                  : html`<p class="surface-subtitle">Loading grounded programme surface…</p>`
+              this.isLoading
+                ? html`
+                    <div class="loading-surface" role="status" aria-live="polite">
+                      <p class="loading-status">
+                        ${this.renderSpinnerIcon()}
+                        <span>Synthesizing grounded A2UI surface…</span>
+                      </p>
+                      <div class="loading-bar"></div>
+                      <div class="loading-bar short"></div>
+                    </div>
+                  `
+                : surface && rootNode
+                  ? this.renderSurfaceNode(rootNode, surface)
+                  : this.dataReady
+                    ? html`<p class="surface-subtitle">Ask a question or pick a topic above.</p>`
+                    : html`<p class="surface-subtitle">Loading grounded programme surface…</p>`
             }
 
             <div class="dialog-footer">
@@ -1867,7 +2346,8 @@ export class DevfestConcierge extends ThemedElement {
                             true,
                           )}
                       >
-                        Ask Gemini AI to customize →
+                        <span>Ask Gemini AI to customize</span>
+                        ${this.renderArrowRightIcon()}
                       </button>
                     `
                   : nothing
