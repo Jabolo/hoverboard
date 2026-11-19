@@ -878,7 +878,7 @@ function buildA2UIMessages(
       badge:
         typeof plan.badge === 'string' && plan.badge.trim()
           ? plan.badge.trim()
-          : 'A2UI · Gemini 4 Hydrogen (Medium)',
+          : 'A2UI · Gemini 4 Hydrogen',
     },
   };
 
@@ -990,7 +990,7 @@ export async function handleConcierge(
       response.status(200).json({
         status: 'ok',
         model: 'gemini-4-hydrogen',
-        thinkingLevel: 'medium',
+        thinkingLevel: 'low',
         cached: true,
         messages: cachedMessages,
       });
@@ -1006,7 +1006,7 @@ export async function handleConcierge(
 
   const fetchImpl = deps.fetchFn ?? fetch;
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 20000);
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
 
   try {
     const userInput = JSON.stringify({
@@ -1030,7 +1030,7 @@ export async function handleConcierge(
           system_instruction: CONCIERGE_SYSTEM_INSTRUCTION,
           input: userInput,
           generation_config: {
-            thinking_level: 'medium',
+            thinking_level: 'low',
             max_output_tokens: 32768,
           },
           response_format: {
@@ -1077,7 +1077,7 @@ export async function handleConcierge(
     response.status(200).json({
       status: 'ok',
       model: 'gemini-4-hydrogen',
-      thinkingLevel: 'medium',
+      thinkingLevel: 'low',
       cached: false,
       messages,
     });

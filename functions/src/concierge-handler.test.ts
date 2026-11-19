@@ -82,7 +82,7 @@ function makeRequest(overrides: Partial<Request> = {}) {
 const VALID_PLAN = {
   title: 'AI & Agents Track',
   subtitle: 'Non-overlapping picks',
-  badge: 'A2UI · Gemini 4 Hydrogen (Medium)',
+  badge: 'A2UI · Gemini 4 Hydrogen',
   banner: {
     tone: 'info',
     kicker: 'AI Track',
@@ -180,7 +180,7 @@ describe('handleConcierge', () => {
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  it('calls Gemini Interactions API with Hydrogen medium config and sanitized input', async () => {
+  it('calls Gemini Interactions API with Hydrogen low thinking config and sanitized input', async () => {
     const res = createMockResponse();
     const fetchFn = jest.fn(async () => ({
       ok: true,
@@ -217,7 +217,7 @@ describe('handleConcierge', () => {
     expect(sentBody.model).toBe('gemini-4-hydrogen');
     expect(sentBody.store).toBe(false);
     expect(sentBody.generation_config).toEqual({
-      thinking_level: 'medium',
+      thinking_level: 'low',
       max_output_tokens: 32768,
     });
     const sentInput = JSON.parse(sentBody.input as string) as {
@@ -258,7 +258,7 @@ describe('handleConcierge', () => {
     expect(body).toMatchObject({
       status: 'ok',
       model: 'gemini-4-hydrogen',
-      thinkingLevel: 'medium',
+      thinkingLevel: 'low',
     });
     expect(body.messages).toHaveLength(3);
 
@@ -452,7 +452,7 @@ describe('handleConcierge', () => {
     expect(res.body).toMatchObject({
       status: 'ok',
       model: 'gemini-4-hydrogen',
-      thinkingLevel: 'medium',
+      thinkingLevel: 'low',
     });
   });
 
