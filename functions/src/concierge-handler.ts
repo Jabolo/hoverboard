@@ -428,6 +428,8 @@ export type ConciergeDeps = {
 const MAX_CACHE_ENTRIES = 200;
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const LIVE_TIME_CACHE_TTL_MS = 5 * 60 * 1000;
+const CONCIERGE_MODEL = 'gemini-3.5-flash-lite';
+const CONCIERGE_THINKING_LEVEL = 'minimal';
 
 const EVENT_TRANSITION_TIMES = [
   '09:00',
@@ -989,7 +991,7 @@ function buildA2UIMessages(
       badge:
         typeof plan.badge === 'string' && plan.badge.trim()
           ? plan.badge.trim()
-          : 'A2UI · Gemini 4 Hydrogen',
+          : 'A2UI · Gemini 3.5 Flash-Lite',
     },
   };
 
@@ -998,7 +1000,7 @@ function buildA2UIMessages(
       type: 'createSurface',
       surfaceId,
       title: rootNode.props.title,
-      source: 'gemini-4-hydrogen',
+      source: CONCIERGE_MODEL,
       timestamp: now,
     },
     {
@@ -1106,8 +1108,8 @@ export async function handleConcierge(
       response.set('X-Concierge-Cache', 'HIT');
       response.status(200).json({
         status: 'ok',
-        model: 'gemini-4-hydrogen',
-        thinkingLevel: 'low',
+        model: CONCIERGE_MODEL,
+        thinkingLevel: CONCIERGE_THINKING_LEVEL,
         cached: true,
         messages: cachedMessages,
       });
@@ -1123,7 +1125,7 @@ export async function handleConcierge(
 
   const fetchImpl = deps.fetchFn ?? fetch;
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 45000);
+  const timeoutId = setTimeout(() => controller.abort(), 25000);
 
   try {
     const userInput = JSON.stringify({
@@ -1143,12 +1145,12 @@ export async function handleConcierge(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gemini-4-hydrogen',
+          model: CONCIERGE_MODEL,
           system_instruction: CONCIERGE_SYSTEM_INSTRUCTION,
           input: userInput,
           generation_config: {
-            thinking_level: 'low',
-            max_output_tokens: 32768,
+            thinking_level: CONCIERGE_THINKING_LEVEL,
+            max_output_tokens: 4096,
           },
           response_format: {
             type: 'text',
@@ -1209,8 +1211,8 @@ export async function handleConcierge(
     response.set('X-Concierge-Cache', 'MISS');
     response.status(200).json({
       status: 'ok',
-      model: 'gemini-4-hydrogen',
-      thinkingLevel: 'low',
+      model: CONCIERGE_MODEL,
+      thinkingLevel: CONCIERGE_THINKING_LEVEL,
       cached: false,
       messages,
     });

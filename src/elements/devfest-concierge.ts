@@ -1711,14 +1711,16 @@ export class DevfestConcierge extends ThemedElement {
 
   override render() {
     const surface = this.processor.getActiveSurface();
+    const aiModelLabel =
+      surface?.source === 'gemini-4-hydrogen' ? 'Gemini 4 Hydrogen' : 'Gemini 3.5 Flash-Lite';
     const isLiveRoomsClock = this.originLabel === 'local' && this.activeIntent === 'compare-rooms';
     const isLiveOrCached =
       this.originLabel === 'live' || this.originLabel === 'cached' || isLiveRoomsClock;
     const sourceBadgeText =
       this.originLabel === 'live'
-        ? 'Live · Gemini 4 Hydrogen'
+        ? `Live · ${aiModelLabel}`
         : this.originLabel === 'cached'
-          ? 'Cached · Gemini 4 Hydrogen'
+          ? `Cached · ${aiModelLabel}`
           : isLiveRoomsClock
             ? 'Live · Local Clock'
             : 'Instant · Local A2UI';

@@ -99,7 +99,7 @@ describe('devfest-concierge', () => {
         type: 'createSurface',
         surfaceId: 'live-surface',
         title: 'Organizer Lookup',
-        source: 'gemini-4-hydrogen',
+        source: 'gemini-3.5-flash-lite',
         timestamp: Date.now(),
       },
       {
@@ -157,7 +157,7 @@ describe('devfest-concierge', () => {
     await flushRender(element);
 
     expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Live · Gemini 4 Hydrogen',
+      'Live · Gemini 3.5 Flash-Lite',
     );
     expect(root.querySelector('.surface-title')?.textContent).toBe('Michał Jabłoński');
 
@@ -168,7 +168,7 @@ describe('devfest-concierge', () => {
     await flushRender(element);
 
     expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Cached · Gemini 4 Hydrogen',
+      'Cached · Gemini 3.5 Flash-Lite',
     );
     const conciergeCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes('/api/concierge'),
@@ -311,7 +311,7 @@ describe('devfest-concierge', () => {
               type: 'createSurface',
               surfaceId: `s-${callCount}`,
               title: 'Live Rooms',
-              source: 'gemini-4-hydrogen',
+              source: 'gemini-3.5-flash-lite',
               timestamp: Date.now(),
             },
             { type: 'updateDataModel', surfaceId: `s-${callCount}`, data: {} },
@@ -358,7 +358,7 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
     expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Cached · Gemini 4 Hydrogen',
+      'Cached · Gemini 3.5 Flash-Lite',
     );
     expect(callCount).toBe(1);
 

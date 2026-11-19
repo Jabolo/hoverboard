@@ -87,7 +87,7 @@ function makeRequest(overrides: Partial<Request> = {}) {
 const VALID_PLAN = {
   title: 'AI & Agents Track',
   subtitle: 'Non-overlapping picks',
-  badge: 'A2UI · Gemini 4 Hydrogen',
+  badge: 'A2UI · Gemini 3.5 Flash-Lite',
   banner: {
     tone: 'info',
     kicker: 'AI Track',
@@ -185,7 +185,7 @@ describe('handleConcierge', () => {
     expect(fetchFn).not.toHaveBeenCalled();
   });
 
-  it('calls Gemini Interactions API with Hydrogen low thinking config and sanitized input', async () => {
+  it('calls Gemini Interactions API with Flash-Lite minimal config and sanitized input', async () => {
     const res = createMockResponse();
     const fetchFn = jest.fn(async () => ({
       ok: true,
@@ -219,11 +219,11 @@ describe('handleConcierge', () => {
     expect(init.headers['Api-Revision']).toBe('2026-05-20');
 
     const sentBody = JSON.parse(init.body) as Record<string, unknown>;
-    expect(sentBody.model).toBe('gemini-4-hydrogen');
+    expect(sentBody.model).toBe('gemini-3.5-flash-lite');
     expect(sentBody.store).toBe(false);
     expect(sentBody.generation_config).toEqual({
-      thinking_level: 'low',
-      max_output_tokens: 32768,
+      thinking_level: 'minimal',
+      max_output_tokens: 4096,
     });
     const sentInput = JSON.parse(sentBody.input as string) as {
       query: string;
@@ -262,15 +262,15 @@ describe('handleConcierge', () => {
     };
     expect(body).toMatchObject({
       status: 'ok',
-      model: 'gemini-4-hydrogen',
-      thinkingLevel: 'low',
+      model: 'gemini-3.5-flash-lite',
+      thinkingLevel: 'minimal',
     });
     expect(body.messages).toHaveLength(3);
 
     const [createSurface, updateDataModel, updateComponents] = body.messages;
     expect(createSurface).toMatchObject({
       type: 'createSurface',
-      source: 'gemini-4-hydrogen',
+      source: 'gemini-3.5-flash-lite',
       timestamp: 1795255200000,
     });
 
@@ -456,8 +456,8 @@ describe('handleConcierge', () => {
     expect(res.code).toBe(200);
     expect(res.body).toMatchObject({
       status: 'ok',
-      model: 'gemini-4-hydrogen',
-      thinkingLevel: 'low',
+      model: 'gemini-3.5-flash-lite',
+      thinkingLevel: 'minimal',
     });
   });
 
