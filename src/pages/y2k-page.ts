@@ -19,6 +19,7 @@ const symbols = ['💿', '💾', '🕹️', '📡'];
 @customElement('y2k-page')
 export class Y2kPage extends ThemedElement {
   @state() private promptIndex = 0;
+  @state() private partyArt = 0;
   @state() private deck = this.shuffle();
   @state() private flipped: number[] = [];
   @state() private matched: number[] = [];
@@ -404,6 +405,107 @@ export class Y2kPage extends ThemedElement {
           background: #332444;
           font-size: 14px;
         }
+        .party-spotlight {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: clamp(20px, 4vw, 50px);
+          align-items: center;
+          margin-top: 36px;
+          padding: clamp(20px, 3vw, 38px);
+          border: 1px solid #9b7bb7;
+          border-radius: 16px;
+          background: linear-gradient(140deg, #332046, #1e173b 70%);
+        }
+        .party-spotlight h2 {
+          margin: 0 0 14px;
+          font-size: clamp(2rem, 4vw, 3.6rem);
+          line-height: 1;
+          letter-spacing: -0.035em;
+        }
+        .party-spotlight p {
+          color: #e7d8ef;
+          line-height: 1.55;
+        }
+        .party-spotlight .party-names {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px 14px;
+          margin: 20px 0;
+        }
+        .party-names a {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          color: #efff94;
+          font-weight: 800;
+        }
+        .party-artwork {
+          position: relative;
+          overflow: hidden;
+          border-radius: 12px;
+          background: #251936;
+          aspect-ratio: 16 / 9;
+        }
+        .party-artwork img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          animation: party-float 7s ease-in-out infinite alternate;
+        }
+        .party-artwork::after {
+          content: '';
+          position: absolute;
+          inset: -50% -30%;
+          pointer-events: none;
+          background: linear-gradient(
+            110deg,
+            transparent 38%,
+            rgb(255 255 255 / 20%) 49%,
+            transparent 60%
+          );
+          animation: party-shimmer 8s ease-in-out infinite;
+        }
+        @keyframes party-float {
+          from {
+            transform: scale(1.025);
+          }
+          to {
+            transform: scale(1.07) translateX(-0.5%);
+          }
+        }
+        @keyframes party-shimmer {
+          0%,
+          25% {
+            transform: translateX(-100%);
+          }
+          75%,
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        .party-options {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 6px;
+          margin-top: 10px;
+        }
+        .party-options span {
+          margin-right: 4px;
+          color: #d8c8e5;
+          font-size: 13px;
+        }
+        .party-options button {
+          min-width: 44px;
+          min-height: 44px;
+          padding: 8px 12px;
+        }
+        .party-options button[aria-pressed='true'] {
+          background: #eaf87f;
+          color: #21193a;
+          border-color: #eaf87f;
+        }
         .credit {
           padding: 28px 0 48px;
           font-size: 13px;
@@ -428,6 +530,10 @@ export class Y2kPage extends ThemedElement {
             width: 145px;
             height: 145px;
           }
+          .party-spotlight {
+            grid-template-columns: 1fr;
+            margin-top: 24px;
+          }
           .modes,
           .split {
             grid-template-columns: 1fr;
@@ -443,7 +549,9 @@ export class Y2kPage extends ThemedElement {
           }
         }
         @media (prefers-reduced-motion: reduce) {
-          .cassette::after {
+          .cassette::after,
+          .party-artwork::after,
+          .party-artwork img {
             animation: none;
           }
         }
@@ -495,6 +603,66 @@ export class Y2kPage extends ThemedElement {
               <p>Your idea. Your tools. A browser game we can all play.</p>
             </button>
           </nav>
+          <div class="party-spotlight" aria-labelledby="party-heading">
+            <div>
+              <h2 id="party-heading">Meet the mood makers.</h2>
+              <p>
+                Big love to Angel, Maryna and Vika for bringing the Y2K energy to DevFest. Get ready
+                for the afterparty and networking from <strong>19:15</strong>.
+              </p>
+              <div class="party-names" aria-label="Meet the organizers">
+                <a
+                  href="https://www.linkedin.com/in/anhelina-sudenkova/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Angel on LinkedIn (opens in a new tab)"
+                  >Angel ↗</a
+                >
+                <a
+                  href="https://www.linkedin.com/in/kamienieva"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Maryna on LinkedIn (opens in a new tab)"
+                  >Maryna ↗</a
+                >
+                <a
+                  href="https://www.linkedin.com/in/viktoriia-vinnykova/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Vika on LinkedIn (opens in a new tab)"
+                  >Vika ↗</a
+                >
+              </div>
+            </div>
+            <div>
+              <div class="party-artwork">
+                <img
+                  src="/images/y2k/party-crew-${this.partyArt + 1}.webp"
+                  alt="Y2K-style illustration celebrating Angel, Maryna and Vika together"
+                  width="1440"
+                  height="810"
+                  loading="lazy"
+                />
+              </div>
+              <div class="party-options" role="group" aria-label="Choose illustration">
+                <span>Choose a look</span>
+                ${[0, 1, 2, 3].map(
+                  (index) => html`
+                    <button
+                      type="button"
+                      aria-label=${`Show illustration ${index + 1}`}
+                      aria-pressed=${this.partyArt === index}
+                      @click=${() => {
+                      this.partyArt = index;
+                    }}
+                    >
+                      ${index + 1}
+                    </button>
+                  `,
+                )}
+              </div>
+            </div>
+          </div>
           <section id="play" tabindex="-1">
             <div class="eyebrow">01 / A little warm-up</div>
             <h2>Insert coin? Nah. Just play.</h2>
@@ -630,10 +798,6 @@ export class Y2kPage extends ThemedElement {
               </div>
             </div>
           </section>
-          <div class="credit">
-            Shoutout to <strong>Angel and Maryna</strong> for setting up the mood booth. Bring your
-            disco energy to the afterparty and networking from <strong>19:15</strong>.
-          </div>
           <div class="credit">
             Card Hunt prepared by
             <a href="https://www.linkedin.com/in/m-jab/" target="_blank" rel="noopener noreferrer"
