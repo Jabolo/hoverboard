@@ -674,7 +674,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           <h2 id="y2k-heading" tabindex="-1">Y2K Vibe Lab &amp; Arcade</h2>
           <p>Scratch your first card, find more around DevFest and keep them in My Collection.</p>
           <div class="y2k-links">
-            <a class="y2k-link y2k-link-primary" href$="[[huntLinks.collection]]">My Collection</a>
+            <a class="y2k-link y2k-link-primary" href$="[[huntLinks.activities]]"
+              >Enter Y2K Arcade</a
+            >
+            <a class="y2k-link" href$="[[huntLinks.collection]]">My Collection</a>
             <a class="y2k-link" href="/hunt/c/y6597cd/">Scratch the Welcome Disc</a>
             <a class="y2k-link" href="/hunt/c/pvbusdb/">Open the Vibe Lab prompt</a>
             <a class="y2k-link" href="/hunt/c/rmz75w8/">Play at the Arcade</a>

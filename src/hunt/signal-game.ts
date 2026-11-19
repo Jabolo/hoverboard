@@ -194,7 +194,7 @@ export class HuntSignalGame extends ThemedElement {
       window.clearInterval(this.timer);
       this.running = false;
       if (this.score === rounds) {
-        rememberHuntPerfect(this.cardId);
+        if (this.cardId) rememberHuntPerfect(this.cardId);
         this.feedback = 'Perfect signal. Bonus transmission unlocked.';
       } else {
         this.feedback = `Game over. You caught ${this.score} of ${rounds} signals.`;
@@ -244,10 +244,12 @@ export class HuntSignalGame extends ThemedElement {
         }
         <p class="feedback" role="status">${this.feedback}</p>
         ${
-          !this.running && hasHuntPerfect(this.cardId)
+          !this.running && (this.score === rounds || (this.cardId && hasHuntPerfect(this.cardId)))
             ? html`<div class="transmission ${this.score === rounds ? 'perfect' : ''}">
                 <h3>Bonus transmission · 5/5</h3>
-                <p>The Warsaw arcade received your signal. Your card now carries the 5/5 stamp.</p>
+                <p>
+                  ${this.cardId ? 'The Warsaw arcade received your signal. Your card now carries the 5/5 stamp.' : 'The Warsaw arcade received your signal. A perfect 5/5 run!'}
+                </p>
                 <p>
                   Bonus build prompt: make a loading screen that gets impatient with the person
                   using it.

@@ -119,6 +119,14 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           color: var(--terminal-green);
         }
 
+        .nav-item a[href='/y2k/'] {
+          color: #eaf87f;
+          background: #342448;
+          border: 1px solid #8f76aa;
+          border-radius: 6px;
+          margin: 8px 2px;
+          padding: 0 12px;
+        }
         paper-icon-button {
           width: 48px;
           height: 48px;

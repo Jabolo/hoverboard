@@ -39,6 +39,11 @@
       "label": "Speakers"
     },
     {
+      "route": "y2k",
+      "permalink": "/y2k/",
+      "label": "Y2K Arcade"
+    },
+    {
       "route": "team",
       "permalink": "/team",
       "label": "Team"

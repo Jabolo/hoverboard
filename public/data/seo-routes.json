@@ -94,5 +94,16 @@
       "Explore confirmed talks and the shared panel at DevFest Warsaw 2026.",
       "Search by topic, speaker or company, and explore dates and rooms in the schedule."
     ]
+  },
+  "/y2k": {
+    "title": "Y2K Arcade & Card Hunt | GDG DevFest Warsaw 2026",
+    "description": "Play tiny browser games, discover holographic cards and join the Y2K Vibe Coding Game Challenge.",
+    "structuredData": null,
+    "fallbackHeading": "Y2K Arcade & Card Hunt",
+    "fallbackParagraphs": [
+      "Play, discover and create at DevFest Warsaw 2026.",
+      "Build a playable browser game with any tools, including AI coding assistants. Submission and detailed voting instructions are pending.",
+      "Card Hunt and arcade demos are separate from competition submissions."
+    ]
   }
 }

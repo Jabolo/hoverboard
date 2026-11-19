@@ -33,6 +33,13 @@ export const selectRouteName = (pathname: string): string => {
 
 const ROUTES: Route[] = [
   {
+    path: '/y2k',
+    component: 'y2k-page',
+    action: async () => {
+      await import('./pages/y2k-page.js');
+    },
+  },
+  {
     path: '/',
     component: 'home-page',
     action: async () => {

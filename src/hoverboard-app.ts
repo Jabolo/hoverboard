@@ -173,6 +173,12 @@ export class HoverboardApp extends PolymerElement {
           font-weight: 700;
         }
 
+        .drawer-list a[href='/y2k/'] {
+          color: #eaf87f;
+          background: #342448;
+          border-left: 3px solid #eaf87f;
+          font-weight: 700;
+        }
         app-toolbar {
           height: auto;
         }
