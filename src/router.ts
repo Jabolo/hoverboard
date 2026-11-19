@@ -8,7 +8,9 @@ const url = getConfig(CONFIG.URL);
 
 window.addEventListener('vaadin-router-location-changed', (event) => {
   // url ends in a slash and pathname starts with a slash
-  const canonicalLink = `${url}${event.detail.location.pathname.slice(1)}`;
+  const pathname: string = event.detail.location.pathname;
+  const canonicalPath = pathname.startsWith('/hunt/c/') ? '/hunt/' : pathname;
+  const canonicalLink = `${url}${canonicalPath.slice(1)}`;
   const link = document.querySelector('link[rel="canonical"]');
   if (link) {
     link.setAttribute('href', canonicalLink);
@@ -35,6 +37,20 @@ const ROUTES: Route[] = [
     component: 'home-page',
     action: async () => {
       await import('./pages/home-page.js');
+    },
+  },
+  {
+    path: '/hunt',
+    component: 'hunt-page',
+    action: async () => {
+      await import('./pages/hunt-page.js');
+    },
+  },
+  {
+    path: '/hunt/c/:token',
+    component: 'hunt-page',
+    action: async () => {
+      await import('./pages/hunt-page.js');
     },
   },
   {

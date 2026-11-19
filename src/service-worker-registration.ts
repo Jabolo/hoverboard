@@ -1,4 +1,5 @@
 import { speakersPreview } from './utils/speakers-preview';
+import { isCardHuntPreviewHost } from './utils/speakers-preview-data';
 import { isAgendaPreviewEnabled } from './utils/agenda-preview-mode';
 import { register } from 'register-service-worker';
 import { store } from './store';
@@ -20,7 +21,9 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
   }
 });
 
-if (!speakersPreview && !isAgendaPreviewEnabled(window.location.hostname))
+const hostname = window.location.hostname;
+// The hunt preview can be installed while Firebase Auth and mutations remain isolated.
+if ((!speakersPreview || isCardHuntPreviewHost(hostname)) && !isAgendaPreviewEnabled(hostname))
   register('/service-worker.js', {
     registrationOptions: { scope: getConfig(CONFIG.BASEPATH), updateViaCache: 'none' },
     updated(registration) {

@@ -112,6 +112,20 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
           --iron-icon-height: 18px;
         }
 
+        .debug-signal {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 0 8px;
+          color: var(--secondary-text-color);
+          font: 0.875rem var(--font-mono, monospace);
+        }
+
+        .debug-signal:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: -2px;
+        }
+
         .additional-sections {
           margin-top: 32px;
         }
@@ -264,6 +278,10 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
         <short-markdown class="description" content="[[session.description]]"></short-markdown>
 
+        <template is="dom-if" if="[[hasDebugSignal(session.id)]]" restamp>
+          <a class="debug-signal" href="/hunt/c/2ejjjgf/">Inspect debug signal</a>
+        </template>
+
         <div class="actions" layout horizontal>
           <a
             class="action"
@@ -354,6 +372,10 @@ export class SessionPage extends ReduxMixin(PolymerElement) {
 
   private previewActionsStyle(preview: boolean) {
     return preview ? 'display:none' : '';
+  }
+
+  private hasDebugSignal(sessionId: string | undefined) {
+    return sessionId === 'CFP-050';
   }
 
   private participantsHeading(sessionId: string) {

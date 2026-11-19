@@ -289,6 +289,14 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           text-decoration: underline;
           text-underline-offset: 4px;
         }
+        .random-access {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 0 8px;
+          color: var(--terminal-muted);
+          font: 0.875rem var(--font-mono, monospace);
+        }
         .empty {
           margin: 40px 0;
           padding: 24px;
@@ -534,6 +542,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         >
           ${filtered.map((item) => this.sessionItem(item))}
         </ul>
+        <a class="random-access" href="/hunt/c/auxq7ah/">Random access</a>
       </section>
       <footer-block></footer-block>`;
   }

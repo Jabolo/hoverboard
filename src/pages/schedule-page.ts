@@ -75,6 +75,24 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
           outline: 2px solid var(--google-blue);
           outline-offset: 4px;
         }
+        .programme-extras {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin: 0 auto;
+        }
+        .programme-extras a {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 0 12px;
+          color: var(--secondary-text-color);
+          font: 0.875rem var(--font-mono, monospace);
+        }
+        .programme-extras a:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: -2px;
+        }
         paper-progress {
           width: 100%;
           --paper-progress-active-color: var(--default-primary-color);
@@ -151,6 +169,10 @@ export class SchedulePage extends ReduxMixin(PolymerElement) {
           </div>
         </template>
       </template>
+      <div class="programme-extras">
+        <a href="/hunt/c/wkyb3kc/" aria-label="Check the 00:00 programme clock">◷ 00:00</a>
+        <a href="/hunt/c/jwvxcv9/">Check the frequency</a>
+      </div>
       <footer-block></footer-block>
     `;
   }

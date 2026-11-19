@@ -145,10 +145,15 @@ export function generatePreviewData(source: PreviewSource): PreviewCollections {
   return generateProgrammeData(source, 'preview');
 }
 
+export function isCardHuntPreviewHost(hostname: string): boolean {
+  return /^gdg-warsaw-devfest26-web--y2k-card-hunt-[a-z0-9]+\.web\.app$/.test(hostname);
+}
+
 /** Normal build review is read-only without changing its compiled files. */
 export function isReleaseReviewHost(hostname: string): boolean {
   return (
     ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname) ||
+    isCardHuntPreviewHost(hostname) ||
     /^gdg-warsaw-devfest26-web--programme-ready-2026-[a-z0-9]+\.web\.app$/.test(hostname)
   );
 }

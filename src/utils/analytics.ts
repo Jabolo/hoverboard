@@ -112,9 +112,11 @@ export async function setAnalyticsConsent(consent: AnalyticsConsent) {
 }
 
 export async function logPageView() {
-  if (speakersPreview || analyticsConsent !== 'granted') return;
+  const isCardLink = () => window.location.pathname.startsWith('/hunt/c/');
+  if (speakersPreview || analyticsConsent !== 'granted' || isCardLink()) return;
 
   await loadAnalytics();
+  if (isCardLink()) return;
   window.gtag?.('event', 'page_view', {
     page_location: window.location.href,
     page_path: window.location.pathname,

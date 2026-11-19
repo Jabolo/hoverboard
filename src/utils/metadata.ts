@@ -40,7 +40,7 @@ const getCanonicalOrigin = () => {
 
 const getCanonicalUrl = () => {
   const pathname = getPathname();
-  return `${getCanonicalOrigin()}${pathname === '/' ? '/' : pathname}`;
+  return `${getCanonicalOrigin()}${pathname.startsWith('/hunt/c/') ? '/hunt/' : pathname}`;
 };
 
 const toAbsoluteUrl = (value: string) => {

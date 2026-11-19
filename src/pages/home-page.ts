@@ -9,6 +9,7 @@ import '../components/google-developers-brand';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
 import { firebaseApp } from '../firebase';
+import { huntSiteLinks } from '../hunt/site-links';
 import { RootState, store } from '../store';
 import { ReduxMixin } from '../store/mixin';
 import { queueSnackbar } from '../store/snackbars';
@@ -365,6 +366,64 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           outline-offset: 4px;
         }
 
+        .terminal-command + .terminal-command {
+          margin-top: 8px;
+        }
+
+        .y2k-activities {
+          padding: 40px 24px;
+          color: var(--terminal-copy, var(--primary-text-color));
+          background: var(--terminal-panel, var(--secondary-background-color));
+        }
+
+        .y2k-inner {
+          max-width: 980px;
+          margin: 0 auto;
+        }
+
+        .y2k-inner h2 {
+          margin: 0;
+          font-family: var(--font-mono, monospace);
+          font-size: clamp(24px, 5vw, 36px);
+        }
+
+        .y2k-inner p {
+          margin: 12px 0 20px;
+        }
+
+        .y2k-links {
+          display: flex;
+          gap: 8px 12px;
+          flex-wrap: wrap;
+        }
+
+        .y2k-link {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 0 12px;
+          border: 1px solid var(--terminal-muted, var(--divider-color));
+          border-radius: 4px;
+          color: inherit;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        .y2k-link-primary {
+          background: var(--google-blue-strong);
+          border-color: var(--google-blue-strong);
+          color: #fff;
+        }
+
+        .y2k-link:hover {
+          text-decoration: underline;
+        }
+
+        .y2k-link:focus-visible {
+          outline: 2px solid var(--google-blue);
+          outline-offset: 3px;
+        }
+
         @media (min-height: 500px) {
           hero-block {
             height: calc(100vh + 57px);
@@ -522,6 +581,9 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   </div>
                   <hr />
                   <a class="terminal-command" href="/schedule/">View full programme →</a>
+                  <a class="terminal-command" href$="[[huntLinks.activities]]">
+                    Y2K Vibe Lab &amp; Arcade →
+                  </a>
                 </div>
               </div>
             </div>
@@ -607,6 +669,18 @@ export class HomePage extends ReduxMixin(PolymerElement) {
       <tickets-block id="registration"></tickets-block>
       <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
       <schedule-block></schedule-block>
+      <section id="y2k-activities" class="y2k-activities" aria-labelledby="y2k-heading">
+        <div class="y2k-inner">
+          <h2 id="y2k-heading" tabindex="-1">Y2K Vibe Lab &amp; Arcade</h2>
+          <p>Scratch your first card, find more around DevFest and keep them in My Collection.</p>
+          <div class="y2k-links">
+            <a class="y2k-link y2k-link-primary" href$="[[huntLinks.collection]]">My Collection</a>
+            <a class="y2k-link" href="/hunt/c/y6597cd/">Scratch the Welcome Disc</a>
+            <a class="y2k-link" href="/hunt/c/pvbusdb/">Open the Vibe Lab prompt</a>
+            <a class="y2k-link" href="/hunt/c/rmz75w8/">Play at the Arcade</a>
+          </div>
+        </div>
+      </section>
       <linkedin-updates-block></linkedin-updates-block>
       <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>
@@ -622,6 +696,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   private programmeSummary = 'Loading programme…';
 
   private siteTitle = title;
+  private huntLinks = huntSiteLinks;
   private eventDate = eventDate;
   private viewHighlights = viewHighlights;
   private buyTicket = buyTicket;
@@ -709,27 +784,30 @@ export class HomePage extends ReduxMixin(PolymerElement) {
     );
     this.checkHashAndScroll();
     window.addEventListener('hashchange', this.onHashChange);
-    window.addEventListener('click', this.onPartnerLinkClick);
+    window.addEventListener('click', this.onSectionLinkClick);
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('hashchange', this.onHashChange);
-    window.removeEventListener('click', this.onPartnerLinkClick);
+    window.removeEventListener('click', this.onSectionLinkClick);
   }
 
   private onHashChange = () => {
     this.checkHashAndScroll();
   };
 
-  private onPartnerLinkClick = (event: MouseEvent) => {
+  private onSectionLinkClick = (event: MouseEvent) => {
     // A repeated click on the same fragment does not emit hashchange. The
     // target is inside a shadow root, so native fragment scrolling cannot help.
     if (
       event
         .composedPath()
         .some(
-          (node) => node instanceof HTMLAnchorElement && node.getAttribute('href') === '/#partners',
+          (node) =>
+            node instanceof HTMLAnchorElement &&
+            (node.getAttribute('href') === '/#partners' ||
+              node.getAttribute('href') === huntSiteLinks.activities),
         )
     ) {
       this.checkHashAndScroll();
@@ -737,15 +815,21 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   };
 
   private checkHashAndScroll() {
-    if (window.location.hash === '#partners') {
+    const { hash } = window.location;
+    if (hash === '#partners' || hash === '#y2k-activities') {
       void loadHomeSections().then(() => {
         requestAnimationFrame(() => {
-          const partners = this.shadowRoot?.querySelector<HTMLElement>('#partners');
-          if (partners) scrollToElement(partners);
+          const section = this.shadowRoot?.querySelector(hash);
+          if (section) {
+            scrollToElement(section);
+            if (hash === '#y2k-activities') {
+              section.querySelector<HTMLElement>('#y2k-heading')?.focus({ preventScroll: true });
+            }
+          }
         });
       });
     }
-    if (window.location.hash === '#tickets' || window.location.hash === '#registration') {
+    if (hash === '#tickets' || hash === '#registration') {
       window.setTimeout(() => this.scrollToTickets(), 50);
     }
   }
