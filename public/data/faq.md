@@ -8,7 +8,7 @@ The event takes place on **November 21, 2026**, at Google for Startups Campus Wa
 
 ## What time does registration open?
 
-Registration opens at **09:00**. The complete timetable will be announced here as sessions and workshops are confirmed.
+Registration opens at **09:00**. See the [schedule](/schedule/) for the published programme.
 
 ## How do I get to the venue?
 
@@ -34,13 +34,13 @@ Current focus areas include Practical AI & ML, Google Cloud, Build with AI, AI A
 
 Registration is available through the [embedded form on our home page](/#registration) or directly via the Evenea ticket portal. Ticket types, prices, and availability are shown in the form. For registration or ticket questions, contact [tickets@gdgwarsaw.pl](mailto:tickets@gdgwarsaw.pl).
 
-## When will the programme and speakers be announced?
+## Where can I find the programme and speakers?
 
-The programme and speaker lineup will be added as they are confirmed. Subscribe to event updates to hear when new information is available.
+Explore the [schedule](/schedule/) and meet the [speakers](/speakers/).
 
 ## How can I speak at DevFest Warsaw?
 
-The Call for Papers is closed. We’re reviewing submissions and planning the programme. Speaker announcements will follow as confirmations are made.
+The Call for Papers is closed. Explore the published [programme](/schedule/) and [speaker lineup](/speakers/).
 
 ## How can my company support the event?
 

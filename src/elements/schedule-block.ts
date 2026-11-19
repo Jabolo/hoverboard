@@ -272,14 +272,6 @@ export class ScheduleBlock extends ThemedElement {
           max-width: 360px;
           margin-top: 12px;
         }
-        .elapsed-label {
-          display: block;
-          margin-bottom: 6px;
-          color: var(--terminal-muted);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          line-height: 1.4;
-        }
         .elapsed progress {
           display: block;
           width: 100%;
@@ -426,10 +418,6 @@ export class ScheduleBlock extends ThemedElement {
         ${
           elapsed !== null
             ? html`<span class="elapsed" aria-live="off">
-                <span class="elapsed-label" aria-hidden="true"
-                  >${item.id === 'networking' ? 'Approx. ' : ''}${elapsed}% scheduled time
-                  elapsed</span
-                >
                 <progress
                   value=${elapsed}
                   max="100"

@@ -2,7 +2,7 @@
 
 > Official public information about GDG DevFest Warsaw 2026, a community-led technology conference in Warsaw on 21 November 2026 at Google for Startups Campus Warsaw.
 
-Use this file as a concise orientation to the official website. Treat confirmed pages as the source for public facts. The 2026 schedule and speaker lineup are still being prepared; do not invent sessions, speakers, sponsors, or prices.
+Use this file as a concise orientation to the official website. Treat confirmed pages as the source for public facts. The 2026 schedule and speaker lineup are published; do not invent sessions, speakers, sponsors, or prices.
 
 Key facts: the event is organised by Google Developer Groups Warsaw, is intended for developers, designers, entrepreneurs, engineers, researchers, and students, and expects approximately 300 attendees. The theme is “Real Work, Real Lessons.” The venue is Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa, Poland. Registration opens at 09:00 and the afterparty is planned until approximately 21:30 Europe/Warsaw. Participation is in person, with English and Polish content planned.
 
@@ -10,7 +10,7 @@ Key facts: the event is organised by Google Developer Groups Warsaw, is intended
 
 - [Home](https://warsaw.devfest.pl/): Event overview, registration, Call for Papers status, venue, archive, and public updates.
 - [Blog](https://warsaw.devfest.pl/blog): News and stories from GDG Warsaw and the DevFest Warsaw community.
-- [Schedule](https://warsaw.devfest.pl/schedule): The programme will be published as sessions are confirmed.
+- [Schedule](https://warsaw.devfest.pl/schedule): Published programme and timetable.
 - [Speakers](https://warsaw.devfest.pl/speakers): Current and previous speaker information published by the organisers.
 - [Previous speakers](https://warsaw.devfest.pl/previous-speakers): Previous DevFest speakers from Warsaw community events.
 - [FAQ](https://warsaw.devfest.pl/faq): Answers about the date, venue, audience, programme, and participation.
@@ -20,7 +20,7 @@ Key facts: the event is organised by Google Developer Groups Warsaw, is intended
 
 ## Topics and participation
 
-- Call for Papers is closed. Submissions are under review and programme planning is underway. Speaker announcements will follow as confirmations are made; see [speaker updates](https://warsaw.devfest.pl/speakers).
+- Call for Papers is closed. Explore the published programme and [speaker lineup](https://warsaw.devfest.pl/speakers).
 - The current focus areas include Practical AI & ML, Google Cloud, Build with AI, AI Antigravity Agent Dev Kit (ADK), Gemini & Gemma, Firebase, Web & Performance, Mobile & Android, Open Source, and Engineering Culture.
 - The event welcomes experience-based, concrete contributions: what was built, what failed, what was measured, and what was learned.
 

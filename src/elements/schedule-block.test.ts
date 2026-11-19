@@ -266,6 +266,7 @@ describe('on-site homepage programme', () => {
     expect(bars).toHaveLength(2);
     expect(bars.map((bar) => bar.value)).toEqual([11, 11]);
     expect(bars[0]?.getAttribute('aria-label')).toContain('scheduled time elapsed');
+    expect(root.querySelector('.elapsed-label')).toBeNull();
     expect(root.querySelector('.amenity')?.textContent).toContain('Coffee');
     const links = [...root.querySelectorAll<HTMLAnchorElement>('.test-options a')];
     expect(links.map((link) => link.textContent?.trim())).toEqual([
@@ -337,9 +338,7 @@ describe('on-site homepage programme', () => {
     await element.updateComplete;
     const progress = element.shadowRoot?.querySelector<HTMLProgressElement>('progress');
     expect(progress?.getAttribute('aria-label')).toContain('approximate scheduled time elapsed');
-    expect(
-      element.shadowRoot?.querySelector('.elapsed-label')?.textContent?.replace(/\s+/g, ' ').trim(),
-    ).toBe('Approx. 33% scheduled time elapsed');
+    expect(progress?.value).toBe(33);
   });
 
   it('hides progress if programme refresh fails and marks the data as potentially stale', async () => {
