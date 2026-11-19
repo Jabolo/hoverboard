@@ -151,6 +151,8 @@ describe('on-site homepage programme', () => {
     expect(root.querySelector('a[href="/sessions/CFP-028/"]')).not.toBeNull();
     expect(root.querySelector('a[href="/sessions/CFP-015/"]')).not.toBeNull();
     expect(root.textContent).not.toContain('17:05');
+    expect(root.querySelector('progress')).toBeNull();
+    expect(root.querySelector('.amenity')?.textContent).toContain('Coffee');
   });
 
   it('keeps an untimed started activity distinct from the next timed item', async () => {
@@ -173,6 +175,8 @@ describe('on-site homepage programme', () => {
     expect(root.textContent).toContain('Opening');
     expect(root.textContent).not.toContain('Happening now');
     expect(root.querySelectorAll('.programme li')).toHaveLength(2);
+    expect(root.querySelector('progress')).toBeNull();
+    expect(root.querySelector('.amenity')?.textContent).toContain('Coffee');
   });
 
   it('starts the pre-event list without the redundant green date heading', async () => {
@@ -216,6 +220,7 @@ describe('on-site homepage programme', () => {
   });
 
   it('shows a recoverable state when programme data cannot be loaded', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('11:05'));
     globalThis.fetch = jest.fn<typeof fetch>().mockRejectedValue(new Error('offline'));
     const element = new ScheduleBlock();
     document.body.appendChild(element);
@@ -223,6 +228,7 @@ describe('on-site homepage programme', () => {
     await element.updateComplete;
     expect(element.shadowRoot?.textContent).toContain('couldn’t be loaded');
     expect(element.shadowRoot?.querySelector('a[href="/schedule/"]')).not.toBeNull();
+    expect(element.shadowRoot?.querySelector('.amenity')?.textContent).toContain('Coffee');
     element.remove();
   });
 
@@ -256,6 +262,11 @@ describe('on-site homepage programme', () => {
     expect(root.querySelector('.intro')?.textContent).toContain('simulated clock');
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
     expect(root.textContent).not.toContain('Started · end time not listed');
+    const bars = [...root.querySelectorAll<HTMLProgressElement>('progress')];
+    expect(bars).toHaveLength(2);
+    expect(bars.map((bar) => bar.value)).toEqual([11, 11]);
+    expect(bars[0]?.getAttribute('aria-label')).toContain('scheduled time elapsed');
+    expect(root.querySelector('.amenity')?.textContent).toContain('Coffee');
     const links = [...root.querySelectorAll<HTMLAnchorElement>('.test-options a')];
     expect(links.map((link) => link.textContent?.trim())).toEqual([
       '09:30',
@@ -270,5 +281,111 @@ describe('on-site homepage programme', () => {
     await element.updateComplete;
     expect(root.textContent).toContain('TEST VIEW · 11:05 Warsaw time');
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
+  });
+
+  it('shows separate scheduled progress for live sessions with different durations', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('10:30'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    const bars = [...element.shadowRoot!.querySelectorAll<HTMLProgressElement>('progress')];
+    expect(bars.map((bar) => bar.value)).toEqual([50, 37]);
+    expect(bars.every((bar) => bar.max === 100)).toBe(true);
+    expect(bars[0]?.getAttribute('aria-label')).toContain('scheduled time elapsed');
+    expect(bars[1]?.getAttribute('aria-label')).toContain('scheduled time elapsed');
+  });
+
+  it('advances live progress with the programme clock', async () => {
+    jest.useFakeTimers().setSystemTime(eventInstant('11:00'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await jest.advanceTimersByTimeAsync(0);
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector<HTMLProgressElement>('progress')?.value).toBe(0);
+    await jest.advanceTimersByTimeAsync(60_000);
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector<HTMLProgressElement>('progress')?.value).toBe(2);
+  });
+
+  it('labels progress as approximate when the published networking end is approximate', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(eventInstant('20:00'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    const progress = element.shadowRoot?.querySelector<HTMLProgressElement>('progress');
+    expect(progress?.getAttribute('aria-label')).toContain('approximate scheduled time elapsed');
+    expect(
+      element.shadowRoot?.querySelector('.elapsed-label')?.textContent?.replace(/\s+/g, ' ').trim(),
+    ).toBe('Approx. 33% scheduled time elapsed');
+  });
+
+  it('hides progress if programme refresh fails and marks the data as potentially stale', async () => {
+    history.replaceState({}, '', '/?schedule-test=11%3A05#programme');
+    jest.useFakeTimers().setSystemTime(eventInstant('11:05'));
+    let requests = 0;
+    globalThis.fetch = jest.fn<typeof fetch>(async (input) => {
+      if (++requests > 2) throw new Error('offline');
+      return {
+        ok: true,
+        json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+      } as Response;
+    });
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await jest.advanceTimersByTimeAsync(0);
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelectorAll('progress')).toHaveLength(2);
+    await jest.advanceTimersByTimeAsync(300_000);
+    await element.updateComplete;
+    expect(element.shadowRoot?.textContent).toContain('Times shown may be out of date');
+    expect(element.shadowRoot?.querySelector('progress')).toBeNull();
+    expect(element.shadowRoot?.querySelector('.amenity')?.textContent).toContain('Coffee');
+  });
+
+  it('keeps the untimed amenity after the last session, but hides it after the event day', async () => {
+    const now = jest.spyOn(Date, 'now').mockReturnValue(eventInstant('23:00'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await element.updateComplete;
+    expect(element.shadowRoot?.querySelector('.amenity')?.textContent).toContain('Coffee');
+    expect(element.shadowRoot?.querySelector('progress')).toBeNull();
+    element.remove();
+    now.mockReturnValue(eventInstant('23:59') + 60_000);
+    const nextDay = new ScheduleBlock();
+    document.body.appendChild(nextDay);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await nextDay.updateComplete;
+    expect(nextDay.shadowRoot?.querySelector('.amenity')).toBeNull();
   });
 });

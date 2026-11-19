@@ -4,6 +4,7 @@ import { ThemedElement } from '../components/themed-element';
 import {
   buildAgenda,
   eventInstant,
+  progressAt,
   warsawTime,
   type AgendaItem,
   type DraftAgenda,
@@ -266,6 +267,58 @@ export class ScheduleBlock extends ThemedElement {
           font-size: 14px;
           line-height: 1.4;
         }
+        .elapsed {
+          display: block;
+          max-width: 360px;
+          margin-top: 12px;
+        }
+        .elapsed-label {
+          display: block;
+          margin-bottom: 6px;
+          color: var(--terminal-muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          line-height: 1.4;
+        }
+        .elapsed progress {
+          display: block;
+          width: 100%;
+          height: 4px;
+          border: 0;
+          border-radius: 3px;
+          overflow: hidden;
+          appearance: none;
+          background: #547960;
+          color: var(--terminal-green);
+          accent-color: var(--terminal-green);
+        }
+        .elapsed progress::-webkit-progress-bar {
+          background: #547960;
+        }
+        .elapsed progress::-webkit-progress-value {
+          background: var(--terminal-green);
+        }
+        .elapsed progress::-moz-progress-bar {
+          background: var(--terminal-green);
+        }
+        .amenity {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: baseline;
+          gap: 8px 16px;
+          margin-top: 24px;
+          padding-top: 20px;
+          border-top: 1px solid var(--terminal-line);
+        }
+        .amenity strong {
+          font-family: var(--font-mono, monospace);
+          color: var(--terminal-green);
+        }
+        .amenity span {
+          color: var(--terminal-muted);
+          font-size: 14px;
+          line-height: 1.4;
+        }
         .message {
           color: var(--terminal-muted);
           line-height: 1.55;
@@ -358,6 +411,8 @@ export class ScheduleBlock extends ThemedElement {
   }
 
   private renderItem(item: AgendaItem) {
+    const progress = this.status === 'ready' ? progressAt(item, this.now) : null;
+    const elapsed = progress === null ? null : Math.floor(progress);
     const content = html` <span class="time"
         ><time datetime=${`2026-11-21T${item.start}:00+01:00`}>${item.start}</time
         >${item.end ? html`–${item.id === 'networking' ? '≈' : nothing}<time datetime=${`2026-11-21T${item.end}:00+01:00`}>${item.end}</time>` : nothing}</span
@@ -368,6 +423,23 @@ export class ScheduleBlock extends ThemedElement {
         >
         <span class="title">${item.title}</span>
         ${item.speakers.length ? html`<span class="speakers">${item.speakers.map((speaker) => speaker.name).join(' · ')}</span>` : nothing}
+        ${
+          elapsed !== null
+            ? html`<span class="elapsed" aria-live="off">
+                <span class="elapsed-label" aria-hidden="true"
+                  >${item.id === 'networking' ? 'Approx. ' : ''}${elapsed}% scheduled time
+                  elapsed</span
+                >
+                <progress
+                  value=${elapsed}
+                  max="100"
+                  aria-label=${`${item.title}: ${item.id === 'networking' ? 'approximate ' : ''}scheduled time elapsed`}
+                >
+                  ${elapsed}%
+                </progress>
+              </span>`
+            : nothing
+        }
       </span>`;
     return html`<li>
       ${item.href ? html`<a class="row" href=${item.href}>${content}</a>` : html`<div class="row">${content}</div>`}
@@ -461,6 +533,11 @@ export class ScheduleBlock extends ThemedElement {
             : nothing
         }
       </div>
+      ${
+        this.now < eventInstant('23:59') + 60_000
+          ? html`<div class="amenity"><strong>Coffee</strong><span>On-site amenity</span></div>`
+          : nothing
+      }
       <a class="schedule-link" href="/schedule/">View full schedule →</a>
     </section>`;
   }
