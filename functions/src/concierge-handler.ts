@@ -427,6 +427,94 @@ export type ConciergeDeps = {
 
 const MAX_CACHE_ENTRIES = 200;
 const CACHE_TTL_MS = 15 * 60 * 1000;
+const LIVE_TIME_CACHE_TTL_MS = 5 * 60 * 1000;
+
+const EVENT_TRANSITION_TIMES = [
+  '09:00',
+  '10:00',
+  '10:15',
+  '10:45',
+  '10:55',
+  '11:00',
+  '11:45',
+  '12:00',
+  '12:45',
+  '13:00',
+  '13:30',
+  '13:45',
+  '14:00',
+  '15:00',
+  '16:00',
+  '16:10',
+  '16:40',
+  '16:55',
+  '17:05',
+  '17:35',
+  '17:50',
+  '18:00',
+  '18:45',
+  '18:55',
+  '19:00',
+  '19:15',
+  '21:30',
+] as const;
+
+type ServerScheduleSlot = {
+  slotKey: string;
+  phase: 'pre-event' | 'live' | 'post-event';
+  nextBoundaryAt: number | null;
+};
+
+function eventInstantServer(hhmm: string): number {
+  return Date.parse(`2026-11-21T${hhmm}:00+01:00`);
+}
+
+export function getServerScheduleSlot(now: number): ServerScheduleSlot {
+  const boundaries = EVENT_TRANSITION_TIMES.map((hhmm) => eventInstantServer(hhmm));
+  const firstStart = boundaries[0]!;
+  if (now < firstStart) {
+    return {
+      slotKey: 'pre-event',
+      phase: 'pre-event',
+      nextBoundaryAt: firstStart,
+    };
+  }
+
+  for (let i = 0; i < EVENT_TRANSITION_TIMES.length - 1; i += 1) {
+    const startMs = boundaries[i]!;
+    const endMs = boundaries[i + 1]!;
+    if (now >= startMs && now < endMs) {
+      return {
+        slotKey: `slot:${EVENT_TRANSITION_TIMES[i]!}-${EVENT_TRANSITION_TIMES[i + 1]!}`,
+        phase: 'live',
+        nextBoundaryAt: endMs,
+      };
+    }
+  }
+
+  return {
+    slotKey: 'post-event',
+    phase: 'post-event',
+    nextBoundaryAt: null,
+  };
+}
+
+function foldDiacriticsServer(input: string): string {
+  return input
+    .replace(/ł/g, 'l')
+    .replace(/Ł/g, 'L')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+const TIME_SENSITIVE_PATTERN =
+  /\b(now|right now|currently|happening|on now|live|up next|next session|next talk|next workshop|starting soon|what'?s next|whats next|today|this hour|remaining|left today|in progress|open now|available now|teraz|aktualnie|obecnie|zaraz|nastepn\w*|na zywo)\b/;
+
+export function isTimeSensitiveQuery(query: string, intent?: string): boolean {
+  if (intent === 'compare-rooms') return true;
+  return TIME_SENSITIVE_PATTERN.test(foldDiacriticsServer(query));
+}
 
 type CacheEntry = {
   messages: ReturnType<typeof buildA2UIMessages>;
@@ -439,12 +527,35 @@ export function clearConciergeCache(): void {
   responseCache.clear();
 }
 
-function buildCacheKey(query: string, intent: string, savedSessionIds: string[]): string {
+function buildCacheKey(
+  query: string,
+  intent: string,
+  savedSessionIds: string[],
+  now: number,
+): string {
   const normalizedSaved = savedSessionIds
     .filter((id) => Boolean(CANONICAL_SESSIONS[id]))
     .sort()
     .join(',');
-  return `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${normalizedSaved}`;
+  let key = `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${normalizedSaved}`;
+  if (isTimeSensitiveQuery(query, intent)) {
+    const slot = getServerScheduleSlot(now);
+    key += `|slot=${slot.slotKey}`;
+  }
+  return key;
+}
+
+function computeServerCacheExpiresAt(slot: ServerScheduleSlot | null, now: number): number {
+  if (!slot) {
+    return now + CACHE_TTL_MS;
+  }
+  if (slot.phase === 'live' && slot.nextBoundaryAt !== null) {
+    return Math.min(now + LIVE_TIME_CACHE_TTL_MS, slot.nextBoundaryAt);
+  }
+  if (slot.phase === 'pre-event' && slot.nextBoundaryAt !== null) {
+    return Math.min(now + CACHE_TTL_MS, slot.nextBoundaryAt);
+  }
+  return now + CACHE_TTL_MS;
 }
 
 function getCachedMessages(key: string, now: number): ReturnType<typeof buildA2UIMessages> | null {
@@ -463,7 +574,7 @@ function getCachedMessages(key: string, now: number): ReturnType<typeof buildA2U
 function setCachedMessages(
   key: string,
   messages: ReturnType<typeof buildA2UIMessages>,
-  now: number,
+  expiresAt: number,
 ): void {
   if (responseCache.size >= MAX_CACHE_ENTRIES) {
     const oldestKey = responseCache.keys().next().value;
@@ -471,7 +582,7 @@ function setCachedMessages(
       responseCache.delete(oldestKey);
     }
   }
-  responseCache.set(key, { messages, expiresAt: now + CACHE_TTL_MS });
+  responseCache.set(key, { messages, expiresAt });
 }
 
 type ConciergeRequest = Pick<Request, 'method' | 'body' | 'headers' | 'ip' | 'connection'>;
@@ -932,7 +1043,7 @@ export async function handleConcierge(
     return;
   }
 
-  const now = deps.now ?? parsed.clientNow ?? Date.now();
+  const now = deps.now ?? Date.now();
   const nowDate = new Date(now);
 
   if (deps.db) {
@@ -982,7 +1093,13 @@ export async function handleConcierge(
     response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
   }
 
-  const cacheKey = buildCacheKey(parsed.query, parsed.intent, parsed.savedSessionIds);
+  const timeSensitive = isTimeSensitiveQuery(parsed.query, parsed.intent);
+  const slot = timeSensitive ? getServerScheduleSlot(now) : null;
+  if (slot) {
+    response.set('X-Concierge-Slot', slot.slotKey);
+  }
+
+  const cacheKey = buildCacheKey(parsed.query, parsed.intent, parsed.savedSessionIds, now);
   if (!deps.bypassCache) {
     const cachedMessages = getCachedMessages(cacheKey, now);
     if (cachedMessages) {
@@ -1071,7 +1188,8 @@ export async function handleConcierge(
     );
 
     if (!deps.bypassCache) {
-      setCachedMessages(cacheKey, messages, now);
+      const expiresAt = computeServerCacheExpiresAt(slot, now);
+      setCachedMessages(cacheKey, messages, expiresAt);
     }
     response.set('X-Concierge-Cache', 'MISS');
     response.status(200).json({

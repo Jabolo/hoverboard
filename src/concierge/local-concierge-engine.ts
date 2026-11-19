@@ -118,7 +118,90 @@ const CREDIT_WORKSHOP_IDS = [
   'INVITED-001',
 ];
 
-const PARALLEL_SLOTS = ['10:15', '11:00', '12:00', '15:00', '16:10', '17:05', '18:00'];
+const PARALLEL_SLOTS = ['10:15', '11:00', '12:00', '13:00', '15:00', '16:10', '17:05', '18:00'];
+
+export const EVENT_TRANSITION_TIMES = [
+  '09:00',
+  '10:00',
+  '10:15',
+  '10:45',
+  '10:55',
+  '11:00',
+  '11:45',
+  '12:00',
+  '12:45',
+  '13:00',
+  '13:30',
+  '13:45',
+  '14:00',
+  '15:00',
+  '16:00',
+  '16:10',
+  '16:40',
+  '16:55',
+  '17:05',
+  '17:35',
+  '17:50',
+  '18:00',
+  '18:45',
+  '18:55',
+  '19:00',
+  '19:15',
+  '21:30',
+] as const;
+
+export interface ScheduleTimeSlot {
+  slotKey: string;
+  phase: 'pre-event' | 'live' | 'post-event';
+  nextBoundaryAt: number | null;
+}
+
+export function getScheduleTimeSlot(now: number): ScheduleTimeSlot {
+  const boundaries = EVENT_TRANSITION_TIMES.map((hhmm) => eventInstant(hhmm));
+  const firstStart = boundaries[0]!;
+  if (now < firstStart) {
+    return {
+      slotKey: 'pre-event',
+      phase: 'pre-event',
+      nextBoundaryAt: firstStart,
+    };
+  }
+
+  for (let i = 0; i < EVENT_TRANSITION_TIMES.length - 1; i++) {
+    const startMs = boundaries[i]!;
+    const endMs = boundaries[i + 1]!;
+    if (now >= startMs && now < endMs) {
+      return {
+        slotKey: `slot:${EVENT_TRANSITION_TIMES[i]!}-${EVENT_TRANSITION_TIMES[i + 1]!}`,
+        phase: 'live',
+        nextBoundaryAt: endMs,
+      };
+    }
+  }
+
+  return {
+    slotKey: 'post-event',
+    phase: 'post-event',
+    nextBoundaryAt: null,
+  };
+}
+
+const TIME_SENSITIVE_PATTERN =
+  /\b(now|right now|currently|happening|on now|live|up next|next session|next talk|next workshop|starting soon|what'?s next|whats next|today|this hour|remaining|left today|in progress|open now|available now|teraz|aktualnie|obecnie|zaraz|nastepn\w*|na zywo)\b/;
+
+export function isTimeSensitiveQuery(query: string, intent?: string): boolean {
+  if (intent === 'compare-rooms') return true;
+  return TIME_SENSITIVE_PATTERN.test(foldDiacritics(query));
+}
+
+function formatWarsawTime(now: number): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Warsaw',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(now));
+}
 
 function formatSpace(space: AgendaSpace): string {
   switch (space) {
@@ -548,6 +631,9 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
 
   const requestedSlot = PARALLEL_SLOTS.find((slot) => req.query.includes(slot));
 
+  const warsawNow = formatWarsawTime(req.now);
+  const slotState = getScheduleTimeSlot(req.now);
+
   let focusItems: AgendaItem[];
   let gridTitle = 'Auditorium vs Classroom vs Vibe Zone';
   let bannerBody =
@@ -565,19 +651,27 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
 
     if (current.length > 0) {
       gridTitle = `Live right now (${current[0]!.start})`;
-      bannerBody = 'These sessions are running live right now across the venue.';
+      bannerBody = `Checked live at ${warsawNow} Warsaw time — these sessions are running now across the venue.`;
     } else if (upcoming.length > 0) {
       gridTitle = `Up next at ${upcoming[0]!.start}`;
-      bannerBody = `Next parallel block starts at ${upcoming[0]!.start} Warsaw time.`;
+      bannerBody = `Checked live at ${warsawNow} Warsaw time — next parallel block starts at ${upcoming[0]!.start}.`;
     }
   } else {
     const targetSlot = requestedSlot ?? '12:00';
     focusItems = ordered.filter((item) => item.start === targetSlot);
-    gridTitle = requestedSlot
-      ? `Parallel comparison at ${targetSlot}`
-      : 'Room format & parallel slot guide (featured 12:00 slot)';
-    bannerBody =
-      'Parallel sessions run at 10:15, 11:00, 12:00, 15:00, 16:10, 17:05, and 18:00. Choose Auditorium for talks or Classroom for hands-on workshops.';
+    if (requestedSlot) {
+      gridTitle = `Parallel comparison at ${targetSlot}`;
+      bannerBody =
+        'Parallel sessions run at 10:15, 11:00, 12:00, 13:00, 15:00, 16:10, 17:05, and 18:00. Choose Auditorium for talks or Classroom for hands-on workshops.';
+    } else if (slotState.phase === 'post-event') {
+      gridTitle = 'Room format & parallel slot guide (featured 12:00 slot)';
+      bannerBody =
+        'The Nov 21, 2026 event has wrapped. Previewing the 12:00 parallel block — sessions ran at 10:15, 11:00, 12:00, 13:00, 15:00, 16:10, 17:05, and 18:00.';
+    } else {
+      gridTitle = 'Room format & parallel slot guide (featured 12:00 slot)';
+      bannerBody =
+        'Doors open Nov 21 at 09:00 Warsaw time. Parallel sessions run at 10:15, 11:00, 12:00, 13:00, 15:00, 16:10, 17:05, and 18:00.';
+    }
   }
 
   const auditoriumItem = focusItems.find((i) => i.space === 'auditorium');
@@ -589,7 +683,7 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
     parentId: 'surface-root',
     props: {
       tone: 'info',
-      kicker: isDuringEvent ? 'Live Room Guide' : 'Parallel Rooms',
+      kicker: isDuringEvent ? `Live at ${warsawNow} Warsaw time` : 'Parallel Rooms',
       title: gridTitle,
       body: bannerBody,
     },
@@ -675,7 +769,9 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
 
   return {
     title: 'Auditorium vs Classroom',
-    subtitle: isDuringEvent ? 'Live schedule comparison' : 'Parallel track guide',
+    subtitle: isDuringEvent
+      ? `Live schedule comparison · ${warsawNow} Warsaw time`
+      : 'Parallel track guide',
     nodes,
   };
 }

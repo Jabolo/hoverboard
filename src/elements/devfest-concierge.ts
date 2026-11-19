@@ -1,5 +1,5 @@
 import { css, html, nothing, type TemplateResult } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
 import {
   ALLOWED_A2UI_COMPONENTS,
@@ -11,6 +11,8 @@ import {
 import {
   computeSavedConflicts,
   generateLocalConciergeMessages,
+  getScheduleTimeSlot,
+  isTimeSensitiveQuery,
   type ConciergeIntent,
   type LocalConciergeRequest,
   type TeamMemberInfo,
@@ -26,6 +28,7 @@ import { isReleaseReviewHost, type PreviewSource } from '../utils/speakers-previ
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
 const CLIENT_CACHE_PREFIX = 'devfest-2026:concierge-cache:v1:';
 const CLIENT_CACHE_TTL_MS = 30 * 60 * 1000;
+const LIVE_TIME_CLIENT_CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface QuickIntentItem {
   label: string;
@@ -105,9 +108,37 @@ function asRecordArray(value: unknown): Array<Record<string, unknown>> {
   );
 }
 
-function buildClientCacheKey(query: string, intent: string, savedIds: string[]): string {
+function buildClientCacheKey(
+  query: string,
+  intent: string,
+  savedIds: string[],
+  now: number,
+  creditStatus: string,
+): string {
   const sortedSaved = [...savedIds].sort().join(',');
-  return `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${sortedSaved}`;
+  let key = `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${sortedSaved}`;
+  if (isTimeSensitiveQuery(query, intent)) {
+    const slot = getScheduleTimeSlot(now);
+    key += `|slot=${slot.slotKey}`;
+  }
+  if (intent === 'credits-workshops' || /credit/i.test(query)) {
+    key += `|credit=${creditStatus}`;
+  }
+  return key;
+}
+
+function computeClientCacheExpiresAt(query: string, intent: string, now: number): number {
+  if (!isTimeSensitiveQuery(query, intent)) {
+    return now + CLIENT_CACHE_TTL_MS;
+  }
+  const slot = getScheduleTimeSlot(now);
+  if (slot.phase === 'live' && slot.nextBoundaryAt !== null) {
+    return Math.min(now + LIVE_TIME_CLIENT_CACHE_TTL_MS, slot.nextBoundaryAt);
+  }
+  if (slot.phase === 'pre-event' && slot.nextBoundaryAt !== null) {
+    return Math.min(now + CLIENT_CACHE_TTL_MS, slot.nextBoundaryAt);
+  }
+  return now + CLIENT_CACHE_TTL_MS;
 }
 
 function readClientCache(key: string, now: number): A2UIMessage[] | null {
@@ -131,8 +162,8 @@ function readClientCache(key: string, now: number): A2UIMessage[] | null {
   return null;
 }
 
-function writeClientCache(key: string, messages: A2UIMessage[], now: number): void {
-  const entry: ClientCacheEntry = { messages, expiresAt: now + CLIENT_CACHE_TTL_MS };
+function writeClientCache(key: string, messages: A2UIMessage[], expiresAt: number): void {
+  const entry: ClientCacheEntry = { messages, expiresAt };
   memoryResponseCache.set(key, entry);
   try {
     window.sessionStorage.setItem(`${CLIENT_CACHE_PREFIX}${key}`, JSON.stringify(entry));
@@ -143,6 +174,8 @@ function writeClientCache(key: string, messages: A2UIMessage[], now: number): vo
 
 @customElement('devfest-concierge')
 export class DevfestConcierge extends ThemedElement {
+  @property({ type: String, reflect: true }) variant: 'band' | 'hero' = 'band';
+
   @state() private query = '';
   @state() private activeIntent = '';
   @state() private activeQuery = '';
@@ -162,6 +195,7 @@ export class DevfestConcierge extends ThemedElement {
   private programme: PreviewSource = { speakers: {}, sessions: {} };
   private teamMembers: TeamMemberInfo[] = [];
   private unsubscribeFavorites: (() => void) | undefined;
+  private liveRefreshTimer: number | undefined;
   private requestCounter = 0;
 
   static override get styles() {
@@ -175,6 +209,8 @@ export class DevfestConcierge extends ThemedElement {
           min-width: 0;
           color-scheme: dark;
           container-type: inline-size;
+          text-align: left;
+          font-size: 16px;
           --_bg: var(--primary-background-color, #070c14);
           --_panel: var(--terminal-panel, #0d1727);
           --_raised: var(--terminal-panel-raised, #112039);
@@ -187,6 +223,11 @@ export class DevfestConcierge extends ThemedElement {
           background: var(--_bg);
           border-bottom: 1px solid var(--divider-color, var(--_line));
           color: var(--_copy);
+        }
+
+        :host([variant='hero']) {
+          background: transparent;
+          border-bottom: 0;
         }
 
         @media (pointer: coarse) {
@@ -220,6 +261,11 @@ export class DevfestConcierge extends ThemedElement {
           padding: 10px 16px;
         }
 
+        :host([variant='hero']) .launcher-shell {
+          max-width: none;
+          padding: 0;
+        }
+
         .launcher-frame {
           display: grid;
           grid-template-columns: minmax(0, 1fr);
@@ -230,6 +276,50 @@ export class DevfestConcierge extends ThemedElement {
           border: 1px solid var(--_line);
           border-radius: 10px;
           background: var(--_panel);
+        }
+
+        :host([variant='hero']) .launcher-frame {
+          padding: 10px 12px;
+          background: rgb(10 21 37 / 90%);
+          border-color: var(--_line);
+          box-shadow: 0 18px 42px rgb(0 0 0 / 34%);
+          backdrop-filter: blur(8px);
+        }
+
+        .launcher-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+          padding-bottom: 6px;
+          border-bottom: 1px solid rgb(38 61 94 / 55%);
+        }
+
+        .launcher-brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          min-width: 0;
+          color: var(--_copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .launcher-dot {
+          width: 7px;
+          height: 7px;
+          flex: 0 0 auto;
+          border-radius: 50%;
+          background: var(--_green);
+        }
+
+        .launcher-meta {
+          flex: 0 0 auto;
+          color: var(--_muted);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          white-space: nowrap;
         }
 
         .launcher-form {
@@ -952,8 +1042,43 @@ export class DevfestConcierge extends ThemedElement {
 
   override disconnectedCallback(): void {
     super.disconnectedCallback();
+    this.clearLiveRefreshTimer();
     this.unsubscribeFavorites?.();
     this.unsubscribeFavorites = undefined;
+  }
+
+  private clearLiveRefreshTimer(): void {
+    if (this.liveRefreshTimer !== undefined) {
+      window.clearTimeout(this.liveRefreshTimer);
+      this.liveRefreshTimer = undefined;
+    }
+  }
+
+  private scheduleLiveRefreshIfNeeded(): void {
+    this.clearLiveRefreshTimer();
+    if (!(
+      this.dialogOpen &&
+      this.originLabel === 'local' &&
+      this.activeIntent === 'compare-rooms'
+    )) {
+      return;
+    }
+    const { nextBoundaryAt } = getScheduleTimeSlot(Date.now());
+    if (nextBoundaryAt === null) return;
+    const delta = nextBoundaryAt - Date.now();
+    if (delta <= 0 || delta > 24 * 60 * 60 * 1000) return;
+
+    this.liveRefreshTimer = window.setTimeout(
+      () => {
+        this.liveRefreshTimer = undefined;
+        if (!this.isConnected || !this.dialogOpen || this.activeIntent !== 'compare-rooms') {
+          return;
+        }
+        this.renderLocalSurface(this.activeQuery, 'compare-rooms');
+        this.scheduleLiveRefreshIfNeeded();
+      },
+      Math.max(1000, delta + 250),
+    );
   }
 
   public openAndFocus(initialIntent?: string): void {
@@ -982,6 +1107,7 @@ export class DevfestConcierge extends ThemedElement {
 
   private closeDialog = (): void => {
     this.dialogOpen = false;
+    this.clearLiveRefreshTimer();
     const dialog = this.dialogEl;
     if (!dialog) return;
     if (typeof dialog.close === 'function' && dialog.open) {
@@ -993,6 +1119,7 @@ export class DevfestConcierge extends ThemedElement {
 
   private readonly onDialogClose = (): void => {
     this.dialogOpen = false;
+    this.clearLiveRefreshTimer();
   };
 
   private readonly onDialogClick = (event: MouseEvent): void => {
@@ -1120,6 +1247,7 @@ export class DevfestConcierge extends ThemedElement {
     this.processor.processBatch(messages);
     this.originLabel = 'local';
     this.renderTick++;
+    this.scheduleLiveRefreshIfNeeded();
   }
 
   private async runConciergeRequest(
@@ -1132,6 +1260,7 @@ export class DevfestConcierge extends ThemedElement {
     this.activeIntent = intent ?? 'custom';
     this.activeQuery = trimmed || (intent ?? 'overview');
     this.statusNotice = '';
+    this.clearLiveRefreshTimer();
     this.openDialog();
 
     // Serve preset chips and quick intents instantaneously at 0 API cost unless AI personalization is requested
@@ -1148,7 +1277,13 @@ export class DevfestConcierge extends ThemedElement {
 
     const savedSessionIds = this.getSavedSessionIds();
     const now = Date.now();
-    const cacheKey = buildClientCacheKey(trimmed, intent ?? '', savedSessionIds);
+    const cacheKey = buildClientCacheKey(
+      trimmed,
+      intent ?? '',
+      savedSessionIds,
+      now,
+      this.creditStatus,
+    );
     const cached = readClientCache(cacheKey, now);
     if (cached) {
       this.processor.processBatch(cached);
@@ -1178,7 +1313,8 @@ export class DevfestConcierge extends ThemedElement {
         const payload = (await response.json()) as { messages?: unknown; cached?: boolean };
         if (Array.isArray(payload.messages) && payload.messages.length > 0) {
           const messages = payload.messages as A2UIMessage[];
-          writeClientCache(cacheKey, messages, now);
+          const expiresAt = computeClientCacheExpiresAt(trimmed, intent ?? '', now);
+          writeClientCache(cacheKey, messages, expiresAt);
           this.processor.processBatch(messages);
           this.syncFavoritesIntoActiveSurface();
           this.originLabel = payload.cached ? 'cached' : 'live';
@@ -1575,13 +1711,17 @@ export class DevfestConcierge extends ThemedElement {
 
   override render() {
     const surface = this.processor.getActiveSurface();
-    const isLiveOrCached = this.originLabel === 'live' || this.originLabel === 'cached';
+    const isLiveRoomsClock = this.originLabel === 'local' && this.activeIntent === 'compare-rooms';
+    const isLiveOrCached =
+      this.originLabel === 'live' || this.originLabel === 'cached' || isLiveRoomsClock;
     const sourceBadgeText =
       this.originLabel === 'live'
         ? 'Live · Gemini 4 Hydrogen'
         : this.originLabel === 'cached'
           ? 'Cached · Gemini 4 Hydrogen'
-          : 'Instant · Local A2UI';
+          : isLiveRoomsClock
+            ? 'Live · Local Clock'
+            : 'Instant · Local A2UI';
 
     const rootNode =
       surface && surface.rootId ? surface.componentsById.get(surface.rootId) : undefined;
@@ -1609,6 +1749,19 @@ export class DevfestConcierge extends ThemedElement {
     return html`
       <section class="launcher-shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
         <div class="launcher-frame">
+          ${
+            this.variant === 'hero'
+              ? html`
+                  <div class="launcher-header">
+                    <span class="launcher-brand">
+                      <span class="launcher-dot" aria-hidden="true"></span>
+                      <span>devfest-concierge</span>
+                    </span>
+                    <span class="launcher-meta">Instant + AI</span>
+                  </div>
+                `
+              : nothing
+          }
           <form class="launcher-form" @submit=${this.onSubmit}>
             <label class="sr-only" for="concierge-input">Ask DevFest Concierge</label>
             <div class="input-wrap">

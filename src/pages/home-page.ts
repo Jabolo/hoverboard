@@ -1,36 +1,24 @@
 import '../hunt/peek-card.js';
-import { Success } from '@abraham/remotedata';
-import { computed, customElement, property, query } from '@polymer/decorators';
-import '@polymer/iron-icon';
-import '@material/web/button/filled-button.js';
-import '@material/web/button/outlined-button.js';
+import { customElement, property, query } from '@polymer/decorators';
 import { html, PolymerElement } from '@polymer/polymer';
 import '../components/event-countdown';
 import '../components/google-developers-brand';
 import '../components/hero/hero-block';
 import { HeroBlock } from '../components/hero/hero-block';
+import '../elements/devfest-concierge';
 import { firebaseApp } from '../firebase';
 import { huntSiteLinks } from '../hunt/site-links';
-import { RootState, store } from '../store';
-import { ReduxMixin } from '../store/mixin';
+import { store } from '../store';
 import { queueSnackbar } from '../store/snackbars';
-import { openVideoDialog } from '../store/ui/actions';
 import {
-  aboutBlock,
-  buyTicket,
   eventDate,
   description,
-  eveneaEmbed,
   heroSettings,
   showForkMeBlockForProjectIds,
   title,
-  ticketingPreview,
-  viewHighlights,
 } from '../utils/data';
-import '../utils/icons';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
-import { initialTicketsState, TicketsState } from '../store/tickets/state';
 import { getProgrammeSummary, loadPublishedProgramme } from '../utils/published-programme';
 
 // Let the browser paint the hero before loading the remaining page sections.
@@ -43,7 +31,6 @@ function loadHomeSections() {
     import('../elements/about-organizer-block'),
     import('../elements/attendee-photos-block'),
     import('../elements/cloud-credit-block'),
-    import('../elements/devfest-concierge'),
     import('../elements/linkedin-updates-block'),
     import('../elements/schedule-block'),
     import('../elements/visit-block'),
@@ -63,7 +50,7 @@ function loadHomeSections() {
 }
 
 @customElement('home-page')
-export class HomePage extends ReduxMixin(PolymerElement) {
+export class HomePage extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles flex flex-alignment">
@@ -113,7 +100,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
 
         .home-intro {
+          width: 100%;
           min-width: 0;
+        }
+
+        .home-intro devfest-concierge {
+          margin-top: 20px;
+          width: min(100%, 540px);
         }
 
         .brand-lockup {
@@ -165,66 +158,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           font-family: var(--font-mono);
           font-size: 18px;
           line-height: 1.45;
-        }
-
-        .action-buttons {
-          margin: 0 -8px;
-          font-size: 14px;
-        }
-
-        .action-buttons md-filled-button,
-        .action-buttons md-outlined-button {
-          min-height: 48px;
-          margin: 6px;
-          border-radius: 4px;
-          font-family: var(--font-mono);
-          font-size: 12px;
-          font-weight: 800;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-        }
-
-        .action-buttons md-filled-button {
-          --md-filled-button-container-shape: 4px;
-          --md-filled-button-container-color: var(--google-blue-strong);
-          --md-filled-button-hover-container-color: var(--google-blue);
-          --md-filled-button-label-text-color: #fff;
-          --md-filled-button-hover-label-text-color: #fff;
-          --md-filled-button-icon-color: #fff;
-        }
-
-        .action-buttons md-outlined-button {
-          --md-outlined-button-container-shape: 4px;
-        }
-
-        .action-buttons .watch-video {
-          color: #fff;
-          --md-outlined-button-label-text-color: #fff;
-          --md-outlined-button-hover-label-text-color: #fff;
-          --md-outlined-button-outline-color: #fff;
-        }
-
-        .action-buttons iron-icon {
-          --iron-icon-fill-color: currentColor;
-          margin-right: 8px;
-        }
-
-        .visit-link {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 44px;
-          padding: 0 12px;
-          color: #fff;
-          font-size: 15px;
-          font-weight: 600;
-          text-decoration: underline;
-          text-underline-offset: 4px;
-        }
-
-        .visit-link:focus-visible {
-          outline: 2px solid var(--terminal-green);
-          outline-offset: 2px;
         }
 
         .scroll-down {
@@ -514,6 +447,10 @@ export class HomePage extends ReduxMixin(PolymerElement) {
             text-align: left;
           }
 
+          .event-details {
+            text-align: left;
+          }
+
           .terminal-column {
             justify-self: end;
           }
@@ -525,32 +462,25 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           display: none;
         }
         @media (max-width: 811px) {
-          /* Put the programme within reach for attendees already on site. */
+          /* Put the Concierge and programme within reach for attendees already on site. */
           .terminal-column,
           .scroll-down {
             display: none;
           }
           .home-content {
-            padding-top: 0;
-            padding-bottom: 0;
+            padding: 0;
           }
           .hero-community {
             margin-top: 8px;
             --google-developers-brand-width: 150px;
           }
           .event-details {
+            margin-top: 14px;
+            text-align: center;
+          }
+          .home-intro devfest-concierge {
             margin-top: 16px;
-          }
-          .action-buttons {
-            margin: 8px 0 0;
-            gap: 8px;
-          }
-          .action-buttons md-filled-button,
-          .action-buttons md-outlined-button {
-            min-height: 44px;
-            margin: 0;
-            font-size: 12px;
-            letter-spacing: 0.02em;
+            width: 100%;
           }
         }
         @media (min-width: 812px) {
@@ -608,20 +538,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
               <event-countdown></event-countdown>
 
-              <div class="action-buttons" layout horizontal center-justified wrap>
-                <template is="dom-if" if="[[hasHighlights]]">
-                  <md-outlined-button class="watch-video" on-click="playVideo">
-                    <iron-icon icon="hoverboard:movie" slot="icon"></iron-icon>
-                    [[viewHighlights]]
-                  </md-outlined-button>
-                </template>
-                <md-filled-button href="/schedule/">View programme</md-filled-button>
-                <md-outlined-button on-click="scrollToTickets">
-                  <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
-                  [[ticketActionLabel]]
-                </md-outlined-button>
-              </div>
-              <a class="visit-link" href="/#visit">Plan your visit</a>
+              <devfest-concierge id="concierge" variant="hero"></devfest-concierge>
             </div>
 
             <div class="terminal-column">
@@ -758,7 +675,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           </button>
         </div>
       </hero-block>
-      <devfest-concierge id="concierge" style="scroll-margin-top: 80px;"></devfest-concierge>
       <schedule-block></schedule-block>
       <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
       <cloud-credit-block id="cloud-credit" style="scroll-margin-top: 80px;"></cloud-credit-block>
@@ -818,46 +734,13 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   private siteTitle = title;
   private huntLinks = huntSiteLinks;
   private eventDate = eventDate;
-  private viewHighlights = viewHighlights;
-  private buyTicket = buyTicket;
   private heroSettings = heroSettings.home;
-  private aboutBlock = aboutBlock;
-  @property({ type: Boolean })
-  private hasHighlights = Boolean(aboutBlock.callToAction.howItWas.youtubeId);
-  private ticketingPreview = ticketingPreview;
-
-  @property({ type: Object })
-  tickets: TicketsState = initialTicketsState;
-
-  @computed('tickets')
-  private get hasAvailableTickets() {
-    return this.tickets instanceof Success && this.tickets.data.some((ticket) => ticket.available);
-  }
-
-  @computed('tickets')
-  private get ticketActionLabel() {
-    if (eveneaEmbed.requiresAccessCode) {
-      return this.ticketingPreview;
-    }
-    return this.hasAvailableTickets ? this.buyTicket : this.ticketingPreview;
-  }
 
   @query('#hero')
   hero!: HeroBlock;
 
   @property({ type: Boolean })
   private showForkMeBlock: boolean = false;
-
-  override stateChanged(state: RootState) {
-    this.tickets = state.tickets;
-  }
-
-  private playVideo() {
-    openVideoDialog({
-      title: this.aboutBlock.callToAction.howItWas.label,
-      youtubeId: this.aboutBlock.callToAction.howItWas.youtubeId,
-    });
-  }
 
   private scrollToTickets() {
     void loadHomeSections().then(() => {
@@ -875,18 +758,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
 
   private openConcierge(e?: Event) {
     e?.preventDefault();
-    void loadHomeSections().then(() => {
-      requestAnimationFrame(() => {
-        const concierge = this.shadowRoot?.querySelector('#concierge') as
-          (HTMLElement & { openAndFocus?: (initialIntent?: string) => void }) | null | undefined;
-        if (concierge) {
-          scrollToElement(concierge);
-          concierge.openAndFocus?.();
-        } else {
-          store.dispatch(queueSnackbar('Error opening concierge.'));
-        }
-      });
-    });
+    const concierge = this.shadowRoot?.querySelector('#concierge') as
+      (HTMLElement & { openAndFocus?: (initialIntent?: string) => void }) | null | undefined;
+    if (concierge) {
+      if (concierge.getBoundingClientRect().top < 0) {
+        scrollToElement(concierge);
+      }
+      concierge.openAndFocus?.();
+    } else {
+      store.dispatch(queueSnackbar('Error opening concierge.'));
+    }
   }
 
   private scrollNextBlock() {

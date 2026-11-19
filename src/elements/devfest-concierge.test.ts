@@ -247,4 +247,128 @@ describe('devfest-concierge', () => {
       false,
     );
   });
+
+  it('renders hero chrome when variant="hero" and omits it in default band variant', async () => {
+    globalThis.fetch = mockBootstrapFetch();
+
+    const heroEl = new DevfestConcierge();
+    heroEl.variant = 'hero';
+    document.body.appendChild(heroEl);
+    await flushRender(heroEl);
+    expect(heroEl.shadowRoot?.querySelector('.launcher-header')?.textContent).toContain(
+      'devfest-concierge',
+    );
+    heroEl.remove();
+
+    const bandEl = new DevfestConcierge();
+    document.body.appendChild(bandEl);
+    await flushRender(bandEl);
+    expect(bandEl.shadowRoot?.querySelector('.launcher-header')).toBeNull();
+  });
+
+  it('evaluates Rooms now live across schedule slots with zero AI calls', async () => {
+    const fetchMock = mockBootstrapFetch();
+    globalThis.fetch = fetchMock;
+    const nowSpy = jest.spyOn(Date, 'now');
+
+    nowSpy.mockReturnValue(Date.parse('2026-11-21T10:20:00+01:00'));
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    const roomsChip = root.querySelector<HTMLButtonElement>(
+      '.launcher-shell button[data-intent="compare-rooms"]',
+    )!;
+    roomsChip.click();
+    await flushRender(element);
+
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live · Local Clock');
+    expect(root.querySelector('.callout-title')?.textContent).toContain('10:15');
+
+    nowSpy.mockReturnValue(Date.parse('2026-11-21T11:10:00+01:00'));
+    roomsChip.click();
+    await flushRender(element);
+
+    expect(root.querySelector('.callout-title')?.textContent).toContain('11:00');
+    const conciergeCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes('/api/concierge'),
+    );
+    expect(conciergeCalls).toHaveLength(0);
+  });
+
+  it('expires client cache across schedule slot boundaries for time-sensitive queries', async () => {
+    let callCount = 0;
+    const fetchMock = mockBootstrapFetch(async () => {
+      callCount++;
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          cached: false,
+          messages: [
+            {
+              type: 'createSurface',
+              surfaceId: `s-${callCount}`,
+              title: 'Live Rooms',
+              source: 'gemini-4-hydrogen',
+              timestamp: Date.now(),
+            },
+            { type: 'updateDataModel', surfaceId: `s-${callCount}`, data: {} },
+            {
+              type: 'updateComponents',
+              surfaceId: `s-${callCount}`,
+              rootId: `root-${callCount}`,
+              components: [
+                {
+                  id: `root-${callCount}`,
+                  component: 'SurfaceContainer',
+                  parentId: null,
+                  children: [],
+                  props: { title: `Slot Response #${callCount}` },
+                },
+              ],
+            },
+          ],
+        }),
+      } as Response;
+    });
+    globalThis.fetch = fetchMock;
+    const nowSpy = jest.spyOn(Date, 'now');
+
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+    const root = element.shadowRoot!;
+
+    nowSpy.mockReturnValue(Date.parse('2026-11-21T10:44:00+01:00'));
+    const input = root.querySelector<HTMLInputElement>('#concierge-input')!;
+    input.value = 'What talks are live right now?';
+    input.dispatchEvent(new Event('input'));
+    root
+      .querySelector<HTMLFormElement>('.launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+    expect(root.querySelector('.surface-title')?.textContent).toBe('Slot Response #1');
+
+    // Within same slot (before 10:45): hits client cache
+    nowSpy.mockReturnValue(Date.parse('2026-11-21T10:44:30+01:00'));
+    root
+      .querySelector<HTMLFormElement>('.dialog-controls .launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
+      'Cached · Gemini 4 Hydrogen',
+    );
+    expect(callCount).toBe(1);
+
+    // Crossing 10:45 boundary: misses cache and fetches fresh live response
+    nowSpy.mockReturnValue(Date.parse('2026-11-21T10:46:00+01:00'));
+    root
+      .querySelector<HTMLFormElement>('.dialog-controls .launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+    expect(root.querySelector('.surface-title')?.textContent).toBe('Slot Response #2');
+    expect(callCount).toBe(2);
+  });
 });

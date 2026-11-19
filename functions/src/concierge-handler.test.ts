@@ -5,7 +5,12 @@ import { Timestamp } from 'firebase-admin/firestore';
 
 jest.mock('./rate-limiter.js', () => require('./rate-limiter'), { virtual: true });
 
-import { CANONICAL_TEAM, clearConciergeCache, handleConcierge } from './concierge-handler';
+import {
+  CANONICAL_TEAM,
+  clearConciergeCache,
+  getServerScheduleSlot,
+  handleConcierge,
+} from './concierge-handler';
 
 function createMockResponse() {
   const res = {
@@ -501,5 +506,101 @@ describe('handleConcierge', () => {
     expect(res2.headers['X-Concierge-Cache']).toBe('HIT');
     expect(res2.body).toMatchObject({ cached: true });
     expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+
+  it('keys and expires time-sensitive cache across schedule slot boundaries', async () => {
+    const fetchFn = jest.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        status: 'completed',
+        steps: [
+          {
+            type: 'model_output',
+            content: [{ type: 'text', text: JSON.stringify(VALID_PLAN) }],
+          },
+        ],
+      }),
+    })) as unknown as typeof fetch;
+
+    const slot = getServerScheduleSlot(Date.parse('2026-11-21T10:20:00+01:00'));
+    expect(slot.slotKey).toBe('slot:10:15-10:45');
+
+    // 10:20 — MISS
+    const res1 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      res1 as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T10:20:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    expect(res1.headers['X-Concierge-Cache']).toBe('MISS');
+    expect(res1.headers['X-Concierge-Slot']).toBe('slot:10:15-10:45');
+
+    // 10:22 same slot — HIT
+    const res2 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      res2 as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T10:22:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    expect(res2.headers['X-Concierge-Cache']).toBe('HIT');
+    expect(res2.headers['X-Concierge-Slot']).toBe('slot:10:15-10:45');
+
+    // Crosses 10:45 transition (10:44 -> 10:46) — MISS
+    const res3 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      res3 as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T10:44:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    const res4 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      res4 as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T10:46:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    expect(res3.headers['X-Concierge-Slot']).toBe('slot:10:15-10:45');
+    expect(res4.headers['X-Concierge-Cache']).toBe('MISS');
+    expect(res4.headers['X-Concierge-Slot']).toBe('slot:10:45-10:55');
+
+    // Crosses 09:00 doors-open boundary (08:58 -> 09:01) — MISS
+    const resPre = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      resPre as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T08:58:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    const resOpen = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'What is happening right now?' } }),
+      resOpen as unknown as Response,
+      {
+        now: Date.parse('2026-11-21T09:01:00+01:00'),
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+      },
+    );
+    expect(resPre.headers['X-Concierge-Slot']).toBe('pre-event');
+    expect(resOpen.headers['X-Concierge-Cache']).toBe('MISS');
+    expect(resOpen.headers['X-Concierge-Slot']).toBe('slot:09:00-10:00');
   });
 });

@@ -14,7 +14,12 @@ import {
   type A2UIComponentNode,
   type A2UIMessage,
 } from './a2ui-protocol';
-import { computeSavedConflicts, generateLocalConciergeMessages } from './local-concierge-engine';
+import {
+  computeSavedConflicts,
+  generateLocalConciergeMessages,
+  getScheduleTimeSlot,
+  isTimeSensitiveQuery,
+} from './local-concierge-engine';
 
 const agendaDraft = JSON.parse(
   fs.readFileSync(path.resolve(process.cwd(), 'public/data/agenda-2026.json'), 'utf8'),
@@ -353,5 +358,63 @@ describe('generateLocalConciergeMessages', () => {
     expect(banners[0]?.props['title']).toContain('Michał Jabłoński');
     const chips = collectNodesByComponent(processor, 'ActionChipRow');
     expect((chips[0]?.props['chips'] as unknown[]).length).toBeLessThanOrEqual(2);
+  });
+
+  it('computes schedule time slots, transitions, and time-sensitive queries', () => {
+    const pre = getScheduleTimeSlot(Date.parse('2026-11-21T08:45:00+01:00'));
+    expect(pre).toEqual({
+      slotKey: 'pre-event',
+      phase: 'pre-event',
+      nextBoundaryAt: eventInstant('09:00'),
+    });
+
+    const slotA = getScheduleTimeSlot(eventInstant('10:44'));
+    expect(slotA).toEqual({
+      slotKey: 'slot:10:15-10:45',
+      phase: 'live',
+      nextBoundaryAt: eventInstant('10:45'),
+    });
+
+    const slotB = getScheduleTimeSlot(eventInstant('10:45'));
+    expect(slotB.slotKey).toBe('slot:10:45-10:55');
+
+    const post = getScheduleTimeSlot(eventInstant('21:30'));
+    expect(post).toEqual({ slotKey: 'post-event', phase: 'post-event', nextBoundaryAt: null });
+
+    expect(isTimeSensitiveQuery('what is happening now?')).toBe(true);
+    expect(isTimeSensitiveQuery('co dzieje sie teraz na salach?')).toBe(true);
+    expect(isTimeSensitiveQuery('Compare Auditorium', 'compare-rooms')).toBe(true);
+    expect(isTimeSensitiveQuery('Who is Michał Jabłoński?')).toBe(false);
+  });
+
+  it('compares 13:00 slot and stamps live Warsaw clock during event day', () => {
+    const slotProcessor = new A2UIMessageProcessor();
+    slotProcessor.processBatch(
+      generateLocalConciergeMessages({
+        query: 'Compare rooms at 13:00',
+        agendaItems,
+        programme,
+        savedSessionIds: [],
+        creditStatus: 'available',
+        now: Date.parse('2026-11-19T12:00:00+01:00'),
+      }),
+    );
+    const grids13 = collectNodesByComponent(slotProcessor, 'ComparisonGrid');
+    expect(String(grids13[0]!.props['title'])).toContain('13:00');
+
+    const liveProcessor = new A2UIMessageProcessor();
+    liveProcessor.processBatch(
+      generateLocalConciergeMessages({
+        query: 'Rooms now',
+        intent: 'compare-rooms',
+        agendaItems,
+        programme,
+        savedSessionIds: [],
+        creditStatus: 'available',
+        now: eventInstant('10:20'),
+      }),
+    );
+    const liveBanner = collectNodesByComponent(liveProcessor, 'CalloutBanner')[0]!;
+    expect(String(liveBanner.props['kicker'])).toContain('Live at 10:20 Warsaw time');
   });
 });
