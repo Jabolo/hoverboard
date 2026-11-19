@@ -4,7 +4,6 @@ import { buildAgenda, eventInstant, type DraftAgenda } from '../utils/agenda-pre
 import type { PreviewSource } from '../utils/speakers-preview-data';
 import agenda from '../../public/data/agenda-2026.json';
 import programme from '../../public/data/programme-2026.json';
-import { getScheduleTestTime } from '../utils/schedule-test-time';
 
 const items = buildAgenda(agenda as DraftAgenda, programme as PreviewSource);
 const ids = (list: typeof items) => list.map((item) => item.id);
@@ -233,8 +232,7 @@ describe('on-site homepage programme', () => {
   });
 
   it('shows the requested test moments from the public programme', () => {
-    const selection = (time: string) =>
-      homeAgendaAt(items, getScheduleTestTime('localhost', `?schedule-test=${time}`)!);
+    const selection = (time: string) => homeAgendaAt(items, eventInstant(time));
     expect(ids(selection('09:30').started)).toEqual(['registration']);
     expect(ids(selection('09:30').upcoming)).toEqual(['opening']);
     expect(ids(selection('11:05').current)).toEqual(['CFP-002', 'CFP-012']);
@@ -243,9 +241,9 @@ describe('on-site homepage programme', () => {
     expect(ids(selection('16:05').upcoming)).toEqual(['CFP-028', 'CFP-015']);
   });
 
-  it('labels simulated time and keeps it fixed as the real clock advances', async () => {
-    history.replaceState({}, '', '/?ref=keep&schedule-test=11%3A05#programme');
-    jest.useFakeTimers().setSystemTime(eventInstant('09:30'));
+  it('uses the real clock even when a former test parameter is present', async () => {
+    history.replaceState({}, '', '/?ref=keep&schedule-test=09%3A30#programme');
+    jest.useFakeTimers().setSystemTime(eventInstant('11:05'));
     globalThis.fetch = jest.fn<typeof fetch>(
       async (input) =>
         ({
@@ -258,8 +256,8 @@ describe('on-site homepage programme', () => {
     await jest.advanceTimersByTimeAsync(0);
     await element.updateComplete;
     const root = element.shadowRoot!;
-    expect(root.textContent).toContain('TEST VIEW · 11:05 Warsaw time');
-    expect(root.querySelector('.intro')?.textContent).toContain('simulated clock');
+    expect(root.textContent).not.toContain('TEST VIEW');
+    expect(root.querySelector('.intro')?.textContent).toContain('device clock');
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
     expect(root.textContent).not.toContain('Started · end time not listed');
     const bars = [...root.querySelectorAll<HTMLProgressElement>('progress')];
@@ -268,19 +266,10 @@ describe('on-site homepage programme', () => {
     expect(bars[0]?.getAttribute('aria-label')).toContain('scheduled time elapsed');
     expect(root.querySelector('.elapsed-label')).toBeNull();
     expect(root.querySelector('.amenity')?.textContent).toContain('Coffee');
-    const links = [...root.querySelectorAll<HTMLAnchorElement>('.test-options a')];
-    expect(links.map((link) => link.textContent?.trim())).toEqual([
-      '09:30',
-      '11:05',
-      '16:05',
-      'Use real time',
-    ]);
-    expect(links[0]?.getAttribute('href')).toBe('/?ref=keep&schedule-test=09%3A30#programme');
-    expect(links[3]?.getAttribute('href')).toBe('/?ref=keep#programme');
-    expect(links.every((link) => link.hasAttribute('router-ignore'))).toBe(true);
-    await jest.advanceTimersByTimeAsync(30_000);
+    expect(root.querySelector('.test-options')).toBeNull();
+    await jest.advanceTimersByTimeAsync(60_000);
     await element.updateComplete;
-    expect(root.textContent).toContain('TEST VIEW · 11:05 Warsaw time');
+    expect(root.querySelector<HTMLProgressElement>('progress')?.value).toBe(13);
     expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
   });
 
@@ -342,7 +331,6 @@ describe('on-site homepage programme', () => {
   });
 
   it('hides progress if programme refresh fails and marks the data as potentially stale', async () => {
-    history.replaceState({}, '', '/?schedule-test=11%3A05#programme');
     jest.useFakeTimers().setSystemTime(eventInstant('11:05'));
     let requests = 0;
     globalThis.fetch = jest.fn<typeof fetch>(async (input) => {
