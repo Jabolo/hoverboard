@@ -173,6 +173,7 @@ export class DevfestConcierge extends ThemedElement {
           width: 100%;
           max-width: 100%;
           min-width: 0;
+          color-scheme: dark;
           container-type: inline-size;
           --_bg: var(--primary-background-color, #070c14);
           --_panel: var(--terminal-panel, #0d1727);
@@ -392,7 +393,8 @@ export class DevfestConcierge extends ThemedElement {
           flex-direction: column;
           width: 100%;
           max-height: 88dvh;
-          border: 1px solid var(--_line);
+          border: 0;
+          border-top: 1px solid var(--_line);
           border-radius: 16px 16px 0 0;
           background: var(--_panel);
           box-shadow: 0 -12px 36px rgb(0 0 0 / 45%);
@@ -409,6 +411,7 @@ export class DevfestConcierge extends ThemedElement {
 
           .dialog-panel {
             max-height: 82dvh;
+            border: 1px solid var(--_line);
             border-radius: 12px;
             box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
           }
@@ -496,6 +499,8 @@ export class DevfestConcierge extends ThemedElement {
           flex: 1 1 auto;
           overflow-y: auto;
           min-width: 0;
+          scrollbar-width: thin;
+          scrollbar-color: var(--_line) transparent;
           padding: 14px 14px max(16px, env(safe-area-inset-bottom, 0px));
           display: grid;
           grid-template-columns: minmax(0, 1fr);
@@ -533,6 +538,8 @@ export class DevfestConcierge extends ThemedElement {
 
         .surface-children {
           display: grid;
+          grid-template-columns: minmax(0, 1fr);
+          min-width: 0;
           gap: 12px;
         }
 
@@ -762,7 +769,7 @@ export class DevfestConcierge extends ThemedElement {
         .logistics-grid {
           display: grid;
           gap: 8px;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
           margin-bottom: 10px;
         }
 
