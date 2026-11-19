@@ -167,12 +167,13 @@ describe('approved programme publication', () => {
     expect(data.generatedSchedule).toEqual([]);
   });
 
-  it('uses read-only operational SDKs only on loopback and the exact release review channel', () => {
+  it('uses read-only operational SDKs only on loopback and the exact review channels', () => {
     for (const host of [
       'localhost',
       '127.0.0.1',
       '[::1]',
       'gdg-warsaw-devfest26-web--programme-ready-2026-a1b2.web.app',
+      'gdg-warsaw-devfest26-web--event-companion-20261119-a1b2.web.app',
     ]) {
       expect(isReleaseReviewHost(host)).toBe(true);
     }
@@ -181,6 +182,11 @@ describe('approved programme publication', () => {
       'gdg-warsaw-devfest26-web.web.app',
       'other-site--programme-ready-2026-a1b2.web.app',
       'gdg-warsaw-devfest26-web--programme-ready-2026-a1b2.web.app.evil.com',
+      'gdg-warsaw-devfest26-web--event-companion-20261119-a1b2.web.app.evil.com',
+      'other-site--event-companion-20261119-a1b2.web.app',
+      'gdg-warsaw-devfest26-web--event-companion-20261119-.web.app',
+      'gdg-warsaw-devfest26-web--event-companion-20261119-a-b.web.app',
+      'gdg-warsaw-devfest26-web--event-companion-20261119-a1b2.firebaseapp.com',
       'localhost.evil.com',
       'gdg-warsaw-devfest26-web--speakers-tomek-2026-a1b2.web.app',
     ]) {

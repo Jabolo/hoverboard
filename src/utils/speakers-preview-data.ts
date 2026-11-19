@@ -149,6 +149,7 @@ export function generatePreviewData(source: PreviewSource): PreviewCollections {
 export function isReleaseReviewHost(hostname: string): boolean {
   return (
     ['localhost', '127.0.0.1', '[::1]', '::1'].includes(hostname) ||
-    /^gdg-warsaw-devfest26-web--programme-ready-2026-[a-z0-9]+\.web\.app$/.test(hostname)
+    /^gdg-warsaw-devfest26-web--programme-ready-2026-[a-z0-9]+\.web\.app$/.test(hostname) ||
+    /^gdg-warsaw-devfest26-web--event-companion-20261119-[a-z0-9]+\.web\.app$/.test(hostname)
   );
 }
