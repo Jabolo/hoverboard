@@ -42,6 +42,6 @@ Use only the existing `node scripts/deploy-hunt-preview.mjs hosting` channel flo
 - `bug5afe` Paperclip Containment Unit: identify the rogue paperclip after one or two clues. Wrong answer or third-clue breach does not unlock it.
 - `cd2002x` World Wide Weird Restored: reveal three fragments and explicitly boot the recovered website.
 
-All routes use `/hunt/c/<id>/`. Existing 00:00, Random access and debugging-session clues now use larger, readable foil panels. Vika is credited for developing the Y2K Vibe Zone and DevFest Quest, and Angel for her mood board and duck decorating challenge proposal, alongside the Card Hunt creator/inspiration credits.
+All routes use `/hunt/c/<id>/`. Existing 00:00, Random access and debugging-session clues now use larger, readable foil panels. Vika is credited for developing the Y2K Vibe Zone and DevFest Quest, alongside the Card Hunt creator/inspiration credits. The Y2K page thanks Angel and Maryna for setting up the mood booth and gives the 19:15 afterparty start.
 
 Additional browser regressions: `scripts/verify-hunt-discovery-ui.mjs` and `scripts/verify-arcade-rewards-ui.mjs`, using the same Playwright environment argument as above. The latter covers losing/retry paths and confirms three earned souvenirs persist in the binder. Preview requires the isolated `y2kCardHuntPreview` catalog function update; production release remains separate.

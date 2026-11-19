@@ -535,8 +535,6 @@ export class HuntPage extends ThemedElement {
               aria-label="Piotr Prus’s scratch card repository (opens in a new tab)"
               >Piotr Prus’s scratch card</a
             >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>.
-            <strong>Angel</strong>
-            shared the visual mood board and proposed the duck decorating challenge.
           </p>
         </footer>
       </div>

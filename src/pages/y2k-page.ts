@@ -631,6 +631,10 @@ export class Y2kPage extends ThemedElement {
             </div>
           </section>
           <div class="credit">
+            Shoutout to <strong>Angel and Maryna</strong> for setting up the mood booth. Bring your
+            disco energy to the afterparty and networking from <strong>19:15</strong>.
+          </div>
+          <div class="credit">
             Card Hunt prepared by
             <a href="https://www.linkedin.com/in/m-jab/" target="_blank" rel="noopener noreferrer"
               >Michał Jabłoński ↗</a
@@ -641,8 +645,6 @@ export class Y2kPage extends ThemedElement {
               rel="noopener noreferrer"
               >Piotr Prus’s holographic scratch card ↗</a
             >. Y2K Vibe Zone and DevFest Quest developed by <strong>Vika</strong>.
-            <strong>Angel</strong>
-            shared the visual mood board and proposed the duck decorating challenge.
           </div>
         </div>
       </div>
