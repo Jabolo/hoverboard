@@ -9,7 +9,9 @@ import { fileURLToPath } from 'node:url';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 import { createHuntHandler } from '../hunt-functions/handler.js';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const env = parseEnv(await readFile(root + '/hunt-functions/.env', 'utf8'));
+const env = parseEnv(
+  await readFile(process.env.HUNT_ENV_FILE || root + '/hunt-functions/.env', 'utf8'),
+);
 const handler = createHuntHandler({
   includePreview: true,
   physicalCards: JSON.parse(env.HUNT_PHYSICAL_CARDS),
@@ -52,7 +54,7 @@ try {
     page.on('pageerror', (e) => errors.push(e.message));
     await page.goto(base + '/y2k/');
     const hub = page.locator('y2k-page');
-    await hub.getByRole('heading', { name: /Y2K/ }).waitFor();
+    await hub.getByRole('heading', { name: 'Y2K Arcade.', exact: true }).waitFor();
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       true,
@@ -64,7 +66,7 @@ try {
         .evaluate((el) => getComputedStyle(el, '::after').animationName),
       'none',
     );
-    await hub.getByRole('button', { name: 'Press START' }).click();
+    await hub.getByRole('button', { name: 'Play mini-games' }).click();
     assert.equal(
       await hub.locator('#play').evaluate((el) => el === el.getRootNode().activeElement),
       true,
@@ -116,9 +118,9 @@ try {
     await hunt.getByRole('button', { name: /reveal/i }).click();
     await hunt.getByRole('heading', { name: 'Collected', exact: true }).waitFor();
     await page.goBack();
-    await hub.getByRole('heading', { name: /Y2K/ }).waitFor();
+    await hub.getByRole('heading', { name: 'Y2K Arcade.', exact: true }).waitFor();
     await page.reload();
-    await hub.getByRole('heading', { name: /Y2K/ }).waitFor();
+    await hub.getByRole('heading', { name: 'Y2K Arcade.', exact: true }).waitFor();
     if (width < 760) {
       await page.getByRole('button', { name: 'Open navigation menu' }).click();
       const link = page

@@ -191,6 +191,13 @@ export class Y2kPage extends ThemedElement {
           gap: 12px;
           margin-top: 25px;
         }
+        .collection-link {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 8px 0;
+          color: #ddcfe9;
+        }
         .cassette {
           transform: rotate(5deg);
           position: relative;
@@ -494,8 +501,8 @@ export class Y2kPage extends ThemedElement {
           }
           .hero {
             grid-template-columns: 1fr;
-            padding: 42px 0 56px;
-            gap: 36px;
+            padding: 28px 0 40px;
+            gap: 28px;
           }
           .cassette {
             max-width: 340px;
@@ -510,6 +517,16 @@ export class Y2kPage extends ThemedElement {
           .party-spotlight {
             grid-template-columns: 1fr;
             margin-top: 24px;
+          }
+          .mode {
+            padding: 16px 20px;
+          }
+          .mode strong {
+            margin: 7px 0;
+            font-size: 22px;
+          }
+          .actions .primary {
+            width: 100%;
           }
           .modes,
           .split {
@@ -548,12 +565,12 @@ export class Y2kPage extends ThemedElement {
               <div class="eyebrow">Welcome back to the internet playground</div>
               <h1>Y2K<em>Arcade.</em></h1>
               <p class="intro">
-                One more round. One more discovery. Play something tiny, scratch something shiny,
-                then build something wonderfully weird.
+                Start with a shiny card. Try a tiny game. Then build something wonderfully weird.
               </p>
               <div class="actions">
-                <button class="primary" @click=${() => this.jump('play')}>Press START ↗</button
-                ><a class="button" href="/hunt/">My Collection</a>
+                <a class="button primary" href="/hunt/c/y6597cd/">Scratch your first card</a>
+                <button @click=${() => this.jump('play')}>Play mini-games</button>
+                <a class="collection-link" href="/hunt/">My Collection ↗</a>
               </div>
             </div>
             <a class="cassette" href="/hunt/c/y6597cd/" aria-label="Scratch the Welcome Disc"
@@ -567,64 +584,61 @@ export class Y2kPage extends ThemedElement {
             >
           </div>
           <nav class="modes" aria-label="Y2K activities">
+            <button class="mode" @click=${() => this.jump('discover')}>
+              <span>01 / DISCOVER</span><strong>Card Hunt ↘</strong>
+              <p>Start your foil collection. No account needed.</p>
+            </button>
             <button class="mode" @click=${() => this.jump('play')}>
-              <span>01 / PLAY</span><strong>The Arcade ↘</strong>
+              <span>02 / PLAY</span><strong>The Arcade ↘</strong>
               <p>Small games. Big “one more go” energy.</p>
             </button>
-            <a class="mode" href="/hunt/"
-              ><span>02 / DISCOVER</span><strong>Card Hunt ↗</strong>
-              <p>Find holographic cards. Fill your own foil binder.</p></a
-            >
             <button class="mode" @click=${() => this.jump('build')}>
               <span>03 / MAKE</span><strong>Vibe Coding Challenge ↘</strong>
-              <p>Your idea. Your tools. A browser game we can all play.</p>
+              <p>Build a playful frontend or a browser game.</p>
             </button>
           </nav>
-          <div class="party-spotlight" aria-labelledby="party-heading">
-            <div>
-              <h2 id="party-heading">Meet the mood makers.</h2>
-              <p>
-                Big love to Angel, Maryna and Viktoriia for bringing the Y2K energy to DevFest. Get
-                ready for the afterparty and networking from <strong>19:15</strong>.
-              </p>
-              <div class="party-names" aria-label="Meet the organizers">
-                <a
-                  href="https://www.linkedin.com/in/anhelina-sudenkova/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Angel on LinkedIn (opens in a new tab)"
-                  >Angel ↗</a
-                >
-                <a
-                  href="https://www.linkedin.com/in/kamienieva"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Maryna on LinkedIn (opens in a new tab)"
-                  >Maryna ↗</a
-                >
-                <a
-                  href="https://www.linkedin.com/in/viktoriia-vinnykova/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Viktoriia on LinkedIn (opens in a new tab)"
-                  >Viktoriia ↗</a
-                >
+          <section id="discover" tabindex="-1">
+            <div class="eyebrow">01 / Keep your eyes open</div>
+            <h2>Find a card. Scratch it. Keep it.</h2>
+            <div class="split">
+              <div>
+                <p class="lede">
+                  Some cards hide in the DevFest website. Others wait around the venue, behind a QR
+                  code or a marked NFC sticker. Follow the clues and see what turns up.
+                </p>
+                <ol class="steps">
+                  <li>
+                    Open a card. Scratch the foil with your finger or mouse, or choose Reveal.
+                  </li>
+                  <li>
+                    Find your revealed cards in My Collection. Stay in the same browser to keep your
+                    finds together.
+                  </li>
+                  <li>
+                    Try a tiny game, borrow a creative prompt, or follow the next clue. Some finds
+                    only appear for a little while.
+                  </li>
+                </ol>
+                <p class="small">
+                  Optional motion effects. No account needed. Clearing site data can remove your
+                  collection. Card Hunt is separate from the DevFest Quest and challenge
+                  submissions.
+                </p>
+              </div>
+              <div class="panel">
+                <h3>Your starter pack</h3>
+                <p>Three doors into the playground. The rest? That’s for you to discover.</p>
+                <div class="actions">
+                  <a class="button primary" href="/hunt/c/y6597cd/">Scratch the Welcome Disc</a
+                  ><a class="button" href="/hunt/c/pvbusdb/">Open the Vibe Lab prompt</a
+                  ><a class="button" href="/hunt/c/rmz75w8/">Find the Arcade card</a
+                  ><a class="button" href="/hunt/">Open My Collection ↗</a>
+                </div>
               </div>
             </div>
-            <div>
-              <div class="party-artwork">
-                <img
-                  src="/images/y2k/party-crew-1.webp"
-                  alt="Y2K-style illustration celebrating Angel, Maryna and Viktoriia together"
-                  width="1440"
-                  height="810"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
+          </section>
           <section id="play" tabindex="-1">
-            <div class="eyebrow">01 / A little warm-up</div>
+            <div class="eyebrow">02 / A little warm-up</div>
             <h2>Insert coin? Nah. Just play.</h2>
             <p class="lede">
               Five tiny games to get you in the mood. These are playground demos, not competition
@@ -663,46 +677,6 @@ export class Y2kPage extends ThemedElement {
               </div>
             </div>
             <y2k-experiments></y2k-experiments>
-          </section>
-          <section id="discover" tabindex="-1">
-            <div class="eyebrow">02 / Keep your eyes open</div>
-            <h2>Find a card. Scratch it. Keep it.</h2>
-            <div class="split">
-              <div>
-                <p class="lede">
-                  Some cards hide in the DevFest website. Others wait around the venue, behind a QR
-                  code or a marked NFC sticker. Follow the clues and see what turns up.
-                </p>
-                <ol class="steps">
-                  <li>
-                    Open a card. Scratch the foil with your finger or mouse, or choose Reveal.
-                  </li>
-                  <li>
-                    Find your revealed cards in My Collection. Stay in the same browser to keep your
-                    finds together.
-                  </li>
-                  <li>
-                    Try a tiny game, borrow a creative prompt, or follow the next clue. Some finds
-                    only appear for a little while.
-                  </li>
-                </ol>
-                <p class="small">
-                  Optional motion effects. No account needed. Clearing site data can remove your
-                  collection. Card Hunt is separate from the DevFest Quest and challenge
-                  submissions.
-                </p>
-              </div>
-              <div class="panel">
-                <h3>Your starter pack</h3>
-                <p>Three doors into the playground. The rest? That’s for you to discover.</p>
-                <div class="actions">
-                  <a class="button primary" href="/hunt/c/y6597cd/">Scratch the Welcome Disc</a
-                  ><a class="button" href="/hunt/c/pvbusdb/">Open the Vibe Lab prompt</a
-                  ><a class="button" href="/hunt/c/rmz75w8/">Find the Arcade card</a
-                  ><a class="button" href="/hunt/">Open My Collection ↗</a>
-                </div>
-              </div>
-            </div>
           </section>
           <section id="build" tabindex="-1">
             <div class="eyebrow">03 / Make the internet weird again</div>
@@ -784,6 +758,49 @@ export class Y2kPage extends ThemedElement {
               </div>
             </div>
           </section>
+          <div class="party-spotlight" aria-labelledby="party-heading">
+            <div>
+              <h2 id="party-heading">Meet the mood makers.</h2>
+              <p>
+                Big love to Angel, Maryna and Viktoriia for bringing the Y2K energy to DevFest. Get
+                ready for the afterparty and networking from <strong>19:15</strong>.
+              </p>
+              <div class="party-names" aria-label="Meet the organizers">
+                <a
+                  href="https://www.linkedin.com/in/anhelina-sudenkova/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Angel on LinkedIn (opens in a new tab)"
+                  >Angel ↗</a
+                >
+                <a
+                  href="https://www.linkedin.com/in/kamienieva"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Maryna on LinkedIn (opens in a new tab)"
+                  >Maryna ↗</a
+                >
+                <a
+                  href="https://www.linkedin.com/in/viktoriia-vinnykova/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Viktoriia on LinkedIn (opens in a new tab)"
+                  >Viktoriia ↗</a
+                >
+              </div>
+            </div>
+            <div>
+              <div class="party-artwork">
+                <img
+                  src="/images/y2k/party-crew-1.webp"
+                  alt="Y2K-style illustration celebrating Angel, Maryna and Viktoriia together"
+                  width="1440"
+                  height="810"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
           <div class="credit">
             Card Hunt prepared by
             <a href="https://www.linkedin.com/in/m-jab/" target="_blank" rel="noopener noreferrer"
