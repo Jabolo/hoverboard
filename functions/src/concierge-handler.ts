@@ -484,20 +484,29 @@ function extractModelJsonText(payload: unknown): string | null {
     return obj.output_text.trim();
   }
   if (Array.isArray(obj.steps)) {
+    const chunks: string[] = [];
     for (const step of obj.steps) {
       if (!step || typeof step !== 'object') continue;
       const stepObj = step as Record<string, unknown>;
       if (stepObj.type !== 'model_output') continue;
       if (typeof stepObj.output_text === 'string' && stepObj.output_text.trim()) {
-        return stepObj.output_text.trim();
-      }
-      if (typeof stepObj.text === 'string' && stepObj.text.trim()) {
-        return stepObj.text.trim();
-      }
-      if (typeof stepObj.content === 'string' && stepObj.content.trim()) {
-        return stepObj.content.trim();
+        chunks.push(stepObj.output_text);
+      } else if (typeof stepObj.text === 'string' && stepObj.text.trim()) {
+        chunks.push(stepObj.text);
+      } else if (typeof stepObj.content === 'string' && stepObj.content.trim()) {
+        chunks.push(stepObj.content);
+      } else if (Array.isArray(stepObj.content)) {
+        for (const part of stepObj.content) {
+          if (!part || typeof part !== 'object') continue;
+          const partObj = part as Record<string, unknown>;
+          if (partObj.type === 'text' && typeof partObj.text === 'string') {
+            chunks.push(partObj.text);
+          }
+        }
       }
     }
+    const joined = chunks.join('').trim();
+    if (joined) return joined;
   }
   return null;
 }

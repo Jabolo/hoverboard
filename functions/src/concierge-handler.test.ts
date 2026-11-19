@@ -421,4 +421,34 @@ describe('handleConcierge', () => {
       fallback: 'local-a2ui',
     });
   });
+
+  it('extracts JSON from Interactions REST steps[].content[] text parts', async () => {
+    const res = createMockResponse();
+    const fetchFn = jest.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        status: 'completed',
+        steps: [
+          { type: 'thought', signature: 'opaque-sig' },
+          {
+            type: 'model_output',
+            content: [{ type: 'text', text: JSON.stringify(VALID_PLAN) }],
+          },
+        ],
+      }),
+    })) as unknown as typeof fetch;
+
+    await handleConcierge(makeRequest(), res as unknown as Response, {
+      now: 1795255200000,
+      getApiKey: () => 'secret-gemini-key',
+      fetchFn,
+    });
+
+    expect(res.code).toBe(200);
+    expect(res.body).toMatchObject({
+      status: 'ok',
+      model: 'gemini-4-hydrogen',
+      thinkingLevel: 'medium',
+    });
+  });
 });
