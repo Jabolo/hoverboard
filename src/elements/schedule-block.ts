@@ -138,8 +138,8 @@ export class ScheduleBlock extends ThemedElement {
           box-sizing: border-box;
         }
         .container {
-          padding-top: 56px;
-          padding-bottom: 56px;
+          padding-top: 32px;
+          padding-bottom: 32px;
         }
         .schedule-link {
           display: inline-flex;
@@ -152,7 +152,7 @@ export class ScheduleBlock extends ThemedElement {
           color: var(--primary-text-color);
           font-weight: 700;
           text-decoration: none;
-          margin-top: 24px;
+          margin-top: 18px;
         }
         .schedule-link:hover {
           background: var(--secondary-background-color);
@@ -162,14 +162,8 @@ export class ScheduleBlock extends ThemedElement {
           outline: 2px solid var(--terminal-green);
           outline-offset: 4px;
         }
-        .programme {
-          border-top: 1px solid var(--terminal-line);
-        }
-        .group {
-          padding-top: 22px;
-        }
         .group + .group {
-          margin-top: 8px;
+          margin-top: 16px;
         }
         h3 {
           margin: 0 0 12px;
@@ -183,8 +177,8 @@ export class ScheduleBlock extends ThemedElement {
           margin: 0;
           padding: 0;
         }
-        li {
-          border-bottom: 1px solid var(--terminal-line);
+        li + li {
+          border-top: 1px solid var(--terminal-line);
         }
         .row {
           display: grid;
@@ -192,7 +186,7 @@ export class ScheduleBlock extends ThemedElement {
           gap: 12px 24px;
           align-items: start;
           min-height: 64px;
-          padding: 16px 0;
+          padding: 12px 0;
           color: inherit;
           text-decoration: none;
         }
@@ -272,9 +266,7 @@ export class ScheduleBlock extends ThemedElement {
           flex-wrap: wrap;
           align-items: baseline;
           gap: 8px 16px;
-          margin-top: 24px;
-          padding-top: 20px;
-          border-top: 1px solid var(--terminal-line);
+          margin-top: 12px;
         }
         .amenity strong {
           font-family: var(--font-mono, monospace);
@@ -295,11 +287,8 @@ export class ScheduleBlock extends ThemedElement {
         }
         @media (max-width: 600px) {
           .container {
-            padding-top: 28px;
-            padding-bottom: 40px;
-          }
-          .group {
-            padding-top: 16px;
+            padding-top: 24px;
+            padding-bottom: 24px;
           }
           h3 {
             margin-bottom: 8px;
@@ -307,7 +296,7 @@ export class ScheduleBlock extends ThemedElement {
           .row {
             grid-template-columns: 1fr;
             gap: 4px;
-            padding: 15px 0;
+            padding: 12px 0;
           }
           .metadata {
             margin: 3px 0 6px;
