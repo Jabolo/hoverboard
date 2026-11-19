@@ -1,11 +1,11 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Request, Response } from 'express';
 import type { Firestore } from 'firebase-admin/firestore';
 import { Timestamp } from 'firebase-admin/firestore';
 
 jest.mock('./rate-limiter.js', () => require('./rate-limiter'), { virtual: true });
 
-import { handleConcierge } from './concierge-handler';
+import { CANONICAL_TEAM, clearConciergeCache, handleConcierge } from './concierge-handler';
 
 function createMockResponse() {
   const res = {
@@ -131,6 +131,10 @@ const VALID_PLAN = {
 };
 
 describe('handleConcierge', () => {
+  beforeEach(() => {
+    clearConciergeCache();
+  });
+
   it('rejects non-POST requests with 405 and security headers', async () => {
     const res = createMockResponse();
     await handleConcierge(makeRequest({ method: 'GET' }), res as unknown as Response, {
@@ -450,5 +454,52 @@ describe('handleConcierge', () => {
       model: 'gemini-4-hydrogen',
       thinkingLevel: 'medium',
     });
+  });
+
+  it('caches repeated queries in memory and skips duplicate Gemini API calls', async () => {
+    const now = 1795255200000;
+    const fetchFn = jest.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        status: 'completed',
+        steps: [
+          {
+            type: 'model_output',
+            content: [{ type: 'text', text: JSON.stringify(VALID_PLAN) }],
+          },
+        ],
+      }),
+    })) as unknown as typeof fetch;
+
+    const res1 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'Who is Michał Jabłoński?', savedSessionIds: ['CFP-021'] } }),
+      res1 as unknown as Response,
+      { now, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(res1.code).toBe(200);
+    expect(res1.headers['X-Concierge-Cache']).toBe('MISS');
+    expect(res1.body).toMatchObject({ cached: false });
+    expect(fetchFn).toHaveBeenCalledTimes(1);
+
+    // Check organizing team grounding is embedded in system instruction
+    const requestInit = (fetchFn as jest.Mock).mock.calls[0]?.[1] as { body: string };
+    const sentBody = JSON.parse(requestInit.body) as { system_instruction: string };
+    expect(sentBody.system_instruction).toContain('Michał Jabłoński');
+    expect(CANONICAL_TEAM.some((m) => m.name === 'Michał Jabłoński')).toBe(true);
+
+    // Second identical normalized query hits cache without calling Gemini again
+    const res2 = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        body: { query: '  who is michał jabłoński? ', savedSessionIds: ['CFP-021'] },
+      }),
+      res2 as unknown as Response,
+      { now: now + 5000, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(res2.code).toBe(200);
+    expect(res2.headers['X-Concierge-Cache']).toBe('HIT');
+    expect(res2.body).toMatchObject({ cached: true });
+    expect(fetchFn).toHaveBeenCalledTimes(1);
   });
 });

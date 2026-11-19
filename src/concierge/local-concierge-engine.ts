@@ -9,7 +9,14 @@ export type ConciergeIntent =
   | 'credits-workshops'
   | 'compare-rooms'
   | 'logistics-venue'
-  | 'saved-schedule';
+  | 'saved-schedule'
+  | 'team-organizer';
+
+export interface TeamMemberInfo {
+  name: string;
+  profileUrl?: string;
+  socials?: Array<{ name: string; link: string }>;
+}
 
 export interface LocalConciergeRequest {
   query: string;
@@ -19,6 +26,7 @@ export interface LocalConciergeRequest {
   savedSessionIds: string[];
   creditStatus: string;
   now: number;
+  teamMembers?: TeamMemberInfo[];
 }
 
 const VALID_INTENTS: ReadonlySet<string> = new Set<ConciergeIntent>([
@@ -29,7 +37,77 @@ const VALID_INTENTS: ReadonlySet<string> = new Set<ConciergeIntent>([
   'compare-rooms',
   'logistics-venue',
   'saved-schedule',
+  'team-organizer',
 ]);
+
+const DEFAULT_TEAM_MEMBERS: TeamMemberInfo[] = [
+  {
+    name: 'Michał Jabłoński',
+    profileUrl: 'https://gdg.community.dev/u/mpwqe3/',
+    socials: [
+      { name: 'LinkedIn', link: 'https://www.linkedin.com/in/m-jab/' },
+      { name: 'Personal website', link: 'https://michaljablonski.dev/' },
+    ],
+  },
+  {
+    name: 'Vatsal Patel',
+    profileUrl: 'https://gdg.community.dev/u/mrwpfx/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/vatsal-patel-py/' }],
+  },
+  {
+    name: 'Viktoriia Vinnykova',
+    profileUrl: 'https://gdg.community.dev/u/mcxbxr/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/viktoriia-vinnykova/' }],
+  },
+  {
+    name: 'Oleksandr Katrych',
+    profileUrl: 'https://gdg.community.dev/u/mjuxfk/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/oleksandr-katrych' }],
+  },
+  {
+    name: 'Anhelina Sudenkova',
+    profileUrl: 'https://gdg.community.dev/u/angelina1/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/anhelina-sudenkova/' }],
+  },
+  {
+    name: 'Maryna Kamienieva',
+    profileUrl: 'https://gdg.community.dev/u/m9pkp3/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/kamienieva' }],
+  },
+  {
+    name: 'Jakub Kołakowski',
+    profileUrl: 'https://gdg.community.dev/u/mwwkjv/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/jkolski/' }],
+  },
+  {
+    name: 'Kamil Krawczyk',
+    profileUrl: 'https://gdg.community.dev/u/m4m895/',
+    socials: [{ name: 'LinkedIn', link: 'https://www.linkedin.com/in/kamil-krawczyk2/' }],
+  },
+];
+
+function foldDiacritics(input: string): string {
+  return input
+    .replace(/ł/g, 'l')
+    .replace(/Ł/g, 'L')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function findMatchingTeamMembers(query: string, members: TeamMemberInfo[]): TeamMemberInfo[] {
+  const foldedQuery = foldDiacritics(query).trim();
+  if (!foldedQuery) return [];
+  if (/\b(organizer|organizers|team|who organizes|who runs)\b/.test(foldedQuery)) {
+    return members;
+  }
+  return members.filter((member) => {
+    const foldedName = foldDiacritics(member.name);
+    if (foldedQuery.includes(foldedName)) return true;
+    const parts = foldedName.split(/\s+/).filter((p) => p.length >= 4);
+    return parts.some((part) => foldedQuery.includes(part));
+  });
+}
 
 const CREDIT_WORKSHOP_IDS = [
   'INVITED-004',
@@ -115,13 +193,21 @@ export function computeSavedConflicts(
   return result;
 }
 
-function inferIntent(query: string, explicitIntent?: string): ConciergeIntent {
+function inferIntent(
+  query: string,
+  explicitIntent?: string,
+  matchedTeamMembers: TeamMemberInfo[] = [],
+): ConciergeIntent {
   if (
     explicitIntent &&
     VALID_INTENTS.has(explicitIntent) &&
     (explicitIntent !== 'overview' || !query.trim())
   ) {
     return explicitIntent as ConciergeIntent;
+  }
+
+  if (matchedTeamMembers.length > 0) {
+    return 'team-organizer';
   }
 
   const q = query.trim().toLowerCase();
@@ -314,54 +400,131 @@ function makeSessionCard(
 }
 
 function makeDefaultChips(currentIntent: ConciergeIntent): A2UIComponentNode {
-  const allChips: Array<{ id: string; label: string; prompt: string; intent: ConciergeIntent }> = [
-    {
-      id: 'chip-ai-track',
-      label: 'Build AI & Agents track',
-      prompt: 'Build my non-overlapping AI & Agents track',
-      intent: 'track-ai',
-    },
-    {
-      id: 'chip-cloud-track',
-      label: 'Cloud & SRE picks',
-      prompt: 'Show me Cloud, SRE, and backend sessions',
-      intent: 'track-cloud',
-    },
-    {
-      id: 'chip-credits',
-      label: '$5 Cloud credits & labs',
-      prompt: 'How do the $5 Google Cloud credits and workshops work?',
-      intent: 'credits-workshops',
-    },
-    {
-      id: 'chip-compare',
-      label: 'Auditorium vs Classroom',
-      prompt: 'Compare Auditorium vs Classroom sessions',
-      intent: 'compare-rooms',
-    },
-    {
-      id: 'chip-logistics',
-      label: 'Venue, metro & lunch',
-      prompt: 'Where is the venue, metro, parking, and lunch?',
-      intent: 'logistics-venue',
-    },
-    {
-      id: 'chip-saved',
-      label: 'Check my saved schedule',
-      prompt: 'Check my saved schedule for conflicts',
-      intent: 'saved-schedule',
-    },
-  ];
-
-  const chips = allChips.filter((chip) => chip.intent !== currentIntent).slice(0, 5);
+  const followUps: Record<
+    ConciergeIntent,
+    Array<{ id: string; label: string; prompt: string; intent: ConciergeIntent }>
+  > = {
+    overview: [
+      {
+        id: 'chip-ai-track',
+        label: 'Build AI track',
+        prompt: 'Build my non-overlapping AI & Agents track',
+        intent: 'track-ai',
+      },
+      {
+        id: 'chip-credits',
+        label: '$5 Cloud credits',
+        prompt: 'How do the $5 Google Cloud credits and workshops work?',
+        intent: 'credits-workshops',
+      },
+    ],
+    'track-ai': [
+      {
+        id: 'chip-cloud-track',
+        label: 'Cloud & SRE picks',
+        prompt: 'Show me Cloud, SRE, and backend sessions',
+        intent: 'track-cloud',
+      },
+      {
+        id: 'chip-saved',
+        label: 'Check conflicts',
+        prompt: 'Check my saved schedule for conflicts',
+        intent: 'saved-schedule',
+      },
+    ],
+    'track-cloud': [
+      {
+        id: 'chip-credits',
+        label: '$5 Cloud credits',
+        prompt: 'How do the $5 Google Cloud credits and workshops work?',
+        intent: 'credits-workshops',
+      },
+      {
+        id: 'chip-saved',
+        label: 'Check conflicts',
+        prompt: 'Check my saved schedule for conflicts',
+        intent: 'saved-schedule',
+      },
+    ],
+    'credits-workshops': [
+      {
+        id: 'chip-compare',
+        label: 'Compare rooms',
+        prompt: 'Compare Auditorium vs Classroom sessions',
+        intent: 'compare-rooms',
+      },
+      {
+        id: 'chip-logistics',
+        label: 'Venue & Wi-Fi',
+        prompt: 'Where is the venue, metro, parking, and Wi-Fi?',
+        intent: 'logistics-venue',
+      },
+    ],
+    'compare-rooms': [
+      {
+        id: 'chip-ai-track',
+        label: 'Build AI track',
+        prompt: 'Build my non-overlapping AI & Agents track',
+        intent: 'track-ai',
+      },
+      {
+        id: 'chip-saved',
+        label: 'My saved',
+        prompt: 'Check my saved schedule for conflicts',
+        intent: 'saved-schedule',
+      },
+    ],
+    'logistics-venue': [
+      {
+        id: 'chip-credits',
+        label: '$5 Cloud credits',
+        prompt: 'How do the $5 Google Cloud credits and workshops work?',
+        intent: 'credits-workshops',
+      },
+      {
+        id: 'chip-compare',
+        label: 'Compare rooms',
+        prompt: 'Compare Auditorium vs Classroom sessions',
+        intent: 'compare-rooms',
+      },
+    ],
+    'saved-schedule': [
+      {
+        id: 'chip-ai-track',
+        label: 'Suggest AI track',
+        prompt: 'Build my non-overlapping AI & Agents track',
+        intent: 'track-ai',
+      },
+      {
+        id: 'chip-compare',
+        label: 'Compare rooms',
+        prompt: 'Compare Auditorium vs Classroom sessions',
+        intent: 'compare-rooms',
+      },
+    ],
+    'team-organizer': [
+      {
+        id: 'chip-logistics',
+        label: 'Venue & contact',
+        prompt: 'Where is the venue, metro, parking, and Wi-Fi?',
+        intent: 'logistics-venue',
+      },
+      {
+        id: 'chip-ai-track',
+        label: 'Build AI track',
+        prompt: 'Build my non-overlapping AI & Agents track',
+        intent: 'track-ai',
+      },
+    ],
+  };
 
   return {
     id: 'action-chips',
     component: 'ActionChipRow',
     parentId: 'surface-root',
     props: {
-      label: 'Explore more',
-      chips,
+      label: 'Next step',
+      chips: followUps[currentIntent],
     },
   };
 }
@@ -519,7 +682,9 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
 
 export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UIMessage[] {
   const surfaceId = 'concierge-main';
-  const intent = inferIntent(req.query, req.intent);
+  const teamPool = req.teamMembers?.length ? req.teamMembers : DEFAULT_TEAM_MEMBERS;
+  const matchedTeam = findMatchingTeamMembers(req.query, teamPool);
+  const intent = inferIntent(req.query, req.intent, matchedTeam);
 
   const savedSessions: Record<string, true> = {};
   for (const id of req.savedSessionIds) {
@@ -831,6 +996,51 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
           childNodes.push(makeSessionCard(`saved-${item.id}`, item, req.programme));
         }
       }
+      break;
+    }
+
+    case 'team-organizer': {
+      const displayMembers = matchedTeam.length > 0 ? matchedTeam : teamPool;
+      const single = displayMembers.length === 1 ? displayMembers[0] : undefined;
+      surfaceTitle = single ? single.name : 'DevFest Warsaw 2026 Organizing Team';
+      surfaceSubtitle = 'GDG Warszawa organizers';
+      surfaceBadge = 'Organizing Team';
+
+      childNodes.push({
+        id: 'team-banner',
+        component: 'CalloutBanner',
+        parentId: 'surface-root',
+        props: {
+          tone: 'info',
+          title: single
+            ? `${single.name} — GDG Warszawa Organizer`
+            : `${displayMembers.length} DevFest Warsaw 2026 Organizers`,
+          body: single
+            ? `${single.name} is part of the DevFest Warsaw 2026 organizing team at Google Developer Groups Warszawa. Reach the organizers via hello@gdgwarsaw.pl.`
+            : 'GDG Warszawa community volunteers running DevFest Warsaw 2026. Reach the team at hello@gdgwarsaw.pl.',
+        },
+      });
+
+      childNodes.push({
+        id: 'team-card',
+        component: 'LogisticsCard',
+        parentId: 'surface-root',
+        props: {
+          title: single ? 'Organizer Profiles' : 'Organizing Team Directory',
+          items: displayMembers.map((member) => ({
+            label: member.name,
+            value: 'GDG Warszawa · DevFest 2026 Organizer',
+            detail: [
+              member.profileUrl,
+              ...(member.socials ?? []).map((s) => `${s.name}: ${s.link}`),
+            ]
+              .filter(Boolean)
+              .join(' · '),
+          })),
+          directionsUrl: '',
+          visitAnchor: '/team/',
+        },
+      });
       break;
     }
 

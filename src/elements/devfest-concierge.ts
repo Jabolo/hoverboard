@@ -1,5 +1,5 @@
 import { css, html, nothing, type TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 import { ThemedElement } from '../components/themed-element';
 import {
   ALLOWED_A2UI_COMPONENTS,
@@ -13,6 +13,7 @@ import {
   generateLocalConciergeMessages,
   type ConciergeIntent,
   type LocalConciergeRequest,
+  type TeamMemberInfo,
 } from '../concierge/local-concierge-engine';
 import { buildAgenda, type AgendaItem, type DraftAgenda } from '../utils/agenda-preview-data';
 import {
@@ -23,39 +24,65 @@ import {
 import { isReleaseReviewHost, type PreviewSource } from '../utils/speakers-preview-data';
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+const CLIENT_CACHE_PREFIX = 'devfest-2026:concierge-cache:v1:';
+const CLIENT_CACHE_TTL_MS = 30 * 60 * 1000;
 
-const QUICK_INTENTS: ReadonlyArray<{ label: string; intent: ConciergeIntent; prompt: string }> = [
+interface QuickIntentItem {
+  label: string;
+  intent: ConciergeIntent;
+  prompt: string;
+}
+
+const QUICK_INTENTS: ReadonlyArray<QuickIntentItem> = [
   {
-    label: 'Build AI & Agents track',
+    label: 'AI track',
     intent: 'track-ai',
     prompt: 'Build my non-overlapping AI & Agents track',
   },
   {
-    label: 'Happening now & rooms',
+    label: 'Rooms now',
     intent: 'compare-rooms',
     prompt: 'What is happening now and how do rooms compare?',
   },
   {
-    label: 'Workshops & $5 Cloud credits',
+    label: '$5 Credits',
     intent: 'credits-workshops',
     prompt: 'Show hands-on workshops and $5 Google Cloud credits',
   },
   {
-    label: 'Cloud & Backend track',
-    intent: 'track-cloud',
-    prompt: 'Build a Cloud & Backend track',
-  },
-  {
-    label: 'Venue, Wi-Fi & food',
+    label: 'Venue & Wi-Fi',
     intent: 'logistics-venue',
     prompt: 'Where is the venue, Wi-Fi, and food?',
   },
   {
-    label: 'My saved sessions',
+    label: 'Saved',
     intent: 'saved-schedule',
     prompt: 'Show my saved sessions and check for conflicts',
   },
 ];
+
+const INSTANT_LOCAL_INTENTS: ReadonlySet<string> = new Set<ConciergeIntent>([
+  'overview',
+  'track-ai',
+  'track-cloud',
+  'credits-workshops',
+  'compare-rooms',
+  'logistics-venue',
+  'saved-schedule',
+]);
+
+type SurfaceOriginLabel = 'local' | 'cached' | 'live';
+
+interface ClientCacheEntry {
+  messages: A2UIMessage[];
+  expiresAt: number;
+}
+
+const memoryResponseCache = new Map<string, ClientCacheEntry>();
+
+export function clearConciergeClientCache(): void {
+  memoryResponseCache.clear();
+}
 
 function isHostedPreviewHostname(hostname: string): boolean {
   return !LOCAL_HOSTS.has(hostname) && isReleaseReviewHost(hostname);
@@ -78,20 +105,62 @@ function asRecordArray(value: unknown): Array<Record<string, unknown>> {
   );
 }
 
+function buildClientCacheKey(query: string, intent: string, savedIds: string[]): string {
+  const sortedSaved = [...savedIds].sort().join(',');
+  return `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${sortedSaved}`;
+}
+
+function readClientCache(key: string, now: number): A2UIMessage[] | null {
+  const mem = memoryResponseCache.get(key);
+  if (mem) {
+    if (mem.expiresAt > now) return mem.messages;
+    memoryResponseCache.delete(key);
+  }
+  try {
+    const raw = window.sessionStorage.getItem(`${CLIENT_CACHE_PREFIX}${key}`);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as ClientCacheEntry;
+    if (parsed && Array.isArray(parsed.messages) && parsed.expiresAt > now) {
+      memoryResponseCache.set(key, parsed);
+      return parsed.messages;
+    }
+    window.sessionStorage.removeItem(`${CLIENT_CACHE_PREFIX}${key}`);
+  } catch {
+    // sessionStorage unavailable
+  }
+  return null;
+}
+
+function writeClientCache(key: string, messages: A2UIMessage[], now: number): void {
+  const entry: ClientCacheEntry = { messages, expiresAt: now + CLIENT_CACHE_TTL_MS };
+  memoryResponseCache.set(key, entry);
+  try {
+    window.sessionStorage.setItem(`${CLIENT_CACHE_PREFIX}${key}`, JSON.stringify(entry));
+  } catch {
+    // Ignore quota errors
+  }
+}
+
 @customElement('devfest-concierge')
 export class DevfestConcierge extends ThemedElement {
   @state() private query = '';
-  @state() private activeIntent: string = 'overview';
+  @state() private activeIntent = '';
+  @state() private activeQuery = '';
   @state() private isLoading = false;
   @state() private statusNotice = '';
-  @state() private inspectOpen = false;
+  @state() private originLabel: SurfaceOriginLabel = 'local';
   @state() private creditStatus = 'checking';
   @state() private dataReady = false;
+  @state() private dialogOpen = false;
   @state() private renderTick = 0;
+
+  @query('#concierge-dialog')
+  private dialogEl?: HTMLDialogElement;
 
   private readonly processor = new A2UIMessageProcessor();
   private agendaItems: AgendaItem[] = [];
   private programme: PreviewSource = { speakers: {}, sessions: {} };
+  private teamMembers: TeamMemberInfo[] = [];
   private unsubscribeFavorites: (() => void) | undefined;
   private requestCounter = 0;
 
@@ -101,9 +170,25 @@ export class DevfestConcierge extends ThemedElement {
       css`
         :host {
           display: block;
-          background: var(--primary-background-color, #070c14);
-          border-bottom: 1px solid var(--divider-color, #263d5e);
-          color: var(--terminal-copy, #eaf2ff);
+          container-type: inline-size;
+          --_bg: var(--primary-background-color, #070c14);
+          --_panel: var(--terminal-panel, #0d1727);
+          --_raised: var(--terminal-panel-raised, #112039);
+          --_line: var(--terminal-line, #263d5e);
+          --_green: var(--terminal-green, #7ef2a5);
+          --_blue: var(--terminal-blue, #8cb5ff);
+          --_copy: var(--terminal-copy, #eaf2ff);
+          --_muted: var(--terminal-muted, #9bb0d0);
+          --_target: 36px;
+          background: var(--_bg);
+          border-bottom: 1px solid var(--divider-color, var(--_line));
+          color: var(--_copy);
+        }
+
+        @media (pointer: coarse) {
+          :host {
+            --_target: 44px;
+          }
         }
 
         * {
@@ -122,599 +207,609 @@ export class DevfestConcierge extends ThemedElement {
           border: 0;
         }
 
-        .shell {
+        /* Compact 1-bar inline launcher */
+        .launcher-shell {
           max-width: 1216px;
           margin: 0 auto;
-          padding: 36px 24px;
+          padding: 10px 16px;
         }
 
-        .concierge-frame {
-          border: 1px solid var(--terminal-line, #263d5e);
+        .launcher-frame {
+          display: grid;
+          gap: 8px;
+          padding: 10px 12px;
+          border: 1px solid var(--_line);
           border-radius: 10px;
-          background: var(--terminal-panel, #0d1727);
-          overflow: hidden;
-          box-shadow: 0 18px 42px rgb(0 0 0 / 28%);
+          background: var(--_panel);
         }
 
-        .topbar {
+        .launcher-form {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 8px;
+          align-items: center;
+        }
+
+        .input-wrap {
           display: flex;
-          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
+          min-block-size: var(--_target);
+          padding: 0 10px;
+          border: 1px solid var(--_line);
+          border-radius: 6px;
+          background: var(--_bg);
+        }
+
+        .input-wrap:focus-within {
+          border-color: var(--_green);
+        }
+
+        .prompt-prefix {
+          flex: 0 0 auto;
+          color: var(--_green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+
+        input {
+          flex: 1 1 auto;
+          min-width: 0;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          font: inherit;
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          outline: none;
+        }
+
+        input::placeholder {
+          color: var(--_muted);
+          opacity: 0.85;
+        }
+
+        button {
+          font: inherit;
+          color: inherit;
+        }
+
+        .go-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-block-size: var(--_target);
+          min-inline-size: var(--_target);
+          padding: 0 14px;
+          border: 0;
+          border-radius: 6px;
+          background: var(--google-blue-strong, #1a56db);
+          color: #fff;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+          cursor: pointer;
+        }
+
+        .go-btn:hover:not(:disabled) {
+          background: var(--google-blue, #4285f4);
+        }
+
+        .go-btn:disabled {
+          opacity: 0.65;
+          cursor: default;
+        }
+
+        .chip-strip {
+          display: flex;
+          flex-wrap: nowrap;
+          gap: 8px;
+          overflow-x: auto;
+          scroll-snap-type: x proximity;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .chip-strip::-webkit-scrollbar {
+          display: none;
+        }
+
+        .intent-chip {
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          min-block-size: var(--_target);
+          padding: 0 12px;
+          border: 1px solid var(--_line);
+          border-radius: 6px;
+          background: var(--_raised);
+          color: var(--_copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 600;
+          white-space: nowrap;
+          scroll-snap-align: start;
+          cursor: pointer;
+        }
+
+        .intent-chip:hover {
+          border-color: var(--_blue);
+        }
+
+        .intent-chip[aria-pressed='true'] {
+          border-color: var(--_green);
+          background: rgb(126 242 165 / 12%);
+          color: var(--_green);
+        }
+
+        @container (min-width: 56rem) {
+          .launcher-shell {
+            padding: 12px 24px;
+          }
+
+          .launcher-frame {
+            grid-template-columns: minmax(280px, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+          }
+        }
+
+        /* On-demand A2UI native <dialog closedby="any"> */
+        dialog.concierge-dialog {
+          padding: 0;
+          border: 0;
+          background: transparent;
+          color: var(--_copy);
+          margin: auto 0 0;
+          width: 100%;
+          max-width: 100%;
+          max-height: 88dvh;
+          overflow: visible;
+        }
+
+        dialog.concierge-dialog::backdrop {
+          background: rgb(4 8 15 / 72%);
+          backdrop-filter: blur(4px);
+        }
+
+        .dialog-panel {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          max-height: 88dvh;
+          border: 1px solid var(--_line);
+          border-radius: 16px 16px 0 0;
+          background: var(--_panel);
+          box-shadow: 0 -12px 36px rgb(0 0 0 / 45%);
+          overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+          dialog.concierge-dialog {
+            margin: auto;
+            width: min(760px, calc(100vw - 32px));
+            max-width: 760px;
+            max-height: 82dvh;
+          }
+
+          .dialog-panel {
+            max-height: 82dvh;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgb(0 0 0 / 55%);
+          }
+        }
+
+        .dialog-header {
+          display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 10px 16px;
-          min-height: 48px;
-          padding: 8px 16px;
-          border-bottom: 1px solid var(--terminal-line, #263d5e);
-          background: var(--terminal-panel-raised, #112039);
+          gap: 12px;
+          padding: 10px 14px;
+          border-bottom: 1px solid var(--_line);
+          background: var(--_raised);
         }
 
-        .topbar-left {
+        .header-title-group {
           display: flex;
+          flex-wrap: wrap;
           align-items: center;
           gap: 8px;
           min-width: 0;
         }
 
-        .dots {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          margin-right: 4px;
-        }
-
-        .dots i {
-          display: block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: var(--google-red, #ea4335);
-        }
-
-        .dots i:nth-child(2) {
-          background: var(--google-yellow, #fbbc04);
-        }
-
-        .dots i:nth-child(3) {
-          background: var(--google-green, #34a853);
-        }
-
-        .file-title {
+        .dialog-title {
+          margin: 0;
           font-family: var(--font-mono, monospace);
           font-size: 13px;
           font-weight: 700;
-          color: var(--terminal-copy, #eaf2ff);
+          color: var(--_copy);
         }
 
         .source-badge {
           display: inline-flex;
           align-items: center;
-          min-height: 26px;
-          padding: 2px 10px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          padding: 2px 8px;
+          border: 1px solid var(--_line);
           border-radius: 999px;
           background: rgb(76 141 247 / 12%);
-          color: var(--terminal-blue, #4c8df7);
+          color: var(--_blue);
           font-family: var(--font-mono, monospace);
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 700;
         }
 
         .source-badge.is-live {
           border-color: rgb(126 242 165 / 45%);
           background: rgb(126 242 165 / 12%);
-          color: var(--terminal-green, #7ef2a5);
+          color: var(--_green);
         }
 
-        .inspect-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 44px;
-          padding: 0 14px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 6px;
-          background: var(--terminal-panel, #0d1727);
-          color: var(--terminal-copy, #eaf2ff);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          cursor: pointer;
-          transition:
-            background-color 0.2s ease,
-            border-color 0.2s ease;
-        }
-
-        .inspect-btn:hover {
-          background: var(--contrast-additional-background-color, #172a45);
-          border-color: var(--terminal-blue, #4c8df7);
-        }
-
-        .inspect-btn[aria-expanded='true'] {
-          border-color: var(--terminal-green, #7ef2a5);
-          color: var(--terminal-green, #7ef2a5);
-        }
-
-        .controls {
-          padding: 18px 16px 16px;
-          border-bottom: 1px solid var(--terminal-line, #263d5e);
-          background: var(--terminal-panel, #0d1727);
-        }
-
-        .prompt-form {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          align-items: stretch;
-        }
-
-        .input-wrap {
-          display: flex;
-          align-items: center;
-          flex: 1 1 320px;
-          min-height: 46px;
-          padding: 0 12px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 6px;
-          background: var(--primary-background-color, #070c14);
-        }
-
-        .input-wrap:focus-within {
-          border-color: var(--terminal-green, #7ef2a5);
-          outline: 2px solid rgb(126 242 165 / 30%);
-          outline-offset: 1px;
-        }
-
-        .prompt-prefix {
+        .close-btn {
           flex: 0 0 auto;
-          margin-right: 10px;
-          color: var(--terminal-green, #7ef2a5);
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
-          font-weight: 700;
-          user-select: none;
-        }
-
-        #concierge-input {
-          width: 100%;
-          min-width: 0;
-          min-height: 44px;
-          border: 0;
-          background: transparent;
-          color: var(--terminal-copy, #eaf2ff);
-          font-family: var(--font-mono, monospace);
-          font-size: 14px;
-        }
-
-        #concierge-input::placeholder {
-          color: var(--terminal-muted, #9bb0d0);
-          opacity: 1;
-        }
-
-        #concierge-input:focus {
-          outline: none;
-        }
-
-        .run-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 46px;
-          padding: 0 20px;
-          border: 1px solid var(--google-blue-strong, #1967d2);
+          width: 44px;
+          height: 44px;
+          border: 1px solid var(--_line);
           border-radius: 6px;
-          background: var(--google-blue-strong, #1967d2);
-          color: #fff;
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
-          font-weight: 700;
+          background: var(--_panel);
+          color: var(--_copy);
           cursor: pointer;
-          transition: background-color 0.2s ease;
         }
 
-        .run-btn:hover:not(:disabled) {
-          background: var(--google-blue, #4285f4);
+        .close-btn:hover {
+          border-color: var(--_blue);
         }
 
-        .run-btn:disabled {
-          opacity: 0.65;
-          cursor: wait;
+        .close-btn svg {
+          width: 18px;
+          height: 18px;
         }
 
-        .chip-bar {
-          display: flex;
-          flex-wrap: wrap;
+        .dialog-controls {
+          display: grid;
           gap: 8px;
-          margin-top: 12px;
+          padding: 10px 14px;
+          border-bottom: 1px solid var(--_line);
+          background: var(--_panel);
         }
 
-        .intent-chip,
-        .action-chip {
-          display: inline-flex;
-          align-items: center;
-          min-height: 44px;
-          padding: 6px 14px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 6px;
-          background: var(--terminal-panel-raised, #112039);
-          color: var(--terminal-copy, #eaf2ff);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          cursor: pointer;
-          text-align: left;
-          transition:
-            border-color 0.2s ease,
-            background-color 0.2s ease;
-        }
-
-        .intent-chip:hover,
-        .action-chip:hover {
-          border-color: var(--terminal-blue, #4c8df7);
-          background: var(--contrast-additional-background-color, #172a45);
-        }
-
-        .intent-chip[aria-pressed='true'] {
-          border-color: var(--terminal-green, #7ef2a5);
-          background: rgb(126 242 165 / 12%);
-          color: var(--terminal-green, #7ef2a5);
+        .dialog-body {
+          flex: 1 1 auto;
+          overflow-y: auto;
+          padding: 14px 14px max(16px, env(safe-area-inset-bottom, 0px));
+          display: grid;
+          gap: 14px;
         }
 
         .status-notice {
-          margin: 12px 0 0;
-          padding: 10px 12px;
-          border: 1px solid rgb(251 215 118 / 45%);
-          border-radius: 6px;
-          background: rgb(251 215 118 / 10%);
-          color: var(--terminal-yellow, #fbd776);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          line-height: 1.5;
-        }
-
-        .inspector {
-          padding: 16px;
-          border-bottom: 1px solid var(--terminal-line, #263d5e);
-          background: var(--primary-background-color, #070c14);
-        }
-
-        .inspector-heading {
-          margin: 0 0 10px;
-          color: var(--terminal-muted, #9bb0d0);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-        }
-
-        .inspector pre {
           margin: 0;
-          max-height: 340px;
-          overflow: auto;
-          padding: 12px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          padding: 8px 10px;
+          border: 1px solid rgb(251 188 4 / 45%);
           border-radius: 6px;
-          background: var(--terminal-panel, #0d1727);
-          color: var(--terminal-green, #7ef2a5);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          line-height: 1.5;
-        }
-
-        .surface-region {
-          padding: 20px 16px 24px;
-        }
-
-        .surface-header {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 8px 16px;
-          margin-bottom: 18px;
+          background: rgb(251 188 4 / 10%);
+          color: var(--terminal-yellow, #fde68a);
+          font-size: 13px;
+          line-height: 1.4;
         }
 
         .surface-title {
           margin: 0;
-          font-size: clamp(20px, 2.6vw, 26px);
-          line-height: 1.2;
-          color: var(--terminal-copy, #eaf2ff);
+          font-family: var(--font-mono, monospace);
+          font-size: clamp(18px, 3vw, 22px);
+          line-height: 1.25;
+          text-wrap: balance;
+          color: var(--_copy);
         }
 
         .surface-subtitle {
           margin: 4px 0 0;
-          color: var(--terminal-muted, #9bb0d0);
-          font-size: 14px;
-          line-height: 1.5;
+          color: var(--_muted);
+          font-size: 13px;
+          line-height: 1.45;
+          text-wrap: pretty;
         }
 
         .surface-children {
           display: grid;
-          gap: 16px;
+          gap: 12px;
         }
 
         .callout {
-          padding: 14px 16px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          padding: 12px;
+          border: 1px solid var(--_line);
           border-radius: 8px;
-          background: var(--terminal-panel-raised, #112039);
+          background: var(--_raised);
         }
 
         .callout.tone-success {
-          border-color: rgb(126 242 165 / 40%);
+          border-color: rgb(126 242 165 / 45%);
           background: rgb(126 242 165 / 8%);
         }
 
         .callout.tone-warning {
-          border-color: rgb(251 215 118 / 45%);
-          background: rgb(251 215 118 / 8%);
+          border-color: rgb(251 188 4 / 45%);
+          background: rgb(251 188 4 / 8%);
         }
 
         .callout-title {
-          margin: 0;
-          font-size: 16px;
-          line-height: 1.35;
-          color: var(--terminal-copy, #eaf2ff);
+          margin: 0 0 4px;
+          font-size: 15px;
+          font-weight: 700;
+          text-wrap: balance;
+          color: var(--_copy);
         }
 
         .callout-body {
-          margin: 6px 0 0;
-          max-width: 72ch;
-          color: var(--terminal-muted, #9bb0d0);
-          font-size: 14px;
-          line-height: 1.55;
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.5;
+          text-wrap: pretty;
+          color: var(--_muted);
         }
 
         .session-card {
-          display: grid;
-          gap: 10px;
-          padding: 16px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          padding: 12px;
+          border: 1px solid var(--_line);
           border-radius: 8px;
-          background: var(--primary-background-color, #070c14);
+          background: var(--_bg);
+          display: grid;
+          gap: 6px;
         }
 
         .session-top {
           display: flex;
-          flex-wrap: wrap;
-          align-items: center;
           justify-content: space-between;
-          gap: 8px 12px;
+          align-items: flex-start;
+          gap: 10px;
         }
 
         .session-badges {
           display: flex;
           flex-wrap: wrap;
+          gap: 6px;
           align-items: center;
-          gap: 8px;
           font-family: var(--font-mono, monospace);
           font-size: 12px;
-          font-weight: 700;
         }
 
         .badge-time {
-          color: var(--terminal-green, #7ef2a5);
+          color: var(--_green);
+          font-weight: 700;
           font-variant-numeric: tabular-nums;
         }
 
         .badge-room {
-          padding: 2px 8px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          padding: 2px 6px;
+          border: 1px solid rgb(76 141 247 / 40%);
           border-radius: 4px;
-          color: var(--terminal-blue, #4c8df7);
+          color: var(--_blue);
         }
 
         .badge-kind {
-          color: var(--terminal-muted, #9bb0d0);
+          color: var(--_muted);
         }
 
         .save-btn {
+          flex: 0 0 auto;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          min-height: 44px;
-          padding: 0 14px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          min-block-size: var(--_target);
+          padding: 0 12px;
+          border: 1px solid var(--_line);
           border-radius: 6px;
-          background: var(--terminal-panel-raised, #112039);
-          color: var(--terminal-copy, #eaf2ff);
+          background: var(--_raised);
+          color: var(--_copy);
           font-family: var(--font-mono, monospace);
           font-size: 12px;
           font-weight: 700;
           cursor: pointer;
         }
 
-        .save-btn:hover {
-          border-color: var(--terminal-blue, #4c8df7);
-        }
-
         .save-btn[aria-pressed='true'] {
-          border-color: var(--terminal-green, #7ef2a5);
+          border-color: var(--_green);
           background: rgb(126 242 165 / 14%);
-          color: var(--terminal-green, #7ef2a5);
+          color: var(--_green);
         }
 
         .session-title {
           margin: 0;
-          font-size: 18px;
+          font-size: 15px;
+          font-weight: 700;
           line-height: 1.35;
+          text-wrap: balance;
         }
 
         .session-title a {
-          color: var(--terminal-copy, #eaf2ff);
+          color: var(--_copy);
           text-decoration: underline;
-          text-underline-color: rgb(155 176 208 / 40%);
-          text-underline-offset: 4px;
+          text-underline-offset: 3px;
+          overflow-wrap: anywhere;
         }
 
         .session-title a:hover {
-          color: var(--terminal-green, #7ef2a5);
+          color: var(--_green);
         }
 
-        .session-speakers {
-          margin: 0;
-          color: var(--terminal-muted, #9bb0d0);
-          font-size: 14px;
-          line-height: 1.45;
-        }
-
+        .session-speakers,
         .session-reason {
           margin: 0;
-          color: var(--terminal-copy, #eaf2ff);
-          font-size: 14px;
-          line-height: 1.5;
+          font-size: 13px;
+          line-height: 1.45;
+          text-wrap: pretty;
+          color: var(--_muted);
         }
 
         .conflict-warning {
-          margin: 0;
-          padding: 8px 10px;
-          border: 1px solid rgb(255 123 114 / 50%);
+          margin: 4px 0 0;
+          padding: 6px 8px;
+          border: 1px solid rgb(251 188 4 / 45%);
           border-radius: 6px;
-          background: rgb(255 123 114 / 10%);
-          color: var(--terminal-red, #ff7b72);
-          font-family: var(--font-mono, monospace);
+          background: rgb(251 188 4 / 10%);
+          color: var(--terminal-yellow, #fde68a);
           font-size: 12px;
-          line-height: 1.45;
+          line-height: 1.4;
         }
 
         .comparison-wrap h3,
         .credit-card h3,
         .logistics-card h3,
         .chip-row-wrap h3 {
-          margin: 0 0 12px;
-          font-size: 16px;
-          color: var(--terminal-copy, #eaf2ff);
+          margin: 0 0 8px;
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          color: var(--_green);
+          text-wrap: balance;
         }
 
         .comparison-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-          gap: 12px;
+          gap: 10px;
+          grid-template-columns: 1fr;
+        }
+
+        @container (min-width: 38rem) {
+          .comparison-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          }
+        }
+
+        .compare-col,
+        .credit-card,
+        .logistics-card {
+          padding: 12px;
+          border: 1px solid var(--_line);
+          border-radius: 8px;
+          background: var(--_bg);
         }
 
         .compare-col {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding: 14px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 8px;
-          background: var(--primary-background-color, #070c14);
+          display: grid;
+          gap: 6px;
+          align-content: start;
         }
 
         .compare-badge {
-          align-self: flex-start;
-          padding: 2px 8px;
-          border: 1px solid var(--terminal-line, #263d5e);
+          justify-self: start;
+          padding: 2px 6px;
+          border: 1px solid var(--_line);
           border-radius: 4px;
-          color: var(--terminal-blue, #4c8df7);
+          background: var(--_raised);
+          color: var(--_blue);
           font-family: var(--font-mono, monospace);
-          font-size: 12px;
+          font-size: 11px;
           font-weight: 700;
         }
 
         .compare-heading {
           margin: 0;
-          font-size: 16px;
+          font-size: 14px;
+          font-weight: 700;
           line-height: 1.35;
+          text-wrap: balance;
         }
 
         .compare-heading a {
-          color: var(--terminal-copy, #eaf2ff);
+          color: var(--_copy);
           text-decoration: underline;
           text-underline-offset: 3px;
         }
 
-        .compare-meta,
+        .compare-meta {
+          margin: 0;
+          color: var(--_green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-variant-numeric: tabular-nums;
+        }
+
         .compare-summary,
         .compare-best {
           margin: 0;
+          color: var(--_muted);
           font-size: 13px;
-          line-height: 1.5;
-          color: var(--terminal-muted, #9bb0d0);
-        }
-
-        .compare-meta {
-          font-family: var(--font-mono, monospace);
-          font-variant-numeric: tabular-nums;
-          color: var(--terminal-green, #7ef2a5);
+          line-height: 1.45;
+          text-wrap: pretty;
         }
 
         .compare-best strong {
-          color: var(--terminal-copy, #eaf2ff);
+          color: var(--_copy);
         }
 
-        .compare-actions {
-          margin-top: auto;
-          padding-top: 6px;
-        }
-
-        .credit-card,
-        .logistics-card {
-          padding: 16px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 8px;
-          background: var(--primary-background-color, #070c14);
-        }
-
-        .credit-facts {
+        .credit-facts,
+        .logistics-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-          gap: 10px;
-          margin-bottom: 14px;
+          gap: 8px;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          margin-bottom: 10px;
         }
 
-        .fact-box {
-          padding: 10px 12px;
-          border: 1px solid var(--terminal-line, #263d5e);
+        .fact-box,
+        .logistics-item {
+          padding: 8px 10px;
+          border: 1px solid var(--_line);
           border-radius: 6px;
-          background: var(--terminal-panel, #0d1727);
+          background: var(--_panel);
         }
 
-        .fact-label {
+        .fact-label,
+        .logistics-label {
           display: block;
-          color: var(--terminal-muted, #9bb0d0);
-          font-size: 12px;
-          margin-bottom: 2px;
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          color: var(--_muted);
         }
 
-        .fact-value {
-          font-family: var(--font-mono, monospace);
+        .fact-value,
+        .logistics-value {
+          display: block;
+          margin-top: 2px;
           font-size: 13px;
           font-weight: 700;
-          color: var(--terminal-green, #7ef2a5);
+          color: var(--_copy);
           font-variant-numeric: tabular-nums;
         }
 
-        .credit-steps {
-          margin: 0 0 14px;
-          padding-left: 20px;
-          color: var(--terminal-copy, #eaf2ff);
-          font-size: 14px;
-          line-height: 1.6;
+        .logistics-detail {
+          display: block;
+          margin-top: 3px;
+          font-size: 12px;
+          color: var(--_muted);
+          overflow-wrap: anywhere;
+        }
+
+        .credit-steps,
+        .workshop-list {
+          margin: 0 0 10px;
+          padding-left: 18px;
+          display: grid;
+          gap: 4px;
+          font-size: 13px;
+          color: var(--_copy);
         }
 
         .workshop-list {
-          display: grid;
-          gap: 8px;
-          margin: 0 0 14px;
-          padding: 0;
           list-style: none;
+          padding-left: 0;
         }
 
         .workshop-item {
           display: flex;
           flex-wrap: wrap;
-          align-items: center;
           justify-content: space-between;
-          gap: 6px 12px;
-          padding: 10px 12px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 6px;
-          background: var(--terminal-panel, #0d1727);
+          gap: 6px;
+          padding: 6px 0;
+          border-top: 1px solid var(--_line);
         }
 
         .workshop-item a {
-          color: var(--terminal-copy, #eaf2ff);
-          font-weight: 700;
+          color: var(--_blue);
           text-decoration: underline;
           text-underline-offset: 3px;
         }
@@ -722,86 +817,103 @@ export class DevfestConcierge extends ThemedElement {
         .workshop-time {
           font-family: var(--font-mono, monospace);
           font-size: 12px;
-          color: var(--terminal-green, #7ef2a5);
-          font-variant-numeric: tabular-nums;
-        }
-
-        .logistics-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 10px;
-          margin-bottom: 14px;
-        }
-
-        .logistics-item {
-          padding: 10px 12px;
-          border: 1px solid var(--terminal-line, #263d5e);
-          border-radius: 6px;
-          background: var(--terminal-panel, #0d1727);
-        }
-
-        .logistics-label {
-          display: block;
-          color: var(--terminal-muted, #9bb0d0);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          margin-bottom: 4px;
-        }
-
-        .logistics-value {
-          display: block;
-          color: var(--terminal-copy, #eaf2ff);
-          font-size: 14px;
-          font-weight: 700;
-          line-height: 1.4;
-        }
-
-        .logistics-detail {
-          display: block;
-          margin-top: 4px;
-          color: var(--terminal-muted, #9bb0d0);
-          font-size: 13px;
-          line-height: 1.45;
+          color: var(--_green);
         }
 
         .card-links {
           display: flex;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 8px;
         }
 
         .jump-link {
           display: inline-flex;
           align-items: center;
-          min-height: 44px;
-          padding: 0 16px;
+          min-block-size: var(--_target);
+          padding: 0 12px;
           border: 1px solid var(--google-blue, #4285f4);
           border-radius: 6px;
-          color: var(--terminal-copy, #eaf2ff);
+          color: var(--_copy);
           font-family: var(--font-mono, monospace);
           font-size: 12px;
           font-weight: 700;
           text-decoration: none;
         }
 
-        .jump-link:hover {
-          background: rgb(66 133 244 / 15%);
+        .action-chip {
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          min-block-size: var(--_target);
+          padding: 0 12px;
+          border: 1px solid var(--_line);
+          border-radius: 6px;
+          background: var(--_raised);
+          color: var(--_copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 600;
+          white-space: nowrap;
+          cursor: pointer;
+        }
+
+        .dialog-footer {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding-top: 8px;
+          border-top: 1px solid var(--_line);
+        }
+
+        .ai-upgrade-btn {
+          display: inline-flex;
+          align-items: center;
+          min-block-size: var(--_target);
+          padding: 0 12px;
+          border: 1px solid rgb(126 242 165 / 45%);
+          border-radius: 6px;
+          background: rgb(126 242 165 / 10%);
+          color: var(--_green);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .inspector-details {
+          width: 100%;
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          color: var(--_muted);
+        }
+
+        .inspector-details summary {
+          cursor: pointer;
+          padding: 6px 0;
+          color: var(--_muted);
+          user-select: none;
+        }
+
+        .inspector-details pre {
+          margin: 6px 0 0;
+          max-height: 220px;
+          overflow: auto;
+          padding: 10px;
+          border: 1px solid var(--_line);
+          border-radius: 6px;
+          background: #050a11;
+          color: #dbeafe;
+          font-size: 11px;
+          line-height: 1.45;
         }
 
         a:focus-visible,
-        button:focus-visible {
-          outline: 2px solid var(--terminal-green, #7ef2a5);
+        button:focus-visible,
+        summary:focus-visible {
+          outline: 2px solid var(--_green);
           outline-offset: 2px;
-        }
-
-        @media (max-width: 640px) {
-          .shell {
-            padding: 24px 16px;
-          }
-
-          .run-btn {
-            width: 100%;
-          }
         }
       `,
     ];
@@ -822,16 +934,58 @@ export class DevfestConcierge extends ThemedElement {
   }
 
   public openAndFocus(initialIntent?: string): void {
-    if (typeof this.scrollIntoView === 'function') {
-      this.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    const input = this.shadowRoot?.querySelector<HTMLInputElement>('#concierge-input');
-    input?.focus({ preventScroll: true });
+    this.openDialog();
     if (initialIntent) {
       const chip = QUICK_INTENTS.find((c) => c.intent === initialIntent);
       void this.runConciergeRequest(chip?.prompt ?? initialIntent, initialIntent);
+      return;
+    }
+    requestAnimationFrame(() => {
+      const input = this.shadowRoot?.querySelector<HTMLInputElement>('#concierge-dialog-input');
+      input?.focus({ preventScroll: true });
+    });
+  }
+
+  private openDialog(): void {
+    this.dialogOpen = true;
+    const dialog = this.dialogEl;
+    if (!dialog) return;
+    if (typeof dialog.showModal === 'function') {
+      if (!dialog.open) dialog.showModal();
+    } else {
+      dialog.setAttribute('open', '');
     }
   }
+
+  private closeDialog = (): void => {
+    this.dialogOpen = false;
+    const dialog = this.dialogEl;
+    if (!dialog) return;
+    if (typeof dialog.close === 'function' && dialog.open) {
+      dialog.close();
+    } else {
+      dialog.removeAttribute('open');
+    }
+  };
+
+  private readonly onDialogClose = (): void => {
+    this.dialogOpen = false;
+  };
+
+  private readonly onDialogClick = (event: MouseEvent): void => {
+    const dialog = this.dialogEl;
+    if (!dialog || event.target !== dialog) return;
+    if ('closedBy' in HTMLDialogElement.prototype) return;
+    const rect = dialog.getBoundingClientRect();
+    const isDialogContent =
+      rect.top <= event.clientY &&
+      event.clientY <= rect.top + rect.height &&
+      rect.left <= event.clientX &&
+      event.clientX <= rect.left + rect.width;
+    if (!isDialogContent) {
+      this.closeDialog();
+    }
+  };
 
   private getSavedSessionIds(): string[] {
     const ids = new Set<string>();
@@ -875,10 +1029,7 @@ export class DevfestConcierge extends ThemedElement {
     this.processor.process({
       type: 'updateDataModel',
       surfaceId: surface.surfaceId,
-      data: {
-        savedSessions,
-        conflicts,
-      },
+      data: { savedSessions, conflicts },
     });
     this.renderTick++;
   }
@@ -890,9 +1041,10 @@ export class DevfestConcierge extends ThemedElement {
     }
 
     try {
-      const [agendaRes, programmeRes] = await Promise.all([
+      const [agendaRes, programmeRes, teamRes] = await Promise.all([
         fetch('/data/agenda-2026.json', { cache: 'no-store' }),
         fetch('/data/programme-2026.json', { cache: 'no-store' }),
+        fetch('/data/event-team.json', { cache: 'no-store' }).catch(() => null),
       ]);
       if (agendaRes.ok && programmeRes.ok) {
         const draft = (await agendaRes.json()) as DraftAgenda;
@@ -900,8 +1052,14 @@ export class DevfestConcierge extends ThemedElement {
         this.programme = prog;
         this.agendaItems = buildAgenda(draft, prog);
       }
+      if (teamRes && teamRes.ok) {
+        const teamJson = (await teamRes.json()) as { members?: TeamMemberInfo[] };
+        if (Array.isArray(teamJson.members)) {
+          this.teamMembers = teamJson.members;
+        }
+      }
     } catch {
-      // Keep empty fallback arrays if offline.
+      // Keep built-in fallbacks if offline.
     }
 
     if (!isHostedPreview) {
@@ -933,21 +1091,46 @@ export class DevfestConcierge extends ThemedElement {
       savedSessionIds: this.getSavedSessionIds(),
       creditStatus: this.creditStatus,
       now: Date.now(),
+      ...(this.teamMembers.length ? { teamMembers: this.teamMembers } : {}),
     };
     const messages = generateLocalConciergeMessages(req);
     this.processor.processBatch(messages);
+    this.originLabel = 'local';
     this.renderTick++;
   }
 
-  private async runConciergeRequest(queryText: string, intent?: string): Promise<void> {
+  private async runConciergeRequest(
+    queryText: string,
+    intent?: string,
+    forceAi = false,
+  ): Promise<void> {
     const trimmed = queryText.trim();
     this.query = trimmed;
     this.activeIntent = intent ?? 'custom';
+    this.activeQuery = trimmed || (intent ?? 'overview');
     this.statusNotice = '';
+    this.openDialog();
+
+    // Serve preset chips and quick intents instantaneously at 0 API cost unless AI personalization is requested
+    if (!forceAi && intent && INSTANT_LOCAL_INTENTS.has(intent)) {
+      this.renderLocalSurface(trimmed, intent);
+      return;
+    }
 
     const isHostedPreview = isHostedPreviewHostname(window.location.hostname);
     if (isHostedPreview) {
       this.renderLocalSurface(trimmed, intent);
+      return;
+    }
+
+    const savedSessionIds = this.getSavedSessionIds();
+    const now = Date.now();
+    const cacheKey = buildClientCacheKey(trimmed, intent ?? '', savedSessionIds);
+    const cached = readClientCache(cacheKey, now);
+    if (cached) {
+      this.processor.processBatch(cached);
+      this.syncFavoritesIntoActiveSurface();
+      this.originLabel = 'cached';
       return;
     }
 
@@ -961,18 +1144,21 @@ export class DevfestConcierge extends ThemedElement {
         body: JSON.stringify({
           query: trimmed,
           ...(intent ? { intent } : {}),
-          savedSessionIds: this.getSavedSessionIds(),
-          now: Date.now(),
+          savedSessionIds,
+          now,
         }),
       });
 
       if (reqId !== this.requestCounter || !this.isConnected) return;
 
       if (response.ok) {
-        const payload = (await response.json()) as { messages?: unknown };
+        const payload = (await response.json()) as { messages?: unknown; cached?: boolean };
         if (Array.isArray(payload.messages) && payload.messages.length > 0) {
-          this.processor.processBatch(payload.messages as A2UIMessage[]);
+          const messages = payload.messages as A2UIMessage[];
+          writeClientCache(cacheKey, messages, now);
+          this.processor.processBatch(messages);
           this.syncFavoritesIntoActiveSurface();
+          this.originLabel = payload.cached ? 'cached' : 'live';
           this.isLoading = false;
           return;
         }
@@ -994,16 +1180,12 @@ export class DevfestConcierge extends ThemedElement {
 
   private readonly onSubmit = (event: Event): void => {
     event.preventDefault();
-    void this.runConciergeRequest(this.query);
+    void this.runConciergeRequest(this.query, undefined, true);
   };
 
   private readonly onInput = (event: Event): void => {
     const input = event.target as HTMLInputElement;
     this.query = input.value;
-  };
-
-  private readonly onToggleInspect = (): void => {
-    this.inspectOpen = !this.inspectOpen;
   };
 
   private readonly scrollToAnchor = (event: Event, selector: string): void => {
@@ -1012,6 +1194,7 @@ export class DevfestConcierge extends ThemedElement {
     const target = rootNode.querySelector<HTMLElement>(selector);
     if (target) {
       event.preventDefault();
+      this.closeDialog();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
@@ -1033,11 +1216,9 @@ export class DevfestConcierge extends ThemedElement {
           .filter((child): child is A2UIComponentNode => Boolean(child));
 
         return html`
-          <div class="surface-header">
-            <div>
-              <h2 class="surface-title">${title}</h2>
-              ${subtitle ? html`<p class="surface-subtitle">${subtitle}</p>` : nothing}
-            </div>
+          <div>
+            <h2 class="surface-title">${title}</h2>
+            ${subtitle ? html`<p class="surface-subtitle">${subtitle}</p>` : nothing}
           </div>
           <div class="surface-children">
             ${children.map((child) => this.renderSurfaceNode(child, surface))}
@@ -1169,18 +1350,16 @@ export class DevfestConcierge extends ThemedElement {
                     ${
                       colSessionId
                         ? html`
-                            <div class="compare-actions">
-                              <button
-                                type="button"
-                                class="save-btn"
-                                aria-pressed=${colSaved ? 'true' : 'false'}
-                                @click=${() => {
-                                  setSessionFavorite(colSessionId, !colSaved);
-                                }}
-                              >
-                                ${colSaved ? 'Saved' : 'Save'}
-                              </button>
-                            </div>
+                            <button
+                              type="button"
+                              class="save-btn"
+                              aria-pressed=${colSaved ? 'true' : 'false'}
+                              @click=${() => {
+                                setSessionFavorite(colSessionId, !colSaved);
+                              }}
+                            >
+                              ${colSaved ? 'Saved' : 'Save'}
+                            </button>
                           `
                         : nothing
                     }
@@ -1240,7 +1419,11 @@ export class DevfestConcierge extends ThemedElement {
                         const wsHref = asString(ws['href']);
                         return html`
                           <li class="workshop-item">
-                            ${wsHref ? html`<a href=${wsHref}>${wsTitle}</a>` : html`<span>${wsTitle}</span>`}
+                            ${
+                              wsHref
+                                ? html`<a href=${wsHref}>${wsTitle}</a>`
+                                : html`<span>${wsTitle}</span>`
+                            }
                             ${wsTime ? html`<span class="workshop-time">${wsTime}</span>` : nothing}
                           </li>
                         `;
@@ -1267,6 +1450,7 @@ export class DevfestConcierge extends ThemedElement {
         const items = asRecordArray(node.props['items']);
         const directionsUrl = asString(node.props['directionsUrl']);
         const visitAnchor = asString(node.props['visitAnchor'], '/#visit');
+        const isTeamLink = visitAnchor === '/team/';
 
         return html`
           <section class="logistics-card">
@@ -1304,9 +1488,12 @@ export class DevfestConcierge extends ThemedElement {
               <a
                 class="jump-link"
                 href=${visitAnchor}
-                @click=${(e: Event) => this.scrollToAnchor(e, '#visit')}
+                @click=${(e: Event) => {
+                  if (!isTeamLink) this.scrollToAnchor(e, '#visit');
+                  else this.closeDialog();
+                }}
               >
-                Plan your visit →
+                ${isTeamLink ? 'View team page →' : 'Plan your visit →'}
               </a>
             </div>
           </section>
@@ -1314,13 +1501,14 @@ export class DevfestConcierge extends ThemedElement {
       }
 
       case 'ActionChipRow': {
-        const label = asString(node.props['label'], 'Explore more');
-        const chips = asRecordArray(node.props['chips']);
+        const label = asString(node.props['label'], 'Next step');
+        const chips = asRecordArray(node.props['chips']).slice(0, 2);
+        if (!chips.length) return nothing;
 
         return html`
           <div class="chip-row-wrap">
             <h3>${label}</h3>
-            <div class="chip-bar">
+            <div class="chip-strip">
               ${chips.map((chip) => {
                 const chipLabel = asString(chip['label']);
                 const chipPrompt = asString(chip['prompt'], chipLabel);
@@ -1342,12 +1530,35 @@ export class DevfestConcierge extends ThemedElement {
     }
   }
 
+  private renderChipStrip() {
+    return html`
+      <div class="chip-strip" role="group" aria-label="Instant concierge topics">
+        ${QUICK_INTENTS.map(
+          (item) => html`
+            <button
+              type="button"
+              class="intent-chip"
+              data-intent=${item.intent}
+              aria-pressed=${this.activeIntent === item.intent ? 'true' : 'false'}
+              @click=${() => void this.runConciergeRequest(item.prompt, item.intent)}
+            >
+              ${item.label}
+            </button>
+          `,
+        )}
+      </div>
+    `;
+  }
+
   override render() {
     const surface = this.processor.getActiveSurface();
-    const isLiveSource = surface?.source === 'gemini-4-hydrogen';
-    const sourceBadgeText = isLiveSource
-      ? 'A2UI · Gemini 4 Hydrogen (Medium)'
-      : 'A2UI · Grounded Local Engine';
+    const isLiveOrCached = this.originLabel === 'live' || this.originLabel === 'cached';
+    const sourceBadgeText =
+      this.originLabel === 'live'
+        ? 'Live · Gemini 4 Hydrogen'
+        : this.originLabel === 'cached'
+          ? 'Cached · Gemini 4 Hydrogen'
+          : 'Instant · Local A2UI';
 
     const rootNode =
       surface && surface.rootId ? surface.componentsById.get(surface.rootId) : undefined;
@@ -1367,96 +1578,131 @@ export class DevfestConcierge extends ThemedElement {
         )
       : '{}';
 
+    const canUpgradeToAi =
+      this.originLabel === 'local' &&
+      !isHostedPreviewHostname(window.location.hostname) &&
+      Boolean(this.activeQuery || this.activeIntent);
+
     return html`
-      <section class="shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
-        <div class="concierge-frame">
-          <div class="topbar">
-            <div class="topbar-left">
-              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="file-title">devfest-concierge.a2ui</span>
-              <span class="source-badge ${isLiveSource ? 'is-live' : ''}">${sourceBadgeText}</span>
+      <section class="launcher-shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
+        <div class="launcher-frame">
+          <form class="launcher-form" @submit=${this.onSubmit}>
+            <label class="sr-only" for="concierge-input">Ask DevFest Concierge</label>
+            <div class="input-wrap">
+              <span class="prompt-prefix" aria-hidden="true">$ ask</span>
+              <input
+                id="concierge-input"
+                type="text"
+                .value=${this.query}
+                @input=${this.onInput}
+                placeholder="Ask AI: talks, rooms, $5 credits, venue…"
+              />
+            </div>
+            <button type="submit" class="go-btn" ?disabled=${this.isLoading}>
+              ${this.isLoading ? '…' : 'Ask →'}
+            </button>
+          </form>
+
+          ${this.renderChipStrip()}
+        </div>
+      </section>
+
+      <dialog
+        id="concierge-dialog"
+        class="concierge-dialog"
+        closedby="any"
+        aria-labelledby="concierge-dialog-title"
+        @click=${this.onDialogClick}
+        @close=${this.onDialogClose}
+      >
+        <div class="dialog-panel">
+          <header class="dialog-header">
+            <div class="header-title-group">
+              <h2 id="concierge-dialog-title" class="dialog-title">devfest-concierge.a2ui</h2>
+              <span class="source-badge ${isLiveOrCached ? 'is-live' : ''}"
+                >${sourceBadgeText}</span
+              >
             </div>
             <button
               type="button"
-              class="inspect-btn"
-              aria-expanded=${this.inspectOpen ? 'true' : 'false'}
-              aria-controls="a2ui-inspector"
-              @click=${this.onToggleInspect}
+              class="close-btn"
+              aria-label="Close concierge"
+              @click=${this.closeDialog}
             >
-              Inspect A2UI JSON
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
             </button>
-          </div>
+          </header>
 
-          <div class="controls">
-            <form class="prompt-form" @submit=${this.onSubmit}>
-              <label class="sr-only" for="concierge-input">Ask DevFest Concierge</label>
+          <div class="dialog-controls">
+            <form class="launcher-form" @submit=${this.onSubmit}>
+              <label class="sr-only" for="concierge-dialog-input">Ask DevFest Concierge</label>
               <div class="input-wrap">
                 <span class="prompt-prefix" aria-hidden="true">$ ask</span>
                 <input
-                  id="concierge-input"
+                  id="concierge-dialog-input"
                   type="text"
                   .value=${this.query}
                   @input=${this.onInput}
-                  placeholder="Ask about talks, AI track, $5 Cloud credits, rooms, or venue…"
+                  placeholder="Ask AI anything about DevFest Warsaw 2026…"
                 />
               </div>
-              <button type="submit" class="run-btn" ?disabled=${this.isLoading}>
-                ${this.isLoading ? 'Running…' : 'Run →'}
+              <button type="submit" class="go-btn" ?disabled=${this.isLoading}>
+                ${this.isLoading ? '…' : 'Ask →'}
               </button>
             </form>
+            ${this.renderChipStrip()}
+          </div>
 
-            <div class="chip-bar" role="group" aria-label="Quick concierge intents">
-              ${QUICK_INTENTS.map(
-                (item) => html`
-                  <button
-                    type="button"
-                    class="intent-chip"
-                    data-intent=${item.intent}
-                    aria-pressed=${this.activeIntent === item.intent ? 'true' : 'false'}
-                    @click=${() => void this.runConciergeRequest(item.prompt, item.intent)}
-                  >
-                    ${item.label}
-                  </button>
-                `,
-              )}
-            </div>
-
+          <div class="dialog-body" role="region" aria-live="polite" aria-label="Concierge output">
             ${
               this.statusNotice
                 ? html`<p class="status-notice" role="status">${this.statusNotice}</p>`
                 : nothing
             }
-          </div>
-
-          ${
-            this.inspectOpen
-              ? html`
-                  <div id="a2ui-inspector" class="inspector">
-                    <p class="inspector-heading">Active A2UI Surface Payload</p>
-                    <pre><code>${inspectorJson}</code></pre>
-                  </div>
-                `
-              : nothing
-          }
-
-          <div
-            class="surface-region"
-            role="region"
-            aria-live="polite"
-            aria-label="Concierge output"
-          >
             ${
               surface && rootNode
                 ? this.renderSurfaceNode(rootNode, surface)
                 : this.dataReady
-                  ? html`<p class="surface-subtitle">
-                      Ask a question or pick a quick intent above.
-                    </p>`
+                  ? html`<p class="surface-subtitle">Ask a question or pick a topic above.</p>`
                   : html`<p class="surface-subtitle">Loading grounded programme surface…</p>`
             }
+
+            <div class="dialog-footer">
+              ${
+                canUpgradeToAi
+                  ? html`
+                      <button
+                        type="button"
+                        class="ai-upgrade-btn"
+                        ?disabled=${this.isLoading}
+                        @click=${() =>
+                          void this.runConciergeRequest(
+                            this.activeQuery || 'Personalize my schedule',
+                            this.activeIntent || undefined,
+                            true,
+                          )}
+                      >
+                        Ask Gemini AI to customize →
+                      </button>
+                    `
+                  : nothing
+              }
+
+              <details class="inspector-details">
+                <summary>Inspect A2UI JSON</summary>
+                <pre><code>${inspectorJson}</code></pre>
+              </details>
+            </div>
           </div>
         </div>
-      </section>
+      </dialog>
     `;
   }
 }

@@ -336,4 +336,22 @@ describe('generateLocalConciergeMessages', () => {
     expect(processor.resolveBinding('savedSessions.CFP-021', false)).toBe(true);
     expect(processor.resolveBinding('conflicts.CFP-021', '')).toContain('AI at Zero Token Cost');
   });
+
+  it('matches organizers accent-insensitively and limits follow-up chips to 2', () => {
+    const processor = new A2UIMessageProcessor();
+    const messages = generateLocalConciergeMessages({
+      query: 'who is michal jablonski?',
+      agendaItems,
+      programme,
+      savedSessionIds: [],
+      creditStatus: 'available',
+      now: baseNow,
+    });
+
+    processor.processBatch(messages);
+    const banners = collectNodesByComponent(processor, 'CalloutBanner');
+    expect(banners[0]?.props['title']).toContain('Michał Jabłoński');
+    const chips = collectNodesByComponent(processor, 'ActionChipRow');
+    expect((chips[0]?.props['chips'] as unknown[]).length).toBeLessThanOrEqual(2);
+  });
 });

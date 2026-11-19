@@ -230,15 +230,81 @@ const WORKSHOP_IDS = [
   'INVITED-001',
 ] as const;
 
+export const CANONICAL_TEAM = [
+  {
+    name: 'Michał Jabłoński',
+    role: 'GDG Warszawa Organizer · DevFest Warsaw 2026 Organizing Team',
+    links: [
+      'https://gdg.community.dev/u/mpwqe3/',
+      'https://www.linkedin.com/in/m-jab/',
+      'https://michaljablonski.dev/',
+    ],
+  },
+  {
+    name: 'Vatsal Patel',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: ['https://gdg.community.dev/u/mrwpfx/', 'https://www.linkedin.com/in/vatsal-patel-py/'],
+  },
+  {
+    name: 'Viktoriia Vinnykova',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: [
+      'https://gdg.community.dev/u/mcxbxr/',
+      'https://www.linkedin.com/in/viktoriia-vinnykova/',
+    ],
+  },
+  {
+    name: 'Oleksandr Katrych',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: ['https://gdg.community.dev/u/mjuxfk/', 'https://www.linkedin.com/in/oleksandr-katrych'],
+  },
+  {
+    name: 'Anhelina Sudenkova',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: [
+      'https://gdg.community.dev/u/angelina1/',
+      'https://www.linkedin.com/in/anhelina-sudenkova/',
+    ],
+  },
+  {
+    name: 'Maryna Kamienieva',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: ['https://gdg.community.dev/u/m9pkp3/', 'https://www.linkedin.com/in/kamienieva'],
+  },
+  {
+    name: 'Jakub Kołakowski',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: ['https://gdg.community.dev/u/mwwkjv/', 'https://www.linkedin.com/in/jkolski/'],
+  },
+  {
+    name: 'Kamil Krawczyk',
+    role: 'DevFest Warsaw 2026 Organizing Team',
+    links: ['https://gdg.community.dev/u/m4m895/', 'https://www.linkedin.com/in/kamil-krawczyk2/'],
+  },
+] as const;
+
 const CONCIERGE_SYSTEM_INSTRUCTION = `You are the DevFest Warsaw 2026 Concierge, generating structured A2UI plans.
 STRICT GROUNDING RULES:
-- Never invent sessions, times, rooms, speakers, or URLs. Use ONLY the canonical session IDs and facts below.
+- Never invent sessions, times, rooms, speakers, organizers, or URLs. Use ONLY the canonical facts below.
 - Event: GDG DevFest Warsaw 2026: Real Work, Real Lessons on November 21, 2026 (Europe/Warsaw).
 - Venue: Google for Startups Campus Warsaw, Plac Konesera 10, 03-736 Warszawa.
-- Transit & Parking: Metro M2 Dworzec Wilenski (short walk), buses/trams at Dworzec Wilenski & Zabkowska. Saturday street parking in Warsaw paid zone is free (subject to space/signs); Koneser has a 24h paid underground car park.
-- Facilities: Wi-Fi available; unmonitored self-service cloakroom (keep valuables with you); wheelchair accessible with step-free seating, ramps, and lifts; contact hello@gdgwarsaw.pl.
-- Agenda Activities: 09:00 Registration, networking & games; 10:00-10:15 Opening; 14:00-15:00 Lunch (both spaces); 18:55-19:15 Closing, results & awards (Auditorium); 19:15-21:30 Afterparty & networking.
-- $5 Google Cloud Credits: 330 credits pool, claimable 09:00-19:00 Warsaw time on 21 Nov 2026, valid for 12 hours after claiming. Bring your own laptop for Classroom workshops.
+- Transit & Parking: Metro M2 Dworzec Wilenski (short walk), buses/trams at Dworzec Wilenski & Zabkowska.
+  Saturday street parking in Warsaw paid zone is free (subject to signs); Koneser has a 24h paid underground car park.
+- Facilities: Wi-Fi available; unmonitored self-service cloakroom (keep valuables with you);
+  wheelchair accessible with step-free seating, ramps, and lifts; contact hello@gdgwarsaw.pl.
+- Agenda Activities: 09:00 Registration, networking & games; 10:00-10:15 Opening; 14:00-15:00 Lunch (both spaces);
+  18:55-19:15 Closing, results & awards (Auditorium); 19:15-21:30 Afterparty & networking.
+- $5 Google Cloud Credits: 330 credits pool, claimable 09:00-19:00 Warsaw time on 21 Nov 2026,
+  valid for 12 hours after claiming. Bring your own laptop for Classroom workshops.
+- DevFest Warsaw 2026 Organizing Team (GDG Warszawa, /team/):
+  - Michał Jabłoński (GDG Warszawa organizer | https://michaljablonski.dev/ | https://www.linkedin.com/in/m-jab/ | https://gdg.community.dev/u/mpwqe3/)
+  - Vatsal Patel (https://www.linkedin.com/in/vatsal-patel-py/)
+  - Viktoriia Vinnykova (https://www.linkedin.com/in/viktoriia-vinnykova/)
+  - Oleksandr Katrych (https://www.linkedin.com/in/oleksandr-katrych)
+  - Anhelina Sudenkova (https://www.linkedin.com/in/anhelina-sudenkova/)
+  - Maryna Kamienieva (https://www.linkedin.com/in/kamienieva)
+  - Jakub Kołakowski (https://www.linkedin.com/in/jkolski/)
+  - Kamil Krawczyk (https://www.linkedin.com/in/kamil-krawczyk2/)
 - Canonical 16 Sessions (ID | Time | Room | Kind | Title | Speakers):
   - CFP-021 | 10:15-10:45 | auditorium | session | Written by Agents. Reviewed by Nobody. Running in Production | Yonatan Levin
   - INVITED-004 | 10:15-10:55 | classroom | workshop | AI at Zero Token Cost: Local-First Browser AI and Prompt API | Julia Rapczynska
@@ -356,7 +422,57 @@ export type ConciergeDeps = {
   db?: Firestore | null;
   getApiKey: () => string;
   fetchFn?: typeof fetch;
+  bypassCache?: boolean;
 };
+
+const MAX_CACHE_ENTRIES = 200;
+const CACHE_TTL_MS = 15 * 60 * 1000;
+
+type CacheEntry = {
+  messages: ReturnType<typeof buildA2UIMessages>;
+  expiresAt: number;
+};
+
+const responseCache = new Map<string, CacheEntry>();
+
+export function clearConciergeCache(): void {
+  responseCache.clear();
+}
+
+function buildCacheKey(query: string, intent: string, savedSessionIds: string[]): string {
+  const normalizedSaved = savedSessionIds
+    .filter((id) => Boolean(CANONICAL_SESSIONS[id]))
+    .sort()
+    .join(',');
+  return `${query.toLowerCase().trim()}|${intent.toLowerCase().trim()}|${normalizedSaved}`;
+}
+
+function getCachedMessages(key: string, now: number): ReturnType<typeof buildA2UIMessages> | null {
+  const entry = responseCache.get(key);
+  if (!entry) return null;
+  if (entry.expiresAt <= now) {
+    responseCache.delete(key);
+    return null;
+  }
+  // Refresh LRU order
+  responseCache.delete(key);
+  responseCache.set(key, entry);
+  return entry.messages;
+}
+
+function setCachedMessages(
+  key: string,
+  messages: ReturnType<typeof buildA2UIMessages>,
+  now: number,
+): void {
+  if (responseCache.size >= MAX_CACHE_ENTRIES) {
+    const oldestKey = responseCache.keys().next().value;
+    if (oldestKey !== undefined) {
+      responseCache.delete(oldestKey);
+    }
+  }
+  responseCache.set(key, { messages, expiresAt: now + CACHE_TTL_MS });
+}
 
 type ConciergeRequest = Pick<Request, 'method' | 'body' | 'headers' | 'ip' | 'connection'>;
 
@@ -866,6 +982,22 @@ export async function handleConcierge(
     response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
   }
 
+  const cacheKey = buildCacheKey(parsed.query, parsed.intent, parsed.savedSessionIds);
+  if (!deps.bypassCache) {
+    const cachedMessages = getCachedMessages(cacheKey, now);
+    if (cachedMessages) {
+      response.set('X-Concierge-Cache', 'HIT');
+      response.status(200).json({
+        status: 'ok',
+        model: 'gemini-4-hydrogen',
+        thinkingLevel: 'medium',
+        cached: true,
+        messages: cachedMessages,
+      });
+      return;
+    }
+  }
+
   const apiKey = (deps.getApiKey() || '').trim();
   if (!apiKey) {
     response.status(503).json({ status: 'unavailable', fallback: 'local-a2ui' });
@@ -938,10 +1070,15 @@ export async function handleConcierge(
       now,
     );
 
+    if (!deps.bypassCache) {
+      setCachedMessages(cacheKey, messages, now);
+    }
+    response.set('X-Concierge-Cache', 'MISS');
     response.status(200).json({
       status: 'ok',
       model: 'gemini-4-hydrogen',
       thinkingLevel: 'medium',
+      cached: false,
       messages,
     });
   } catch {

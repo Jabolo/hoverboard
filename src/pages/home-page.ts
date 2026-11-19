@@ -175,7 +175,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         .action-buttons md-filled-button,
         .action-buttons md-outlined-button {
           min-height: 48px;
-          margin: 8px;
+          margin: 6px;
           border-radius: 4px;
           font-family: var(--font-mono);
           font-size: 12px;
@@ -185,6 +185,7 @@ export class HomePage extends ReduxMixin(PolymerElement) {
         }
 
         .action-buttons md-filled-button {
+          --md-filled-button-container-shape: 4px;
           --md-filled-button-container-color: var(--google-blue-strong);
           --md-filled-button-hover-container-color: var(--google-blue);
           --md-filled-button-label-text-color: #fff;
@@ -192,19 +193,15 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           --md-filled-button-icon-color: #fff;
         }
 
+        .action-buttons md-outlined-button {
+          --md-outlined-button-container-shape: 4px;
+        }
+
         .action-buttons .watch-video {
           color: #fff;
           --md-outlined-button-label-text-color: #fff;
           --md-outlined-button-hover-label-text-color: #fff;
           --md-outlined-button-outline-color: #fff;
-        }
-
-        .action-buttons .concierge-button {
-          color: var(--terminal-green);
-          --md-outlined-button-label-text-color: var(--terminal-green);
-          --md-outlined-button-hover-label-text-color: #fff;
-          --md-outlined-button-outline-color: var(--terminal-green);
-          --md-outlined-button-hover-state-layer-color: var(--terminal-green);
         }
 
         .action-buttons iron-icon {
@@ -544,11 +541,16 @@ export class HomePage extends ReduxMixin(PolymerElement) {
           .event-details {
             margin-top: 16px;
           }
+          .action-buttons {
+            margin: 8px 0 0;
+            gap: 8px;
+          }
           .action-buttons md-filled-button,
           .action-buttons md-outlined-button {
-            margin: 4px;
-            font-size: 13px;
-            letter-spacing: 0;
+            min-height: 44px;
+            margin: 0;
+            font-size: 12px;
+            letter-spacing: 0.02em;
           }
         }
         @media (min-width: 812px) {
@@ -614,9 +616,6 @@ export class HomePage extends ReduxMixin(PolymerElement) {
                   </md-outlined-button>
                 </template>
                 <md-filled-button href="/schedule/">View programme</md-filled-button>
-                <md-outlined-button class="concierge-button" on-click="openConcierge">
-                  Ask Concierge
-                </md-outlined-button>
                 <md-outlined-button on-click="scrollToTickets">
                   <iron-icon icon="hoverboard:ticket" slot="icon"></iron-icon>
                   [[ticketActionLabel]]
