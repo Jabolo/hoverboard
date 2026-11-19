@@ -17,8 +17,8 @@ export class VisitBlock extends ThemedElement {
 
         .container {
           position: relative;
-          padding-top: 76px;
-          padding-bottom: 72px;
+          padding-top: 52px;
+          padding-bottom: 52px;
         }
 
         h2,
@@ -51,12 +51,12 @@ export class VisitBlock extends ThemedElement {
         .details {
           display: grid;
           gap: 0;
-          margin-top: 40px;
+          margin-top: 28px;
           border-top: 1px solid var(--divider-color);
         }
 
         .column {
-          padding: 28px 0;
+          padding: 22px 0;
         }
 
         .column + .column {
@@ -65,9 +65,9 @@ export class VisitBlock extends ThemedElement {
 
         .explore-copy {
           max-width: 48ch;
-          margin: 22px 0 0;
+          margin: 14px 0 0;
           color: var(--terminal-copy);
-          font-size: 15px;
+          font-size: 16px;
           line-height: 1.65;
         }
 
@@ -86,26 +86,19 @@ export class VisitBlock extends ThemedElement {
 
         ul {
           display: grid;
-          gap: 16px;
-          margin: 22px 0 0;
-          padding: 0;
-          list-style: none;
+          gap: 12px;
+          margin: 14px 0 0;
+          padding-left: 1.25rem;
         }
 
         li {
-          display: grid;
-          grid-template-columns: 12px minmax(0, 1fr);
-          gap: 10px;
           color: var(--terminal-copy);
-          font-size: 15px;
+          font-size: 16px;
           line-height: 1.55;
         }
 
-        li::before {
+        li::marker {
           color: var(--google-blue);
-          content: '›';
-          font-family: var(--font-mono, monospace);
-          font-weight: 800;
         }
 
         .directions,
@@ -113,20 +106,12 @@ export class VisitBlock extends ThemedElement {
           display: inline-flex;
           align-items: center;
           min-height: 44px;
-          margin-top: 22px;
-          color: var(--google-blue);
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
-          font-weight: 800;
-          letter-spacing: 0.03em;
-          text-decoration: none;
-          text-transform: uppercase;
-        }
-
-        .directions::after {
-          margin-left: 9px;
-          content: '↗';
-          font-size: 18px;
+          margin-top: 16px;
+          color: #a9c7ff;
+          font-size: 15px;
+          font-weight: 700;
+          text-decoration: underline;
+          text-underline-offset: 4px;
         }
 
         .directions:hover,
@@ -143,6 +128,11 @@ export class VisitBlock extends ThemedElement {
         }
 
         @media (min-width: 720px) {
+          .container {
+            padding-top: 76px;
+            padding-bottom: 72px;
+          }
+
           .details {
             grid-template-columns: repeat(2, minmax(0, 1fr));
             column-gap: clamp(40px, 7vw, 96px);

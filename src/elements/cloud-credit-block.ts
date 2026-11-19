@@ -94,11 +94,10 @@ export class CloudCreditBlock extends ThemedElement {
         }
         .details {
           display: grid;
-          gap: 12px;
-          padding: 18px 20px;
-          border: 1px solid var(--terminal-line, #31445f);
-          border-radius: 12px;
-          background: var(--primary-background-color, #080f1a);
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+          padding-top: 16px;
+          border-top: 1px solid var(--terminal-line, #31445f);
         }
         .detail {
           display: grid;
@@ -146,6 +145,9 @@ export class CloudCreditBlock extends ThemedElement {
             align-items: center;
             gap: 48px;
             padding: 54px 24px;
+          }
+          .details {
+            grid-template-columns: 1fr;
           }
         }
       `,

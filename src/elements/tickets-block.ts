@@ -186,7 +186,16 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item[tier='supporter'] md-filled-button {
           --md-filled-button-container-color: var(--google-green);
-          --md-filled-button-hover-container-color: #2b8a44;
+          --md-filled-button-label-text-color: #06101a;
+          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-focus-label-text-color: #06101a;
+          --md-filled-button-pressed-label-text-color: #06101a;
+          --md-filled-button-icon-color: #06101a;
+          --md-filled-button-hover-icon-color: #06101a;
+          --md-filled-button-focus-icon-color: #06101a;
+          --md-filled-button-pressed-icon-color: #06101a;
+          --md-filled-button-hover-state-layer-color: #fff;
+          --md-filled-button-pressed-state-layer-color: #fff;
         }
 
         /* Patron Tier Styling */
@@ -211,7 +220,16 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item[tier='patron'] md-filled-button {
           --md-filled-button-container-color: #e3a600;
-          --md-filled-button-hover-container-color: #c99300;
+          --md-filled-button-label-text-color: #06101a;
+          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-focus-label-text-color: #06101a;
+          --md-filled-button-pressed-label-text-color: #06101a;
+          --md-filled-button-icon-color: #06101a;
+          --md-filled-button-hover-icon-color: #06101a;
+          --md-filled-button-focus-icon-color: #06101a;
+          --md-filled-button-pressed-icon-color: #06101a;
+          --md-filled-button-hover-state-layer-color: #fff;
+          --md-filled-button-pressed-state-layer-color: #fff;
         }
 
         .badge-slot {
@@ -276,58 +294,35 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         .community-impact-note {
           max-width: 780px;
           margin: 28px auto 12px;
-          padding: 16px 20px;
-          background: rgba(251, 188, 4, 0.07);
-          border: 1px solid rgba(251, 188, 4, 0.35);
-          border-radius: 8px;
-          font-size: 13px;
+          padding: 20px 0 0;
+          border-top: 1px solid var(--divider-color);
+          font-size: 14px;
           line-height: 1.55;
           color: var(--primary-text-color);
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          gap: 14px;
           text-align: left;
         }
 
-        .community-impact-note .impact-icon {
-          font-size: 22px;
-          line-height: 1.2;
-          flex-shrink: 0;
-        }
-
-        .community-impact-note .impact-text {
-          flex: 1;
-        }
-
         .community-impact-note .impact-title {
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
-          font-weight: 800;
-          color: var(--google-yellow);
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--primary-text-color);
           margin-bottom: 6px;
-          text-transform: uppercase;
-          letter-spacing: 0.03em;
         }
 
         .community-impact-note .impact-desc {
           color: var(--secondary-text-color);
-          font-size: 13px;
+          font-size: 14px;
         }
 
         .community-impact-note .patron-promise {
           display: block;
           margin-top: 8px;
-          padding-top: 8px;
-          border-top: 1px dashed rgba(251, 188, 4, 0.25);
-          color: var(--terminal-green);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
+          color: var(--secondary-text-color);
+          font-size: 14px;
         }
 
         .community-impact-note .patron-promise strong {
-          color: var(--google-yellow);
+          color: var(--primary-text-color);
         }
 
         .header {
@@ -395,10 +390,11 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         md-filled-button {
-          --md-filled-button-container-color: var(--google-blue);
-          --md-filled-button-hover-container-color: var(--terminal-green);
+          --md-filled-button-container-color: var(--google-blue-strong);
           --md-filled-button-label-text-color: #fff;
-          --md-filled-button-hover-label-text-color: #06101a;
+          --md-filled-button-hover-label-text-color: #fff;
+          --md-filled-button-hover-state-layer-color: #000;
+          --md-filled-button-pressed-state-layer-color: #000;
           --md-filled-button-container-height: 46px;
           font-family: var(--font-mono, monospace);
           font-size: 12px;
@@ -410,9 +406,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         md-filled-button[disabled] {
           --md-filled-button-disabled-container-color: rgba(255, 255, 255, 0.08);
           --md-filled-button-disabled-container-opacity: 1;
-          --md-filled-button-disabled-label-text-color: rgba(255, 255, 255, 0.4);
+          --md-filled-button-disabled-label-text-color: rgba(255, 255, 255, 0.72);
           --md-filled-button-disabled-label-text-opacity: 1;
-          opacity: 0.8;
+          opacity: 1;
           pointer-events: none;
         }
 
@@ -462,16 +458,13 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         .registration-drawer-bar {
           max-width: 780px;
           margin: 24px auto 0;
-          padding: 12px 18px;
+          padding: 20px 0 0;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 16px;
-          background: var(--secondary-background-color);
-          border: 1px dashed var(--divider-color);
-          border-radius: 8px;
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
+          border-top: 1px solid var(--divider-color);
+          font-size: 14px;
           color: var(--secondary-text-color);
           text-align: left;
           box-sizing: border-box;
@@ -488,23 +481,19 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           line-height: 1.4;
         }
 
-        .drawer-icon {
-          font-size: 18px;
-          flex-shrink: 0;
-        }
-
         .drawer-toggle-btn {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          background: rgba(66, 133, 244, 0.12);
+          min-height: 44px;
+          background: transparent;
           border: 1px solid var(--google-blue);
           color: var(--primary-text-color);
           padding: 8px 16px;
           border-radius: 6px;
           cursor: pointer;
           font-family: var(--font-mono, monospace);
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 700;
           letter-spacing: 0.03em;
           white-space: nowrap;
@@ -515,22 +504,119 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .drawer-toggle-btn:hover {
-          background: var(--google-blue);
+          background: var(--google-blue-strong);
           color: #fff;
         }
 
         @media (max-width: 639px) {
+          .tickets-wrapper {
+            padding-top: 48px;
+            padding-bottom: 40px;
+          }
+
+          .tickets-wrapper::before {
+            display: none;
+          }
+
+          .tickets {
+            gap: 12px;
+          }
+
+          .ticket-item {
+            display: grid !important;
+            grid-template-areas:
+              'heading price'
+              'details details'
+              'action action';
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: start;
+            min-height: 0;
+            max-width: none;
+            padding: 16px;
+            text-align: left;
+            box-sizing: border-box;
+          }
+
+          .ticket-item[in-demand],
+          .ticket-item[selected],
+          .ticket-item:hover,
+          .ticket-item[tier='supporter']:hover,
+          .ticket-item[tier='patron']:hover {
+            transform: none !important;
+            box-shadow: none !important;
+          }
+
+          .ticket-item[selected] {
+            outline: 2px solid var(--google-blue);
+            outline-offset: 2px;
+          }
+
+          .header {
+            grid-area: heading;
+            padding: 0;
+          }
+
+          .badge-slot,
+          .subtext-slot {
+            min-height: 0;
+            justify-content: flex-start;
+          }
+
+          .content {
+            display: contents !important;
+          }
+
+          .ticket-price-wrapper {
+            grid-area: price;
+            margin: 0 0 0 12px;
+            text-align: right;
+          }
+
+          .ticket-price-wrapper .subtext-slot {
+            justify-content: flex-end;
+          }
+
+          .price {
+            font-size: 24px;
+          }
+
+          .type-description {
+            grid-area: details;
+            display: block;
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+          }
+
+          .ticket-dates {
+            font-size: 12px;
+          }
+
+          .actions {
+            grid-area: action;
+            padding: 14px 0 0;
+          }
+
+          .actions md-filled-button {
+            width: 100%;
+          }
+
+          .sold-out {
+            height: auto;
+          }
+
+          .community-impact-note {
+            margin-top: 20px;
+          }
+
           .registration-drawer-bar {
             flex-direction: column;
-            text-align: center;
-            align-items: center;
+            align-items: stretch;
             gap: 12px;
-            padding: 14px;
           }
 
           .drawer-hint {
-            flex-direction: column;
-            gap: 6px;
+            text-align: left;
           }
 
           .drawer-toggle-btn {
@@ -627,7 +713,6 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="community-impact-note">
-            <span class="impact-icon">💛</span>
             <div class="impact-text">
               <div class="impact-title">
                 100% Non-Profit Community Event — Organized by Volunteers
@@ -638,7 +723,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 Warsaw. Supporter and Patron tickets directly fund full-day attendee catering &
                 specialty coffee, custom community swag, and conference operations.
                 <span class="patron-promise"
-                  >⭐ <strong>Patron Ticket Promise:</strong> Guaranteed personal or company name
+                  ><strong>Patron Ticket Promise:</strong> Guaranteed personal or company name
                   recognition on our opening intro slide!</span
                 >
               </div>
@@ -648,7 +733,6 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           <template is="dom-if" if="[[!registrationOpened]]">
             <div class="registration-drawer-bar">
               <div class="drawer-hint">
-                <span class="drawer-icon">🎟️</span>
                 <span>
                   Choose <strong>GET YOUR TICKET</strong> on a ticket above, or open the form
                   directly.
@@ -661,7 +745,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
                 on-click="toggleRegistration"
                 aria-expanded="false"
               >
-                ▼ Open registration form
+                Open registration form
               </button>
             </div>
           </template>

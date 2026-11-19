@@ -492,6 +492,59 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
           width: 44px;
           height: 30px;
         }
+
+        @media (max-width: 639px) {
+          .container {
+            padding-top: 48px;
+            padding-bottom: 40px;
+          }
+
+          .container::before {
+            display: none;
+          }
+
+          .organizer-logos,
+          .logos-wrapper[data-tier='Community Partners'] {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+          }
+
+          .organizer-logo,
+          .organizer-logo.gdg-organizer {
+            width: 100%;
+            min-width: 0;
+            min-height: 66px;
+            padding: 8px;
+          }
+
+          .organizer-logo.gdg-organizer {
+            gap: 6px;
+            font-size: 13px;
+          }
+
+          .organizer-logo.gdg-organizer img {
+            flex: none;
+            width: 36px;
+          }
+
+          .logos-wrapper[data-tier='Community Partners'] {
+            --partner-logo-width: min(100%, 120px);
+            --partner-logo-height: 40px;
+          }
+
+          .logos-wrapper[data-tier='Community Partners'] .logo-item {
+            height: 128px;
+            padding: 12px;
+          }
+
+          .logos-wrapper[data-tier='Community Partners']
+            .logo-item[data-partner='red-bull']
+            .logo-img {
+            width: 66px;
+            height: 92px;
+          }
+        }
       </style>
 
       <div class="container">

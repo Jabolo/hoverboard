@@ -128,7 +128,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
           display: grid;
           position: relative;
           grid-auto-flow: column;
-          grid-auto-columns: 92%;
+          grid-auto-columns: min(82%, 320px);
           gap: 16px;
           margin-top: 24px;
           padding: 4px 4px 12px;
@@ -168,10 +168,6 @@ export class LinkedInUpdatesBlock extends ThemedElement {
         article {
           scroll-snap-align: start;
           min-width: 0;
-          border: 1px solid var(--divider-color, #263b56);
-          border-radius: 12px;
-          overflow: hidden;
-          background: var(--secondary-background-color, #101b2c);
         }
         .story-link {
           display: block;
@@ -185,7 +181,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
           outline-offset: -3px;
         }
         .story-copy {
-          padding: 20px;
+          padding: 16px 2px 4px;
         }
 
         .visually-hidden {
@@ -204,6 +200,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
           width: 100%;
           height: auto;
           object-fit: contain;
+          border-radius: 12px;
         }
         .read-post {
           display: inline-block;
@@ -218,7 +215,7 @@ export class LinkedInUpdatesBlock extends ThemedElement {
           font-weight: 700;
         }
         h3 {
-          margin: 7px 0 0;
+          margin: 0 0 4px;
           font-size: 21px;
           line-height: 1.25;
         }
@@ -243,6 +240,12 @@ export class LinkedInUpdatesBlock extends ThemedElement {
         }
         a:hover {
           background: var(--secondary-background-color, #14243a);
+        }
+        .story-link:hover {
+          background: transparent;
+        }
+        .story-link:hover .read-post {
+          text-decoration: underline;
         }
         a:focus-visible,
         button:focus-visible,
@@ -320,8 +323,8 @@ export class LinkedInUpdatesBlock extends ThemedElement {
                     height=${story.height}
                   />
                   <div class="story-copy">
-                    <span class="category">Speaker conversation</span>
                     <h3>${story.name}</h3>
+                    <span class="category">Speaker conversation</span>
                     <p>${story.summary}</p>
                     <span class="read-post">Read the story ↗</span>
                     <span class="visually-hidden"> (opens on LinkedIn in a new tab)</span>

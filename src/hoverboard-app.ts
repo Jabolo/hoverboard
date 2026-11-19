@@ -6,7 +6,6 @@ import '@polymer/app-layout/app-header-layout/app-header-layout';
 import '@polymer/app-layout/app-header/app-header';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import { computed, customElement, property, query } from '@polymer/decorators';
-import '@polymer/iron-icon';
 import '@polymer/iron-selector/iron-selector';
 import { html, PolymerElement } from '@polymer/polymer';
 import {
@@ -94,6 +93,7 @@ export class HoverboardApp extends PolymerElement {
         }
 
         app-drawer app-toolbar {
+          position: relative;
           padding: 28px 24px 24px;
           background: var(--terminal-panel);
           border-bottom: 1px solid var(--divider-color);
@@ -103,6 +103,36 @@ export class HoverboardApp extends PolymerElement {
           width: 176px;
           height: 98px;
           object-fit: contain;
+        }
+
+        .drawer-close {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          display: grid;
+          width: 48px;
+          height: 48px;
+          place-items: center;
+          border: 0;
+          border-radius: 4px;
+          background: transparent;
+          color: var(--primary-text-color);
+          cursor: pointer;
+        }
+
+        .drawer-close:hover {
+          background: rgb(255 255 255 / 8%);
+        }
+
+        .drawer-close:focus-visible,
+        .drawer-list a:focus-visible {
+          outline: 3px solid var(--google-blue);
+          outline-offset: -3px;
+        }
+
+        .drawer-close svg {
+          width: 24px;
+          height: 24px;
         }
 
         app-drawer .drawer-google {
@@ -162,6 +192,10 @@ export class HoverboardApp extends PolymerElement {
             border-color var(--animation);
         }
 
+        .drawer-list a[hidden] {
+          display: none;
+        }
+
         app-drawer a {
           padding: 12px 24px;
         }
@@ -203,17 +237,6 @@ export class HoverboardApp extends PolymerElement {
           background-color: var(--terminal-background);
           min-height: 100%;
           height: 100%;
-        }
-
-        .drawer-content iron-icon {
-          --iron-icon-width: 14px;
-          margin-left: 6px;
-        }
-
-        // Look for copies of this
-        .bottom-drawer-link {
-          padding: 16px 24px;
-          cursor: pointer;
         }
 
         sticky-countdown[active] ~ cookie-consent {
@@ -259,6 +282,16 @@ export class HoverboardApp extends PolymerElement {
           aria-hidden$="[[getDrawerAriaHidden(drawerOpened)]]"
         >
           <app-toolbar layout vertical start>
+            <button
+              class="drawer-close"
+              type="button"
+              aria-label="Close navigation menu"
+              on-click="closeDrawer"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </button>
             <img
               class="toolbar-logo"
               src="/images/logos/devfest-2026-wordmark-dark.svg"
@@ -285,6 +318,24 @@ export class HoverboardApp extends PolymerElement {
               role="navigation"
               aria-label="Primary navigation"
             >
+              <template is="dom-repeat" items="[[priorityNavigation]]" as="nav">
+                <a
+                  href="[[nav.permalink]]"
+                  path="[[nav.route]]"
+                  on-click="closeDrawer"
+                  aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                >
+                  [[nav.label]]
+                </a>
+              </template>
+              <a href="/#visit" path="visit" on-click="scrollToVisit">Getting here</a>
+              <a
+                href$="[[registrationUrl]]"
+                on-click="scrollToRegistration"
+                hidden$="[[!ticketUrl]]"
+              >
+                [[registrationActionLabel]]
+              </a>
               <template is="dom-repeat" items="[[navigation]]" as="nav">
                 <a
                   href="[[nav.permalink]]"
@@ -299,19 +350,6 @@ export class HoverboardApp extends PolymerElement {
 
             <div>
               <app-install></app-install>
-
-              <a
-                class="bottom-drawer-link"
-                href$="[[registrationUrl]]"
-                on-click="scrollToRegistration"
-                hidden$="[[!ticketUrl]]"
-                layout
-                horizontal
-                center
-              >
-                <span>[[registrationActionLabel]]</span>
-                <iron-icon icon="hoverboard:open-in-new"></iron-icon>
-              </a>
             </div>
           </div>
         </app-drawer>
@@ -340,7 +378,8 @@ export class HoverboardApp extends PolymerElement {
   private dates = dates;
   private buyTicket = buyTicket;
   private registrationActionLabel = eveneaEmbed.requiresAccessCode ? ticketingPreview : buyTicket;
-  private navigation = navigation;
+  private priorityNavigation = navigation.filter((item) => item.route === 'schedule');
+  private navigation = navigation.filter((item) => item.route !== 'schedule');
   private shortLocation = location.short;
 
   @query('#drawer')
@@ -441,7 +480,7 @@ export class HoverboardApp extends PolymerElement {
       drawer.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
       ),
-    );
+    ).filter((element) => !element.closest('[hidden]') && element.getClientRects().length > 0);
     if (focusable.length === 0) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -503,6 +542,16 @@ export class HoverboardApp extends PolymerElement {
 
     e.preventDefault();
     scrollToElement(ticketsBlock);
+  }
+
+  private scrollToVisit(e: Event) {
+    const homePage = this.main.querySelector('home-page') as HTMLElement | null;
+    const visitBlock = homePage?.shadowRoot?.querySelector('#visit');
+    this.closeDrawer();
+    if (visitBlock) {
+      e.preventDefault();
+      scrollToElement(visitBlock);
+    }
   }
 
   @computed('tickets')
