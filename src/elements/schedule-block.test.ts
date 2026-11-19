@@ -4,6 +4,7 @@ import { buildAgenda, eventInstant, type DraftAgenda } from '../utils/agenda-pre
 import type { PreviewSource } from '../utils/speakers-preview-data';
 import agenda from '../../public/data/agenda-2026.json';
 import programme from '../../public/data/programme-2026.json';
+import { getScheduleTestTime } from '../utils/schedule-test-time';
 
 const items = buildAgenda(agenda as DraftAgenda, programme as PreviewSource);
 const ids = (list: typeof items) => list.map((item) => item.id);
@@ -15,6 +16,7 @@ describe('on-site homepage programme', () => {
     globalThis.fetch = originalFetch;
     jest.restoreAllMocks();
     jest.useRealTimers();
+    history.replaceState({}, '', '/');
   });
 
   it('shows the first three published starting times before the event', () => {
@@ -185,5 +187,58 @@ describe('on-site homepage programme', () => {
     expect(element.shadowRoot?.textContent).toContain('couldn’t be loaded');
     expect(element.shadowRoot?.querySelector('a[href="/schedule/"]')).not.toBeNull();
     element.remove();
+  });
+
+  it('shows the requested test moments from the public programme', () => {
+    const selection = (time: string) =>
+      homeAgendaAt(items, getScheduleTestTime('localhost', `?schedule-test=${time}`)!);
+    expect(ids(selection('09:30').started)).toEqual(['registration']);
+    expect(ids(selection('09:30').upcoming)).toEqual(['opening', 'CFP-021', 'INVITED-004']);
+    expect(ids(selection('11:05').current)).toEqual(['CFP-002', 'CFP-012']);
+    expect(ids(selection('11:05').upcoming)).toEqual(['CFP-014', 'CFP-050', 'CFP-034', 'CFP-043']);
+    expect(ids(selection('16:05').current)).toEqual([]);
+    expect(ids(selection('16:05').upcoming)).toEqual([
+      'CFP-028',
+      'CFP-015',
+      'scaling-hugging-face-hub',
+      'INVITED-003',
+      'INVITED-002',
+      'INVITED-001',
+    ]);
+  });
+
+  it('labels simulated time and keeps it fixed as the real clock advances', async () => {
+    history.replaceState({}, '', '/?ref=keep&schedule-test=11%3A05#programme');
+    jest.useFakeTimers().setSystemTime(eventInstant('09:30'));
+    globalThis.fetch = jest.fn<typeof fetch>(
+      async (input) =>
+        ({
+          ok: true,
+          json: async () => (String(input).includes('agenda-2026') ? agenda : programme),
+        }) as Response,
+    );
+    const element = new ScheduleBlock();
+    document.body.appendChild(element);
+    await jest.advanceTimersByTimeAsync(0);
+    await element.updateComplete;
+    const root = element.shadowRoot!;
+    expect(root.textContent).toContain('TEST VIEW · 11:05 Warsaw time');
+    expect(root.querySelector('.intro')?.textContent).toContain('simulated clock');
+    expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
+    expect(root.textContent).not.toContain('Started · end time not listed');
+    const links = [...root.querySelectorAll<HTMLAnchorElement>('.test-options a')];
+    expect(links.map((link) => link.textContent?.trim())).toEqual([
+      '09:30',
+      '11:05',
+      '16:05',
+      'Use real time',
+    ]);
+    expect(links[0]?.getAttribute('href')).toBe('/?ref=keep&schedule-test=09%3A30#programme');
+    expect(links[3]?.getAttribute('href')).toBe('/?ref=keep#programme');
+    expect(links.every((link) => link.hasAttribute('router-ignore'))).toBe(true);
+    await jest.advanceTimersByTimeAsync(30_000);
+    await element.updateComplete;
+    expect(root.textContent).toContain('TEST VIEW · 11:05 Warsaw time');
+    expect(root.textContent).toContain(items.find((item) => item.id === 'CFP-002')!.title);
   });
 });

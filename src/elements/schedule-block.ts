@@ -4,10 +4,12 @@ import { ThemedElement } from '../components/themed-element';
 import {
   buildAgenda,
   eventInstant,
+  warsawTime,
   type AgendaItem,
   type DraftAgenda,
 } from '../utils/agenda-preview-data';
 import type { PreviewSource } from '../utils/speakers-preview-data';
+import { getScheduleTestTime } from '../utils/schedule-test-time';
 
 const spaceLabel = { auditorium: 'Auditorium', classroom: 'Classroom', both: 'Event-wide' };
 const kindLabel = {
@@ -83,7 +85,8 @@ function groupByStart(items: AgendaItem[]): AgendaItem[][] {
 export class ScheduleBlock extends ThemedElement {
   @state() private items: AgendaItem[] = [];
   @state() private status: 'loading' | 'ready' | 'stale' | 'error' = 'loading';
-  @state() private now = Date.now();
+  @state() private now =
+    getScheduleTestTime(window.location.hostname, window.location.search) ?? Date.now();
   private clockTimer?: number;
   private refreshTimer?: number;
   private requestVersion = 0;
@@ -92,7 +95,8 @@ export class ScheduleBlock extends ThemedElement {
     super.connectedCallback();
     void this.load();
     this.clockTimer = window.setInterval(() => {
-      this.now = Date.now();
+      this.now =
+        getScheduleTestTime(window.location.hostname, window.location.search) ?? Date.now();
     }, 15_000);
     this.refreshTimer = window.setInterval(() => {
       if (!document.hidden) void this.load();
@@ -110,7 +114,8 @@ export class ScheduleBlock extends ThemedElement {
 
   private readonly onVisibilityChange = () => {
     if (!document.hidden) {
-      this.now = Date.now();
+      this.now =
+        getScheduleTestTime(window.location.hostname, window.location.search) ?? Date.now();
       void this.load();
     }
   };
@@ -283,6 +288,49 @@ export class ScheduleBlock extends ThemedElement {
           color: var(--terminal-yellow);
           line-height: 1.5;
         }
+        .test-mode {
+          margin-top: 20px;
+          padding: 16px;
+          border: 1px solid var(--terminal-line);
+          border-radius: 4px;
+          background: var(--terminal-panel);
+        }
+        .test-mode p {
+          margin: 0;
+          line-height: 1.5;
+        }
+        .test-mode strong {
+          color: var(--terminal-yellow);
+        }
+        .test-mode small {
+          display: block;
+          margin-top: 4px;
+          color: var(--terminal-muted);
+          line-height: 1.5;
+        }
+        .test-options {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 12px;
+        }
+        .test-options a {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 0 12px;
+          border: 1px solid var(--terminal-line);
+          border-radius: 4px;
+          color: var(--terminal-copy);
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          font-weight: 700;
+          text-decoration: none;
+        }
+        .test-options a[aria-current='true'] {
+          border-color: var(--terminal-green);
+          color: var(--terminal-green);
+        }
         @media (max-width: 600px) {
           .container {
             padding-top: 28px;
@@ -340,16 +388,52 @@ export class ScheduleBlock extends ThemedElement {
     </li>`;
   }
 
+  private testHref(time?: string) {
+    const url = new URL(window.location.href);
+    if (time) {
+      url.searchParams.set('schedule-test', time);
+    } else {
+      url.searchParams.delete('schedule-test');
+    }
+    url.hash = 'programme';
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
   override render() {
     const selection = homeAgendaAt(this.items, this.now);
     const upcomingGroups = groupByStart(selection.upcoming);
+    const testTime = getScheduleTestTime(window.location.hostname, window.location.search);
     return html` <section id="schedule" class="container" aria-labelledby="schedule-title">
       <div class="heading-row">
         <div>
           <h2 id="schedule-title">The programme</h2>
-          <p class="intro">21 November · Warsaw time · device clock</p>
+          <p class="intro">
+            21 November · Warsaw time · ${testTime !== null ? 'simulated clock' : 'device clock'}
+          </p>
         </div>
       </div>
+      ${
+        testTime !== null
+          ? html`<aside class="test-mode" aria-label="Schedule test mode">
+              <p><strong>TEST VIEW · ${warsawTime(testTime)} Warsaw time</strong></p>
+              <small
+                >Simulated time for the programme only. Other site functions use real time.</small
+              >
+              <nav class="test-options" aria-label="Choose a programme test time">
+                ${['09:30', '11:05', '16:05'].map(
+                  (time) =>
+                    html`<a
+                      router-ignore
+                      href=${this.testHref(time)}
+                      aria-current=${time === warsawTime(testTime) ? 'true' : 'false'}
+                      >${time}</a
+                    >`,
+                )}
+                <a router-ignore href=${this.testHref()}>Use real time</a>
+              </nav>
+            </aside>`
+          : nothing
+      }
       <div class="programme" aria-live="polite">
         ${this.status === 'loading' ? html`<p class="message">Loading the programme…</p>` : nothing}
         ${this.status === 'error' ? html`<p class="message">The programme couldn’t be loaded. <a href="/schedule/">Open the full schedule</a> or try again when you’re online.</p>` : nothing}

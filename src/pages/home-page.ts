@@ -30,6 +30,7 @@ import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
 import { initialTicketsState, TicketsState } from '../store/tickets/state';
 import { getProgrammeSummary, loadPublishedProgramme } from '../utils/published-programme';
+import { isScheduleTestHost } from '../utils/schedule-test-time';
 
 // Let the browser paint the hero before loading the remaining page sections.
 // Loading begins on the next frame rather than waiting for a scroll, so deep
@@ -856,6 +857,14 @@ export class HomePage extends ReduxMixin(PolymerElement) {
   };
 
   private checkHashAndScroll() {
+    if (window.location.hash === '#programme' && isScheduleTestHost(window.location.hostname)) {
+      void loadHomeSections().then(() => {
+        requestAnimationFrame(() => {
+          const programme = this.shadowRoot?.querySelector<HTMLElement>('schedule-block');
+          if (programme) scrollToElement(programme);
+        });
+      });
+    }
     if (window.location.hash === '#partners') {
       void loadHomeSections().then(() => {
         requestAnimationFrame(() => {
