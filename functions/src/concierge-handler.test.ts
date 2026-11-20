@@ -395,77 +395,411 @@ describe('handleConcierge', () => {
     }
   });
 
-  it('enforces 2-tier rate limits and sets rate limit headers', async () => {
+  it('enforces 3000 per-IP limit across query, live-token, and transcribe modes', async () => {
     const now = 1795255200000;
-    const db = createMockDb();
-    const fetchFn = jest.fn(async () => ({
+    const { hashKey } = await import('./rate-limiter');
+    const ipHashKey = hashKey('concierge-ip', '203.0.113.10');
+
+    const queryFetch = jest.fn(async () => ({
       ok: true,
       json: async () => ({ output_text: JSON.stringify(VALID_PLAN) }),
     })) as unknown as typeof fetch;
+    const liveTokenFetch = jest.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ name: 'auth_tokens/test-token-ip' }),
+    })) as unknown as typeof fetch;
+    const transcribeFetch = jest.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({ output_text: JSON.stringify({ transcript: 'Hello DevFest' }) }),
+    })) as unknown as typeof fetch;
 
-    const resOk = createMockResponse();
-    await handleConcierge(makeRequest(), resOk as unknown as Response, {
+    // Fresh IP without x-concierge-client reports 2999 remaining (3000 - 1)
+    const freshDb = createMockDb();
+    const resFresh = createMockResponse();
+    await handleConcierge(makeRequest({ ip: '203.0.113.10' }), resFresh as unknown as Response, {
       now,
-      db,
+      db: freshDb,
       getApiKey: () => 'secret-gemini-key',
-      fetchFn,
+      fetchFn: queryFetch,
+      bypassCache: true,
     });
-    expect(resOk.code).toBe(200);
-    expect(resOk.headers['X-RateLimit-Remaining']).toBe('44');
-    expect(resOk.headers['X-RateLimit-Reset']).toBeDefined();
+    expect(resFresh.code).toBe(200);
+    expect(resFresh.headers['X-RateLimit-Remaining']).toBe('2999');
+    expect(resFresh.headers['X-RateLimit-Reset']).toBe(String(Math.ceil((now + 900_000) / 1000)));
 
-    // Exhaust per-IP limit (45 attempts)
-    for (let i = 0; i < 44; i += 1) {
-      const r = createMockResponse();
-      await handleConcierge(makeRequest(), r as unknown as Response, {
-        now,
-        db,
-        getApiKey: () => 'secret-gemini-key',
-        fetchFn,
-      });
-      expect(r.code).toBe(200);
-    }
-
-    const resBlocked = createMockResponse();
-    await handleConcierge(makeRequest(), resBlocked as unknown as Response, {
-      now,
-      db,
-      getApiKey: () => 'secret-gemini-key',
-      fetchFn,
-    });
-    expect(resBlocked.code).toBe(429);
-    expect(resBlocked.headers['X-RateLimit-Remaining']).toBe('0');
-    expect(resBlocked.body).toMatchObject({
-      status: 'rate-limited',
-      fallback: 'local-a2ui',
-    });
-
-    // Global limit check with fresh IP
-    const globalHashKey = await import('./rate-limiter').then((m) =>
-      m.hashKey('concierge-global-30h', 'devfest-2026-sponsored'),
-    );
-    const dbGlobalBlocked = createMockDb({
-      [`functionsRateLimits/${globalHashKey}`]: {
-        attempts: 6000,
-        resetAt: Timestamp.fromMillis(now + 60000),
+    // Pre-seed IP at 2997 attempts -> 3 requests left across query, live-token, transcribe
+    const nearLimitDb = createMockDb({
+      [`functionsRateLimits/${ipHashKey}`]: {
+        attempts: 2997,
+        resetAt: Timestamp.fromMillis(now + 60_000),
       },
     });
-    const resGlobalBlocked = createMockResponse();
+
+    const res2998 = createMockResponse();
+    await handleConcierge(makeRequest({ ip: '203.0.113.10' }), res2998 as unknown as Response, {
+      now,
+      db: nearLimitDb,
+      getApiKey: () => 'secret-gemini-key',
+      fetchFn: queryFetch,
+      bypassCache: true,
+    });
+    expect(res2998.code).toBe(200);
+    expect(res2998.headers['X-RateLimit-Remaining']).toBe('2');
+
+    const res2999 = createMockResponse();
     await handleConcierge(
-      makeRequest({ ip: '10.0.0.99' }),
-      resGlobalBlocked as unknown as Response,
+      makeRequest({ ip: '203.0.113.10', body: { mode: 'live-token' } }),
+      res2999 as unknown as Response,
       {
         now,
-        db: dbGlobalBlocked,
+        db: nearLimitDb,
         getApiKey: () => 'secret-gemini-key',
-        fetchFn,
+        fetchFn: liveTokenFetch,
       },
     );
-    expect(resGlobalBlocked.code).toBe(429);
-    expect(resGlobalBlocked.body).toMatchObject({
+    expect(res2999.code).toBe(200);
+    expect(res2999.headers['X-RateLimit-Remaining']).toBe('1');
+
+    const res3000 = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '203.0.113.10',
+        body: { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+      }),
+      res3000 as unknown as Response,
+      {
+        now,
+        db: nearLimitDb,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn: transcribeFetch,
+      },
+    );
+    expect(res3000.code).toBe(200);
+    expect(res3000.headers['X-RateLimit-Remaining']).toBe('0');
+
+    // 3001st attempt is blocked across all three modes
+    const resQueryBlocked = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '203.0.113.10' }),
+      resQueryBlocked as unknown as Response,
+      {
+        now,
+        db: nearLimitDb,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn: queryFetch,
+        bypassCache: true,
+      },
+    );
+    expect(resQueryBlocked.code).toBe(429);
+    expect(resQueryBlocked.headers['X-RateLimit-Remaining']).toBe('0');
+    expect(resQueryBlocked.body).toMatchObject({
       status: 'rate-limited',
       fallback: 'local-a2ui',
     });
+
+    const resLiveBlocked = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '203.0.113.10', body: { mode: 'live-token' } }),
+      resLiveBlocked as unknown as Response,
+      {
+        now,
+        db: nearLimitDb,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn: liveTokenFetch,
+      },
+    );
+    expect(resLiveBlocked.code).toBe(429);
+    expect(resLiveBlocked.headers['X-RateLimit-Remaining']).toBe('0');
+    expect(resLiveBlocked.body).toMatchObject({
+      status: 'rate-limited',
+      error: 'Rate limit exceeded',
+    });
+
+    const resTranscribeBlocked = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '203.0.113.10',
+        body: { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+      }),
+      resTranscribeBlocked as unknown as Response,
+      {
+        now,
+        db: nearLimitDb,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn: transcribeFetch,
+      },
+    );
+    expect(resTranscribeBlocked.code).toBe(429);
+    expect(resTranscribeBlocked.headers['X-RateLimit-Remaining']).toBe('0');
+    expect(resTranscribeBlocked.body).toMatchObject({
+      status: 'rate-limited',
+      error: 'Rate limit exceeded',
+    });
+  });
+
+  it('enforces 80 per-client rate limit when valid x-concierge-client is sent and falls back to IP-only when missing or invalid', async () => {
+    const now = 1795255200000;
+    const db = createMockDb();
+    const fetchFn = jest.fn(async (url: string | URL | Request) => {
+      const u = String(url);
+      if (u.includes('/v1beta/auth_tokens')) {
+        return { ok: true, status: 200, json: async () => ({ name: 'auth_tokens/tok-client' }) };
+      }
+      if (u.includes('/v1beta/interactions')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ output_text: JSON.stringify({ transcript: 'Voice query' }) }),
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ output_text: JSON.stringify(VALID_PLAN) }),
+      };
+    }) as unknown as typeof fetch;
+
+    const clientA = 'tab-client-aaaa-123456';
+    const clientB = 'tab-client-bbbb-654321';
+
+    // First request with valid lowercase header -> 79 remaining (80 - 1)
+    const resFirst = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '198.51.100.5', headers: { 'x-concierge-client': clientA } }),
+      resFirst as unknown as Response,
+      { now, db, getApiKey: () => 'secret-gemini-key', fetchFn, bypassCache: true },
+    );
+    expect(resFirst.code).toBe(200);
+    expect(resFirst.headers['X-RateLimit-Remaining']).toBe('79');
+
+    // Array header value is handled cleanly and shares the same client bucket
+    const resArray = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '198.51.100.5', headers: { 'x-concierge-client': [clientA, 'ignored'] } }),
+      resArray as unknown as Response,
+      { now, db, getApiKey: () => 'secret-gemini-key', fetchFn, bypassCache: true },
+    );
+    expect(resArray.code).toBe(200);
+    expect(resArray.headers['X-RateLimit-Remaining']).toBe('78');
+
+    // Exhaust remaining 78 attempts for clientA across modes
+    for (let i = 0; i < 76; i += 1) {
+      const r = createMockResponse();
+      await handleConcierge(
+        makeRequest({ ip: '198.51.100.5', headers: { 'x-concierge-client': clientA } }),
+        r as unknown as Response,
+        { now, db, getApiKey: () => 'secret-gemini-key', fetchFn, bypassCache: true },
+      );
+      expect(r.code).toBe(200);
+    }
+    const res79 = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '198.51.100.5',
+        headers: { 'x-concierge-client': clientA },
+        body: { mode: 'live-token' },
+      }),
+      res79 as unknown as Response,
+      { now, db, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(res79.code).toBe(200);
+    expect(res79.headers['X-RateLimit-Remaining']).toBe('1');
+
+    const res80 = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '198.51.100.5',
+        headers: { 'x-concierge-client': clientA },
+        body: { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+      }),
+      res80 as unknown as Response,
+      { now, db, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(res80.code).toBe(200);
+    expect(res80.headers['X-RateLimit-Remaining']).toBe('0');
+
+    // 81st attempt for clientA is blocked across query, live-token, and transcribe
+    for (const body of [
+      { query: 'Over limit' },
+      { mode: 'live-token' },
+      { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+    ]) {
+      const resBlocked = createMockResponse();
+      await handleConcierge(
+        makeRequest({ ip: '198.51.100.5', headers: { 'x-concierge-client': clientA }, body }),
+        resBlocked as unknown as Response,
+        { now, db, getApiKey: () => 'secret-gemini-key', fetchFn, bypassCache: true },
+      );
+      expect(resBlocked.code).toBe(429);
+      expect(resBlocked.headers['X-RateLimit-Remaining']).toBe('0');
+    }
+
+    // Another attendee (clientB) behind the SAME venue Wi-Fi IP is unaffected
+    const resClientB = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '198.51.100.5', headers: { 'x-concierge-client': clientB } }),
+      resClientB as unknown as Response,
+      { now, db, getApiKey: () => 'secret-gemini-key', fetchFn, bypassCache: true },
+    );
+    expect(resClientB.code).toBe(200);
+    expect(resClientB.headers['X-RateLimit-Remaining']).toBe('79');
+
+    // Invalid headers (too short, bad characters, too long) skip per-client check and fall back to IP-only
+    for (const invalidHeader of ['short', 'invalid!token@1234', 'a'.repeat(65)]) {
+      const resInvalid = createMockResponse();
+      await handleConcierge(
+        makeRequest({ ip: '198.51.100.99', headers: { 'x-concierge-client': invalidHeader } }),
+        resInvalid as unknown as Response,
+        {
+          now,
+          db: createMockDb(),
+          getApiKey: () => 'secret-gemini-key',
+          fetchFn,
+          bypassCache: true,
+        },
+      );
+      expect(resInvalid.code).toBe(200);
+      expect(resInvalid.headers['X-RateLimit-Remaining']).toBe('2999');
+    }
+  });
+
+  it('isolates 15000 global 30h pools between chat (concierge-global-30h) and voice (concierge-voice-global-30h)', async () => {
+    const now = 1795255200000;
+    const { hashKey } = await import('./rate-limiter');
+    const chatGlobalKey = hashKey('concierge-global-30h', 'devfest-2026-sponsored');
+    const voiceGlobalKey = hashKey('concierge-voice-global-30h', 'devfest-2026-sponsored');
+
+    const fetchFn = jest.fn(async (url: string | URL | Request) => {
+      const u = String(url);
+      if (u.includes('/v1beta/auth_tokens')) {
+        return { ok: true, status: 200, json: async () => ({ name: 'auth_tokens/tok-global' }) };
+      }
+      if (u.includes('/v1beta/interactions')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ output_text: JSON.stringify({ transcript: 'Voice pool ok' }) }),
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ output_text: JSON.stringify(VALID_PLAN) }),
+      };
+    }) as unknown as typeof fetch;
+
+    // 1. Exhaust voice global pool (15000) -> live-token and transcribe are blocked, chat still succeeds
+    const dbVoiceExhausted = createMockDb({
+      [`functionsRateLimits/${voiceGlobalKey}`]: {
+        attempts: 15000,
+        resetAt: Timestamp.fromMillis(now + 60_000),
+      },
+    });
+
+    const resLiveBlocked = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '10.0.0.10', body: { mode: 'live-token' } }),
+      resLiveBlocked as unknown as Response,
+      { now, db: dbVoiceExhausted, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(resLiveBlocked.code).toBe(429);
+    expect(resLiveBlocked.body).toMatchObject({
+      status: 'rate-limited',
+      error: 'Rate limit exceeded',
+    });
+
+    const resTranscribeBlocked = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '10.0.0.11',
+        body: { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+      }),
+      resTranscribeBlocked as unknown as Response,
+      { now, db: dbVoiceExhausted, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(resTranscribeBlocked.code).toBe(429);
+
+    const resChatStillAllowed = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '10.0.0.12' }),
+      resChatStillAllowed as unknown as Response,
+      {
+        now,
+        db: dbVoiceExhausted,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+        bypassCache: true,
+      },
+    );
+    expect(resChatStillAllowed.code).toBe(200);
+    expect(resChatStillAllowed.headers['X-RateLimit-Remaining']).toBe('2999');
+
+    // 2. Exhaust chat global pool (15000) -> chat is blocked, live-token and transcribe still succeed
+    const dbChatExhausted = createMockDb({
+      [`functionsRateLimits/${chatGlobalKey}`]: {
+        attempts: 15000,
+        resetAt: Timestamp.fromMillis(now + 60_000),
+      },
+    });
+
+    const resChatBlocked = createMockResponse();
+    await handleConcierge(makeRequest({ ip: '10.0.0.20' }), resChatBlocked as unknown as Response, {
+      now,
+      db: dbChatExhausted,
+      getApiKey: () => 'secret-gemini-key',
+      fetchFn,
+      bypassCache: true,
+    });
+    expect(resChatBlocked.code).toBe(429);
+    expect(resChatBlocked.body).toMatchObject({ status: 'rate-limited', fallback: 'local-a2ui' });
+
+    const resLiveStillAllowed = createMockResponse();
+    await handleConcierge(
+      makeRequest({ ip: '10.0.0.21', body: { mode: 'live-token' } }),
+      resLiveStillAllowed as unknown as Response,
+      { now, db: dbChatExhausted, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(resLiveStillAllowed.code).toBe(200);
+
+    const resTranscribeStillAllowed = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '10.0.0.22',
+        body: { mode: 'transcribe', audio: 'UklGRi4AAABXQVZF', mimeType: 'audio/webm' },
+      }),
+      resTranscribeStillAllowed as unknown as Response,
+      { now, db: dbChatExhausted, getApiKey: () => 'secret-gemini-key', fetchFn },
+    );
+    expect(resTranscribeStillAllowed.code).toBe(200);
+
+    // 3. When global pool has fewer remaining attempts than client/IP limits, X-RateLimit-Remaining reflects it
+    const globalResetMs = now + 108_000_000;
+    const dbGlobalBinding = createMockDb({
+      [`functionsRateLimits/${chatGlobalKey}`]: {
+        attempts: 14995,
+        resetAt: Timestamp.fromMillis(globalResetMs),
+      },
+    });
+    const resBinding = createMockResponse();
+    await handleConcierge(
+      makeRequest({
+        ip: '10.0.0.30',
+        headers: { 'x-concierge-client': 'binding-client-token-1234' },
+      }),
+      resBinding as unknown as Response,
+      {
+        now,
+        db: dbGlobalBinding,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+        bypassCache: true,
+      },
+    );
+    expect(resBinding.code).toBe(200);
+    expect(resBinding.headers['X-RateLimit-Remaining']).toBe('4');
+    expect(resBinding.headers['X-RateLimit-Reset']).toBe(String(Math.ceil(globalResetMs / 1000)));
   });
 
   it('extracts JSON from Interactions REST steps[].content[] text parts', async () => {

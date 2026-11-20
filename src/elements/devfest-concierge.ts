@@ -20,6 +20,7 @@ import {
 } from '../concierge/local-concierge-engine';
 import {
   detectVoiceSupport,
+  getConciergeClientToken,
   VoiceInputController,
   type VoiceInputState,
   type VoiceLanguage,
@@ -2265,7 +2266,10 @@ export class DevfestConcierge extends ThemedElement {
     try {
       const response = await fetch('/api/concierge', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Concierge-Client': getConciergeClientToken(),
+        },
         body: JSON.stringify({
           query: trimmed,
           ...(intent ? { intent } : {}),
@@ -2999,7 +3003,8 @@ export class DevfestConcierge extends ThemedElement {
 
   private renderPrivacyNote() {
     return html`<p class="ai-privacy-note">
-      Questions and voice may be sent to Google. Please avoid personal or sensitive information.
+      For adult attendees (18+). Questions and voice may be sent to Google. Do not submit personal
+      or sensitive information.
       <a href="/privacy/">Privacy &amp; data</a>
     </p>`;
   }

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import type { Firestore } from 'firebase-admin/firestore';
-import { checkRateLimit, getClientIp } from './rate-limiter.js';
+import { checkRateLimit, getClientIp, type RateLimitResult } from './rate-limiter.js';
 
 export type CanonicalSession = {
   id: string;
@@ -682,10 +682,112 @@ type A2UINode = {
   bindings?: Record<string, string>;
 };
 
+const RATE_LIMIT_IP_MAX_ATTEMPTS = 3000;
+const RATE_LIMIT_IP_WINDOW_SECONDS = 900;
+const RATE_LIMIT_CLIENT_MAX_ATTEMPTS = 80;
+const RATE_LIMIT_CLIENT_WINDOW_SECONDS = 900;
+const RATE_LIMIT_GLOBAL_MAX_ATTEMPTS = 15000;
+const RATE_LIMIT_GLOBAL_WINDOW_SECONDS = 108000;
+const CONCIERGE_CLIENT_HEADER_PATTERN = /^[a-zA-Z0-9_-]{12,64}$/;
+
 function setSecurityHeaders(response: Response) {
   response.set('Cache-Control', 'private, no-store, max-age=0');
   response.set('Referrer-Policy', 'no-referrer');
   response.set('X-Robots-Tag', 'noindex, nofollow');
+}
+
+function getConciergeClientHeader(request: ConciergeRequest): string | null {
+  const headers = request.headers;
+  if (!headers) return null;
+  let raw = headers['x-concierge-client'];
+  if (raw === undefined) {
+    for (const [key, value] of Object.entries(headers)) {
+      if (key.toLowerCase() === 'x-concierge-client') {
+        raw = value;
+        break;
+      }
+    }
+  }
+  const candidate = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof candidate !== 'string') return null;
+  const trimmed = candidate.trim();
+  return CONCIERGE_CLIENT_HEADER_PATTERN.test(trimmed) ? trimmed : null;
+}
+
+async function enforceConciergeRateLimits(options: {
+  db: Firestore;
+  request: ConciergeRequest;
+  response: Response;
+  nowDate: Date;
+  globalPrefix: 'concierge-global-30h' | 'concierge-voice-global-30h';
+  rateLimitedBody: (resetAtIso: string) => Record<string, unknown>;
+}): Promise<boolean> {
+  const { db, request, response, nowDate, globalPrefix, rateLimitedBody } = options;
+
+  const clientHeader = getConciergeClientHeader(request);
+  let clientLimit: RateLimitResult | null = null;
+  if (clientHeader) {
+    clientLimit = await checkRateLimit({
+      db,
+      prefix: 'concierge-client',
+      key: clientHeader,
+      maxAttempts: RATE_LIMIT_CLIENT_MAX_ATTEMPTS,
+      windowSeconds: RATE_LIMIT_CLIENT_WINDOW_SECONDS,
+      now: nowDate,
+    });
+    if (!clientLimit.allowed) {
+      response.set('X-RateLimit-Remaining', '0');
+      response.set('X-RateLimit-Reset', String(Math.ceil(clientLimit.resetAt.getTime() / 1000)));
+      response.status(429).json(rateLimitedBody(clientLimit.resetAt.toISOString()));
+      return false;
+    }
+  }
+
+  const clientIp = getClientIp(request);
+  const ipLimit = await checkRateLimit({
+    db,
+    prefix: 'concierge-ip',
+    key: clientIp,
+    maxAttempts: RATE_LIMIT_IP_MAX_ATTEMPTS,
+    windowSeconds: RATE_LIMIT_IP_WINDOW_SECONDS,
+    now: nowDate,
+  });
+  if (!ipLimit.allowed) {
+    response.set('X-RateLimit-Remaining', '0');
+    response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+    response.status(429).json(rateLimitedBody(ipLimit.resetAt.toISOString()));
+    return false;
+  }
+
+  const globalLimit = await checkRateLimit({
+    db,
+    prefix: globalPrefix,
+    key: 'devfest-2026-sponsored',
+    maxAttempts: RATE_LIMIT_GLOBAL_MAX_ATTEMPTS,
+    windowSeconds: RATE_LIMIT_GLOBAL_WINDOW_SECONDS,
+    now: nowDate,
+  });
+  if (!globalLimit.allowed) {
+    response.set('X-RateLimit-Remaining', '0');
+    response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
+    response.status(429).json(rateLimitedBody(globalLimit.resetAt.toISOString()));
+    return false;
+  }
+
+  const activeLimits: RateLimitResult[] = clientLimit
+    ? [clientLimit, ipLimit, globalLimit]
+    : [ipLimit, globalLimit];
+  let bindingLimit = activeLimits[0]!;
+  for (let i = 1; i < activeLimits.length; i += 1) {
+    const candidate = activeLimits[i]!;
+    if (candidate.remaining < bindingLimit.remaining) {
+      bindingLimit = candidate;
+    }
+  }
+
+  response.set('X-RateLimit-Remaining', String(bindingLimit.remaining));
+  response.set('X-RateLimit-Reset', String(Math.ceil(bindingLimit.resetAt.getTime() / 1000)));
+  return true;
 }
 
 function parseMinutes(hhmm: string): number {
@@ -1100,50 +1202,21 @@ export async function handleConcierge(
     const nowDate = new Date(now);
 
     if (deps.db) {
-      const clientIp = getClientIp(request);
-      const ipLimit = await checkRateLimit({
+      const allowed = await enforceConciergeRateLimits({
         db: deps.db,
-        prefix: 'concierge-ip',
-        key: clientIp,
-        maxAttempts: 45,
-        windowSeconds: 900,
-        now: nowDate,
-      });
-      if (!ipLimit.allowed) {
-        response.set('X-RateLimit-Remaining', '0');
-        response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
-        response.status(429).json({
+        request,
+        response,
+        nowDate,
+        globalPrefix: 'concierge-voice-global-30h',
+        rateLimitedBody: (resetAt) => ({
           status: 'rate-limited',
           error: 'Rate limit exceeded',
-          resetAt: ipLimit.resetAt.toISOString(),
-        });
-        return;
-      }
-
-      const globalLimit = await checkRateLimit({
-        db: deps.db,
-        prefix: 'concierge-global-30h',
-        key: 'devfest-2026-sponsored',
-        maxAttempts: 6000,
-        windowSeconds: 108000,
-        now: nowDate,
+          resetAt,
+        }),
       });
-      if (!globalLimit.allowed) {
-        response.set('X-RateLimit-Remaining', '0');
-        response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
-        response.status(429).json({
-          status: 'rate-limited',
-          error: 'Rate limit exceeded',
-          resetAt: globalLimit.resetAt.toISOString(),
-        });
+      if (!allowed) {
         return;
       }
-
-      response.set(
-        'X-RateLimit-Remaining',
-        String(Math.min(ipLimit.remaining, globalLimit.remaining)),
-      );
-      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
     }
 
     const apiKey = (deps.getApiKey() || '').trim();
@@ -1249,50 +1322,21 @@ export async function handleConcierge(
     const nowDate = new Date(now);
 
     if (deps.db) {
-      const clientIp = getClientIp(request);
-      const ipLimit = await checkRateLimit({
+      const allowed = await enforceConciergeRateLimits({
         db: deps.db,
-        prefix: 'concierge-ip',
-        key: clientIp,
-        maxAttempts: 45,
-        windowSeconds: 900,
-        now: nowDate,
-      });
-      if (!ipLimit.allowed) {
-        response.set('X-RateLimit-Remaining', '0');
-        response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
-        response.status(429).json({
+        request,
+        response,
+        nowDate,
+        globalPrefix: 'concierge-voice-global-30h',
+        rateLimitedBody: (resetAt) => ({
           status: 'rate-limited',
           error: 'Rate limit exceeded',
-          resetAt: ipLimit.resetAt.toISOString(),
-        });
-        return;
-      }
-
-      const globalLimit = await checkRateLimit({
-        db: deps.db,
-        prefix: 'concierge-global-30h',
-        key: 'devfest-2026-sponsored',
-        maxAttempts: 6000,
-        windowSeconds: 108000,
-        now: nowDate,
+          resetAt,
+        }),
       });
-      if (!globalLimit.allowed) {
-        response.set('X-RateLimit-Remaining', '0');
-        response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
-        response.status(429).json({
-          status: 'rate-limited',
-          error: 'Rate limit exceeded',
-          resetAt: globalLimit.resetAt.toISOString(),
-        });
+      if (!allowed) {
         return;
       }
-
-      response.set(
-        'X-RateLimit-Remaining',
-        String(Math.min(ipLimit.remaining, globalLimit.remaining)),
-      );
-      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
     }
 
     const apiKey = (deps.getApiKey() || '').trim();
@@ -1421,50 +1465,21 @@ export async function handleConcierge(
   const nowDate = new Date(now);
 
   if (deps.db) {
-    const clientIp = getClientIp(request);
-    const ipLimit = await checkRateLimit({
+    const allowed = await enforceConciergeRateLimits({
       db: deps.db,
-      prefix: 'concierge-ip',
-      key: clientIp,
-      maxAttempts: 45,
-      windowSeconds: 900,
-      now: nowDate,
-    });
-    if (!ipLimit.allowed) {
-      response.set('X-RateLimit-Remaining', '0');
-      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
-      response.status(429).json({
+      request,
+      response,
+      nowDate,
+      globalPrefix: 'concierge-global-30h',
+      rateLimitedBody: (resetAt) => ({
         status: 'rate-limited',
         fallback: 'local-a2ui',
-        resetAt: ipLimit.resetAt.toISOString(),
-      });
-      return;
-    }
-
-    const globalLimit = await checkRateLimit({
-      db: deps.db,
-      prefix: 'concierge-global-30h',
-      key: 'devfest-2026-sponsored',
-      maxAttempts: 6000,
-      windowSeconds: 108000,
-      now: nowDate,
+        resetAt,
+      }),
     });
-    if (!globalLimit.allowed) {
-      response.set('X-RateLimit-Remaining', '0');
-      response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
-      response.status(429).json({
-        status: 'rate-limited',
-        fallback: 'local-a2ui',
-        resetAt: globalLimit.resetAt.toISOString(),
-      });
+    if (!allowed) {
       return;
     }
-
-    response.set(
-      'X-RateLimit-Remaining',
-      String(Math.min(ipLimit.remaining, globalLimit.remaining)),
-    );
-    response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
   }
 
   const timeSensitive = isTimeSensitiveQuery(parsed.query, parsed.intent);

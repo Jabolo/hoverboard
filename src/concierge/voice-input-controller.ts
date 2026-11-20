@@ -2,6 +2,36 @@ export type VoiceSupportKind = 'gemini-live' | 'web-speech' | 'media-recorder' |
 export type VoiceInputState = 'idle' | 'listening' | 'transcribing' | 'error';
 export type VoiceLanguage = 'pl-PL' | 'en-US';
 
+let inMemoryConciergeClientToken: string | null = null;
+
+function generateConciergeClientToken(): string {
+  const cryptoApi = typeof globalThis !== 'undefined' ? globalThis.crypto : undefined;
+  if (cryptoApi && typeof cryptoApi.randomUUID === 'function') {
+    return cryptoApi.randomUUID();
+  }
+  if (cryptoApi && typeof cryptoApi.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    cryptoApi.getRandomValues(bytes);
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  const fallback = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+  return fallback
+    .replace(/[^a-zA-Z0-9_-]/g, '')
+    .slice(0, 48)
+    .padEnd(24, '0');
+}
+
+/**
+ * Returns an ephemeral per-page-load client token kept strictly in module memory
+ * (never persisted to localStorage, sessionStorage, or cookies) for per-tab rate limiting.
+ */
+export function getConciergeClientToken(): string {
+  if (!inMemoryConciergeClientToken) {
+    inMemoryConciergeClientToken = generateConciergeClientToken();
+  }
+  return inMemoryConciergeClientToken;
+}
+
 export interface VoiceInputControllerOptions {
   onTranscript: (transcript: string, isFinal: boolean) => void;
   onStateChange: (state: VoiceInputState) => void;
@@ -299,7 +329,10 @@ export class VoiceInputController {
     try {
       const tokenRes = await fetchFn(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Concierge-Client': getConciergeClientToken(),
+        },
         body: JSON.stringify({ mode: 'live-token' }),
       });
       if (tokenRes.ok) {
@@ -701,7 +734,10 @@ export class VoiceInputController {
       const fetchFn = this.options.fetchFn || fetch;
       const res = await fetchFn(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Concierge-Client': getConciergeClientToken(),
+        },
         body: JSON.stringify({
           mode: 'transcribe',
           audio: base64Data,
