@@ -325,16 +325,6 @@ export class DevfestConcierge extends ThemedElement {
           :host {
             --_target: 44px;
           }
-
-          input {
-            font-size: 16px;
-          }
-        }
-
-        @media (max-width: 639px) {
-          input {
-            font-size: 16px;
-          }
         }
 
         * {
@@ -540,6 +530,12 @@ export class DevfestConcierge extends ThemedElement {
         input::placeholder {
           color: var(--_muted);
           opacity: 0.85;
+        }
+
+        @media (pointer: coarse), (any-pointer: coarse), (max-width: 811px) {
+          input {
+            font-size: 16px;
+          }
         }
 
         button {
