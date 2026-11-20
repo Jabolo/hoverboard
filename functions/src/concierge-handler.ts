@@ -1089,6 +1089,133 @@ export async function handleConcierge(
   }
 
   const rawBody = request.body;
+  const isLiveToken =
+    Boolean(rawBody) &&
+    typeof rawBody === 'object' &&
+    !Array.isArray(rawBody) &&
+    (rawBody as Record<string, unknown>).mode === 'live-token';
+
+  if (isLiveToken) {
+    const now = deps.now ?? Date.now();
+    const nowDate = new Date(now);
+
+    if (deps.db) {
+      const clientIp = getClientIp(request);
+      const ipLimit = await checkRateLimit({
+        db: deps.db,
+        prefix: 'concierge-ip',
+        key: clientIp,
+        maxAttempts: 45,
+        windowSeconds: 900,
+        now: nowDate,
+      });
+      if (!ipLimit.allowed) {
+        response.set('X-RateLimit-Remaining', '0');
+        response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+        response.status(429).json({
+          status: 'rate-limited',
+          error: 'Rate limit exceeded',
+          resetAt: ipLimit.resetAt.toISOString(),
+        });
+        return;
+      }
+
+      const globalLimit = await checkRateLimit({
+        db: deps.db,
+        prefix: 'concierge-global-30h',
+        key: 'devfest-2026-sponsored',
+        maxAttempts: 6000,
+        windowSeconds: 108000,
+        now: nowDate,
+      });
+      if (!globalLimit.allowed) {
+        response.set('X-RateLimit-Remaining', '0');
+        response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
+        response.status(429).json({
+          status: 'rate-limited',
+          error: 'Rate limit exceeded',
+          resetAt: globalLimit.resetAt.toISOString(),
+        });
+        return;
+      }
+
+      response.set(
+        'X-RateLimit-Remaining',
+        String(Math.min(ipLimit.remaining, globalLimit.remaining)),
+      );
+      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+    }
+
+    const apiKey = (deps.getApiKey() || '').trim();
+    if (!apiKey) {
+      response.status(503).json({ status: 'unavailable', error: 'AI key not configured' });
+      return;
+    }
+
+    const fetchImpl = deps.fetchFn ?? fetch;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), PER_ATTEMPT_TIMEOUT_MS);
+
+    try {
+      const upstreamRes = await fetchImpl(
+        'https://generativelanguage.googleapis.com/v1beta/auth_tokens',
+        {
+          method: 'POST',
+          headers: {
+            'x-goog-api-key': apiKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uses: 1,
+            bidiGenerateContentSetup: {
+              model: 'models/gemini-3.5-transcribe-live',
+              generationConfig: {
+                responseModalities: ['TEXT'],
+              },
+              inputAudioTranscription: {
+                mode: 'smart',
+              },
+            },
+          }),
+          signal: controller.signal,
+        },
+      );
+
+      if (!upstreamRes.ok) {
+        response
+          .status(502)
+          .json({ status: 'upstream-error', error: 'Failed to generate live token' });
+        return;
+      }
+
+      const tokenJson = (await upstreamRes.json()) as { name?: string };
+      const tokenName = typeof tokenJson?.name === 'string' ? tokenJson.name.trim() : '';
+      if (!tokenName) {
+        response
+          .status(502)
+          .json({ status: 'upstream-error', error: 'Failed to generate live token' });
+        return;
+      }
+
+      const wsUrl = `wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContentConstrained?access_token=${encodeURIComponent(tokenName)}`;
+      response.set('X-Concierge-Model', 'gemini-3.5-transcribe-live');
+      response.status(200).json({
+        status: 'ok',
+        token: tokenName,
+        wsUrl,
+        model: 'gemini-3.5-transcribe-live',
+      });
+      return;
+    } catch {
+      response
+        .status(502)
+        .json({ status: 'upstream-error', error: 'Failed to generate live token' });
+      return;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+
   const isTranscribe =
     Boolean(rawBody) &&
     typeof rawBody === 'object' &&

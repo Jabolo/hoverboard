@@ -847,4 +847,86 @@ describe('handleConcierge', () => {
       expect(sleepFn).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('mode: live-token', () => {
+    it('returns 503 if API key is not configured', async () => {
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({ body: { mode: 'live-token' } }),
+        res as unknown as Response,
+        { getApiKey: () => '' },
+      );
+      expect(res.code).toBe(503);
+      expect(res.body).toEqual({ status: 'unavailable', error: 'AI key not configured' });
+    });
+
+    it('generates ephemeral live token constrained to gemini-3.5-transcribe-live and returns 200 with wsUrl', async () => {
+      const fetchFn = jest.fn(async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          name: 'auth_tokens/test-token-12345',
+        }),
+      })) as unknown as typeof fetch;
+
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({ body: { mode: 'live-token' } }),
+        res as unknown as Response,
+        {
+          getApiKey: () => 'secret-gemini-key',
+          fetchFn,
+        },
+      );
+
+      expect(res.code).toBe(200);
+      expect(res.headers['X-Concierge-Model']).toBe('gemini-3.5-transcribe-live');
+      expect(res.body).toEqual({
+        status: 'ok',
+        token: 'auth_tokens/test-token-12345',
+        wsUrl:
+          'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContentConstrained?access_token=auth_tokens%2Ftest-token-12345',
+        model: 'gemini-3.5-transcribe-live',
+      });
+
+      const calls = (fetchFn as unknown as jest.Mock).mock.calls;
+      expect(calls[0]![0]).toBe('https://generativelanguage.googleapis.com/v1beta/auth_tokens');
+      const body = JSON.parse(String((calls[0]![1] as { body?: string }).body)) as {
+        uses: number;
+        bidiGenerateContentSetup: {
+          model: string;
+          generationConfig: { responseModalities: string[] };
+          inputAudioTranscription: { mode: string };
+        };
+      };
+      expect(body.uses).toBe(1);
+      expect(body.bidiGenerateContentSetup.model).toBe('models/gemini-3.5-transcribe-live');
+      expect(body.bidiGenerateContentSetup.generationConfig.responseModalities).toEqual(['TEXT']);
+      expect(body.bidiGenerateContentSetup.inputAudioTranscription.mode).toBe('smart');
+    });
+
+    it('returns 502 if upstream token creation fails', async () => {
+      const fetchFn = jest.fn(async () => ({
+        ok: false,
+        status: 500,
+        text: async () => '{"error":"internal_error"}',
+      })) as unknown as typeof fetch;
+
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({ body: { mode: 'live-token' } }),
+        res as unknown as Response,
+        {
+          getApiKey: () => 'secret-gemini-key',
+          fetchFn,
+        },
+      );
+
+      expect(res.code).toBe(502);
+      expect(res.body).toEqual({
+        status: 'upstream-error',
+        error: 'Failed to generate live token',
+      });
+    });
+  });
 });

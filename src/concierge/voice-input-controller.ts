@@ -1,4 +1,4 @@
-export type VoiceSupportKind = 'web-speech' | 'media-recorder' | 'unsupported';
+export type VoiceSupportKind = 'gemini-live' | 'web-speech' | 'media-recorder' | 'unsupported';
 export type VoiceInputState = 'idle' | 'listening' | 'transcribing' | 'error';
 export type VoiceLanguage = 'pl-PL' | 'en-US';
 
@@ -9,24 +9,69 @@ export interface VoiceInputControllerOptions {
   onVolume?: (volumeNormalized: number) => void;
   lang?: VoiceLanguage;
   fetchFn?: typeof fetch;
+  webSocketFactory?: (url: string) => WebSocket;
   apiEndpoint?: string;
   maxDurationMs?: number;
 }
 
 export function detectVoiceSupport(): VoiceSupportKind {
   if (typeof window === 'undefined') return 'unsupported';
+  const hasMediaDevices =
+    typeof navigator !== 'undefined' && Boolean(navigator.mediaDevices?.getUserMedia);
+  const hasWebSocket = typeof WebSocket !== 'undefined';
+  const hasAudioContext =
+    typeof window !== 'undefined' &&
+    Boolean(
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: unknown }).webkitAudioContext,
+    );
+
+  if (hasMediaDevices && hasWebSocket && hasAudioContext) {
+    return 'gemini-live';
+  }
   const hasWebSpeech =
     'SpeechRecognition' in window ||
     'webkitSpeechRecognition' in (window as unknown as Record<string, unknown>);
   if (hasWebSpeech) return 'web-speech';
-  if (
-    typeof navigator !== 'undefined' &&
-    Boolean(navigator.mediaDevices?.getUserMedia) &&
-    typeof MediaRecorder !== 'undefined'
-  ) {
+  if (hasMediaDevices && typeof MediaRecorder !== 'undefined') {
     return 'media-recorder';
   }
   return 'unsupported';
+}
+
+export function downsampleAndConvertToInt16(
+  inputData: Float32Array,
+  sourceSampleRate: number,
+  targetSampleRate = 16000,
+): Int16Array {
+  if (sourceSampleRate === targetSampleRate) {
+    const output = new Int16Array(inputData.length);
+    for (let i = 0; i < inputData.length; i += 1) {
+      const s = Math.max(-1, Math.min(1, inputData[i] ?? 0));
+      output[i] = Math.round(s < 0 ? s * 0x8000 : s * 0x7fff);
+    }
+    return output;
+  }
+  const ratio = sourceSampleRate / targetSampleRate;
+  const newLength = Math.max(1, Math.round(inputData.length / ratio));
+  const output = new Int16Array(newLength);
+  for (let i = 0; i < newLength; i += 1) {
+    const srcIndex = Math.min(inputData.length - 1, Math.round(i * ratio));
+    const s = Math.max(-1, Math.min(1, inputData[srcIndex] ?? 0));
+    output[i] = Math.round(s < 0 ? s * 0x8000 : s * 0x7fff);
+  }
+  return output;
+}
+
+export function int16ToBase64(int16Array: Int16Array): string {
+  const bytes = new Uint8Array(int16Array.buffer, int16Array.byteOffset, int16Array.byteLength);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk as unknown as number[]);
+  }
+  return btoa(binary);
 }
 
 export class VoiceInputController {
@@ -35,18 +80,26 @@ export class VoiceInputController {
   private support: VoiceSupportKind;
   public lang: VoiceLanguage;
 
+  // Gemini Live WebSocket streaming state
+  private ws: WebSocket | null = null;
+  private liveSetupComplete = false;
+  private accumulatedTranscript = '';
+  private scriptProcessor: ScriptProcessorNode | null = null;
+
   // Web Speech state
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private recognition: any = null;
 
-  // MediaRecorder fallback state
-  private mediaRecorder: MediaRecorder | null = null;
+  // Media & Audio state
   private mediaStream: MediaStream | null = null;
+  private audioContext: AudioContext | null = null;
+  private autoStopTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private volumeTimerId: ReturnType<typeof setInterval> | null = null;
+
+  // MediaRecorder unary fallback state
+  private mediaRecorder: MediaRecorder | null = null;
   private recordedChunks: Blob[] = [];
   private chosenMimeType = '';
-  private autoStopTimeoutId: ReturnType<typeof setTimeout> | null = null;
-  private audioContext: AudioContext | null = null;
-  private volumeTimerId: ReturnType<typeof setInterval> | null = null;
 
   constructor(options: VoiceInputControllerOptions) {
     this.options = options;
@@ -91,7 +144,9 @@ export class VoiceInputController {
     }
     this.cancel();
 
-    if (this.support === 'web-speech') {
+    if (this.support === 'gemini-live') {
+      await this.startGeminiLive();
+    } else if (this.support === 'web-speech') {
       this.startWebSpeech();
     } else if (this.support === 'media-recorder') {
       await this.startMediaRecorder();
@@ -104,21 +159,41 @@ export class VoiceInputController {
   public stop(): void {
     if (this.state !== 'listening') return;
 
-    if (this.support === 'web-speech') {
-      if (this.recognition) {
-        try {
-          this.recognition.stop();
-        } catch {
-          // ignore
-        }
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      try {
+        this.ws.send(
+          JSON.stringify({
+            realtimeInput: {
+              audioStreamEnd: true,
+            },
+          }),
+        );
+      } catch {
+        // ignore
       }
-    } else if (this.support === 'media-recorder') {
-      if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-        try {
-          this.mediaRecorder.stop();
-        } catch {
-          // ignore
+      setTimeout(() => {
+        this.cleanupLiveResources();
+        if (this.state !== 'idle') {
+          this.setState('idle');
         }
+      }, 350);
+      return;
+    }
+
+    if (this.recognition) {
+      try {
+        this.recognition.stop();
+      } catch {
+        // ignore
+      }
+      return;
+    }
+
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      try {
+        this.mediaRecorder.stop();
+      } catch {
+        // ignore
       }
     }
   }
@@ -132,6 +207,8 @@ export class VoiceInputController {
       clearInterval(this.volumeTimerId);
       this.volumeTimerId = null;
     }
+    this.cleanupLiveResources();
+
     if (this.recognition) {
       try {
         this.recognition.abort();
@@ -149,6 +226,21 @@ export class VoiceInputController {
         // ignore
       }
       this.mediaRecorder = null;
+    }
+    this.recordedChunks = [];
+    if (this.state !== 'idle') {
+      this.setState('idle');
+    }
+  }
+
+  private cleanupLiveResources(): void {
+    if (this.scriptProcessor) {
+      try {
+        this.scriptProcessor.disconnect();
+      } catch {
+        // ignore
+      }
+      this.scriptProcessor = null;
     }
     if (this.mediaStream) {
       for (const track of this.mediaStream.getTracks()) {
@@ -168,9 +260,204 @@ export class VoiceInputController {
       }
       this.audioContext = null;
     }
-    this.recordedChunks = [];
-    if (this.state !== 'idle') {
-      this.setState('idle');
+    if (this.ws) {
+      try {
+        this.ws.close();
+      } catch {
+        // ignore
+      }
+      this.ws = null;
+    }
+    this.liveSetupComplete = false;
+  }
+
+  private async startGeminiLive(): Promise<void> {
+    try {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+    } catch (err) {
+      this.options.onError(
+        err instanceof Error && err.name === 'NotAllowedError'
+          ? 'Microphone access denied. Please allow microphone in browser.'
+          : 'Failed to access microphone.',
+      );
+      this.setState('error');
+      return;
+    }
+
+    const fetchFn = this.options.fetchFn || fetch;
+    const endpoint = this.options.apiEndpoint || '/api/concierge';
+    let tokenData: { wsUrl?: string } | null = null;
+
+    try {
+      const tokenRes = await fetchFn(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'live-token' }),
+      });
+      if (tokenRes.ok) {
+        tokenData = (await tokenRes.json()) as { wsUrl?: string };
+      }
+    } catch {
+      tokenData = null;
+    }
+
+    if (!tokenData || !tokenData.wsUrl) {
+      // Clean fallback to Web Speech or MediaRecorder if live token endpoint is unavailable
+      if (
+        'SpeechRecognition' in window ||
+        'webkitSpeechRecognition' in (window as unknown as Record<string, unknown>)
+      ) {
+        this.startWebSpeech();
+        return;
+      }
+      await this.startMediaRecorder();
+      return;
+    }
+
+    try {
+      const wsUrl = tokenData.wsUrl;
+      const wsFactory = this.options.webSocketFactory || ((url: string) => new WebSocket(url));
+      this.ws = wsFactory(wsUrl);
+      this.liveSetupComplete = false;
+      this.accumulatedTranscript = '';
+
+      this.ws.onopen = () => {
+        if (!this.ws) return;
+        this.ws.send(
+          JSON.stringify({
+            setup: {
+              model: 'models/gemini-3.5-transcribe-live',
+              generationConfig: {
+                responseModalities: ['TEXT'],
+              },
+              inputAudioTranscription: {
+                mode: 'smart',
+              },
+            },
+          }),
+        );
+      };
+
+      this.ws.onmessage = async (event: MessageEvent) => {
+        try {
+          const rawText =
+            typeof event.data === 'string'
+              ? event.data
+              : event.data instanceof Blob
+                ? await event.data.text()
+                : '';
+          if (!rawText) return;
+          const msg = JSON.parse(rawText) as {
+            setupComplete?: unknown;
+            serverContent?: {
+              interimInputTranscription?: { text?: string };
+              inputTranscription?: { text?: string };
+            };
+          };
+
+          if (msg.setupComplete) {
+            this.liveSetupComplete = true;
+          }
+
+          if (msg.serverContent?.interimInputTranscription?.text) {
+            const interim = msg.serverContent.interimInputTranscription.text.trim();
+            if (interim) {
+              this.accumulatedTranscript = interim;
+              this.options.onTranscript(interim, false);
+            }
+          }
+
+          if (msg.serverContent?.inputTranscription?.text) {
+            const final = msg.serverContent.inputTranscription.text.trim();
+            if (final) {
+              this.accumulatedTranscript = final;
+              this.options.onTranscript(final, true);
+            }
+          }
+        } catch {
+          // ignore parsing error
+        }
+      };
+
+      this.ws.onerror = () => {
+        if (this.state === 'listening') {
+          this.options.onError('Real-time connection interrupted. Switching to speech fallback…');
+          this.stop();
+        }
+      };
+
+      this.ws.onclose = () => {
+        if (this.state === 'listening') {
+          this.setState('idle');
+        }
+      };
+
+      // Set up AudioContext & Audio processing
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (AudioCtx) {
+        this.audioContext = new AudioCtx();
+        const source = this.audioContext.createMediaStreamSource(this.mediaStream);
+        const scriptProcessor = this.audioContext.createScriptProcessor(2048, 1, 1);
+        this.scriptProcessor = scriptProcessor;
+
+        scriptProcessor.onaudioprocess = (e: AudioProcessingEvent) => {
+          if (this.state !== 'listening') return;
+          const inputChannel = e.inputBuffer.getChannelData(0);
+          const sampleRate = this.audioContext?.sampleRate || 16000;
+          const pcm16 = downsampleAndConvertToInt16(inputChannel, sampleRate, 16000);
+
+          if (this.options.onVolume) {
+            let sumSquares = 0;
+            for (let i = 0; i < inputChannel.length; i += 1) {
+              const val = inputChannel[i] ?? 0;
+              sumSquares += val * val;
+            }
+            const rms = Math.sqrt(sumSquares / inputChannel.length);
+            const normalized = Math.min(1, Math.max(0, rms * 4));
+            this.options.onVolume(normalized);
+          }
+
+          if (this.ws && this.ws.readyState === WebSocket.OPEN && this.liveSetupComplete) {
+            const base64Data = int16ToBase64(pcm16);
+            this.ws.send(
+              JSON.stringify({
+                realtimeInput: {
+                  mediaChunks: [
+                    {
+                      mimeType: 'audio/pcm;rate=16000',
+                      data: base64Data,
+                    },
+                  ],
+                },
+              }),
+            );
+          }
+        };
+
+        source.connect(scriptProcessor);
+        scriptProcessor.connect(this.audioContext.destination);
+      }
+
+      this.setState('listening');
+      const maxDuration = this.options.maxDurationMs || 15_000;
+      this.autoStopTimeoutId = setTimeout(() => {
+        this.stop();
+      }, maxDuration);
+    } catch (err) {
+      this.options.onError(
+        err instanceof Error ? err.message : 'Failed to initialize live transcription',
+      );
+      this.setState('error');
     }
   }
 
@@ -215,10 +502,7 @@ export class VoiceInputController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.recognition.onerror = (event: any) => {
         const error = event.error || 'speech-error';
-        if (error === 'not-allowed') {
-          this.options.onError('Microphone access denied. Please grant permission.');
-          this.setState('error');
-        } else if (error === 'service-not-allowed') {
+        if (error === 'not-allowed' || error === 'service-not-allowed') {
           this.options.onError('Microphone access denied. Please grant permission.');
           this.setState('error');
         } else if (error === 'network') {
@@ -256,7 +540,6 @@ export class VoiceInputController {
         this.stop();
       }, maxDuration);
 
-      // Web Speech simulated volume pulses for lively visual EQ
       if (this.options.onVolume) {
         this.volumeTimerId = setInterval(() => {
           if (this.state === 'listening' && this.options.onVolume) {
