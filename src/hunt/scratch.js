@@ -24,9 +24,8 @@ let waitingTimer;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-const tiltDegrees = 25;
+const tiltDegrees = 7;
 const sensitivity = 1;
-const foilStrength = 1.4;
 const response = 0.28;
 
 function setMotionState(state) {
@@ -249,8 +248,8 @@ export function bindAlbumMotion(element, onState) {
       if (reducedMotion.matches) return;
       const roll = clamp(x, -1, 1);
       const pitch = clamp(y, -1, 1);
-      element.style.setProperty('--album-rotate-x', `${-pitch * 13}deg`);
-      element.style.setProperty('--album-rotate-y', `${roll * 16}deg`);
+      element.style.setProperty('--album-rotate-x', `${-pitch * 5}deg`);
+      element.style.setProperty('--album-rotate-y', `${roll * 6}deg`);
       element.style.setProperty('--album-sheen-x', `${roll * 42}%`);
     },
   };
@@ -263,10 +262,12 @@ export function enableAlbumMotion() {
   requestTilt();
 }
 
-/** @param {{label?: string, content?: string, onReveal?: () => boolean | Promise<boolean>}} options */
+/** @param {{label?: string, content?: string, onReveal?: (foil: string) => boolean | Promise<boolean>}} options */
 export function scratch({ label, content, onReveal } = {}) {
   const wrapper = document.createElement('div');
   wrapper.className = 'scratch-widget';
+  const stage = document.createElement('div');
+  stage.className = 'scratch-stage';
   const surface = document.createElement('div');
   surface.className = 'scratch-surface';
   const answer = document.createElement('div');
@@ -276,6 +277,9 @@ export function scratch({ label, content, onReveal } = {}) {
   const canvas = document.createElement('canvas');
   canvas.className = 'scratch-canvas';
   canvas.setAttribute('aria-hidden', 'true');
+  const dustCanvas = document.createElement('canvas');
+  dustCanvas.className = 'scratch-dust';
+  dustCanvas.setAttribute('aria-hidden', 'true');
   const instruction = document.createElement('span');
   instruction.className = 'scratch-instruction';
   instruction.textContent = label || 'Scratch to reveal';
@@ -294,7 +298,8 @@ export function scratch({ label, content, onReveal } = {}) {
   status.setAttribute('aria-live', 'polite');
   controls.append(hint, reveal, status);
   surface.append(answer, canvas, instruction);
-  wrapper.append(surface, controls);
+  stage.append(surface, dustCanvas);
+  wrapper.append(stage, controls);
 
   const hasTouchInput =
     navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
@@ -350,11 +355,68 @@ export function scratch({ label, content, onReveal } = {}) {
   let activePointerId = null;
   let cardState = null;
   let cardFrozen = false;
+  let audioContext;
+  let audioBuffer;
+  let audioLoad;
+  let lastSound = 0;
+  let lastGrain = -1;
+  let soundTravel = Infinity;
+  let dustFrame = 0;
+  let lastDustAt = 0;
+  let dustFreshness = 0;
+  const dustMargin = 28;
+  const particles = [];
+  const dustCtx = dustCanvas.getContext('2d');
+  // Piotr Prus's 16 recorded 120 ms grains, filtered for the selected fine scrape:
+  // https://github.com/PiotrPrus/holographic-lottery-coupon-agsl/tree/b508047d66da1df656b2ee85f1320d63670290e0/app/src/main/res/raw
+  // Fetch ahead of the gesture; browsers still require AudioContext activation by the user.
+  const soundData = fetch('/audio/piotr-scratch-fine.wav')
+    .then((result) => {
+      if (!result.ok) throw new Error('Scratch sound unavailable');
+      return result.arrayBuffer();
+    })
+    .catch(() => null);
+  function prepareSound() {
+    if (audioLoad) {
+      if (audioContext?.state === 'suspended') void audioContext.resume().catch(() => {});
+      return;
+    }
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      audioContext = new AudioContext();
+      void audioContext.resume().catch(() => {});
+      audioLoad = soundData
+        .then((data) => data && audioContext.decodeAudioData(data))
+        .then((buffer) => {
+          audioBuffer = buffer;
+          if (dragging && audioBuffer) playScratchSound(performance.now());
+        })
+        .catch(() => {});
+    } catch {
+      // The interaction stays usable when audio is unavailable.
+    }
+  }
+  function playScratchSound(now) {
+    if (!audioBuffer || !audioContext || audioContext.state !== 'running' || now - lastSound < 45)
+      return;
+    if (soundTravel < 14) return;
+    soundTravel = 0;
+    lastSound = now;
+    let index = Math.floor(Math.random() * 16);
+    if (index === lastGrain) index = (index + 1) % 16;
+    lastGrain = index;
+    const source = audioContext.createBufferSource();
+    const gain = audioContext.createGain();
+    source.buffer = audioBuffer;
+    source.playbackRate.value = 0.92 + Math.random() * 0.16;
+    gain.gain.value = 0.55;
+    source.connect(gain).connect(audioContext.destination);
+    source.start(0, index * 0.12, 0.12);
+  }
   const ctx = canvas.getContext('2d');
   const mask = document.createElement('canvas');
   const maskCtx = mask.getContext('2d', { willReadFrequently: true });
-  const spectrumLayer = document.createElement('canvas');
-  const spectrumCtx = spectrumLayer.getContext('2d');
   let cssWidth = 0;
   let cssHeight = 0;
   function ensureCard() {
@@ -384,7 +446,7 @@ export function scratch({ label, content, onReveal } = {}) {
     const size = getComputedStyle(state.target);
     const halfWidth = (parseFloat(size.width) || state.target.clientWidth) / 2;
     const halfHeight = (parseFloat(size.height) || state.target.clientHeight) / 2;
-    const perspective = 1000;
+    const perspective = 2200;
     let scale = 1;
     if (halfWidth && halfHeight) {
       const rx = (rotateX * Math.PI) / 180;
@@ -394,7 +456,7 @@ export function scratch({ label, content, onReveal } = {}) {
       const sy = Math.sin(ry);
       const cy = Math.cos(ry);
       // Keep each projected corner within the surface's stationary layout box.
-      // This prevents even the 30° diagonal setting from covering controls.
+      // Keep the tilted surface clear of the surrounding controls.
       for (const x of [-halfWidth, halfWidth]) {
         for (const y of [-halfHeight, halfHeight]) {
           const projectedX = cy * x;
@@ -443,7 +505,12 @@ export function scratch({ label, content, onReveal } = {}) {
       detachCard();
       resizeObserver?.disconnect();
       if (frame) cancelAnimationFrame(frame);
+      if (dustFrame) cancelAnimationFrame(dustFrame);
       frame = 0;
+      dustFrame = 0;
+      particles.length = 0;
+      if (audioContext && audioContext.state !== 'closed')
+        void audioContext.close().catch(() => {});
     },
     tilt(x, y) {
       if (reducedMotion.matches) return;
@@ -460,7 +527,7 @@ export function scratch({ label, content, onReveal } = {}) {
   };
 
   function resize() {
-    if (!ctx || !maskCtx || !spectrumCtx) return false;
+    if (!ctx || !maskCtx) return false;
     const widthCss = canvas.clientWidth;
     const heightCss = canvas.clientHeight;
     if (!widthCss || !heightCss) return false;
@@ -476,8 +543,8 @@ export function scratch({ label, content, onReveal } = {}) {
       mask.height = height;
       canvas.width = width;
       canvas.height = height;
-      spectrumLayer.width = width;
-      spectrumLayer.height = height;
+      dustCanvas.width = Math.round((widthCss + dustMargin * 2) * ratio);
+      dustCanvas.height = Math.round((heightCss + dustMargin * 2) * ratio);
       if (initialized) maskCtx.drawImage(old, 0, 0, width, height);
       else {
         maskCtx.fillStyle = '#000';
@@ -506,58 +573,42 @@ export function scratch({ label, content, onReveal } = {}) {
     ctx.fillStyle = metal;
     ctx.fillRect(0, 0, width, height);
 
-    // A narrow spectral reflection moves across the brushed metal as it tilts.
-    const center = width * (0.5 + tiltX * 0.27);
-    spectrumCtx.setTransform(
-      spectrumLayer.width / width,
-      0,
-      0,
-      spectrumLayer.height / height,
-      0,
-      0,
+    // Two broad diffraction bands and a moving pool of light span both axes.
+    const lightX = width * (0.5 + tiltX * 0.58);
+    const lightY = height * (0.5 + tiltY * 0.55);
+    const spectrum = ctx.createLinearGradient(
+      -width * 0.2 + tiltX * width * 0.32,
+      -height * 0.55 + tiltY * height * 0.5,
+      width * 1.2 + tiltX * width * 0.32,
+      height * 1.55 + tiltY * height * 0.5,
     );
-    spectrumCtx.globalCompositeOperation = 'source-over';
-    spectrumCtx.clearRect(0, 0, width, height);
-    const spectrum = spectrumCtx.createLinearGradient(
-      center - width * 0.46,
-      0,
-      center + width * 0.46,
-      0,
-    );
-    spectrum.addColorStop(0, 'rgba(220,164,190,0)');
-    // Preserve today's look at 100%, but keep the full 100–200% range useful.
-    const strength = foilStrength;
-    const opacity = (base) =>
-      strength <= 1 ? base * strength : base + (1 - base) * (strength - 1);
-    const pink = opacity(0.67);
-    const rainbow = opacity(0.68);
-    spectrum.addColorStop(0.2, `rgba(232,139,183,${pink})`);
-    spectrum.addColorStop(0.42, `rgba(235,203,133,${rainbow})`);
-    spectrum.addColorStop(0.62, `rgba(113,205,199,${rainbow})`);
-    spectrum.addColorStop(0.8, `rgba(150,152,231,${pink})`);
-    spectrum.addColorStop(1, 'rgba(177,163,214,0)');
-    const sheenY = height * (0.5 + tiltY * 0.2);
-    spectrumCtx.fillStyle = spectrum;
-    spectrumCtx.fillRect(0, 0, width, height);
-    const fade = spectrumCtx.createLinearGradient(
-      0,
-      sheenY - height * 0.35,
-      0,
-      sheenY + height * 0.35,
-    );
-    fade.addColorStop(0, 'rgba(0,0,0,0)');
-    fade.addColorStop(0.5, 'rgba(0,0,0,1)');
-    fade.addColorStop(1, 'rgba(0,0,0,0)');
-    spectrumCtx.globalCompositeOperation = 'destination-in';
-    spectrumCtx.fillStyle = fade;
-    spectrumCtx.fillRect(0, 0, width, height);
-    ctx.drawImage(spectrumLayer, 0, 0, width, height);
+    spectrum.addColorStop(0, 'rgba(157,172,213,0.18)');
+    spectrum.addColorStop(0.23, 'rgba(221,166,195,0.42)');
+    spectrum.addColorStop(0.43, 'rgba(238,209,157,0.46)');
+    spectrum.addColorStop(0.64, 'rgba(151,214,202,0.47)');
+    spectrum.addColorStop(0.82, 'rgba(171,169,223,0.4)');
+    spectrum.addColorStop(1, 'rgba(219,173,190,0.2)');
+    ctx.fillStyle = spectrum;
+    ctx.fillRect(0, 0, width, height);
 
-    const glare = ctx.createLinearGradient(0, sheenY - height * 0.26, 0, sheenY + height * 0.26);
-    glare.addColorStop(0, 'rgba(255,255,255,0)');
-    glare.addColorStop(0.5, 'rgba(255,255,255,0.27)');
-    glare.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = glare;
+    const fringe = ctx.createLinearGradient(
+      width * 0.15 - tiltX * width * 0.25,
+      -height * 0.5 - tiltY * height * 0.35,
+      width * 0.85 - tiltX * width * 0.25,
+      height * 1.5 - tiltY * height * 0.35,
+    );
+    fringe.addColorStop(0, 'rgba(255,255,255,0)');
+    fringe.addColorStop(0.36, 'rgba(255,235,244,0.06)');
+    fringe.addColorStop(0.48, 'rgba(255,255,255,0.25)');
+    fringe.addColorStop(0.58, 'rgba(184,231,228,0.12)');
+    fringe.addColorStop(0.72, 'rgba(255,255,255,0)');
+    ctx.fillStyle = fringe;
+    ctx.fillRect(0, 0, width, height);
+    const glow = ctx.createRadialGradient(lightX, lightY, 0, lightX, lightY, width * 0.65);
+    glow.addColorStop(0, 'rgba(255,255,255,0.26)');
+    glow.addColorStop(0.45, 'rgba(255,255,255,0.08)');
+    glow.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glow;
     ctx.fillRect(0, 0, width, height);
     // Fine, deterministic lines and small facets suggest brushed aluminium.
     for (let y = 0; y < height; y += 2) {
@@ -570,9 +621,11 @@ export function scratch({ label, content, onReveal } = {}) {
       const noiseY = Math.sin(i * 311.7 + 41) * 43758.5453;
       const x = (noiseX - Math.floor(noiseX)) * width;
       const y = (noiseY - Math.floor(noiseY)) * height;
-      const light = Math.max(0, 1 - Math.abs(x / width - (0.5 + tiltX * 0.27)) * 4);
-      ctx.fillStyle = `rgba(255,255,255,${light * 0.5})`;
-      ctx.fillRect(x, y, 1.2, 1.2);
+      const alignment = Math.cos(i * 7.3 + tiltX * 7 + tiltY * 5);
+      const distance = Math.hypot((x - lightX) / width, (y - lightY) / height);
+      const sparkle = Math.max(0, (alignment - 0.88) / 0.12) * Math.max(0, 1 - distance);
+      ctx.fillStyle = `rgba(255,255,255,${sparkle * 0.72})`;
+      ctx.fillRect(x, y, 1.5, 1.5);
     }
     // Intersect the foil with the persistent scratch mask after each redraw.
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -592,7 +645,11 @@ export function scratch({ label, content, onReveal } = {}) {
     reveal.textContent = 'Checking…';
     let approved = false;
     try {
-      approved = (await onReveal?.()) !== false;
+      // Preserve the exact remaining foil before a successful state update replaces this widget.
+      if (frame) cancelAnimationFrame(frame);
+      render();
+      const foil = initialized ? canvas.toDataURL('image/png') : '';
+      approved = (await onReveal?.(foil)) !== false;
     } catch {
       status.textContent = 'Could not check the card. Try Reveal again.';
     } finally {
@@ -622,6 +679,57 @@ export function scratch({ label, content, onReveal } = {}) {
     if (motionStatus) motionStatus.hidden = true;
     status.textContent = `Revealed: ${content || ''}`;
   }
+  function drawDust(now) {
+    dustFrame = 0;
+    if (!dustCtx || !dustCanvas.width || !cssWidth) return;
+    const scaleX = dustCanvas.width / (cssWidth + dustMargin * 2);
+    const scaleY = dustCanvas.height / (cssHeight + dustMargin * 2);
+    dustCtx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+    dustCtx.clearRect(0, 0, cssWidth + dustMargin * 2, cssHeight + dustMargin * 2);
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      const age = (now - p.start) / 1000;
+      if (age >= p.life) {
+        particles.splice(i, 1);
+        continue;
+      }
+      dustCtx.globalAlpha = Math.max(0, 1 - age / p.life);
+      dustCtx.fillStyle = p.color;
+      dustCtx.beginPath();
+      dustCtx.arc(
+        p.x + dustMargin + p.vx * age,
+        p.y + dustMargin + p.vy * age + 180 * age * age,
+        p.size,
+        0,
+        Math.PI * 2,
+      );
+      dustCtx.fill();
+    }
+    dustCtx.globalAlpha = 1;
+    if (particles.length && !document.hidden) dustFrame = requestAnimationFrame(drawDust);
+  }
+  function scratchFeedback(p, freshness) {
+    if (freshness <= 0) return;
+    const now = performance.now();
+    if (!reducedMotion.matches && dustCtx && now - lastDustAt > 25) {
+      lastDustAt = now;
+      const count = Math.max(1, Math.round(4 * freshness));
+      for (let i = 0; i < count && particles.length < 70; i++) {
+        particles.push({
+          x: p.x,
+          y: p.y,
+          vx: (Math.random() - 0.5) * 100,
+          vy: -25 - Math.random() * 90,
+          size: 0.8 + Math.random() * 1.4,
+          life: 0.35 + Math.random() * 0.35,
+          start: now,
+          color: ['#555b67', '#d6d8d9', '#8e939b'][Math.floor(Math.random() * 3)],
+        });
+      }
+      if (!dustFrame) dustFrame = requestAnimationFrame(drawDust);
+    }
+    if (freshness > 0.05) playScratchSound(now);
+  }
   function point(event) {
     const rect = canvas.getBoundingClientRect();
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -641,6 +749,29 @@ export function scratch({ label, content, onReveal } = {}) {
     if (!dragging || checking || done || !initialized) return;
     const p = point(event);
     const rect = canvas.getBoundingClientRect();
+    // A small patch estimates how much untouched foil surrounds the moving blade.
+    // Sampling a patch, instead of a single pixel, tapers dust at scratched edges.
+    const scaleX = mask.width / rect.width;
+    const scaleY = mask.height / rect.height;
+    const sampleX = clamp(Math.floor((p.x - 7) * scaleX), 0, mask.width - 1);
+    const sampleY = clamp(Math.floor((p.y - 7) * scaleY), 0, mask.height - 1);
+    const sampleWidth = Math.max(1, Math.min(Math.ceil(14 * scaleX), mask.width - sampleX));
+    const sampleHeight = Math.max(1, Math.min(Math.ceil(14 * scaleY), mask.height - sampleY));
+    const pixels = maskCtx.getImageData(sampleX, sampleY, sampleWidth, sampleHeight).data;
+    let untouched = 0;
+    let samples = 0;
+    for (let i = 3; i < pixels.length; i += 16) {
+      samples++;
+      if (pixels[i] > 64) untouched++;
+    }
+    const fresh = samples ? untouched / samples : 0;
+    dustFreshness += (fresh - dustFreshness) * 0.4;
+    if (previous) soundTravel += Math.hypot(p.x - previous.x, p.y - previous.y);
+    scratchFeedback(p, fresh > 0.02 ? dustFreshness : 0);
+    if (!reducedMotion.matches) {
+      tiltX += (clamp((p.x / rect.width) * 2 - 1, -1, 1) - tiltX) * 0.16;
+      tiltY += (clamp((p.y / rect.height) * 2 - 1, -1, 1) - tiltY) * 0.16;
+    }
     maskCtx.setTransform(mask.width / rect.width, 0, 0, mask.height / rect.height, 0, 0);
     maskCtx.globalCompositeOperation = 'destination-out';
     const from = previous || p;
@@ -683,6 +814,8 @@ export function scratch({ label, content, onReveal } = {}) {
     releaseCard();
     dragging = false;
     previous = null;
+    soundTravel = Infinity;
+    dustFreshness = 0;
     touchId = null;
     activePointerId = null;
     removeFallbackListeners();
@@ -738,6 +871,7 @@ export function scratch({ label, content, onReveal } = {}) {
     canvas.addEventListener('pointerdown', (event) => {
       if (dragging || checking || done) return;
       if (event.pointerType === 'mouse' && event.button !== 0) return;
+      prepareSound();
       freezeCard();
       if (!initialized) render();
       dragging = true;
@@ -777,6 +911,7 @@ export function scratch({ label, content, onReveal } = {}) {
   } else {
     canvas.addEventListener('mousedown', (event) => {
       if (event.button !== 0 || checking || done) return;
+      prepareSound();
       freezeCard();
       if (!initialized) render();
       dragging = true;
@@ -799,6 +934,7 @@ export function scratch({ label, content, onReveal } = {}) {
       'touchstart',
       (event) => {
         if (dragging || checking || done || !event.changedTouches.length) return;
+        prepareSound();
         freezeCard();
         if (!initialized) render();
         event.preventDefault();

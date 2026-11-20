@@ -363,7 +363,7 @@ export const huntStyles = css`
     color: #291534;
     background: var(--deck-paper);
     box-shadow: 0 4px 10px rgb(12 8 21 / 34%);
-    transform: perspective(650px) rotateX(var(--album-rotate-x))
+    transform: perspective(1600px) rotateX(var(--album-rotate-x))
       rotateY(calc(var(--album-rotate-y) + var(--hover-angle)));
     transition:
       transform 160ms ease-out,
@@ -371,7 +371,7 @@ export const huntStyles = css`
   }
 
   .find:is(a, button):hover {
-    --hover-angle: -5deg;
+    --hover-angle: -3deg;
     border-color: #f3d8fe;
   }
 
@@ -574,13 +574,105 @@ export const huntStyles = css`
 
   .reveal-result {
     display: grid;
+    align-content: center;
+    box-sizing: border-box;
+    min-height: clamp(250px, 60vw, 260px);
     gap: 8px;
-    border: 1px solid #9c91a4;
+    position: relative;
+    isolation: isolate;
     border-radius: 11px;
-    padding: clamp(13px, 3.8vw, 24px);
+    padding: clamp(23px, 5.5vw, 32px);
+    background: linear-gradient(125deg, #a8a8b0, #e7cbd4 25%, #d9ddce 55%, #a9c8c6 78%, #9c9eae);
+    box-shadow: inset 0 1px 3px rgb(49 36 56 / 35%);
+  }
+
+  .reveal-result::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 8px;
     background: #f9f2e5;
+    clip-path: polygon(
+      2% 1%,
+      10% 2%,
+      18% 0%,
+      29% 2%,
+      38% 0%,
+      50% 2%,
+      62% 0%,
+      73% 2%,
+      85% 0%,
+      98% 2%,
+      100% 12%,
+      98% 24%,
+      100% 38%,
+      98% 52%,
+      100% 65%,
+      98% 79%,
+      100% 92%,
+      98% 99%,
+      88% 98%,
+      77% 100%,
+      65% 98%,
+      53% 100%,
+      41% 98%,
+      29% 100%,
+      16% 98%,
+      2% 100%,
+      0% 89%,
+      2% 76%,
+      0% 62%,
+      2% 49%,
+      0% 35%,
+      2% 21%,
+      0% 9%
+    );
+    border-radius: 5px;
+  }
+
+  .reveal-result {
     line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+
+  /* The result uses the actual scratched foil; only the centre clears for the message. */
+  .reveal-result.has-scratch {
+    background: #f9f2e5;
+    overflow: hidden;
+  }
+
+  .reveal-result.has-scratch::before,
+  .reveal-result.has-scratch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--reveal-foil) center / 100% 100% no-repeat;
+    pointer-events: none;
+    clip-path: none;
+  }
+
+  .reveal-result.has-scratch::before {
+    z-index: -1;
+    mask-image: radial-gradient(ellipse at center, transparent 37%, #000 80%);
+  }
+
+  .reveal-result.has-scratch::after {
+    z-index: 2;
+    opacity: 0;
+    animation: clear-remaining-foil 680ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes clear-remaining-foil {
+    0% {
+      opacity: 0.96;
+    }
+    35% {
+      opacity: 0.72;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 
   .replay-action,
@@ -668,10 +760,15 @@ export const huntStyles = css`
     min-width: 0;
   }
 
+  .scratch-stage {
+    position: relative;
+    isolation: isolate;
+  }
+
   .scratch-surface {
     position: relative;
     isolation: isolate;
-    min-height: clamp(125px, 31vw, 192px);
+    min-height: clamp(250px, 60vw, 260px);
     border-radius: 11px;
     overflow: hidden;
     background: #e9ddc2;
@@ -685,13 +782,22 @@ export const huntStyles = css`
       linear-gradient(125deg, #ffefd3, #dcc9e7 53%, #b8e9d8);
   }
 
-  .scratch-canvas,
+  .scratch-dust {
+    position: absolute;
+    inset: -28px;
+    width: calc(100% + 56px);
+    height: calc(100% + 56px);
+    pointer-events: none;
+  }
+
   .scratch-instruction {
     position: absolute;
     inset: 0;
   }
 
   .scratch-canvas {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     touch-action: none;
@@ -780,6 +886,10 @@ export const huntStyles = css`
     .scratch-canvas,
     .find {
       transition: none;
+    }
+
+    .reveal-result.has-scratch::after {
+      animation: none;
     }
 
     .find {
