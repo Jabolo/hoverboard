@@ -70,6 +70,35 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
           font-size: 12px;
         }
 
+        [hidden] {
+          display: none !important;
+        }
+        .success {
+          width: 100%;
+          color: var(--footer-text-color);
+        }
+        .spinner {
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+          margin-right: 8px;
+          border: 2px solid currentColor;
+          border-right-color: transparent;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+          vertical-align: -2px;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .spinner {
+            animation: none;
+          }
+        }
+
         paper-input-container input,
         paper-input-container label {
           font-size: 14px;
@@ -80,7 +109,10 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         }
       </style>
 
-      <div class="form-content" layout vertical center>
+      <div class="success" role="status" aria-live="polite" hidden$="[[!success]]">
+        [[subscribeBlock.toast]]
+      </div>
+      <div class="form-content" layout vertical center hidden$="[[success]]">
         <paper-input
           id="emailInput"
           on-touchend="_focus"
@@ -115,8 +147,11 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
           [[subscribeBlock.generalError]]
         </div>
         <md-filled-button on-click="subscribe" disabled$="[[disabled]]" layout self-end>
-          [[ctaLabel]]
+          <span class="spinner" hidden$="[[!pending]]" aria-hidden="true"></span>[[ctaLabel]]
         </md-filled-button>
+        <div role="status" aria-live="polite" hidden$="[[!pending]]">
+          [[subscribeBlock.subscribing]]
+        </div>
       </div>
     `;
   }
@@ -162,9 +197,19 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
 
   @computed('subscribed')
   private get ctaLabel() {
-    return this.subscribed instanceof Success
-      ? this.subscribeBlock.subscribed
+    return this.subscribed instanceof Pending
+      ? this.subscribeBlock.subscribing
       : this.subscribeBlock.subscribe;
+  }
+
+  @computed('subscribed')
+  private get pending() {
+    return this.subscribed instanceof Pending;
+  }
+
+  @computed('subscribed')
+  private get success() {
+    return this.subscribed instanceof Success;
   }
 
   @computed('email', 'consentGiven', 'subscribed')

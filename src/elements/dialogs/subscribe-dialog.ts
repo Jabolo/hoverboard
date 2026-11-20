@@ -1,5 +1,5 @@
 import { speakersPreview } from '../../utils/speakers-preview';
-import { Failure, Success } from '@abraham/remotedata';
+import { Failure, Pending, Success } from '@abraham/remotedata';
 import '@material/web/button/filled-button.js';
 import '@material/web/button/outlined-button.js';
 import '@material/web/checkbox/checkbox.js';
@@ -80,10 +80,36 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           color: var(--error-color);
           font-size: 12px;
         }
+
+        .spinner {
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+          margin-right: 8px;
+          border: 2px solid currentColor;
+          border-right-color: transparent;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+          vertical-align: -2px;
+        }
+
+        .spinner[hidden] {
+          display: none;
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .spinner {
+            animation: none;
+          }
+        }
       </style>
 
       <mwc-dialog id="dialog" open="[[open]]" heading="[[title]]">
-        <div hidden$="[[!errorOccurred]]" class="general-error">
+        <div hidden$="[[!errorOccurred]]" class="general-error" role="alert">
           [[subscribeBlock.generalError]]
         </div>
         <paper-input
@@ -137,8 +163,11 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
           [[subscribeBlock.consentRequired]]
         </div>
 
-        <md-filled-button on-click="subscribe" slot="primaryAction">
-          [[submitLabel]]
+        <div role="status" aria-live="polite" hidden$="[[!pending]]">
+          [[subscribeBlock.subscribing]]
+        </div>
+        <md-filled-button on-click="subscribe" slot="primaryAction" disabled$="[[pending]]">
+          <span class="spinner" hidden$="[[!pending]]" aria-hidden="true"></span>[[buttonLabel]]
         </md-filled-button>
         <md-outlined-button on-click="close" slot="secondaryAction" dialogAction="cancel">
           [[subscribeBlock.close]]
@@ -190,6 +219,10 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
   private marketingConsent = false;
   @property({ type: Boolean })
   private consentError = false;
+  @property({ type: Boolean })
+  private pending = false;
+  @property({ type: String })
+  private buttonLabel = '';
   @property({ type: Number })
   private initialHeight = 0;
 
@@ -225,6 +258,8 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
 
   @observe('subscribed')
   private onSubscribed(subscribed: SubscribeState) {
+    this.pending = subscribed instanceof Pending;
+    this.buttonLabel = this.pending ? this.subscribeBlock.subscribing : this.submitLabel;
     if (subscribed instanceof Success) {
       closeDialog();
     } else if (subscribed instanceof Failure) {
@@ -247,6 +282,7 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
       const data = dialog.data.data;
       this.title = data.title || this.subscribeBlock.formTitle;
       this.submitLabel = data.submitLabel || this.subscribeBlock.subscribe;
+      this.buttonLabel = this.pending ? this.subscribeBlock.subscribing : this.submitLabel;
       this.firstFieldLabel = data.firstFieldLabel || this.subscribeBlock.firstName;
       this.secondFieldLabel = data.secondFieldLabel || this.subscribeBlock.lastName;
       this.firstFieldName = data.firstFieldName || 'firstName';
@@ -260,6 +296,7 @@ class SubscribeDialog extends ReduxMixin(PolymerElement) {
   }
 
   private subscribe() {
+    if (this.pending) return;
     if (this.dialog instanceof Success && this.dialog.data.name === DIALOG.SUBSCRIBE) {
       this.errorOccurred = false;
       if (

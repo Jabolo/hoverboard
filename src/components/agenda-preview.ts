@@ -75,6 +75,15 @@ export class AgendaPreview extends ThemedElement {
         :host {
           display: block;
           color: var(--terminal-copy);
+          border-top: 3px solid transparent;
+          border-image: linear-gradient(
+              90deg,
+              #4285f4 0 25%,
+              #34a853 25% 50%,
+              #fbbc04 50% 75%,
+              #ea4335 75% 100%
+            )
+            1;
         }
         * {
           box-sizing: border-box;
@@ -291,6 +300,10 @@ export class AgendaPreview extends ThemedElement {
           border: 1px solid var(--terminal-line);
           border-radius: 12px;
           background: var(--terminal-panel);
+          transition: border-color 150ms ease;
+        }
+        .entry:hover:not(.current):not(.open) {
+          border-color: #3e5a84;
         }
         .entry.current {
           border-color: var(--terminal-green);
@@ -742,10 +755,15 @@ export class AgendaPreview extends ThemedElement {
             padding: 48px 32px 112px;
           }
           .column-headings {
+            position: sticky;
+            top: 64px;
+            z-index: 10;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            padding-top: 16px;
+            padding: 14px 0 10px;
+            background: var(--terminal-background);
+            border-bottom: 1px solid var(--terminal-line);
             color: var(--terminal-muted);
             font-size: 13px;
             font-weight: 700;
@@ -775,6 +793,7 @@ export class AgendaPreview extends ThemedElement {
           .lunch-icons span {
             animation: none;
           }
+          .entry,
           .progress span,
           .now-progress span {
             transition: none;

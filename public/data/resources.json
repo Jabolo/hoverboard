@@ -373,10 +373,11 @@
     "consentLabel": "I agree to receive community communications from GDG Warsaw and GDG Poland about DevFest, meetups, workshops, hackathons and related initiatives. Contact: hello@gdgwarsaw.pl.",
     "consentRequired": "Please confirm that you want to receive these communications.",
     "subscribe": "Subscribe",
+    "subscribing": "Subscribing…",
     "subscribed": "Subscribed",
     "close": "Close",
-    "generalError": "An error has occurred. Please try again later.",
-    "toast": "Successfully subscribed."
+    "generalError": "We couldn’t complete your subscription. Please try again.",
+    "toast": "You’re subscribed. Thanks for joining!"
   },
   "team": {
     "description": "[GDG Warsaw](https://gdg.community.dev/gdg-warszawa/) is an open, volunteer-led community that creates space for people to learn, share experience, and connect around technology. The DevFest Warsaw team is building this event with the community, partners, and volunteers."
