@@ -16,6 +16,7 @@ import {
 import './components/snack-bar';
 import './components/sticky-countdown';
 import './components/cookie-consent';
+import './elements/devfest-concierge';
 import './elements/footer-block';
 import './elements/header-toolbar';
 import './elements/shared-styles';
@@ -239,7 +240,8 @@ export class HoverboardApp extends PolymerElement {
           height: 100%;
         }
 
-        sticky-countdown[active] ~ cookie-consent {
+        sticky-countdown[active] ~ cookie-consent,
+        sticky-countdown[active] ~ devfest-concierge {
           --countdown-offset: 64px;
         }
 
@@ -247,8 +249,13 @@ export class HoverboardApp extends PolymerElement {
           --footer-countdown-space: calc(80px + env(safe-area-inset-bottom));
         }
 
+        cookie-consent[dialog-open] ~ devfest-concierge {
+          display: none !important;
+        }
+
         @media (max-width: 480px) {
-          sticky-countdown[active] ~ cookie-consent {
+          sticky-countdown[active] ~ cookie-consent,
+          sticky-countdown[active] ~ devfest-concierge {
             --countdown-offset: 76px;
           }
 
@@ -370,6 +377,7 @@ export class HoverboardApp extends PolymerElement {
 
       <sticky-countdown></sticky-countdown>
       <cookie-consent hidden$="[[hideAgendaPreviewConsent(routeName)]]"></cookie-consent>
+      <devfest-concierge id="global-concierge" variant="floating"></devfest-concierge>
 
       <snack-bar></snack-bar>
     `;

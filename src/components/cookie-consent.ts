@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html, type PropertyValues } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { getAnalyticsConsent, setAnalyticsConsent } from '../utils/analytics';
 import { isAgendaPreviewEnabled } from '../utils/agenda-preview-mode';
@@ -13,6 +13,11 @@ export class CookieConsent extends LitElement {
       z-index: 1000;
       color: var(--terminal-copy, #f7f7f7);
       font-family: var(--font-mono, monospace);
+    }
+
+    :host(:not([dialog-open])) {
+      right: auto;
+      left: 16px;
     }
 
     .panel {
@@ -89,6 +94,11 @@ export class CookieConsent extends LitElement {
         bottom: calc(8px + var(--countdown-offset, 0px));
       }
 
+      :host(:not([dialog-open])) {
+        right: auto;
+        left: 8px;
+      }
+
       .panel {
         width: calc(100vw - 16px);
         padding: 16px;
@@ -140,6 +150,7 @@ export class CookieConsent extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.toggleAttribute('dialog-open', this.settingsOpen);
     window.addEventListener('devfest-cookie-footer', this.onFooterAvailability);
     window.addEventListener('devfest-cookie-settings', this.onFooterSettings);
     // The page may already have mounted before this component connected.
@@ -159,7 +170,15 @@ export class CookieConsent extends LitElement {
     window.removeEventListener('devfest-cookie-settings', this.onFooterSettings);
     this.mountedFooters.clear();
     this.removeAttribute('data-cookie-footer');
+    this.removeAttribute('dialog-open');
     super.disconnectedCallback();
+  }
+
+  override updated(changedProperties: PropertyValues<this>) {
+    super.updated(changedProperties);
+    if ((changedProperties as Map<string, unknown>).has('settingsOpen')) {
+      this.toggleAttribute('dialog-open', this.settingsOpen);
+    }
   }
 
   override render() {

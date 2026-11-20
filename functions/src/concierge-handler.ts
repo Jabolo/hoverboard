@@ -432,8 +432,8 @@ const CACHE_TTL_MS = 15 * 60 * 1000;
 const LIVE_TIME_CACHE_TTL_MS = 5 * 60 * 1000;
 const CONCIERGE_MODEL_CHAIN = [
   'gemini-3.5-flash-lite',
-  'gemini-3.1-flash-lite',
   'gemini-3.6-flash',
+  'gemini-3.1-flash-lite',
 ] as const;
 type ConciergeModelId = (typeof CONCIERGE_MODEL_CHAIN)[number];
 const CONCIERGE_MODEL: ConciergeModelId = CONCIERGE_MODEL_CHAIN[0];
@@ -453,6 +453,29 @@ function formatModelBadge(model: ConciergeModelId): string {
       return 'A2UI · Gemini 3.5 Flash-Lite';
   }
 }
+
+const TRANSCRIBE_MAX_BASE64_CHARS = 700_000;
+const TRANSCRIBE_ALLOWED_MIME_TYPES = new Set([
+  'audio/webm',
+  'audio/ogg',
+  'audio/mp4',
+  'audio/m4a',
+  'audio/aac',
+  'audio/wav',
+  'audio/mpeg',
+  'audio/opus',
+]);
+
+const TRANSCRIBE_RESPONSE_SCHEMA = {
+  type: 'object',
+  required: ['transcript'],
+  properties: {
+    transcript: { type: 'string' },
+  },
+};
+
+const TRANSCRIBE_SYSTEM_PROMPT =
+  'Listen to this DevFest Warsaw 2026 conference attendee speaking Polish or English. Transcribe the attendee\'s speech accurately into the target language spoken. If ambiguous conference terms or speaker names appear (e.g. "DevFest", "Warsaw", "Michał", "Yonatan", "Willi", "Julia", "Gemini", "Antigravity", "Campus"), spell them correctly. Return ONLY a JSON object with a single string property "transcript". If silence or unintelligible noise, return {"transcript": ""}.';
 
 const EVENT_TRANSITION_TIMES = [
   '09:00',
@@ -1062,6 +1085,209 @@ export async function handleConcierge(
 
   if (request.method !== 'POST') {
     response.set('Allow', 'POST').status(405).json({ status: 'method-not-allowed' });
+    return;
+  }
+
+  const rawBody = request.body;
+  const isTranscribe =
+    Boolean(rawBody) &&
+    typeof rawBody === 'object' &&
+    !Array.isArray(rawBody) &&
+    (rawBody as Record<string, unknown>).mode === 'transcribe';
+
+  if (isTranscribe) {
+    const bodyObj = rawBody as Record<string, unknown>;
+    const rawAudio = typeof bodyObj.audio === 'string' ? bodyObj.audio.trim() : '';
+    if (!rawAudio) {
+      response.status(400).json({ status: 'invalid-request', error: 'Missing audio payload' });
+      return;
+    }
+    if (rawAudio.length > TRANSCRIBE_MAX_BASE64_CHARS) {
+      response
+        .status(413)
+        .json({ status: 'payload-too-large', error: 'Audio exceeds 15 seconds limit' });
+      return;
+    }
+    const rawMime =
+      typeof bodyObj.mimeType === 'string' ? bodyObj.mimeType.trim().toLowerCase() : '';
+    const normalizedMime = rawMime.split(';')[0]?.trim() || '';
+    if (!TRANSCRIBE_ALLOWED_MIME_TYPES.has(normalizedMime)) {
+      response
+        .status(400)
+        .json({ status: 'invalid-request', error: 'Unsupported audio MIME type' });
+      return;
+    }
+
+    const now = deps.now ?? Date.now();
+    const nowDate = new Date(now);
+
+    if (deps.db) {
+      const clientIp = getClientIp(request);
+      const ipLimit = await checkRateLimit({
+        db: deps.db,
+        prefix: 'concierge-ip',
+        key: clientIp,
+        maxAttempts: 45,
+        windowSeconds: 900,
+        now: nowDate,
+      });
+      if (!ipLimit.allowed) {
+        response.set('X-RateLimit-Remaining', '0');
+        response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+        response.status(429).json({
+          status: 'rate-limited',
+          error: 'Rate limit exceeded',
+          resetAt: ipLimit.resetAt.toISOString(),
+        });
+        return;
+      }
+
+      const globalLimit = await checkRateLimit({
+        db: deps.db,
+        prefix: 'concierge-global-30h',
+        key: 'devfest-2026-sponsored',
+        maxAttempts: 6000,
+        windowSeconds: 108000,
+        now: nowDate,
+      });
+      if (!globalLimit.allowed) {
+        response.set('X-RateLimit-Remaining', '0');
+        response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
+        response.status(429).json({
+          status: 'rate-limited',
+          error: 'Rate limit exceeded',
+          resetAt: globalLimit.resetAt.toISOString(),
+        });
+        return;
+      }
+
+      response.set(
+        'X-RateLimit-Remaining',
+        String(Math.min(ipLimit.remaining, globalLimit.remaining)),
+      );
+      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+    }
+
+    const apiKey = (deps.getApiKey() || '').trim();
+    if (!apiKey) {
+      response.status(503).json({ status: 'unavailable', error: 'AI key not configured' });
+      return;
+    }
+
+    const fetchImpl = deps.fetchFn ?? fetch;
+    const sleepImpl =
+      deps.sleepFn ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
+
+    for (let attemptIdx = 0; attemptIdx < CONCIERGE_MODEL_CHAIN.length; attemptIdx += 1) {
+      const model = CONCIERGE_MODEL_CHAIN[attemptIdx]!;
+      const hasNext = attemptIdx < CONCIERGE_MODEL_CHAIN.length - 1;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), PER_ATTEMPT_TIMEOUT_MS);
+
+      try {
+        const upstreamRes = await fetchImpl(
+          'https://generativelanguage.googleapis.com/v1/interactions',
+          {
+            method: 'POST',
+            headers: {
+              'x-goog-api-key': apiKey,
+              'Api-Revision': '2026-05-20',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model,
+              input: [
+                {
+                  type: 'text',
+                  text: TRANSCRIBE_SYSTEM_PROMPT,
+                },
+                {
+                  type: 'audio',
+                  data: rawAudio,
+                  mime_type: normalizedMime,
+                },
+              ],
+              generation_config: {
+                thinking_level: CONCIERGE_THINKING_LEVEL,
+                max_output_tokens: 256,
+              },
+              response_format: {
+                type: 'text',
+                mime_type: 'application/json',
+                schema: TRANSCRIBE_RESPONSE_SCHEMA,
+              },
+              store: false,
+            }),
+            signal: controller.signal,
+          },
+        );
+
+        if (!upstreamRes.ok) {
+          const bodySnippet =
+            typeof upstreamRes.text === 'function'
+              ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
+              : '';
+          console.error('concierge transcribe upstream non-OK', {
+            model,
+            attempt: attemptIdx + 1,
+            status: upstreamRes.status,
+            bodySnippet,
+          });
+          if (RETRYABLE_UPSTREAM_STATUSES.has(upstreamRes.status) && hasNext) {
+            await sleepImpl(FAILOVER_BACKOFF_MS);
+            continue;
+          }
+          break;
+        }
+
+        const upstreamJson = (await upstreamRes.json()) as unknown;
+        const rawText = extractModelJsonText(upstreamJson);
+        if (!rawText) {
+          if (hasNext) continue;
+          break;
+        }
+
+        let parsedJson: { transcript?: unknown } | null = null;
+        try {
+          parsedJson = JSON.parse(
+            rawText
+              .replace(/^```(?:json)?\s*/i, '')
+              .replace(/```\s*$/i, '')
+              .trim(),
+          );
+        } catch {
+          parsedJson = null;
+        }
+
+        const transcript =
+          parsedJson && typeof parsedJson.transcript === 'string'
+            ? parsedJson.transcript.trim()
+            : '';
+
+        response.set('X-Concierge-Model', model);
+        response.status(200).json({
+          status: 'ok',
+          transcript,
+          model,
+        });
+        return;
+      } catch (err) {
+        console.error('concierge transcribe upstream exception', {
+          model,
+          attempt: attemptIdx + 1,
+          name: err instanceof Error ? err.name : 'unknown',
+          message: err instanceof Error ? err.message : String(err),
+        });
+        if (hasNext) {
+          await sleepImpl(FAILOVER_BACKOFF_MS);
+          continue;
+        }
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
+
+    response.status(502).json({ status: 'upstream-error', error: 'Transcription unavailable' });
     return;
   }
 

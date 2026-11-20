@@ -1,4 +1,4 @@
-import { css, html, nothing, type TemplateResult } from 'lit';
+import { css, html, nothing, type PropertyValues, type TemplateResult } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { ThemedElement } from '../components/themed-element';
@@ -18,6 +18,13 @@ import {
   type LocalConciergeRequest,
   type TeamMemberInfo,
 } from '../concierge/local-concierge-engine';
+import {
+  detectVoiceSupport,
+  VoiceInputController,
+  type VoiceInputState,
+  type VoiceLanguage,
+  type VoiceSupportKind,
+} from '../concierge/voice-input-controller';
 import { buildAgenda, type AgendaItem, type DraftAgenda } from '../utils/agenda-preview-data';
 import {
   isSessionFavorite,
@@ -131,14 +138,15 @@ function formatCreditStatusLabel(status: string): string {
 function formatAiModelLabel(source?: string): string {
   switch (source) {
     case 'gemini-4-hydrogen':
-      return 'Gemini 4 Hydrogen';
+      return 'Gemini 4';
     case 'gemini-3.6-flash':
       return 'Gemini 3.6 Flash';
     case 'gemini-3.1-flash-lite':
       return 'Gemini 3.1 Flash-Lite';
     case 'gemini-3.5-flash-lite':
+      return 'Gemini AI';
     default:
-      return 'Gemini 3.5 Flash-Lite';
+      return 'Gemini AI';
   }
 }
 
@@ -208,7 +216,7 @@ function writeClientCache(key: string, messages: A2UIMessage[], expiresAt: numbe
 
 @customElement('devfest-concierge')
 export class DevfestConcierge extends ThemedElement {
-  @property({ type: String, reflect: true }) variant: 'band' | 'hero' = 'band';
+  @property({ type: String, reflect: true }) variant: 'band' | 'hero' | 'floating' = 'band';
 
   @state() private query = '';
   @state() private activeIntent = '';
@@ -219,6 +227,10 @@ export class DevfestConcierge extends ThemedElement {
   @state() private creditStatus = 'checking';
   @state() private dataReady = false;
   @state() private dialogOpen = false;
+  @state() private isFabVisible = false;
+  @state() private voiceState: VoiceInputState = 'idle';
+  @state() private voiceLanguage: VoiceLanguage = 'pl-PL';
+  @state() private voiceNotice = '';
   @state() private renderTick = 0;
 
   @query('#concierge-dialog')
@@ -235,6 +247,9 @@ export class DevfestConcierge extends ThemedElement {
   private returnFocusEl: HTMLElement | null = null;
   private surfaceTransitionTick = 0;
   private requestCounter = 0;
+  private voiceController?: VoiceInputController;
+  private voiceSupport: VoiceSupportKind = 'unsupported';
+  private heroObserver: IntersectionObserver | undefined;
 
   static override get styles() {
     return [
@@ -1362,20 +1377,309 @@ export class DevfestConcierge extends ThemedElement {
           outline-offset: 2px;
         }
 
+        /* Floating persistent FAB */
+        :host([variant='floating']) {
+          position: fixed;
+          right: 18px;
+          bottom: calc(18px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+          z-index: 900;
+          font-family: var(--font-mono, monospace);
+          pointer-events: none;
+        }
+
+        :host([variant='floating']) .orbital-fab {
+          pointer-events: auto;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          height: 48px;
+          padding: 0 16px 0 12px;
+          border: 1px solid transparent;
+          border-radius: 9999px;
+          background:
+            linear-gradient(rgb(11 19 32 / 94%), rgb(11 19 32 / 94%)) padding-box,
+            conic-gradient(
+                from var(--_beam-angle, 135deg),
+                var(--_blue, #4285f4),
+                var(--_green, #34a853),
+                var(--_yellow, #fbbc04),
+                var(--_blue, #4285f4)
+              )
+              border-box;
+          box-shadow:
+            0 8px 24px rgb(4 8 15 / 55%),
+            0 0 0 1px rgb(255 255 255 / 8%),
+            inset 0 1px 0 rgb(255 255 255 / 15%);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          color: #fff;
+          cursor: pointer;
+          user-select: none;
+          transform: scale(0.8) translateY(12px);
+          opacity: 0;
+          visibility: hidden;
+          transition:
+            opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+            transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+            visibility 280ms allow-discrete;
+          animation: concierge-beam-spin 6s linear infinite;
+        }
+
+        :host([variant='floating'][data-fab-visible]) .orbital-fab {
+          opacity: 1;
+          visibility: visible;
+          transform: scale(1) translateY(0);
+        }
+
+        :host([variant='floating'][data-dialog-open]) .orbital-fab {
+          opacity: 0;
+          visibility: hidden;
+          transform: scale(0.8) translateY(12px);
+          pointer-events: none;
+        }
+
+        .fab-spark-wrap {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+        }
+
+        .fab-pulse-ring {
+          position: absolute;
+          inset: -3px;
+          border-radius: 50%;
+          border: 1.5px solid var(--_green, #7ef2a5);
+          opacity: 0.7;
+          animation: fab-sonar 2.6s ease-out infinite;
+        }
+
+        @keyframes fab-sonar {
+          0% {
+            transform: scale(0.85);
+            opacity: 0.8;
+          }
+          60% {
+            transform: scale(1.6);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1.6);
+            opacity: 0;
+          }
+        }
+
+        .fab-spark-svg {
+          width: 18px;
+          height: 18px;
+          fill: var(--_green, #7ef2a5);
+          filter: drop-shadow(0 0 6px rgb(126 242 165 / 65%));
+        }
+
+        .fab-label {
+          font-family: var(--font-mono, monospace);
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          color: #fff;
+        }
+
+        .fab-kbd {
+          padding: 2px 6px;
+          border-radius: 4px;
+          border: 1px solid rgb(255 255 255 / 20%);
+          background: rgb(255 255 255 / 8%);
+          font-size: 11px;
+          color: var(--_copy-sub, #9fb0c7);
+        }
+
+        @media (max-width: 639px) {
+          :host([variant='floating']) {
+            right: 14px;
+            bottom: calc(14px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+          }
+
+          :host([variant='floating']) .orbital-fab {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            min-height: 52px;
+            padding: 0;
+            justify-content: center;
+          }
+
+          .fab-label,
+          .fab-kbd {
+            display: none;
+          }
+        }
+
+        /* Voice input mic button */
+        .mic-btn {
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          min-width: 36px;
+          min-height: 36px;
+          margin-inline-end: 4px;
+          padding: 0;
+          border: 1px solid transparent;
+          border-radius: 6px;
+          background: transparent;
+          color: var(--_copy-sub, #9fb0c7);
+          cursor: pointer;
+          transition:
+            color 160ms ease,
+            border-color 160ms ease,
+            background-color 160ms ease;
+        }
+
+        .mic-btn:hover {
+          color: var(--_green, #7ef2a5);
+          background: rgb(126 242 165 / 10%);
+        }
+
+        .mic-btn:focus-visible {
+          outline: 2px solid var(--_yellow, #fbbc04);
+          outline-offset: 2px;
+        }
+
+        .mic-btn.is-listening {
+          color: var(--_green, #7ef2a5);
+          border-color: var(--_green, #7ef2a5);
+          background: rgb(126 242 165 / 16%);
+          box-shadow: 0 0 10px rgb(126 242 165 / 35%);
+        }
+
+        .mic-btn.is-transcribing {
+          color: var(--_blue, #4285f4);
+          border-color: var(--_blue, #4285f4);
+          background: rgb(66 133 244 / 14%);
+        }
+
+        .mic-icon {
+          width: 18px;
+          height: 18px;
+        }
+
+        /* 4-bar animated equalizer */
+        .eq-bars {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 2.5px;
+          width: 20px;
+          height: 18px;
+        }
+
+        .eq-bar {
+          width: 2.5px;
+          border-radius: 2px;
+          background: currentColor;
+          animation: eq-pulse 0.8s ease-in-out infinite alternate;
+        }
+
+        .bar-1 {
+          height: 6px;
+          animation-delay: 0.1s;
+        }
+        .bar-2 {
+          height: 16px;
+          animation-delay: 0.3s;
+        }
+        .bar-3 {
+          height: 11px;
+          animation-delay: 0.2s;
+        }
+        .bar-4 {
+          height: 7px;
+          animation-delay: 0.4s;
+        }
+
+        @keyframes eq-pulse {
+          0% {
+            transform: scaleY(0.4);
+          }
+          100% {
+            transform: scaleY(1.3);
+          }
+        }
+
+        @media (pointer: coarse) {
+          .mic-btn {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
+          }
+        }
+
+        .voice-status-bar {
+          margin: 6px 0 2px;
+          padding: 6px 10px;
+          border-radius: 4px;
+          background: rgb(126 242 165 / 10%);
+          border: 1px solid rgb(126 242 165 / 25%);
+          color: var(--_green, #7ef2a5);
+          font-size: 12px;
+          font-family: var(--font-mono, monospace);
+        }
+
+        .lang-pill-wrap {
+          display: inline-flex;
+          align-items: center;
+          padding: 2px;
+          border-radius: 4px;
+          border: 1px solid var(--_line, rgb(255 255 255 / 10%));
+          background: var(--_raised, #131d2e);
+          gap: 2px;
+          margin-inline-start: 8px;
+        }
+
+        .lang-toggle-btn {
+          border: 0;
+          border-radius: 3px;
+          padding: 2px 6px;
+          background: transparent;
+          color: var(--_copy-sub, #9fb0c7);
+          font-family: var(--font-mono, monospace);
+          font-size: 11px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .lang-toggle-btn.is-active {
+          background: var(--_blue, #4285f4);
+          color: #fff;
+        }
+
         @media (prefers-reduced-motion: reduce) {
           :host([variant='hero']) .launcher-frame,
           .launcher-dot,
           .loading-bar,
           .surface-node,
-          .spinner-icon {
+          .spinner-icon,
+          :host([variant='floating']) .orbital-fab,
+          .fab-pulse-ring,
+          .eq-bar {
             animation: none;
+          }
+
+          .fab-pulse-ring {
+            display: none;
           }
 
           dialog.concierge-dialog,
           dialog.concierge-dialog::backdrop,
           :host([variant='hero']) .launcher-frame::before,
           .go-btn,
-          .save-btn {
+          .save-btn,
+          :host([variant='floating']) .orbital-fab {
             transition: none;
           }
         }
@@ -1383,18 +1687,107 @@ export class DevfestConcierge extends ThemedElement {
     ];
   }
 
+  private initVoice(): void {
+    this.voiceSupport = detectVoiceSupport();
+    if (this.voiceSupport !== 'unsupported') {
+      this.voiceController = new VoiceInputController({
+        lang: this.voiceLanguage,
+        onTranscript: (transcript: string, isFinal: boolean) => {
+          this.query = transcript;
+          this.voiceNotice = isFinal ? 'Voice captured. Edit or tap Ask.' : 'Listening…';
+          const inputId = this.dialogOpen ? '#concierge-dialog-input' : '#concierge-input';
+          const inputEl = this.shadowRoot?.querySelector<HTMLInputElement>(inputId);
+          inputEl?.focus();
+        },
+        onStateChange: (state: VoiceInputState) => {
+          this.voiceState = state;
+          if (state === 'listening') {
+            this.voiceNotice = 'Listening… speak your query now';
+          } else if (state === 'transcribing') {
+            this.voiceNotice = 'Transcribing voice with Gemini…';
+          }
+        },
+        onError: (err: string) => {
+          this.voiceNotice = err;
+        },
+      });
+    }
+  }
+
   override connectedCallback(): void {
     super.connectedCallback();
-    window.addEventListener('keydown', this.onGlobalKeydown);
+    this.initVoice();
+
+    if (this.variant === 'floating') {
+      window.addEventListener('devfest-concierge:hero-visible', this.onHeroVisibleEvent);
+      window.addEventListener('devfest-concierge:request', this.onConciergeRequestEvent);
+      window.addEventListener('vaadin-router-location-changed', this.onLocationChanged);
+      window.addEventListener('keydown', this.onGlobalKeydown);
+      this.isFabVisible = typeof window !== 'undefined' && window.location.pathname !== '/';
+    } else {
+      window.addEventListener('keydown', this.onGlobalKeydown);
+    }
+
+    this.toggleAttribute('data-dialog-open', this.dialogOpen);
+    this.toggleAttribute('data-fab-visible', this.isFabVisible);
+
     this.unsubscribeFavorites = subscribeSessionFavorites(() => {
       this.syncFavoritesIntoActiveSurface();
     });
     void this.bootstrapData();
   }
 
+  override firstUpdated(changedProperties: PropertyValues<this>): void {
+    super.firstUpdated(changedProperties);
+    if (this.variant === 'hero' && typeof IntersectionObserver !== 'undefined') {
+      const frame = this.shadowRoot?.querySelector('.launcher-frame');
+      if (frame) {
+        this.heroObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              window.dispatchEvent(
+                new CustomEvent('devfest-concierge:hero-visible', {
+                  detail: { visible: entry.isIntersecting },
+                }),
+              );
+            }
+          },
+          { threshold: 0.15 },
+        );
+        this.heroObserver.observe(frame);
+      }
+    }
+  }
+
+  override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    const props = changedProperties as Map<string, unknown>;
+    if (props.has('dialogOpen')) {
+      this.toggleAttribute('data-dialog-open', this.dialogOpen);
+    }
+    if (props.has('isFabVisible')) {
+      this.toggleAttribute('data-fab-visible', this.isFabVisible);
+    }
+  }
+
   override disconnectedCallback(): void {
     super.disconnectedCallback();
     window.removeEventListener('keydown', this.onGlobalKeydown);
+    if (this.variant === 'floating') {
+      window.removeEventListener('devfest-concierge:hero-visible', this.onHeroVisibleEvent);
+      window.removeEventListener('devfest-concierge:request', this.onConciergeRequestEvent);
+      window.removeEventListener('vaadin-router-location-changed', this.onLocationChanged);
+    }
+    if (this.variant === 'hero') {
+      this.heroObserver?.disconnect();
+      this.heroObserver = undefined;
+      window.dispatchEvent(
+        new CustomEvent('devfest-concierge:hero-visible', {
+          detail: { visible: false },
+        }),
+      );
+    }
+    this.voiceController?.cancel();
     if (this.spotlightRaf !== undefined) {
       window.cancelAnimationFrame(this.spotlightRaf);
       this.spotlightRaf = undefined;
@@ -1404,6 +1797,40 @@ export class DevfestConcierge extends ThemedElement {
     this.unsubscribeFavorites?.();
     this.unsubscribeFavorites = undefined;
   }
+
+  private readonly onHeroVisibleEvent = (e: Event): void => {
+    const visible = Boolean((e as CustomEvent<{ visible?: boolean }>).detail?.visible);
+    this.isFabVisible = !visible;
+  };
+
+  private readonly onConciergeRequestEvent = (e: Event): void => {
+    e.preventDefault();
+    const custom = e as CustomEvent<{
+      query?: string;
+      intent?: string;
+      forceAi?: boolean;
+      trigger?: HTMLElement;
+    }>;
+    if (custom.detail) {
+      if (custom.detail.trigger) {
+        this.returnFocusEl = custom.detail.trigger;
+      }
+      void this.runConciergeRequest(
+        custom.detail.query || '',
+        custom.detail.intent,
+        custom.detail.forceAi,
+      );
+    }
+  };
+
+  private readonly onLocationChanged = (): void => {
+    if (this.dialogOpen) {
+      this.closeDialog();
+    }
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+      this.isFabVisible = true;
+    }
+  };
 
   private readonly onGlobalKeydown = (event: KeyboardEvent): void => {
     const isCmdK =
@@ -1495,6 +1922,26 @@ export class DevfestConcierge extends ThemedElement {
   }
 
   public openAndFocus(initialIntent?: string): void {
+    if (this.variant !== 'floating') {
+      const chip = initialIntent
+        ? QUICK_INTENTS.find((c) => c.intent === initialIntent)
+        : undefined;
+      const delegated = !window.dispatchEvent(
+        new CustomEvent('devfest-concierge:request', {
+          bubbles: true,
+          cancelable: true,
+          detail: {
+            query: chip?.prompt ?? '',
+            intent: initialIntent,
+            trigger: this.shadowRoot?.querySelector('#concierge-input') || this,
+          },
+        }),
+      );
+      if (delegated) {
+        return;
+      }
+    }
+
     this.openDialog();
     if (initialIntent) {
       const chip = QUICK_INTENTS.find((c) => c.intent === initialIntent);
@@ -1727,6 +2174,24 @@ export class DevfestConcierge extends ThemedElement {
     forceAi = false,
   ): Promise<void> {
     const trimmed = queryText.trim();
+    if (this.variant !== 'floating') {
+      const delegated = !window.dispatchEvent(
+        new CustomEvent('devfest-concierge:request', {
+          bubbles: true,
+          cancelable: true,
+          detail: {
+            query: trimmed,
+            intent,
+            forceAi,
+            trigger: this.shadowRoot?.querySelector('#concierge-input') || this,
+          },
+        }),
+      );
+      if (delegated) {
+        return;
+      }
+    }
+
     this.query = trimmed;
     this.activeIntent = intent ?? 'custom';
     this.activeQuery = trimmed || (intent ?? 'overview');
@@ -1835,14 +2300,43 @@ export class DevfestConcierge extends ThemedElement {
     this.query = input.value;
   };
 
+  private async toggleVoiceInput(e?: Event, targetInputId?: string): Promise<void> {
+    e?.preventDefault();
+    e?.stopPropagation();
+    if (!this.voiceController) return;
+
+    if (this.voiceState === 'listening') {
+      this.voiceController.stop();
+    } else {
+      if (targetInputId) {
+        const input = this.shadowRoot?.querySelector<HTMLInputElement>(`#${targetInputId}`);
+        input?.focus({ preventScroll: true });
+      }
+      await this.voiceController.start();
+    }
+  }
+
+  private toggleVoiceLanguage(lang: VoiceLanguage): void {
+    this.voiceLanguage = lang;
+    this.voiceController?.setLanguage(lang);
+    this.requestUpdate();
+  }
+
   private readonly scrollToAnchor = (event: Event, selector: string): void => {
-    const rootNode = this.getRootNode();
-    if (!(rootNode instanceof ShadowRoot || rootNode instanceof Document)) return;
-    const target = rootNode.querySelector<HTMLElement>(selector);
+    let target = document.querySelector<HTMLElement>(selector);
+    if (!target) {
+      const rootNode = this.getRootNode();
+      if (rootNode instanceof ShadowRoot || rootNode instanceof Document) {
+        target = rootNode.querySelector<HTMLElement>(selector);
+      }
+    }
     if (target) {
       event.preventDefault();
       this.closeDialog();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (window.location.pathname !== '/') {
+      this.closeDialog();
+      window.location.href = `/${selector}`;
     }
   };
 
@@ -2330,6 +2824,105 @@ export class DevfestConcierge extends ThemedElement {
       !isHostedPreviewHostname(window.location.hostname) &&
       Boolean(this.activeQuery || this.activeIntent);
 
+    if (this.variant === 'floating') {
+      return html`
+        ${this.renderFloatingFab()}
+        ${this.renderDialog(
+          isLiveOrCached,
+          sourceBadgeText,
+          canUpgradeToAi,
+          inspectorJson,
+          rootNode,
+          surface,
+        )}
+      `;
+    }
+
+    return html`
+      ${this.renderLauncherShell()}
+      ${this.renderDialog(
+        isLiveOrCached,
+        sourceBadgeText,
+        canUpgradeToAi,
+        inspectorJson,
+        rootNode,
+        surface,
+      )}
+    `;
+  }
+
+  private renderFloatingFab() {
+    return html`
+      <button
+        type="button"
+        class="orbital-fab"
+        aria-label="Ask DevFest AI Concierge"
+        aria-haspopup="dialog"
+        @click=${() => this.openAndFocus()}
+      >
+        <span class="fab-spark-wrap" aria-hidden="true">
+          <span class="fab-pulse-ring"></span>
+          <svg class="fab-spark-svg" viewBox="0 0 24 24">
+            <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
+          </svg>
+        </span>
+        <span class="fab-label">Ask AI</span>
+        <kbd class="fab-kbd" aria-hidden="true">⌘K</kbd>
+      </button>
+    `;
+  }
+
+  private renderVoiceMicButton(targetInputId: string) {
+    if (this.voiceSupport === 'unsupported') return nothing;
+    const isListening = this.voiceState === 'listening';
+    const isTranscribing = this.voiceState === 'transcribing';
+    const title = isListening
+      ? 'Listening… tap to stop'
+      : isTranscribing
+        ? 'Transcribing audio with Gemini…'
+        : 'Voice dictation (Speak your query)';
+
+    return html`
+      <button
+        type="button"
+        class="mic-btn ${isListening ? 'is-listening' : ''} ${isTranscribing ? 'is-transcribing' : ''}"
+        aria-label=${title}
+        title=${title}
+        @click=${(e: Event) => void this.toggleVoiceInput(e, targetInputId)}
+      >
+        ${
+          isListening
+            ? html`
+                <span class="eq-bars" aria-hidden="true">
+                  <span class="eq-bar bar-1"></span>
+                  <span class="eq-bar bar-2"></span>
+                  <span class="eq-bar bar-3"></span>
+                  <span class="eq-bar bar-4"></span>
+                </span>
+              `
+            : isTranscribing
+              ? this.renderSpinnerIcon()
+              : html`
+                  <svg class="mic-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                `
+        }
+      </button>
+    `;
+  }
+
+  private renderLauncherShell() {
     return html`
       <section class="launcher-shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
         <div class="launcher-frame" @pointermove=${this.onLauncherPointerMove}>
@@ -2360,6 +2953,7 @@ export class DevfestConcierge extends ThemedElement {
                 @input=${this.onInput}
                 placeholder="Ask AI: talks, rooms, $5 credits, venue…"
               />
+              ${this.renderVoiceMicButton('concierge-input')}
             </div>
             <button
               type="submit"
@@ -2378,7 +2972,18 @@ export class DevfestConcierge extends ThemedElement {
           ${this.renderChipStrip()}
         </div>
       </section>
+    `;
+  }
 
+  private renderDialog(
+    isLiveOrCached: boolean,
+    sourceBadgeText: string,
+    canUpgradeToAi: boolean,
+    inspectorJson: string,
+    rootNode?: A2UIComponentNode,
+    surface?: SurfaceState,
+  ) {
+    return html`
       <dialog
         id="concierge-dialog"
         class="concierge-dialog"
@@ -2394,6 +2999,28 @@ export class DevfestConcierge extends ThemedElement {
               <span class="source-badge ${isLiveOrCached ? 'is-live' : ''}"
                 >${sourceBadgeText}</span
               >
+              ${
+                this.voiceSupport === 'web-speech'
+                  ? html`
+                      <div class="lang-pill-wrap" title="Speech language">
+                        <button
+                          type="button"
+                          class="lang-toggle-btn ${this.voiceLanguage === 'pl-PL' ? 'is-active' : ''}"
+                          @click=${() => this.toggleVoiceLanguage('pl-PL')}
+                        >
+                          PL
+                        </button>
+                        <button
+                          type="button"
+                          class="lang-toggle-btn ${this.voiceLanguage === 'en-US' ? 'is-active' : ''}"
+                          @click=${() => this.toggleVoiceLanguage('en-US')}
+                        >
+                          EN
+                        </button>
+                      </div>
+                    `
+                  : nothing
+              }
             </div>
             <button
               type="button"
@@ -2424,6 +3051,7 @@ export class DevfestConcierge extends ThemedElement {
                   @input=${this.onInput}
                   placeholder="Ask AI anything about DevFest Warsaw 2026…"
                 />
+                ${this.renderVoiceMicButton('concierge-dialog-input')}
               </div>
               <button
                 type="submit"
@@ -2438,6 +3066,13 @@ export class DevfestConcierge extends ThemedElement {
                 }
               </button>
             </form>
+            ${
+              this.voiceNotice
+                ? html`<div class="voice-status-bar" role="status" aria-live="polite">
+                    ${this.voiceNotice}
+                  </div>`
+                : nothing
+            }
             ${this.renderChipStrip()}
           </div>
 

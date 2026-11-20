@@ -645,7 +645,7 @@ describe('handleConcierge', () => {
 
     expect(res1.code).toBe(200);
     expect(res1.headers['X-Concierge-Cache']).toBe('MISS');
-    expect(res1.headers['X-Concierge-Model']).toBe('gemini-3.1-flash-lite');
+    expect(res1.headers['X-Concierge-Model']).toBe('gemini-3.6-flash');
     expect(sleepFn).toHaveBeenCalledTimes(1);
     expect(fetchFn).toHaveBeenCalledTimes(2);
 
@@ -654,7 +654,7 @@ describe('handleConcierge', () => {
       model: string;
       input: string;
     };
-    expect(secondBody.model).toBe('gemini-3.1-flash-lite');
+    expect(secondBody.model).toBe('gemini-3.6-flash');
     const parsedInput = JSON.parse(secondBody.input) as {
       currentWarsawTime: string;
       scheduleSlot: string;
@@ -666,10 +666,10 @@ describe('handleConcierge', () => {
       model: string;
       messages: Array<Record<string, unknown>>;
     };
-    expect(body1.model).toBe('gemini-3.1-flash-lite');
+    expect(body1.model).toBe('gemini-3.6-flash');
     expect(body1.messages[0]).toMatchObject({
       type: 'createSurface',
-      source: 'gemini-3.1-flash-lite',
+      source: 'gemini-3.6-flash',
     });
 
     // Repeated call hits cache and preserves failover model metadata
@@ -686,8 +686,8 @@ describe('handleConcierge', () => {
     );
     expect(res2.code).toBe(200);
     expect(res2.headers['X-Concierge-Cache']).toBe('HIT');
-    expect(res2.headers['X-Concierge-Model']).toBe('gemini-3.1-flash-lite');
-    expect(res2.body).toMatchObject({ cached: true, model: 'gemini-3.1-flash-lite' });
+    expect(res2.headers['X-Concierge-Model']).toBe('gemini-3.6-flash');
+    expect(res2.body).toMatchObject({ cached: true, model: 'gemini-3.6-flash' });
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
 
@@ -710,5 +710,140 @@ describe('handleConcierge', () => {
     expect(res.body).toEqual({ status: 'upstream-error', fallback: 'local-a2ui' });
     expect(fetchFn).toHaveBeenCalledTimes(3);
     expect(sleepFn).toHaveBeenCalledTimes(2);
+  });
+
+  describe('mode: transcribe', () => {
+    it('validates missing audio payload and returns 400', async () => {
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({ body: { mode: 'transcribe', mimeType: 'audio/webm' } }),
+        res as unknown as Response,
+        { getApiKey: () => 'key' },
+      );
+      expect(res.code).toBe(400);
+      expect(res.body).toEqual({ status: 'invalid-request', error: 'Missing audio payload' });
+    });
+
+    it('rejects oversize audio payloads > 700,000 base64 chars with 413', async () => {
+      const res = createMockResponse();
+      const largeAudio = 'A'.repeat(700_001);
+      await handleConcierge(
+        makeRequest({ body: { mode: 'transcribe', audio: largeAudio, mimeType: 'audio/webm' } }),
+        res as unknown as Response,
+        { getApiKey: () => 'key' },
+      );
+      expect(res.code).toBe(413);
+      expect(res.body).toEqual({
+        status: 'payload-too-large',
+        error: 'Audio exceeds 15 seconds limit',
+      });
+    });
+
+    it('rejects unsupported audio MIME types with 400', async () => {
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({ body: { mode: 'transcribe', audio: 'base64audio', mimeType: 'video/mp4' } }),
+        res as unknown as Response,
+        { getApiKey: () => 'key' },
+      );
+      expect(res.code).toBe(400);
+      expect(res.body).toEqual({
+        status: 'invalid-request',
+        error: 'Unsupported audio MIME type',
+      });
+    });
+
+    it('transcribes valid audio, strips codec suffixes, and returns 200 with transcript', async () => {
+      const fetchFn = jest.fn(async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          output_text: JSON.stringify({ transcript: 'Gdzie jest sala Classroom?' }),
+        }),
+      })) as unknown as typeof fetch;
+
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({
+          body: {
+            mode: 'transcribe',
+            audio: 'UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=',
+            mimeType: 'audio/webm;codecs=opus',
+          },
+        }),
+        res as unknown as Response,
+        {
+          getApiKey: () => 'secret-gemini-key',
+          fetchFn,
+        },
+      );
+
+      expect(res.code).toBe(200);
+      expect(res.headers['X-Concierge-Model']).toBe('gemini-3.5-flash-lite');
+      expect(res.body).toEqual({
+        status: 'ok',
+        transcript: 'Gdzie jest sala Classroom?',
+        model: 'gemini-3.5-flash-lite',
+      });
+
+      const calls = (fetchFn as unknown as jest.Mock).mock.calls;
+      const sentPayload = JSON.parse(String((calls[0]![1] as { body?: string }).body)) as {
+        model: string;
+        input: Array<{ type: string; mime_type?: string; data?: string; text?: string }>;
+      };
+      expect(sentPayload.model).toBe('gemini-3.5-flash-lite');
+      expect(sentPayload.input).toHaveLength(2);
+      expect(sentPayload.input[1]?.type).toBe('audio');
+      expect(sentPayload.input[1]?.mime_type).toBe('audio/webm');
+    });
+
+    it('fails over to next model on 503 during transcription', async () => {
+      let callCount = 0;
+      const fetchFn = jest.fn(async () => {
+        callCount += 1;
+        if (callCount === 1) {
+          return {
+            ok: false,
+            status: 503,
+            text: async () => '{"error":"service_unavailable"}',
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            output_text: JSON.stringify({ transcript: 'Warszawa DevFest agenda' }),
+          }),
+        };
+      }) as unknown as typeof fetch;
+      const sleepFn = jest.fn(async () => {});
+
+      const res = createMockResponse();
+      await handleConcierge(
+        makeRequest({
+          body: {
+            mode: 'transcribe',
+            audio: 'UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=',
+            mimeType: 'audio/ogg',
+          },
+        }),
+        res as unknown as Response,
+        {
+          getApiKey: () => 'secret-gemini-key',
+          fetchFn,
+          sleepFn,
+        },
+      );
+
+      expect(res.code).toBe(200);
+      expect(res.headers['X-Concierge-Model']).toBe('gemini-3.6-flash');
+      expect(res.body).toEqual({
+        status: 'ok',
+        transcript: 'Warszawa DevFest agenda',
+        model: 'gemini-3.6-flash',
+      });
+      expect(fetchFn).toHaveBeenCalledTimes(2);
+      expect(sleepFn).toHaveBeenCalledTimes(1);
+    });
   });
 });

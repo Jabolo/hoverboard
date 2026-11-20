@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import agenda from '../../public/data/agenda-2026.json';
 import team from '../../public/data/event-team.json';
 import programme from '../../public/data/programme-2026.json';
@@ -156,9 +156,7 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Live · Gemini 3.5 Flash-Lite',
-    );
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live · Gemini AI');
     expect(root.querySelector('.surface-title')?.textContent).toBe('Michał Jabłoński');
 
     // Submit again — should hit client cache without another fetch to /api/concierge
@@ -167,9 +165,7 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Cached · Gemini 3.5 Flash-Lite',
-    );
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Cached · Gemini AI');
     const conciergeCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes('/api/concierge'),
     );
@@ -357,9 +353,7 @@ describe('devfest-concierge', () => {
       .querySelector<HTMLFormElement>('.dialog-controls .launcher-form')!
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe(
-      'Cached · Gemini 3.5 Flash-Lite',
-    );
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Cached · Gemini AI');
     expect(callCount).toBe(1);
 
     // Crossing 10:45 boundary: misses cache and fetches fresh live response
@@ -566,5 +560,161 @@ describe('devfest-concierge', () => {
       'Live AI temporarily busy — showing grounded local A2UI answer',
     );
     expect(root.querySelector('.logistics-card')).not.toBeNull();
+  });
+
+  describe('variant="floating" orbital FAB and smart handoff', () => {
+    it('renders orbital FAB on non-root routes and opens modal on click', async () => {
+      window.history.replaceState({}, '', '/schedule/');
+      const element = new DevfestConcierge();
+      element.variant = 'floating';
+      document.body.appendChild(element);
+      await flushRender(element);
+
+      const root = element.shadowRoot!;
+      expect(element.hasAttribute('data-fab-visible')).toBe(true);
+      expect(root.querySelector('.launcher-shell')).toBeNull();
+      const fab = root.querySelector<HTMLButtonElement>('.orbital-fab')!;
+      expect(fab).not.toBeNull();
+      expect(fab.textContent).toContain('Ask AI');
+
+      // Click FAB to open dialog
+      fab.click();
+      await flushRender(element);
+
+      const dialog = root.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+      expect(dialog.hasAttribute('open')).toBe(true);
+      expect(element.hasAttribute('data-dialog-open')).toBe(true);
+    });
+
+    it('hides FAB when hero is visible and reveals when scrolled past', async () => {
+      window.history.replaceState({}, '', '/');
+      const floatingEl = new DevfestConcierge();
+      floatingEl.variant = 'floating';
+      document.body.appendChild(floatingEl);
+      await flushRender(floatingEl);
+
+      expect(floatingEl.hasAttribute('data-fab-visible')).toBe(false);
+
+      // Hero reports scrolled out of view
+      window.dispatchEvent(
+        new CustomEvent('devfest-concierge:hero-visible', {
+          detail: { visible: false },
+        }),
+      );
+      await flushRender(floatingEl);
+
+      expect(floatingEl.hasAttribute('data-fab-visible')).toBe(true);
+
+      // Hero scrolls back into view
+      window.dispatchEvent(
+        new CustomEvent('devfest-concierge:hero-visible', {
+          detail: { visible: true },
+        }),
+      );
+      await flushRender(floatingEl);
+
+      expect(floatingEl.hasAttribute('data-fab-visible')).toBe(false);
+    });
+
+    it('delegates request from hero to floating concierge instance', async () => {
+      window.history.replaceState({}, '', '/');
+      const floatingEl = new DevfestConcierge();
+      floatingEl.variant = 'floating';
+      document.body.appendChild(floatingEl);
+      await flushRender(floatingEl);
+
+      const heroEl = new DevfestConcierge();
+      heroEl.variant = 'hero';
+      document.body.appendChild(heroEl);
+      await flushRender(heroEl);
+
+      const heroRoot = heroEl.shadowRoot!;
+      const floatingRoot = floatingEl.shadowRoot!;
+
+      // Click AI track in Hero
+      heroRoot
+        .querySelector<HTMLButtonElement>('.launcher-shell button[data-intent="track-ai"]')!
+        .click();
+      await flushRender(floatingEl);
+      await flushRender(heroEl);
+
+      // Floating modal opened and handled the request
+      const floatingDialog = floatingRoot.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+      expect(floatingDialog.hasAttribute('open')).toBe(true);
+      expect(floatingRoot.querySelector('.surface-title')?.textContent).toBe('AI & Agents Track');
+
+      // Hero local dialog remained closed
+      const heroDialog = heroRoot.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+      expect(heroDialog.hasAttribute('open')).toBe(false);
+    });
+
+    it('auto-closes dialog on route navigation', async () => {
+      window.history.replaceState({}, '', '/sessions/CFP-021/');
+      const floatingEl = new DevfestConcierge();
+      floatingEl.variant = 'floating';
+      document.body.appendChild(floatingEl);
+      await flushRender(floatingEl);
+
+      floatingEl.openAndFocus();
+      await flushRender(floatingEl);
+
+      const dialog = floatingEl.shadowRoot!.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+      expect(dialog.hasAttribute('open')).toBe(true);
+
+      // Simulate client router location changed
+      window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
+      await flushRender(floatingEl);
+
+      expect(dialog.hasAttribute('open')).toBe(false);
+    });
+  });
+
+  describe('voice input UI', () => {
+    const originalSpeechRecognition = (window as unknown as Record<string, unknown>)[
+      'SpeechRecognition'
+    ];
+
+    beforeEach(() => {
+      (window as unknown as Record<string, unknown>)['SpeechRecognition'] = class {
+        continuous = false;
+        interimResults = false;
+        lang = 'en-US';
+        start = jest.fn();
+        stop = jest.fn();
+        abort = jest.fn();
+      };
+    });
+
+    afterEach(() => {
+      (window as unknown as Record<string, unknown>)['SpeechRecognition'] =
+        originalSpeechRecognition;
+    });
+
+    it('renders mic button and toggles language between PL and EN', async () => {
+      const element = new DevfestConcierge();
+      document.body.appendChild(element);
+      await flushRender(element);
+
+      const root = element.shadowRoot!;
+      const micBtn = root.querySelector<HTMLButtonElement>('.mic-btn')!;
+      expect(micBtn).not.toBeNull();
+      expect(micBtn.getAttribute('aria-label')).toContain('Voice dictation');
+
+      // Open dialog to check language pill
+      element.openAndFocus();
+      await flushRender(element);
+
+      const plBtn = root.querySelector<HTMLButtonElement>('.lang-toggle-btn.is-active')!;
+      expect(plBtn.textContent?.trim()).toBe('PL');
+
+      // Click EN
+      const enBtn = Array.from(root.querySelectorAll<HTMLButtonElement>('.lang-toggle-btn')).find(
+        (b) => b.textContent?.trim() === 'EN',
+      )!;
+      enBtn.click();
+      await flushRender(element);
+
+      expect(enBtn.classList.contains('is-active')).toBe(true);
+    });
   });
 });
