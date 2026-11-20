@@ -2,6 +2,7 @@ import { Router, type RouterLocation } from '@vaadin/router';
 import { html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { ThemedElement } from '../components/themed-element';
 import {
   getHuntProgress,
@@ -62,10 +63,11 @@ export class HuntPage extends ThemedElement {
   @state() private cardView: CardView = { status: 'loading' };
   @state() private codeError = '';
   @state() private revealIssue = '';
+  @state() private revealFoil = '';
   @state() private storageAvailable = true;
   @state() private albumMotion = 'idle';
   @state() private replay:
-    { card: EarnedHuntCard; foil: HTMLElement; revealed: boolean } | undefined;
+    { card: EarnedHuntCard; foil: HTMLElement; revealed: boolean; foilImage?: string } | undefined;
   private routeRequest?: AbortController;
   private unbindAlbumMotion?: () => void;
   private replayTrigger: HTMLElement | undefined;
@@ -123,6 +125,7 @@ export class HuntPage extends ThemedElement {
     this.routeRequest = new AbortController();
     const { signal } = this.routeRequest;
     this.revealIssue = '';
+    this.revealFoil = '';
     if (this.token === undefined) {
       const groups = await huntGroups(signal);
       if (!signal.aborted) this.groups = groups;
@@ -157,7 +160,7 @@ export class HuntPage extends ThemedElement {
         card: result.card,
         foil: scratch({
           label: 'Scratch here',
-          onReveal: () => this.revealCard(result.card.id, signal),
+          onReveal: (foil) => this.revealCard(result.card.id, signal, foil),
         }),
       };
       return;
@@ -173,7 +176,7 @@ export class HuntPage extends ThemedElement {
     this.cardView = result;
   }
 
-  private async revealCard(id: string, signal: AbortSignal) {
+  private async revealCard(id: string, signal: AbortSignal, foil: string) {
     this.revealIssue = '';
     let result = await requestHuntCard(id, 'POST', signal);
     if (signal.aborted) return false;
@@ -186,6 +189,7 @@ export class HuntPage extends ThemedElement {
       return false;
     }
     if (result.status === 'open') return false;
+    this.revealFoil = result.status === 'earned' ? foil : '';
     this.applyResult(result);
     await this.updateComplete;
     if (!signal.aborted) {
@@ -228,9 +232,9 @@ export class HuntPage extends ThemedElement {
       foil: scratch({
         label: 'Scratch again',
         content: card.text,
-        onReveal: async () => {
+        onReveal: async (foil) => {
           if (this.replay?.card.id !== card.id) return false;
-          this.replay = { ...this.replay, revealed: true };
+          this.replay = { ...this.replay, revealed: true, foilImage: foil };
           await this.updateComplete;
           this.renderRoot.querySelector<HTMLElement>('#replay-reveal')?.focus();
           return true;
@@ -265,7 +269,11 @@ export class HuntPage extends ThemedElement {
           ${
             replay.revealed
               ? html`
-                  <section class="reveal-result" aria-labelledby="replay-reveal">
+                  <section
+                    class="reveal-result ${replay.foilImage ? 'has-scratch' : ''}"
+                    style=${styleMap({ '--reveal-foil': replay.foilImage ? `url("${replay.foilImage}")` : 'none' })}
+                    aria-labelledby="replay-reveal"
+                  >
                     <h3 id="replay-reveal" tabindex="-1">Collected card</h3>
                     <p>${replay.card.text}</p>
                   </section>
@@ -461,7 +469,11 @@ export class HuntPage extends ThemedElement {
               ? html`${view.foil}
                   <p class="reveal-issue" role="status">${this.revealIssue}</p>`
               : html`
-                  <section class="reveal-result" aria-labelledby="reveal-heading">
+                  <section
+                    class="reveal-result ${this.revealFoil ? 'has-scratch' : ''}"
+                    style=${styleMap({ '--reveal-foil': this.revealFoil ? `url("${this.revealFoil}")` : 'none' })}
+                    aria-labelledby="reveal-heading"
+                  >
                     <h2 id="reveal-heading" tabindex="-1">Collected</h2>
                     <p>${view.card.text}</p>
                     <button

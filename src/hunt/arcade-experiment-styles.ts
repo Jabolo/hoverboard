@@ -140,6 +140,11 @@ export const experimentStyles = css`
     min-width: 0;
     width: 100%;
   }
+  .scratch-stage {
+    position: relative;
+    isolation: isolate;
+  }
+
   .scratch-surface {
     position: relative;
     isolation: isolate;
@@ -168,6 +173,13 @@ export const experimentStyles = css`
     touch-action: none;
     cursor: crosshair;
     transition: opacity 0.3s ease;
+  }
+  .scratch-dust {
+    position: absolute;
+    inset: -28px;
+    width: calc(100% + 56px);
+    height: calc(100% + 56px);
+    pointer-events: none;
   }
   .scratch-instruction {
     position: absolute;
