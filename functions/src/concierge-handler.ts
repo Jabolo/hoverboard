@@ -1186,7 +1186,7 @@ export async function handleConcierge(
 
       try {
         const upstreamRes = await fetchImpl(
-          'https://generativelanguage.googleapis.com/v1/interactions',
+          'https://generativelanguage.googleapis.com/v1beta/interactions',
           {
             method: 'POST',
             headers: {

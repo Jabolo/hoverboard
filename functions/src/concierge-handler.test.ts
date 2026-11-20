@@ -787,6 +787,7 @@ describe('handleConcierge', () => {
       });
 
       const calls = (fetchFn as unknown as jest.Mock).mock.calls;
+      expect(calls[0]![0]).toBe('https://generativelanguage.googleapis.com/v1beta/interactions');
       const sentPayload = JSON.parse(String((calls[0]![1] as { body?: string }).body)) as {
         model: string;
         input: Array<{ type: string; mime_type?: string; data?: string; text?: string }>;
