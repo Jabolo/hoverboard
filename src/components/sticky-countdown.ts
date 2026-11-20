@@ -77,7 +77,7 @@ export class StickyCountdown extends LitElement {
         font-size: 19px;
       }
       .label {
-        font-size: 11px;
+        font-size: 12px;
       }
     }
     @media (prefers-reduced-motion: reduce) {

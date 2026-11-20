@@ -52,6 +52,11 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           background: var(--primary-background-color);
         }
 
+        .speakers-stage {
+          position: relative;
+          min-height: 80vh;
+        }
+
         .container {
           padding-top: 32px;
           padding-bottom: 32px;
@@ -150,14 +155,6 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
           overflow-wrap: anywhere;
         }
 
-        .professional-highlight {
-          margin: 12px 0 0;
-          color: var(--terminal-muted);
-          font-size: 14px;
-          line-height: 1.6;
-          overflow-wrap: anywhere;
-        }
-
         .origin {
           margin-top: 4px;
           color: var(--terminal-muted);
@@ -194,6 +191,9 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
         }
 
         paper-progress {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           --paper-progress-active-color: var(--default-primary-color);
           --paper-progress-secondary-color: var(--default-primary-color);
@@ -220,123 +220,104 @@ export class SpeakersPage extends ReduxMixin(PolymerElement) {
 
       <simple-hero page="speakers"></simple-hero>
 
-      <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
+      <div class="speakers-stage">
+        <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
-      <template is="dom-if" if="[[showFilters]]">
-        <filter-menu
-          filter-groups="[[filterGroups]]"
-          selected-filters="[[selectedFilters]]"
-          results-count="[[speakersToRender.length]]"
-        ></filter-menu>
-      </template>
+        <template is="dom-if" if="[[showFilters]]">
+          <filter-menu
+            filter-groups="[[filterGroups]]"
+            selected-filters="[[selectedFilters]]"
+            results-count="[[speakersToRender.length]]"
+          ></filter-menu>
+        </template>
 
-      <content-loader
-        class="container"
-        card-padding="32px"
-        card-height="400px"
-        avatar-size="128px"
-        avatar-circle="64px"
-        horizontal-position="50%"
-        border-radius="4px"
-        box-shadow="var(--box-shadow)"
-        items-count="[[contentLoaders.speakers.itemsCount]]"
-        hidden$="[[contentLoaderVisibility]]"
-      ></content-loader>
+        <content-loader
+          class="container"
+          card-padding="32px"
+          card-height="400px"
+          avatar-size="128px"
+          avatar-circle="64px"
+          horizontal-position="50%"
+          border-radius="4px"
+          box-shadow="var(--box-shadow)"
+          items-count="[[contentLoaders.speakers.itemsCount]]"
+          hidden$="[[contentLoaderVisibility]]"
+        ></content-loader>
 
-      <div class="container" hidden$="[[showEmptyState]]">
-        <template is="dom-repeat" items="[[speakersToRender]]" as="speaker">
-          <div class="speaker card">
-            <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
-              <lazy-image
-                class="photo"
-                src="[[portraitSource(speaker.photoUrl, speaker.animatedPhotoUrl, portraitsPaused)]]"
-                alt="[[speaker.name]]"
-              ></lazy-image>
+        <div class="container" hidden$="[[showEmptyState]]">
+          <template is="dom-repeat" items="[[speakersToRender]]" as="speaker">
+            <div class="speaker card">
+              <a class="speaker-link" href$="[[speakerUrl(speaker.id)]]">
+                <lazy-image
+                  class="photo"
+                  src="[[portraitSource(speaker.photoUrl, speaker.animatedPhotoUrl, portraitsPaused)]]"
+                  alt="[[speaker.name]]"
+                ></lazy-image>
 
-              <div class="description">
-                <h2 class="name">[[speaker.name]]</h2>
-                <template is="dom-if" if="[[speaker.title]]">
-                  <div class="professional-role">[[speaker.title]]</div>
-                </template>
-                <template is="dom-if" if="[[speaker.company]]">
-                  <div class="professional-company">[[speaker.company]]</div>
-                </template>
-                <template
-                  is="dom-if"
-                  if="[[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]"
-                >
-                  <p class="professional-highlight">
-                    [[professionalHighlight(speaker.shortBio, speaker.title, speaker.company)]]
-                  </p>
-                </template>
-                <template is="dom-if" if="[[speaker.country]]">
-                  <div class="origin">[[speaker.country]]</div>
-                </template>
+                <div class="description">
+                  <h2 class="name">[[speaker.name]]</h2>
+                  <template is="dom-if" if="[[speaker.title]]">
+                    <div class="professional-role">[[speaker.title]]</div>
+                  </template>
+                  <template is="dom-if" if="[[speaker.company]]">
+                    <div class="professional-company">[[speaker.company]]</div>
+                  </template>
+                  <template is="dom-if" if="[[speaker.country]]">
+                    <div class="origin">[[speaker.country]]</div>
+                  </template>
 
-                <speaker-affiliations
-                  company="[[speaker.company]]"
-                  logo-url="[[speaker.companyLogoUrl]]"
-                  logo-background="[[speaker.companyLogoBackground]]"
-                  badges="[[speaker.badges]]"
-                ></speaker-affiliations>
-              </div>
-            </a>
+                  <speaker-affiliations
+                    company="[[speaker.company]]"
+                    logo-url="[[speaker.companyLogoUrl]]"
+                    logo-background="[[speaker.companyLogoBackground]]"
+                    badges="[[speaker.badges]]"
+                  ></speaker-affiliations>
+                </div>
+              </a>
 
-            <template is="dom-if" if="[[speaker.animatedPhotoUrl]]">
-              <portrait-motion-preference
-                on-portrait-motion-change="onPortraitMotionChange"
-              ></portrait-motion-preference>
-            </template>
-
-            <speaker-session-links
-              sessions="[[speaker.sessions]]"
-              session-roles="[[speaker.sessionRoles]]"
-            ></speaker-session-links>
-
-            <div class="contacts">
-              <template is="dom-repeat" items="[[speaker.socials]]" as="social">
-                <a
-                  class="social-link"
-                  href$="[[social.link]]"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label$="[[socialLabel(speaker.name, social.name, social.icon, social.link)]]"
-                >
-                  <iron-icon
-                    class="social-icon"
-                    icon="hoverboard:[[social.icon]]"
-                    aria-hidden="true"
-                  ></iron-icon>
-                </a>
+              <template is="dom-if" if="[[speaker.animatedPhotoUrl]]">
+                <portrait-motion-preference
+                  on-portrait-motion-change="onPortraitMotionChange"
+                ></portrait-motion-preference>
               </template>
+
+              <speaker-session-links
+                sessions="[[speaker.sessions]]"
+                session-roles="[[speaker.sessionRoles]]"
+              ></speaker-session-links>
+
+              <div class="contacts">
+                <template is="dom-repeat" items="[[speaker.socials]]" as="social">
+                  <a
+                    class="social-link"
+                    href$="[[social.link]]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label$="[[socialLabel(speaker.name, social.name, social.icon, social.link)]]"
+                  >
+                    <iron-icon
+                      class="social-icon"
+                      icon="hoverboard:[[social.icon]]"
+                      aria-hidden="true"
+                    ></iron-icon>
+                  </a>
+                </template>
+              </div>
             </div>
+          </template>
+        </div>
+
+        <template is="dom-if" if="[[showEmptyState]]">
+          <div class="container empty-state-container">
+            <p class="empty-state">[[emptyMessage(speakersPreview)]]</p>
           </div>
         </template>
       </div>
-
-      <template is="dom-if" if="[[showEmptyState]]">
-        <div class="container empty-state-container">
-          <p class="empty-state">[[emptyMessage(speakersPreview)]]</p>
-        </div>
-      </template>
 
       <previous-speakers-block></previous-speakers-block>
 
       <footer-block></footer-block>
     `;
-  }
-
-  private professionalHighlight(shortBio = '', title = '', company = '') {
-    const normalize = (value: string) =>
-      value
-        .trim()
-        .toLocaleLowerCase()
-        .replace(/[\s,|·–—-]+/g, ' ');
-    const highlight = shortBio.trim();
-    const repeated = [title, company, `${title} at ${company}`, `${title} ${company}`].map(
-      normalize,
-    );
-    return highlight && !repeated.includes(normalize(highlight)) ? highlight : '';
   }
 
   private emptyMessage(preview: boolean) {

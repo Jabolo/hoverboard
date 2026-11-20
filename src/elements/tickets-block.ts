@@ -35,21 +35,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .tickets-wrapper {
           position: relative;
-          padding-top: 64px;
+          padding-top: 48px;
           padding-bottom: 48px;
           text-align: center;
-        }
-
-        .tickets-wrapper::before {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--google-yellow);
-          content: '> tickets --show';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
         }
 
         .tickets {
@@ -108,19 +96,19 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         /* Active / Selected Ticket Highlight */
         .ticket-item[selected] {
           border-color: var(--google-blue) !important;
-          box-shadow: 0 0 20px rgba(66, 133, 244, 0.45) !important;
+          box-shadow: 0 12px 24px rgb(0 0 0 / 32%) !important;
           transform: translateY(-4px) scale(1.02) !important;
           z-index: 2;
         }
 
         .ticket-item[tier='supporter'][selected] {
           border-color: var(--google-green) !important;
-          box-shadow: 0 0 24px rgba(52, 168, 83, 0.5) !important;
+          box-shadow: 0 12px 24px rgb(0 0 0 / 34%) !important;
         }
 
         .ticket-item[tier='patron'][selected] {
           border-color: var(--google-yellow) !important;
-          box-shadow: 0 0 24px rgba(251, 188, 4, 0.55) !important;
+          box-shadow: 0 12px 24px rgb(0 0 0 / 34%) !important;
         }
 
         /* Unavailable & Sold-out: accessible disabled state with preserved contrast */
@@ -176,7 +164,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item[tier='supporter']:hover {
           border-color: var(--google-green);
-          box-shadow: 0 0 20px rgba(52, 168, 83, 0.35);
+          box-shadow: 0 10px 24px rgb(0 0 0 / 28%);
           transform: translateY(-4px);
         }
 
@@ -210,7 +198,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .ticket-item[tier='patron']:hover {
           border-color: var(--google-yellow);
-          box-shadow: 0 0 24px rgba(251, 188, 4, 0.45);
+          box-shadow: 0 10px 24px rgb(0 0 0 / 28%);
           transform: translateY(-4px);
         }
 
@@ -243,10 +231,10 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         .badge-pill {
           display: inline-block;
           font-family: var(--font-mono, monospace);
-          font-size: 10px;
+          font-size: 12px;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.04em;
           padding: 2px 8px;
           border-radius: 12px;
         }
@@ -279,7 +267,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         .impact-subtext {
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
         }
 
@@ -310,19 +298,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         }
 
         .community-impact-note .impact-desc {
+          margin: 0;
           color: var(--secondary-text-color);
           font-size: 14px;
-        }
-
-        .community-impact-note .patron-promise {
-          display: block;
-          margin-top: 8px;
-          color: var(--secondary-text-color);
-          font-size: 14px;
-        }
-
-        .community-impact-note .patron-promise strong {
-          color: var(--primary-text-color);
         }
 
         .header {
@@ -349,7 +327,7 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
         .ticket-dates {
           font-weight: 600;
           color: var(--primary-text-color);
-          font-size: 11px;
+          font-size: 12px;
           letter-spacing: 0.02em;
           margin-bottom: 4px;
         }
@@ -461,24 +439,12 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           padding: 20px 0 0;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: center;
           gap: 16px;
           border-top: 1px solid var(--divider-color);
           font-size: 14px;
           color: var(--secondary-text-color);
-          text-align: left;
           box-sizing: border-box;
-        }
-
-        .registration-drawer-bar strong {
-          color: var(--primary-text-color);
-        }
-
-        .drawer-hint {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          line-height: 1.4;
         }
 
         .drawer-toggle-btn {
@@ -510,12 +476,8 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
         @media (max-width: 639px) {
           .tickets-wrapper {
-            padding-top: 48px;
+            padding-top: 40px;
             padding-bottom: 40px;
-          }
-
-          .tickets-wrapper::before {
-            display: none;
           }
 
           .tickets {
@@ -615,10 +577,6 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
             gap: 12px;
           }
 
-          .drawer-hint {
-            text-align: left;
-          }
-
           .drawer-toggle-btn {
             width: 100%;
           }
@@ -713,32 +671,16 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
           </div>
 
           <div class="community-impact-note">
-            <div class="impact-text">
-              <div class="impact-title">
-                100% Non-Profit Community Event — Organized by Volunteers
-              </div>
-              <div class="impact-desc">
-                DevFest Warsaw is run by the community, for the community. All organizers and
-                speakers donate their time pro bono, and Google generously hosts us at Campus
-                Warsaw. Supporter and Patron tickets directly fund full-day attendee catering &
-                specialty coffee, custom community swag, and conference operations.
-                <span class="patron-promise"
-                  ><strong>Patron Ticket Promise:</strong> Guaranteed personal or company name
-                  recognition on our opening intro slide!</span
-                >
-              </div>
-            </div>
+            <div class="impact-title">100% Volunteer-Run Non-Profit Event</div>
+            <p class="impact-desc">
+              Supporter and Patron tickets directly fund catering, specialty coffee, swag, and
+              operations while Google hosts us at Campus Warsaw. Patron tickets include personal or
+              company recognition on our opening slide.
+            </p>
           </div>
 
           <template is="dom-if" if="[[!registrationOpened]]">
             <div class="registration-drawer-bar">
-              <div class="drawer-hint">
-                <span>
-                  Choose <strong>GET YOUR TICKET</strong> on a ticket above, or open the form
-                  directly.
-                </span>
-              </div>
-
               <button
                 type="button"
                 class="drawer-toggle-btn"
@@ -847,9 +789,9 @@ export class TicketsBlock extends ReduxMixin(PolymerElement) {
 
   private getBadgeText(ticket: Ticket): string {
     const tier = this.getTicketTier(ticket);
-    if (tier === 'patron') return '⭐ Community Patron';
-    if (tier === 'supporter') return '💛 Community Supporter';
-    if (tier === 'early-bird') return '⚡ Early Bird';
+    if (tier === 'patron') return 'Community Patron';
+    if (tier === 'supporter') return 'Community Supporter';
+    if (tier === 'early-bird') return 'Early Bird';
     return '';
   }
 

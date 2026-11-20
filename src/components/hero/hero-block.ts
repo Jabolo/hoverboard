@@ -47,23 +47,6 @@ export class HeroBlock extends ThemedElement {
           pointer-events: none;
         }
 
-        .hero-block::after {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          z-index: 2;
-          height: 4px;
-          background: linear-gradient(
-            90deg,
-            var(--google-blue) 0 25%,
-            var(--google-green) 25% 50%,
-            var(--google-yellow) 50% 75%,
-            var(--google-red) 75%
-          );
-          content: '';
-        }
-
         :host([background-image]) .hero-block {
           background: var(--hero-background, var(--terminal-background));
         }
@@ -98,7 +81,7 @@ export class HeroBlock extends ThemedElement {
         }
 
         .hero-content {
-          padding: 80px 32px 32px;
+          padding: 72px 16px 24px;
           position: relative;
           z-index: 1;
         }
@@ -134,6 +117,12 @@ export class HeroBlock extends ThemedElement {
           color: var(--terminal-muted);
           font-size: 16px;
           line-height: 1.65;
+        }
+
+        @media (min-width: 640px) {
+          .hero-content {
+            padding: 80px 32px 32px;
+          }
         }
 
         @media (min-width: 812px) {

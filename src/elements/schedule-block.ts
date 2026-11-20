@@ -130,6 +130,7 @@ export class ScheduleBlock extends ThemedElement {
       css`
         :host {
           display: block;
+          min-height: 340px;
           border-bottom: 1px solid var(--divider-color);
           background: var(--primary-background-color);
           color: var(--terminal-copy);
@@ -387,11 +388,19 @@ export class ScheduleBlock extends ThemedElement {
         }
       </div>
       ${
-        this.now < eventInstant('23:59') + 60_000
-          ? html`<div class="amenity"><strong>Coffee</strong><span>On-site amenity</span></div>`
+        this.status !== 'loading'
+          ? html`
+              ${
+                this.now < eventInstant('23:59') + 60_000
+                  ? html`<div class="amenity">
+                      <strong>Coffee &amp; snacks</strong><span>Available on site</span>
+                    </div>`
+                  : nothing
+              }
+              <a class="schedule-link" href="/schedule/">View full schedule →</a>
+            `
           : nothing
       }
-      <a class="schedule-link" href="/schedule/">View full schedule →</a>
     </section>`;
   }
 }

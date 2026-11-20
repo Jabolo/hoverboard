@@ -22,8 +22,8 @@ export class HuntPeekCard extends LitElement {
       box-sizing: border-box;
     }
     .card {
-      display: grid;
-      grid-template-columns: 44px 1fr;
+      display: flex;
+      align-items: stretch;
       max-height: 56px;
       overflow: hidden;
       background: linear-gradient(125deg, #ffefd3, #dcc9e7 53%, #b8e9d8);
@@ -36,7 +36,7 @@ export class HuntPeekCard extends LitElement {
     }
     .card:not(.open) button {
       height: 56px;
-      align-self: start;
+      align-self: flex-start;
     }
     .card.open {
       max-height: 320px;
@@ -47,8 +47,8 @@ export class HuntPeekCard extends LitElement {
     button {
       cursor: grab;
       touch-action: pan-y;
+      flex: 0 0 44px;
       border: 0;
-      border-right: 1px solid #8a7697;
       border-radius: 14px 0 0 14px;
       color: #211830;
       background: transparent;
@@ -56,8 +56,15 @@ export class HuntPeekCard extends LitElement {
       font:
         700 12px 'Trebuchet MS',
         sans-serif;
+      width: 44px;
       min-width: 44px;
       min-height: 56px;
+    }
+    .divider {
+      flex: 0 0 1px;
+      width: 1px;
+      background: #8a7697;
+      align-self: stretch;
     }
     button:active {
       cursor: grabbing;
@@ -68,6 +75,8 @@ export class HuntPeekCard extends LitElement {
       margin-bottom: 2px;
     }
     .copy {
+      flex: 1;
+      min-width: 0;
       padding: 18px 16px;
       font:
         14px/1.45 'Trebuchet MS',
@@ -183,6 +192,7 @@ export class HuntPeekCard extends LitElement {
       >
         <span class="eyes" aria-hidden="true">👀</span>${this.open ? '→' : '↖'}
       </button>
+      <span class="divider" aria-hidden="true"></span>
       <div id="peek-details" class="copy" ?inert=${!this.open}>
         <strong>Psst. I’m not a popup.</strong>
         <p>I’m just a very shy browser tab. You found my hiding spot.</p>

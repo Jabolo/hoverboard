@@ -33,17 +33,8 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           overflow: hidden;
         }
 
-        .description-wrapper::before {
-          display: block;
-          max-width: var(--max-container-width);
-          margin: 0 auto;
-          padding: 0 16px;
-          color: var(--terminal-green);
-          content: '> gdg --team';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
+        .team-container {
+          min-height: 75vh;
         }
 
         .team-title {
@@ -64,7 +55,9 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           margin-bottom: 32px;
         }
 
-        .crew-find { grid-column:1 / -1; justify-self:center; width:100%; }
+        .crew-find {
+          margin: 8px 0 40px;
+        }
         .member {
           min-width: 0;
           padding: 16px 12px;
@@ -179,7 +172,7 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
         </div>
       </div>
 
-      <div class="container">
+      <div class="container team-container">
         <template is="dom-if" if="[[pending]]">
           <p>[[loading]]</p>
         </template>
@@ -188,11 +181,11 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
           <p>Error loading teams.</p>
         </template>
 
-        <template is="dom-repeat" items="[[teamsMembers.data]]" as="team" index-as="teamIndex">
+        <template is="dom-repeat" items="[[teamsMembers.data]]" as="team">
           <h2 class="team-title">[[team.title]]</h2>
 
           <div class="team-block">
-            <template is="dom-repeat" items="[[team.members]]" as="member" index-as="memberIndex">
+            <template is="dom-repeat" items="[[team.members]]" as="member">
               <div class="member" layout horizontal>
                 <lazy-image
                   class="photo"
@@ -217,29 +210,21 @@ export class TeamPage extends ReduxMixin(PolymerElement) {
                   </div>
                 </div>
               </div>
-              <template
-                is="dom-if"
-                if="[[isCrewMiddle(memberIndex, team.members.length, teamIndex)]]"
-              >
-                <hunt-clue
-                  class="crew-find"
-                  href="/hunt/c/cr3w8up/"
-                  label="Crew cache discovered"
-                  hint="The team left a little something between the tabs."
-                  glyph="💿"
-                ></hunt-clue>
-              </template>
             </template>
           </div>
         </template>
+
+        <hunt-clue
+          class="crew-find"
+          href="/hunt/c/cr3w8up/"
+          label="Crew cache discovered"
+          hint="The team left a little something between the tabs."
+          glyph="💿"
+        ></hunt-clue>
       </div>
 
       <footer-block></footer-block>
     `;
-  }
-
-  private isCrewMiddle(index: number, count: number, teamIndex: number) {
-    return teamIndex === 0 && index === Math.max(0, Math.ceil(count / 2) - 1);
   }
 
   private heroSettings = heroSettings.team;

@@ -32,6 +32,10 @@ export const theme = css`
     --md-sys-color-on-primary: #fff;
     --md-sys-color-primary-container: var(--primary-color-white);
     --md-sys-color-on-primary-container: var(--focused-color);
+    --md-filled-button-disabled-container-color: rgb(140 181 255 / 16%);
+    --md-filled-button-disabled-container-opacity: 1;
+    --md-filled-button-disabled-label-text-color: #9bb0d0;
+    --md-filled-button-disabled-label-text-opacity: 1;
     --text-primary-color: var(--terminal-copy);
     --accent-color: var(--google-red);
     --primary-background-color: var(--terminal-background);
@@ -143,11 +147,20 @@ export const theme = css`
   }
 
   md-outlined-button[disabled],
-  md-filled-button[disabled],
   md-text-button[disabled] {
     cursor: default;
     background-color: var(--primary-color-transparent);
     opacity: 0.8;
+  }
+
+  md-filled-button[disabled] {
+    cursor: default;
+    background-color: transparent;
+    --md-filled-button-disabled-container-color: rgb(140 181 255 / 16%);
+    --md-filled-button-disabled-container-opacity: 1;
+    --md-filled-button-disabled-label-text-color: #9bb0d0;
+    --md-filled-button-disabled-label-text-opacity: 1;
+    opacity: 1;
   }
 
   md-outlined-button[primary],

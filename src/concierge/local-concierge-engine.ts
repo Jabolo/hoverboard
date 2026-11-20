@@ -768,7 +768,10 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
     },
   });
 
-  for (const item of focusItems.filter((i) => i.kind !== 'activity')) {
+  const displayedIds = new Set<string>(
+    [auditoriumItem?.id, classroomItem?.id].filter((id): id is string => Boolean(id)),
+  );
+  for (const item of focusItems.filter((i) => i.kind !== 'activity' && !displayedIds.has(i.id))) {
     nodes.push(
       makeSessionCard(
         `compare-card-${item.id}`,
@@ -940,18 +943,6 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
       const friendlyStatus = formatCreditStatus(req.creditStatus);
 
       childNodes.push({
-        id: 'credits-banner',
-        component: 'CalloutBanner',
-        parentId: 'surface-root',
-        props: {
-          tone: 'success',
-          kicker: 'Google Cloud Credits',
-          title: '$5 Google Cloud credits for attendees',
-          body: `330 credits available on Nov 21 (09:00–19:00 Warsaw time), valid for 12 hours after claiming. Current status: ${friendlyStatus}.`,
-        },
-      });
-
-      childNodes.push({
         id: 'credit-guide-card',
         component: 'CreditGuideCard',
         parentId: 'surface-root',
@@ -977,17 +968,6 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
           })),
         },
       });
-
-      for (const item of workshopItems) {
-        childNodes.push(
-          makeSessionCard(
-            `workshop-${item.id}`,
-            item,
-            req.programme,
-            'Hands-on Classroom workshop (BYOD)',
-          ),
-        );
-      }
       break;
     }
 
@@ -1177,18 +1157,6 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
     default: {
       surfaceTitle = 'DevFest Warsaw 2026 Concierge';
       surfaceSubtitle = 'Nov 21, 2026 · Google for Startups Campus Warsaw';
-
-      childNodes.push({
-        id: 'overview-banner',
-        component: 'CalloutBanner',
-        parentId: 'surface-root',
-        props: {
-          tone: 'info',
-          kicker: 'Real Work, Real Lessons',
-          title: 'Plan your DevFest Warsaw 2026 day',
-          body: 'Build a conflict-free AI or Cloud track, compare Auditorium vs Classroom, check $5 Google Cloud credits, or get venue directions.',
-        },
-      });
 
       childNodes.push({
         id: 'overview-grid',

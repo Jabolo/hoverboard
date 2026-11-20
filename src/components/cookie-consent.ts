@@ -11,8 +11,8 @@ export class CookieConsent extends LitElement {
       right: 16px;
       bottom: calc(16px + var(--countdown-offset, 0px));
       z-index: 1000;
-      color: var(--terminal-copy, #f7f7f7);
-      font-family: var(--font-mono, monospace);
+      color: var(--terminal-copy, #eaf2ff);
+      font-family: var(--font-family);
     }
 
     :host(:not([dialog-open])) {
@@ -21,56 +21,61 @@ export class CookieConsent extends LitElement {
     }
 
     .panel {
-      width: min(620px, calc(100vw - 32px));
+      width: min(460px, calc(100vw - 32px));
       box-sizing: border-box;
-      padding: 20px;
-      border: 1px solid var(--google-green, #34a853);
-      border-radius: 4px;
-      background: var(--terminal-panel, #202124);
-      box-shadow: 0 8px 28px rgb(0 0 0 / 35%);
+      padding: 14px 16px;
+      border: 1px solid var(--terminal-line, #263d5e);
+      border-radius: 6px;
+      background: var(--terminal-panel, #0d1727);
+      box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
     }
 
-    h2 {
-      margin: 0 0 8px;
-      color: var(--google-yellow, #fbbc04);
-      font-size: 16px;
+    .title {
+      margin: 0 0 4px;
+      color: var(--terminal-copy, #eaf2ff);
+      font-size: 14px;
+      font-weight: 700;
       line-height: 1.3;
     }
 
     p {
       margin: 0;
-      color: var(--terminal-copy, #f7f7f7);
+      color: var(--terminal-muted, #9bb0d0);
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.4;
     }
 
     a {
-      color: var(--google-blue, #8ab4f8);
+      color: #8cb5ff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     .actions {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
+      flex-direction: row;
+      gap: 8px;
+      margin-top: 10px;
     }
 
     button {
-      min-height: 40px;
+      flex: 1;
+      min-height: 44px;
       padding: 8px 14px;
       border: 1px solid var(--google-green, #34a853);
-      border-radius: 3px;
+      border-radius: 4px;
       background: var(--google-green, #34a853);
-      color: #102217;
+      color: #06101a;
       cursor: pointer;
       font: inherit;
+      font-size: 13px;
       font-weight: 700;
     }
 
     button.secondary {
-      border-color: var(--divider-color, #5f6368);
+      border-color: var(--terminal-line, #263d5e);
       background: transparent;
-      color: var(--terminal-copy, #f7f7f7);
+      color: var(--terminal-copy, #eaf2ff);
     }
 
     button:focus-visible,
@@ -80,10 +85,12 @@ export class CookieConsent extends LitElement {
     }
 
     .settings {
-      padding: 7px 10px;
-      border-color: var(--divider-color, #5f6368);
-      background: var(--terminal-panel, #202124);
-      color: var(--terminal-copy, #f7f7f7);
+      flex: none;
+      min-height: 44px;
+      padding: 8px 12px;
+      border-color: var(--terminal-line, #263d5e);
+      background: var(--terminal-panel, #0d1727);
+      color: var(--terminal-copy, #eaf2ff);
       box-shadow: 0 4px 16px rgb(0 0 0 / 25%);
       font-size: 12px;
     }
@@ -106,15 +113,7 @@ export class CookieConsent extends LitElement {
 
       .panel {
         width: calc(100vw - 16px);
-        padding: 16px;
-      }
-
-      .actions {
-        flex-direction: column;
-      }
-
-      button {
-        width: 100%;
+        padding: 12px 14px;
       }
     }
   `;
@@ -197,16 +196,15 @@ export class CookieConsent extends LitElement {
         aria-labelledby="cookie-consent-title"
         aria-live="polite"
       >
-        <h2 id="cookie-consent-title">Privacy & analytics</h2>
+        <p class="title" id="cookie-consent-title">Privacy &amp; analytics</p>
         <p>
-          We use Google Analytics to understand which pages are useful and improve the event
-          website. Analytics cookies are loaded only after you allow them. Read more in
-          <a href="/privacy">Privacy & data</a>.
+          Optional Google Analytics to improve this site.
+          <a href="/privacy/">Privacy &amp; data</a>.
         </p>
         <div class="actions">
-          <button type="button" @click=${() => this.choose('granted')}>Allow analytics</button>
+          <button type="button" @click=${() => this.choose('granted')}>Allow</button>
           <button class="secondary" type="button" @click=${() => this.choose('denied')}>
-            Decline analytics
+            Decline
           </button>
         </div>
       </section>

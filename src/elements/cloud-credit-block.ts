@@ -163,7 +163,7 @@ export class CloudCreditBlock extends ThemedElement {
           </h2>
           <p>
             Try something in Google Cloud at DevFest. Credits will be available to eligible
-            attendees. Use them for your next idea or a workshop.
+            attendees.
           </p>
           <p class="note">330 credits available. Eligibility and redemption conditions apply.</p>
           <div class="claim" aria-live="polite">

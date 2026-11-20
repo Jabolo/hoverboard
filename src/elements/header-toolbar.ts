@@ -5,7 +5,6 @@ import { computed, customElement, observe, property } from '@polymer/decorators'
 import '@material/web/button/filled-button.js';
 import '@polymer/paper-icon-button';
 import '@polymer/paper-menu-button';
-import '@polymer/paper-tabs';
 import { html, PolymerElement } from '@polymer/polymer';
 import { Hero } from '../models/hero';
 import { selectRouteName } from '../router';
@@ -66,17 +65,22 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         app-toolbar {
           margin: 0 auto;
           min-height: 68px;
+          height: 68px;
           padding: 0 16px;
-          height: auto;
           max-width: var(--max-container-width);
         }
 
         .toolbar-brand {
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          min-height: 44px;
           gap: 10px;
           color: inherit;
           text-decoration: none;
+        }
+
+        .menu-button {
+          margin-right: 8px;
         }
 
         .toolbar-logo {
@@ -97,21 +101,50 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         }
 
         .nav-items {
-          --paper-tabs-selection-bar-color: var(--terminal-green);
-          --paper-tabs: {
-            height: 64px;
-          };
+          display: flex;
+          align-items: center;
+        }
+
+        .nav-items[hidden],
+        .signin-tab[hidden] {
+          display: none;
+        }
+
+        .nav-list {
+          display: flex;
+          align-items: center;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .nav-item {
+          display: flex;
+          align-items: center;
         }
 
         .nav-item a,
         .signin-tab {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
           padding: 0 14px;
+          border: 0;
+          border-bottom: 2px solid transparent;
+          background: transparent;
           color: inherit;
           font-family: var(--font-mono);
           font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .nav-item a[aria-current='page'] {
+          border-bottom-color: var(--terminal-green);
+          color: var(--terminal-green);
         }
 
         .nav-item a:hover,
@@ -124,8 +157,9 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           background: #342448;
           border: 1px solid #8f76aa;
           border-radius: 6px;
-          margin: 8px 2px;
+          margin: 0 4px;
           padding: 0 12px;
+          min-height: 44px;
         }
         paper-icon-button {
           width: 48px;
@@ -198,11 +232,11 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
           --md-filled-button-hover-container-color: var(--terminal-green);
           --md-filled-button-label-text-color: #fff;
           --md-filled-button-hover-label-text-color: #06101a;
-          --md-filled-button-container-height: 40px;
-          --md-filled-button-container-shape: 20px;
-          border-radius: 20px;
+          --md-filled-button-container-height: 44px;
+          --md-filled-button-container-shape: 22px;
+          border-radius: 22px;
           font-family: var(--font-mono);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 800;
           letter-spacing: 0.05em;
           text-transform: uppercase;
@@ -212,110 +246,110 @@ export class HeaderToolbar extends ReduxMixin(PolymerElement) {
         @media (min-width: 640px) {
           app-toolbar {
             padding: 0 36px;
-            height: initial;
+            height: 68px;
           }
         }
       </style>
 
-      <app-toolbar class="header">
-        <div>
-          <paper-icon-button
-            icon="hoverboard:menu"
-            hidden$="[[viewport.isLaptopPlus]]"
-            aria-label="Open navigation menu"
-            aria-expanded$="[[getDrawerAriaExpanded(drawerOpened)]]"
-            on-click="openDrawer"
-          ></paper-icon-button>
-        </div>
-        <div layout horizontal center flex>
-          <a class="toolbar-brand" href="/" title="[[logoTitle]]">
-            <img class="toolbar-logo" src="/images/logos/gdg.svg" alt="Google Developer Groups" />
-            <span class="toolbar-title">GDG Warsaw</span>
-          </a>
-        </div>
+      <header>
+        <app-toolbar class="header">
+          <div>
+            <paper-icon-button
+              class="menu-button"
+              icon="hoverboard:menu"
+              hidden$="[[viewport.isLaptopPlus]]"
+              aria-label="Open navigation menu"
+              aria-expanded$="[[getDrawerAriaExpanded(drawerOpened)]]"
+              on-click="openDrawer"
+            ></paper-icon-button>
+          </div>
+          <div layout horizontal center flex>
+            <a class="toolbar-brand" href="/" title="[[logoTitle]]">
+              <img
+                class="toolbar-logo"
+                src="/images/logos/gdg.svg"
+                alt="Google Developer Groups"
+                width="38"
+                height="30"
+              />
+              <span class="toolbar-title">GDG Warsaw</span>
+            </a>
+          </div>
 
-        <paper-tabs
-          class="nav-items"
-          selected="[[routeName]]"
-          attr-for-selected="name"
-          hidden$="[[!viewport.isLaptopPlus]]"
-          role="tablist"
-          aria-label="Main navigation"
-          noink
-        >
-          <template is="dom-repeat" items="[[navigation]]" as="nav">
-            <paper-tab name="[[nav.route]]" class="nav-item" link tabindex="-1">
-              <a
-                href="[[nav.permalink]]"
-                layout
-                vertical
-                center-center
-                aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
-                >[[nav.label]]</a
-              >
-            </paper-tab>
-          </template>
+          <nav class="nav-items" hidden$="[[!viewport.isLaptopPlus]]" aria-label="Main navigation">
+            <ul class="nav-list">
+              <template is="dom-repeat" items="[[navigation]]" as="nav">
+                <li class="nav-item">
+                  <a
+                    href="[[nav.permalink]]"
+                    aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                    >[[nav.label]]</a
+                  >
+                </li>
+              </template>
+            </ul>
 
-          <paper-tab
-            class="signin-tab"
-            on-click="signIn"
-            link
-            hidden$="[[shouldHideAccountEntry(signedIn, hasAttendeeAgenda)]]"
+            <button
+              class="signin-tab"
+              type="button"
+              on-click="signIn"
+              hidden$="[[shouldHideAccountEntry(signedIn, hasAttendeeAgenda)]]"
+            >
+              [[signInText]]
+            </button>
+          </nav>
+
+          <md-filled-button
+            class="buy-button"
+            href$="[[registrationUrl]]"
+            on-click="requestRegistration"
+            hidden$="[[isBuyButtonHidden(ticketUrl, viewport.isLaptopPlus)]]"
           >
-            [[signInText]]
-          </paper-tab>
-        </paper-tabs>
+            [[registrationActionLabel]]
+          </md-filled-button>
 
-        <md-filled-button
-          class="buy-button"
-          href$="[[registrationUrl]]"
-          on-click="requestRegistration"
-          hidden$="[[isBuyButtonHidden(ticketUrl, viewport.isLaptopPlus)]]"
-        >
-          [[registrationActionLabel]]
-        </md-filled-button>
+          <notification-toggle hidden$="[[!hasAttendeeAgenda]]"></notification-toggle>
 
-        <notification-toggle hidden$="[[!hasAttendeeAgenda]]"></notification-toggle>
-
-        <paper-menu-button
-          class="auth-menu"
-          hidden$="[[!signedIn]]"
-          vertical-align="top"
-          horizontal-align="right"
-          no-animations
-          layout
-          horizontal
-          center-center
-        >
-          <div
-            class="profile-image"
-            slot="dropdown-trigger"
-            style$="background-image: url('[[user.data.photoURL]]')"
-          ></div>
-          <div class="dropdown-panel profile-details" slot="dropdown-content" layout horizontal>
+          <paper-menu-button
+            class="auth-menu"
+            hidden$="[[!signedIn]]"
+            vertical-align="top"
+            horizontal-align="right"
+            no-animations
+            layout
+            horizontal
+            center-center
+          >
             <div
               class="profile-image"
               slot="dropdown-trigger"
-              self-center
               style$="background-image: url('[[user.data.photoURL]]')"
             ></div>
-            <div layout vertical center-justified>
-              <span class="profile-name">[[user.data.displayName]]</span>
-              <span class="profile-email">[[user.data.email]]</span>
-              <button class="profile-action" type="button" on-click="signOut">
-                [[signOutText]]
-              </button>
+            <div class="dropdown-panel profile-details" slot="dropdown-content" layout horizontal>
+              <div
+                class="profile-image"
+                slot="dropdown-trigger"
+                self-center
+                style$="background-image: url('[[user.data.photoURL]]')"
+              ></div>
+              <div layout vertical center-justified>
+                <span class="profile-name">[[user.data.displayName]]</span>
+                <span class="profile-email">[[user.data.email]]</span>
+                <button class="profile-action" type="button" on-click="signOut">
+                  [[signOutText]]
+                </button>
+              </div>
             </div>
-          </div>
-        </paper-menu-button>
+          </paper-menu-button>
 
-        <paper-icon-button
-          icon="hoverboard:account"
-          aria-label="Sign in"
-          on-click="signIn"
-          hidden$="[[isAccountIconHidden(signedIn, viewport.isLaptopPlus, hasAttendeeAgenda)]]"
-        ></paper-icon-button>
-      </app-toolbar>
+          <paper-icon-button
+            icon="hoverboard:account"
+            aria-label="Sign in"
+            on-click="signIn"
+            hidden$="[[isAccountIconHidden(signedIn, viewport.isLaptopPlus, hasAttendeeAgenda)]]"
+          ></paper-icon-button>
+        </app-toolbar>
+      </header>
     `;
   }
 

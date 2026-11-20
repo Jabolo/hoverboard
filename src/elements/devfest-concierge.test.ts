@@ -43,6 +43,7 @@ describe('devfest-concierge', () => {
     globalThis.fetch = originalFetch;
     window.localStorage.clear();
     window.sessionStorage.clear();
+    window.history.replaceState({}, '', '/');
     clearConciergeClientCache();
     jest.restoreAllMocks();
   });
@@ -57,7 +58,13 @@ describe('devfest-concierge', () => {
 
     const root = element.shadowRoot!;
     expect(root.querySelector('.launcher-shell')).not.toBeNull();
+    expect(root.querySelector('.prompt-prefix')).toBeNull();
     expect(root.querySelectorAll('.launcher-shell .intent-chip')).toHaveLength(5);
+    const frameChildren = Array.from(root.querySelector('.launcher-frame')!.children);
+    const chipIdx = frameChildren.findIndex((el) => el.classList.contains('chip-strip'));
+    const privacyIdx = frameChildren.findIndex((el) => el.classList.contains('ai-privacy-note'));
+    expect(chipIdx).toBeGreaterThan(-1);
+    expect(privacyIdx).toBeGreaterThan(chipIdx);
     const dialog = root.querySelector<HTMLDialogElement>('#concierge-dialog');
     expect(dialog?.hasAttribute('open')).toBe(false);
 
@@ -84,8 +91,12 @@ describe('devfest-concierge', () => {
 
     const dialog = root.querySelector<HTMLDialogElement>('#concierge-dialog');
     expect(dialog?.hasAttribute('open')).toBe(true);
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Instant · Local A2UI');
+    expect(root.querySelector('#concierge-dialog-title')?.textContent?.trim()).toBe(
+      'DevFest Concierge',
+    );
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Instant');
     expect(root.querySelector('.logistics-card')).not.toBeNull();
+    expect(root.querySelector('.inspector-details')).toBeNull();
 
     const conciergeCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes('/api/concierge'),
@@ -156,7 +167,8 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live · Gemini AI');
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Gemini AI');
+    expect(root.querySelector('.source-badge')?.getAttribute('data-origin')).toBe('live');
     expect(root.querySelector('.surface-title')?.textContent).toBe('Michał Jabłoński');
     expect(JSON.stringify(window.sessionStorage)).not.toContain('michał');
 
@@ -166,7 +178,8 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Cached · Gemini AI');
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Gemini AI');
+    expect(root.querySelector('.source-badge')?.getAttribute('data-origin')).toBe('cached');
     const conciergeCalls = fetchMock.mock.calls.filter((call) =>
       String(call[0]).includes('/api/concierge'),
     );
@@ -196,14 +209,15 @@ describe('devfest-concierge', () => {
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Instant · Local A2UI');
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Instant');
     expect(root.querySelector('.status-notice')?.textContent).toContain(
-      'Rate limit reached — running on Grounded Local A2UI Engine',
+      'AI busy — showing instant programme answer.',
     );
   });
 
-  it('syncs session bookmarks, reveals A2UI JSON in native details, and closes via close button', async () => {
+  it('syncs session bookmarks, gates A2UI JSON inspector behind ?debug=1, and closes via close button', async () => {
     globalThis.fetch = mockBootstrapFetch();
+    window.history.replaceState({}, '', '/?debug=1');
     setSessionFavorite('INVITED-004', true);
 
     const element = new DevfestConcierge();
@@ -211,10 +225,10 @@ describe('devfest-concierge', () => {
     await flushRender(element);
 
     const root = element.shadowRoot!;
-    const compareChip = root.querySelector<HTMLButtonElement>(
-      '.launcher-shell button[data-intent="compare-rooms"]',
+    const trackChip = root.querySelector<HTMLButtonElement>(
+      '.launcher-shell button[data-intent="track-ai"]',
     )!;
-    compareChip.click();
+    trackChip.click();
     await flushRender(element);
 
     const cfpCard = root.querySelector<HTMLElement>(
@@ -236,6 +250,7 @@ describe('devfest-concierge', () => {
     }
 
     const details = root.querySelector<HTMLDetailsElement>('.inspector-details')!;
+    expect(details).not.toBeNull();
     expect(details.textContent).toContain('"SurfaceContainer"');
 
     root.querySelector<HTMLButtonElement>('.close-btn')!.click();
@@ -245,22 +260,26 @@ describe('devfest-concierge', () => {
     );
   });
 
-  it('renders hero chrome when variant="hero" and omits it in default band variant', async () => {
-    globalThis.fetch = mockBootstrapFetch();
+  it('omits launcher-header, dialog, and bootstrap fetches when variant="hero"', async () => {
+    const fetchMock = mockBootstrapFetch();
+    globalThis.fetch = fetchMock;
 
     const heroEl = new DevfestConcierge();
     heroEl.variant = 'hero';
     document.body.appendChild(heroEl);
     await flushRender(heroEl);
-    expect(heroEl.shadowRoot?.querySelector('.launcher-header')?.textContent).toContain(
-      'devfest-concierge',
-    );
+    expect(heroEl.shadowRoot?.querySelector('.launcher-header')).toBeNull();
+    expect(heroEl.shadowRoot?.querySelector('#concierge-dialog')).toBeNull();
+    expect(heroEl.shadowRoot?.querySelector('.prompt-prefix')).toBeNull();
+    expect(fetchMock.mock.calls).toHaveLength(0);
     heroEl.remove();
 
     const bandEl = new DevfestConcierge();
     document.body.appendChild(bandEl);
     await flushRender(bandEl);
     expect(bandEl.shadowRoot?.querySelector('.launcher-header')).toBeNull();
+    expect(bandEl.shadowRoot?.querySelector('#concierge-dialog')).not.toBeNull();
+    expect(fetchMock.mock.calls.length).toBeGreaterThan(0);
   });
 
   it('evaluates Rooms now live across schedule slots with zero AI calls', async () => {
@@ -280,8 +299,9 @@ describe('devfest-concierge', () => {
     roomsChip.click();
     await flushRender(element);
 
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live · Local Clock');
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live clock');
     expect(root.querySelector('.callout-title')?.textContent).toContain('10:15');
+    expect(root.querySelectorAll('.session-card')).toHaveLength(0);
 
     nowSpy.mockReturnValue(Date.parse('2026-11-21T11:10:00+01:00'));
     roomsChip.click();
@@ -354,7 +374,8 @@ describe('devfest-concierge', () => {
       .querySelector<HTMLFormElement>('.dialog-controls .launcher-form')!
       .dispatchEvent(new Event('submit', { cancelable: true }));
     await flushRender(element);
-    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Cached · Gemini AI');
+    expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Gemini AI');
+    expect(root.querySelector('.source-badge')?.getAttribute('data-origin')).toBe('cached');
     expect(callCount).toBe(1);
 
     // Crossing 10:45 boundary: misses cache and fetches fresh live response
@@ -367,33 +388,45 @@ describe('devfest-concierge', () => {
     expect(callCount).toBe(2);
   });
 
-  it('opens dialog via Ctrl/Cmd+K shortcut and suppresses duplicate ComparisonGrid heading', async () => {
-    globalThis.fetch = mockBootstrapFetch();
+  it('opens floating dialog via Ctrl/Cmd+K shortcut and suppresses duplicate ComparisonGrid heading', async () => {
+    const fetchMock = mockBootstrapFetch();
+    globalThis.fetch = fetchMock;
 
-    const element = new DevfestConcierge();
-    element.variant = 'hero';
-    document.body.appendChild(element);
-    await flushRender(element);
+    const floatingEl = new DevfestConcierge();
+    floatingEl.variant = 'floating';
+    document.body.appendChild(floatingEl);
+    await flushRender(floatingEl);
 
-    const root = element.shadowRoot!;
-    const dialog = root.querySelector<HTMLDialogElement>('#concierge-dialog')!;
+    const heroEl = new DevfestConcierge();
+    heroEl.variant = 'hero';
+    document.body.appendChild(heroEl);
+    await flushRender(heroEl);
+
+    // Single bootstrap only (hero does not double-fetch)
+    const agendaCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes('/data/agenda-2026.json'),
+    );
+    expect(agendaCalls).toHaveLength(1);
+
+    const floatingRoot = floatingEl.shadowRoot!;
+    const dialog = floatingRoot.querySelector<HTMLDialogElement>('#concierge-dialog')!;
     expect(dialog.hasAttribute('open')).toBe(false);
 
     window.dispatchEvent(
       new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, cancelable: true }),
     );
-    await element.updateComplete;
+    await floatingEl.updateComplete;
     expect(dialog.hasAttribute('open')).toBe(true);
 
-    // Trigger Rooms now (CalloutBanner + ComparisonGrid share the same title)
-    const roomsChip = root.querySelector<HTMLButtonElement>(
+    // Trigger Rooms now from hero (CalloutBanner + ComparisonGrid share the same title)
+    const roomsChip = heroEl.shadowRoot!.querySelector<HTMLButtonElement>(
       '.launcher-shell button[data-intent="compare-rooms"]',
     )!;
     roomsChip.click();
-    await flushRender(element);
+    await flushRender(floatingEl);
 
-    expect(root.querySelector('.comparison-wrap h3')).toBeNull();
-    expect(root.querySelector('.callout-title')?.textContent).toBeTruthy();
+    expect(floatingRoot.querySelector('.comparison-wrap h3')).toBeNull();
+    expect(floatingRoot.querySelector('.callout-title')?.textContent).toBeTruthy();
   });
 
   it('renders loading skeleton while awaiting live /api/concierge and clears it on resolve', async () => {
@@ -558,7 +591,7 @@ describe('devfest-concierge', () => {
     await flushRender(element);
 
     expect(root.querySelector('.status-notice')?.textContent).toContain(
-      'Live AI temporarily busy — showing grounded local A2UI answer',
+      'AI busy — showing instant programme answer.',
     );
     expect(root.querySelector('.logistics-card')).not.toBeNull();
   });
@@ -644,9 +677,8 @@ describe('devfest-concierge', () => {
       expect(floatingDialog.hasAttribute('open')).toBe(true);
       expect(floatingRoot.querySelector('.surface-title')?.textContent).toBe('AI & Agents Track');
 
-      // Hero local dialog remained closed
-      const heroDialog = heroRoot.querySelector<HTMLDialogElement>('#concierge-dialog')!;
-      expect(heroDialog.hasAttribute('open')).toBe(false);
+      // Hero does not render an unused dialog
+      expect(heroRoot.querySelector<HTMLDialogElement>('#concierge-dialog')).toBeNull();
     });
 
     it('auto-closes dialog on route navigation', async () => {

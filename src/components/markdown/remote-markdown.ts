@@ -1,5 +1,5 @@
 import { Failure, fold, Initialized, Pending, RemoteData, Success } from '@abraham/remotedata';
-import { html, TemplateResult } from 'lit';
+import { css, html, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './toc-markdown';
 import { ThemedElement } from '../themed-element';
@@ -8,6 +8,18 @@ type State = RemoteData<Error, string>;
 
 @customElement('remote-markdown')
 export class RemoteMarkDown extends ThemedElement {
+  static override get styles() {
+    return [
+      ...super.styles,
+      css`
+        :host {
+          display: block;
+          min-height: 100vh;
+        }
+      `,
+    ];
+  }
+
   @property()
   path: string = '';
 

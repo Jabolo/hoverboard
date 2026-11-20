@@ -22,7 +22,6 @@ export class HuntClue extends LitElement {
       color: #fff8ec;
       background: linear-gradient(120deg, #332344, #211830);
       border: 1px solid #a38ab8;
-      border-left: 4px solid #eaf87f;
       border-radius: 12px;
       text-decoration: none;
       font-family: 'Trebuchet MS', sans-serif;
@@ -43,9 +42,21 @@ export class HuntClue extends LitElement {
       height: 48px;
       flex-shrink: 0;
       border-radius: 8px;
+      border: 1px solid #eaf87f;
       color: #261934;
       font-size: 25px;
       background: linear-gradient(135deg, #ecf9ce, #d8d4ff, #f8cce9);
+    }
+    .accent {
+      display: inline-block;
+      margin-bottom: 4px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #eaf87f;
+      color: #21193a;
+      font: 700 12px/1.2 monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
     strong {
       display: block;
@@ -78,7 +89,9 @@ export class HuntClue extends LitElement {
   override render() {
     return html`<a href=${this.href} aria-label=${this.label}
       ><span class="glyph" aria-hidden="true">${this.glyph}</span
-      ><span><strong>${this.label}</strong><small>${this.hint}</small></span
+      ><span
+        ><span class="accent" aria-hidden="true">Card Hunt</span><strong>${this.label}</strong
+        ><small>${this.hint}</small></span
       ><span class="arrow" aria-hidden="true">↗</span></a
     >`;
   }

@@ -23,20 +23,8 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
 
         .container {
           position: relative;
-          padding-top: 76px;
+          padding-top: 48px;
           padding-bottom: 56px;
-        }
-
-        .container::before {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--terminal-red);
-          content: '> organizer --info';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
         }
 
         .block:not(:last-of-type) {
@@ -81,8 +69,8 @@ export class AboutOrganizerBlock extends ReduxMixin(PolymerElement) {
 
       <div class="container" layout horizontal>
         <div layout horizontal center-center flex hidden$="[[viewport.isPhone]]">
-          <a href="/team" class="image-link">
-            <img class="organizers-photo" src="[[aboutOrganizerBlock.image]]" alt="Organizer" />
+          <a href="/team" class="image-link" aria-label="Meet the GDG Warsaw organizing team">
+            <img class="organizers-photo" src="[[aboutOrganizerBlock.image]]" alt="GDG Warsaw" />
           </a>
         </div>
 

@@ -1,5 +1,4 @@
 import { css, html, nothing } from 'lit';
-import type { PropertyValues } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { ThemedElement } from './themed-element';
 import './session-favorite';
@@ -49,9 +48,6 @@ export class AgendaPreview extends ThemedElement {
   @state() private favoritesRevision = 0;
   private timer: number | undefined;
   private unsubscribeFavorites: (() => void) | undefined;
-  private openingObserver: IntersectionObserver | undefined;
-  private observedOpening: Element | undefined;
-  private openingSeen = false;
   private groupedItems: AgendaItem[] | undefined;
   private groupedFilter: AgendaFilter | undefined;
   private groupedSavedOnly = false;
@@ -74,16 +70,8 @@ export class AgendaPreview extends ThemedElement {
       css`
         :host {
           display: block;
+          min-height: 100vh;
           color: var(--terminal-copy);
-          border-top: 3px solid transparent;
-          border-image: linear-gradient(
-              90deg,
-              #4285f4 0 25%,
-              #34a853 25% 50%,
-              #fbbc04 50% 75%,
-              #ea4335 75% 100%
-            )
-            1;
         }
         * {
           box-sizing: border-box;
@@ -126,8 +114,15 @@ export class AgendaPreview extends ThemedElement {
           font-size: 13px;
           line-height: 1.5;
         }
+        .filter-bar {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 12px 16px;
+        }
         .saved-filter {
-          margin-top: 14px;
+          min-height: 44px;
         }
         .filters {
           display: flex;
@@ -319,125 +314,21 @@ export class AgendaPreview extends ThemedElement {
           border-color: var(--terminal-green);
         }
         .lunch-icons {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 12px;
-          margin-top: 12px;
-          font-size: 27px;
-          line-height: 1.2;
+          gap: 8px;
+          margin-top: 10px;
+          color: #9ed7c3;
         }
-        .lunch-icons span {
-          display: inline-block;
-          animation: lunch-bob 3s ease-in-out infinite alternate;
-        }
-        .lunch-icons span:nth-child(2) {
-          animation-delay: -1.4s;
-        }
-        .lunch-icons span:nth-child(3) {
-          font-size: 20px;
-          animation-delay: -0.7s;
-        }
-        @keyframes lunch-bob {
-          from {
-            transform: translateY(0) rotate(-4deg);
-          }
-          to {
-            transform: translateY(-3px) rotate(4deg);
-          }
+        .lunch-icons svg {
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
         }
         .entry.opening {
           position: relative;
-          overflow: hidden;
           background: #14283a;
           border-color: #526e91;
-        }
-        .confetti {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          opacity: 0.65;
-        }
-        .confetti i {
-          position: absolute;
-          width: 7px;
-          height: 10px;
-          border-radius: 2px;
-          left: 12%;
-          top: 20%;
-          --tilt: 28deg;
-          background: #8ab4f8;
-          transform: rotate(var(--tilt));
-          animation: confetti-drift 2.8s ease-in-out infinite alternate;
-        }
-        .confetti i:nth-child(2) {
-          left: 29%;
-          top: 68%;
-          background: #81c995;
-          --tilt: -35deg;
-          animation-delay: -3s;
-        }
-        .confetti i:nth-child(3) {
-          left: 51%;
-          top: 15%;
-          background: #fdd663;
-          --tilt: 55deg;
-          animation-delay: -1s;
-        }
-        .confetti i:nth-child(4) {
-          left: 69%;
-          top: 70%;
-          background: #f28b82;
-          --tilt: -20deg;
-          animation-delay: -4s;
-        }
-        .confetti i:nth-child(5) {
-          left: 86%;
-          top: 24%;
-          background: #fdd663;
-          --tilt: 62deg;
-          animation-delay: -2s;
-        }
-        .confetti i:nth-child(6) {
-          left: 93%;
-          top: 74%;
-          background: #8ab4f8;
-          --tilt: -42deg;
-          animation-delay: -5s;
-        }
-        .confetti i:nth-child(7) {
-          left: 39%;
-          top: 37%;
-          background: #f28b82;
-          --tilt: 18deg;
-          animation-delay: -1.5s;
-        }
-        .confetti i:nth-child(8) {
-          left: 60%;
-          top: 84%;
-          background: #81c995;
-          --tilt: -50deg;
-          animation-delay: -0.8s;
-        }
-        .confetti i:nth-child(9) {
-          left: 78%;
-          top: 39%;
-          background: #8ab4f8;
-          --tilt: 38deg;
-          animation-delay: -2.2s;
-        }
-        .confetti i:nth-child(10) {
-          left: 20%;
-          top: 86%;
-          background: #fdd663;
-          --tilt: -15deg;
-          animation-delay: -1.1s;
-        }
-        .entry.opening > .meta,
-        .entry.opening > .entry-heading,
-        .entry.opening > .activity-copy,
-        .entry.opening > .progress {
-          position: relative;
         }
         .activity-copy {
           margin: 4px 0 0;
@@ -446,115 +337,12 @@ export class AgendaPreview extends ThemedElement {
           font-size: 14px;
           line-height: 1.5;
         }
-        @keyframes confetti-drift {
-          from {
-            transform: translate(-8px, -8px) rotate(var(--tilt));
-          }
-          to {
-            transform: translate(9px, 10px) rotate(calc(var(--tilt) + 45deg));
-          }
-        }
         .entry.networking {
           position: relative;
           overflow: hidden;
           padding-right: 112px;
           background: #1c1a32;
           border-color: #655583;
-        }
-        .party-lights {
-          position: absolute;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          opacity: 0.65;
-        }
-        .party-lights i {
-          position: absolute;
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: var(--light-color, #fff8df);
-          box-shadow: 0 0 10px 2px var(--light-color, #fff8df);
-          animation: party-light-drift var(--duration, 8s) ease-in-out infinite alternate;
-          animation-delay: var(--delay, 0s);
-        }
-        .party-lights i:nth-child(1) {
-          top: 15%;
-          left: 8%;
-          --light-color: #fffdf6;
-        }
-        .party-lights i:nth-child(2) {
-          top: 42%;
-          left: 23%;
-          --light-color: #ffedae;
-          --delay: -3s;
-        }
-        .party-lights i:nth-child(3) {
-          top: 75%;
-          left: 12%;
-          --light-color: #ffe4a0;
-          --duration: 10s;
-        }
-        .party-lights i:nth-child(4) {
-          top: 20%;
-          left: 39%;
-          --light-color: #fffdf6;
-          --delay: -5s;
-        }
-        .party-lights i:nth-child(5) {
-          top: 66%;
-          left: 35%;
-          --light-color: #fff4cb;
-          --duration: 11s;
-        }
-        .party-lights i:nth-child(6) {
-          top: 37%;
-          left: 55%;
-          --light-color: #fffdf6;
-          --delay: -4s;
-        }
-        .party-lights i:nth-child(7) {
-          top: 82%;
-          left: 58%;
-          --light-color: #fff4cb;
-          --duration: 9s;
-        }
-        .party-lights i:nth-child(8) {
-          top: 15%;
-          left: 71%;
-          --light-color: #ffe4a0;
-          --delay: -6s;
-        }
-        .party-lights i:nth-child(9) {
-          top: 70%;
-          left: 80%;
-          --light-color: #fffdf6;
-          --duration: 12s;
-        }
-        .party-lights i:nth-child(10) {
-          top: 45%;
-          left: 91%;
-          --light-color: #ffedae;
-          --delay: -2s;
-        }
-        .entry.networking > .meta,
-        .entry.networking > .entry-heading,
-        .entry.networking > .party-copy,
-        .entry.networking > .progress {
-          position: relative;
-        }
-        @keyframes party-light-drift {
-          0% {
-            transform: translate(-14px, -9px) scale(0.65);
-            opacity: 0.35;
-          }
-          50% {
-            opacity: 0.75;
-          }
-          100% {
-            transform: translate(18px, 12px) scale(1);
-            opacity: 0.45;
-          }
         }
         .party-copy {
           margin: 4px 0 0;
@@ -569,27 +357,6 @@ export class AgendaPreview extends ThemedElement {
           width: 76px;
           height: 90px;
           pointer-events: none;
-          transform-origin: 50% 0;
-          animation: disco-sway 6s ease-in-out infinite alternate;
-        }
-        .disco-sparkle {
-          animation: disco-shimmer 2.8s ease-in-out infinite alternate;
-        }
-        @keyframes disco-sway {
-          from {
-            transform: rotate(-4deg);
-          }
-          to {
-            transform: rotate(4deg);
-          }
-        }
-        @keyframes disco-shimmer {
-          from {
-            opacity: 0.45;
-          }
-          to {
-            opacity: 1;
-          }
         }
         .entry.open {
           border-style: dashed;
@@ -741,8 +508,12 @@ export class AgendaPreview extends ThemedElement {
         }
         @media (max-width: 479px) {
           .filters {
+            width: 100%;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .saved-filter {
+            width: 100%;
           }
         }
         @media (min-width: 480px) and (max-width: 759px), (min-width: 960px) {
@@ -786,13 +557,6 @@ export class AgendaPreview extends ThemedElement {
           }
         }
         @media (prefers-reduced-motion: reduce) {
-          .disco-ball,
-          .disco-sparkle,
-          .confetti i,
-          .party-lights i,
-          .lunch-icons span {
-            animation: none;
-          }
           .entry,
           .progress span,
           .now-progress span {
@@ -817,50 +581,8 @@ export class AgendaPreview extends ThemedElement {
     super.disconnectedCallback();
     this.unsubscribeFavorites?.();
     this.unsubscribeFavorites = undefined;
-    this.openingObserver?.disconnect();
-    this.openingObserver = undefined;
-    this.observedOpening = undefined;
     if (this.timer !== undefined) window.clearTimeout(this.timer);
     document.removeEventListener('visibilitychange', this.refreshClock);
-  }
-
-  protected override updated(changedProperties: PropertyValues): void {
-    super.updated(changedProperties);
-    if (
-      this.observedOpening &&
-      (!this.observedOpening.isConnected || !this.observedOpening.classList.contains('opening'))
-    ) {
-      this.openingObserver?.disconnect();
-      this.openingObserver = undefined;
-      this.observedOpening = undefined;
-    }
-    if (this.openingSeen || this.openingObserver || !this.shadowRoot) return;
-    const opening = this.shadowRoot.querySelector('.opening');
-    if (!opening || typeof IntersectionObserver === 'undefined') return;
-    this.openingObserver = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      this.openingSeen = true;
-      this.openingObserver?.disconnect();
-      this.openingObserver = undefined;
-      this.observedOpening = undefined;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      opening.querySelectorAll<HTMLElement>('.confetti i').forEach((piece, index) => {
-        if (!piece.animate) return;
-        piece.animate(
-          [
-            { opacity: 0, translate: '0 -14px' },
-            { opacity: 1, translate: '0 0' },
-          ],
-          {
-            duration: 500,
-            delay: index * 45,
-            easing: 'ease-out',
-          },
-        );
-      });
-    });
-    this.observedOpening = opening;
-    this.openingObserver.observe(opening);
   }
 
   private async load(): Promise<void> {
@@ -880,9 +602,9 @@ export class AgendaPreview extends ThemedElement {
     }
   }
 
-  private toggleSaved(): void {
+  private toggleSaved = (): void => {
     this.savedOnly = !this.savedOnly;
-  }
+  };
 
   private renderSpeaker(speaker: AgendaSpeaker) {
     const role = [speaker.title, speaker.company].filter(Boolean).join(' · ');
@@ -934,8 +656,6 @@ export class AgendaPreview extends ThemedElement {
       <article
         class="entry ${item.space} ${item.kind} ${opening ? 'opening' : ''} ${registration ? 'registration' : ''} ${party ? 'networking' : ''} ${lunch ? 'lunch' : ''} ${progress !== null ? 'current' : ''}"
       >
-        ${opening ? html`<span class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>` : nothing}
-        ${party ? html`<span class="party-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>` : nothing}
         ${
           party
             ? html`<svg class="disco-ball" viewBox="0 0 80 96" aria-hidden="true" focusable="false">
@@ -987,7 +707,19 @@ export class AgendaPreview extends ThemedElement {
                   Wraps and salad bowls for everyone. Grab a bite and recharge!
                 </p>
                 <div class="lunch-icons" aria-hidden="true">
-                  <span>🌯</span><span>🥗</span><span>✨</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 11h16a8 8 0 0 1-16 0Z" />
+                    <path d="M8 19h8" />
+                    <path d="M9 7c0-1.5 1-2.5 1-4" />
+                    <path d="M14 7c0-1.5 1-2.5 1-4" />
+                  </svg>
                 </div>`
             : nothing
         }
@@ -1040,32 +772,34 @@ export class AgendaPreview extends ThemedElement {
           </div>
           <div>
             <div class="date">Saturday, 21 November · Warsaw</div>
-            <div class="date-note">Complete programme · All speaking slots are filled</div>
+            <div class="date-note">16 sessions · Auditorium, Classroom &amp; Vibe Zone</div>
           </div>
         </div>
-        <fieldset class="filters">
-          <legend>Explore by space</legend>
-          ${filters.map(
-            ({ value, label }) =>
-              html`<button
-                type="button"
-                aria-pressed=${this.filter === value ? 'true' : 'false'}
-                @click=${() => {
-                  this.filter = value;
-                }}
-              >
-                ${label}
-              </button>`,
-          )}
-        </fieldset>
-        <button
-          class="saved-filter"
-          type="button"
-          aria-pressed=${this.savedOnly ? 'true' : 'false'}
-          @click=${this.toggleSaved}
-        >
-          Saved sessions
-        </button>
+        <div class="filter-bar">
+          <fieldset class="filters">
+            <legend>Explore by space</legend>
+            ${filters.map(
+              ({ value, label }) =>
+                html`<button
+                  type="button"
+                  aria-pressed=${this.filter === value ? 'true' : 'false'}
+                  @click=${() => {
+                    this.filter = value;
+                  }}
+                >
+                  ${label}
+                </button>`,
+            )}
+          </fieldset>
+          <button
+            class="saved-filter"
+            type="button"
+            aria-pressed=${this.savedOnly ? 'true' : 'false'}
+            @click=${this.toggleSaved}
+          >
+            Saved sessions
+          </button>
+        </div>
         ${
           eventState(this.now) === 'during' && this.filter !== 'vibe' && this.loadState === 'ready'
             ? this.renderNowSummary(currentItems)
@@ -1081,8 +815,7 @@ export class AgendaPreview extends ThemedElement {
             ? html`<section class="empty">
                 <h2>Vibe Zone</h2>
                 <p>
-                  Meet the community, take on challenges and explore activities. Details and times
-                  are being prepared.
+                  Open all day (09:00–19:15) — community booths, games, Pin Hunt &amp; networking.
                 </p>
               </section>`
             : nothing

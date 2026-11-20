@@ -174,7 +174,7 @@ describe('computeSavedConflicts', () => {
 describe('generateLocalConciergeMessages', () => {
   const baseNow = eventInstant('08:30');
 
-  it('generates overview surface with welcome banner, comparison grid, and action chips', () => {
+  it('generates overview surface with comparison grid and action chips without redundant welcome banner', () => {
     const processor = new A2UIMessageProcessor();
     const messages = generateLocalConciergeMessages({
       query: '',
@@ -189,7 +189,7 @@ describe('generateLocalConciergeMessages', () => {
     processor.processBatch(messages);
     const surface = processor.getActiveSurface();
     expect(surface?.source).toBe('local-engine');
-    expect(collectNodesByComponent(processor, 'CalloutBanner')).toHaveLength(1);
+    expect(collectNodesByComponent(processor, 'CalloutBanner')).toHaveLength(0);
     expect(collectNodesByComponent(processor, 'ComparisonGrid')).toHaveLength(1);
     expect(collectNodesByComponent(processor, 'ActionChipRow')).toHaveLength(1);
     expect(processor.resolveBinding('credits.pool', '')).toBe('330 credits');
@@ -253,6 +253,8 @@ describe('generateLocalConciergeMessages', () => {
     });
 
     processor.processBatch(messages);
+    expect(collectNodesByComponent(processor, 'CalloutBanner')).toHaveLength(0);
+    expect(collectNodesByComponent(processor, 'SessionCard')).toHaveLength(0);
     const creditCards = collectNodesByComponent(processor, 'CreditGuideCard');
     expect(creditCards).toHaveLength(1);
     const guide = creditCards[0]!;
@@ -270,7 +272,7 @@ describe('generateLocalConciergeMessages', () => {
     ]);
   });
 
-  it('compares live rooms during event day and parallel slots outside event day', () => {
+  it('compares live rooms during event day and parallel slots outside event day without duplicate SessionCards', () => {
     const liveProcessor = new A2UIMessageProcessor();
     const liveMessages = generateLocalConciergeMessages({
       query: 'Compare Auditorium vs Classroom right now',
@@ -285,6 +287,7 @@ describe('generateLocalConciergeMessages', () => {
     const liveGrids = collectNodesByComponent(liveProcessor, 'ComparisonGrid');
     expect(liveGrids).toHaveLength(1);
     expect(String(liveGrids[0]!.props['title'])).toContain('12:00');
+    expect(collectNodesByComponent(liveProcessor, 'SessionCard')).toHaveLength(0);
 
     const offDayProcessor = new A2UIMessageProcessor();
     const offDayMessages = generateLocalConciergeMessages({
@@ -299,6 +302,7 @@ describe('generateLocalConciergeMessages', () => {
     offDayProcessor.processBatch(offDayMessages);
     const offDayGrids = collectNodesByComponent(offDayProcessor, 'ComparisonGrid');
     expect(String(offDayGrids[0]!.props['title'])).toContain('16:10');
+    expect(collectNodesByComponent(offDayProcessor, 'SessionCard')).toHaveLength(0);
   });
 
   it('renders grounded venue & logistics info from faq.md', () => {

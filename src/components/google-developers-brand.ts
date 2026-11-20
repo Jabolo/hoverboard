@@ -34,8 +34,18 @@ export class GoogleDevelopersBrand extends LitElement {
   `;
 
   override render() {
-    return html`<a href="https://developers.google.com/" target="_blank" rel="noopener noreferrer">
-      <img src="/images/logos/google-for-developers.svg" alt="Google for Developers" />
+    return html`<a
+      href="https://developers.google.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Google for Developers"
+    >
+      <img
+        src="/images/logos/google-for-developers.svg"
+        alt="Google for Developers"
+        width="432"
+        height="64"
+      />
     </a>`;
   }
 }

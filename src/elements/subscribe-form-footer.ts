@@ -107,6 +107,24 @@ export class SubscribeFormFooter extends ReduxMixin(PolymerElement) {
         iron-icon {
           margin-bottom: 5px;
         }
+
+        md-filled-button {
+          margin-top: 8px;
+          min-height: 44px;
+          --md-filled-button-container-height: 44px;
+          --md-filled-button-container-color: var(--google-blue-strong);
+          --md-filled-button-label-text-color: #fff;
+          --md-filled-button-hover-label-text-color: #fff;
+          --md-filled-button-disabled-container-color: rgb(140 181 255 / 16%);
+          --md-filled-button-disabled-container-opacity: 1;
+          --md-filled-button-disabled-label-text-color: #9bb0d0;
+          --md-filled-button-disabled-label-text-opacity: 1;
+        }
+
+        md-filled-button[disabled] {
+          background-color: transparent;
+          opacity: 1;
+        }
       </style>
 
       <div class="success" role="status" aria-live="polite" hidden$="[[!success]]">

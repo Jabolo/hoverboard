@@ -2,7 +2,6 @@ import { Success } from '@abraham/remotedata';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout';
 import '@polymer/app-layout/app-drawer/app-drawer';
 import { AppDrawerElement } from '@polymer/app-layout/app-drawer/app-drawer';
-import '@polymer/app-layout/app-header-layout/app-header-layout';
 import '@polymer/app-layout/app-header/app-header';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import { computed, customElement, property, query } from '@polymer/decorators';
@@ -179,7 +178,9 @@ export class HoverboardApp extends PolymerElement {
         }
 
         .drawer-list a {
-          display: block;
+          display: flex;
+          align-items: center;
+          min-height: 44px;
           border-left: 3px solid transparent;
           color: var(--primary-text-color);
           font-family: var(--font-mono);
@@ -226,8 +227,19 @@ export class HoverboardApp extends PolymerElement {
           height: 40px;
         }
 
-        app-header-layout {
-          margin-top: -1px;
+        .header-layout {
+          position: relative;
+          z-index: 0;
+          min-height: 100%;
+          padding-top: 69px;
+        }
+
+        #header {
+          position: fixed;
+          top: 0;
+          right: 0;
+          left: 0;
+          z-index: 2;
         }
 
         app-header.remove-shadow::before {
@@ -303,57 +315,65 @@ export class HoverboardApp extends PolymerElement {
               class="toolbar-logo"
               src="/images/logos/devfest-2026-wordmark-dark.svg"
               alt="DevFest 2026"
+              width="2417"
+              height="282"
             />
             <a
               class="drawer-google"
               href="https://developers.google.com/"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Google for Developers"
             >
-              <img src="/images/logos/google-for-developers.svg" alt="Google for Developers" />
+              <img
+                src="/images/logos/google-for-developers.svg"
+                alt="Google for Developers"
+                width="432"
+                height="64"
+              />
             </a>
             <div class="dates">[[dates]]</div>
             <div class="location">[[shortLocation]]</div>
           </app-toolbar>
 
           <div class="drawer-content" layout vertical justified flex>
-            <iron-selector
-              class="drawer-list"
-              selected="[[routeName]]"
-              attr-for-selected="path"
-              selected-class="selected"
-              role="navigation"
-              aria-label="Primary navigation"
-            >
-              <template is="dom-repeat" items="[[priorityNavigation]]" as="nav">
-                <a
-                  href="[[nav.permalink]]"
-                  path="[[nav.route]]"
-                  on-click="closeDrawer"
-                  aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
-                >
-                  [[nav.label]]
-                </a>
-              </template>
-              <a href="/#visit" path="visit" on-click="scrollToVisit">Getting here</a>
-              <a
-                href$="[[registrationUrl]]"
-                on-click="scrollToRegistration"
-                hidden$="[[!ticketUrl]]"
+            <nav aria-label="Primary navigation">
+              <iron-selector
+                class="drawer-list"
+                selected="[[routeName]]"
+                attr-for-selected="path"
+                selected-class="selected"
               >
-                [[registrationActionLabel]]
-              </a>
-              <template is="dom-repeat" items="[[navigation]]" as="nav">
+                <template is="dom-repeat" items="[[priorityNavigation]]" as="nav">
+                  <a
+                    href="[[nav.permalink]]"
+                    path="[[nav.route]]"
+                    on-click="closeDrawer"
+                    aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                  >
+                    [[nav.label]]
+                  </a>
+                </template>
+                <a href="/#visit" path="visit" on-click="scrollToVisit">Getting here</a>
                 <a
-                  href="[[nav.permalink]]"
-                  path="[[nav.route]]"
-                  on-click="closeDrawer"
-                  aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                  href$="[[registrationUrl]]"
+                  on-click="scrollToRegistration"
+                  hidden$="[[!ticketUrl]]"
                 >
-                  [[nav.label]]
+                  [[registrationActionLabel]]
                 </a>
-              </template>
-            </iron-selector>
+                <template is="dom-repeat" items="[[navigation]]" as="nav">
+                  <a
+                    href="[[nav.permalink]]"
+                    path="[[nav.route]]"
+                    on-click="closeDrawer"
+                    aria-current$="[[getAriaCurrent(routeName, nav.route)]]"
+                  >
+                    [[nav.label]]
+                  </a>
+                </template>
+              </iron-selector>
+            </nav>
 
             <div>
               <app-install></app-install>
@@ -361,13 +381,13 @@ export class HoverboardApp extends PolymerElement {
           </div>
         </app-drawer>
 
-        <app-header-layout id="headerLayout" fullbleed>
-          <app-header id="header" slot="header" condenses fixed>
+        <div id="headerLayout" class="header-layout">
+          <app-header id="header" condenses fixed>
             <header-toolbar drawer-opened="{{drawerOpened}}"></header-toolbar>
           </app-header>
 
           <main id="main-content" tabindex="-1"></main>
-        </app-header-layout>
+        </div>
       </app-drawer-layout>
 
       <feedback-dialog></feedback-dialog>

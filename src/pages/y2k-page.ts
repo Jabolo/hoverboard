@@ -100,9 +100,9 @@ export class Y2kPage extends ThemedElement {
         }
         .world {
           background:
-            linear-gradient(#a18cb809 1px, transparent 1px),
-            linear-gradient(90deg, #a18cb809 1px, transparent 1px);
-          background-size: 40px 40px;
+            radial-gradient(circle at 18% 8%, #2e1b52 0%, transparent 48%),
+            radial-gradient(circle at 86% 24%, #241745 0%, transparent 42%),
+            linear-gradient(180deg, #170d2e 0%, #140b29 100%);
         }
         .wrap {
           max-width: 1160px;

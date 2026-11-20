@@ -265,8 +265,8 @@
         "number": "3"
       },
       "tracks": {
-        "label": "Formats",
-        "number": "Talks & Labs"
+        "label": "Sessions",
+        "number": "16"
       }
     }
   },
@@ -443,30 +443,12 @@
     "image": "/images/logos/gdg-warsaw-white.svg",
     "blocks": [
       {
-        "title": "Organizer",
-        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) (GDG Warsaw) brings DevFest Warsaw to the community with volunteers and partners.",
+        "title": "Organized by GDG Warsaw",
+        "description": "[Google Developer Groups Warszawa](https://gdg.community.dev/gdg-warszawa/) is a volunteer-led developer community bringing DevFest Warsaw to life with speakers, partners, and organizers.",
         "callToAction": {
           "label": "Meet the team",
           "link": "/team",
           "newTab": false
-        }
-      },
-      {
-        "title": "What is a GDG?",
-        "description": "Google Developer Groups are local communities where developers and technology enthusiasts learn, connect, and share knowledge.",
-        "callToAction": {
-          "label": "Learn more",
-          "link": "https://developers.google.com/groups/",
-          "newTab": true
-        }
-      },
-      {
-        "title": "What is DevFest?",
-        "description": "DevFests are community-led developer events hosted by Google Developer Groups around the globe.",
-        "callToAction": {
-          "label": "Learn more",
-          "link": "https://devfest.withgoogle.com/",
-          "newTab": true
         }
       }
     ]

@@ -81,7 +81,6 @@ export class SimpleHero extends ThemedElement {
         background-color="${heroSettings[this.page].background.color}"
         font-color="${heroSettings[this.page].fontColor}"
       >
-        <div class="hero-command">&gt; route --page=${this.page}</div>
         ${this.renderTitle()} ${this.renderDescription()}
 
         <slot></slot>

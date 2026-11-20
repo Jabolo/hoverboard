@@ -42,41 +42,55 @@ export class EveneaEmbed extends PolymerElement {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 12px;
+          gap: 16px;
           margin-bottom: 20px;
-          padding: 10px 16px;
+          padding: 14px 16px;
           background: var(--secondary-background-color);
           border: 1px solid var(--divider-color);
           border-radius: var(--border-radius);
+          text-align: left;
+        }
+
+        .embed-bar-copy {
+          min-width: 0;
+        }
+
+        .embed-bar-copy h2 {
+          margin: 0;
+          color: var(--primary-text-color);
           font-family: var(--font-mono, monospace);
-          font-size: 13px;
+          font-size: 16px;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
         }
 
         .active-selection {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: var(--google-blue);
+          margin: 4px 0 0;
+          color: var(--secondary-text-color);
+          font-size: 14px;
+          line-height: 1.45;
         }
 
         .active-selection strong {
           color: var(--primary-text-color);
-          font-weight: 800;
+          font-weight: 700;
         }
 
         .close-embed-btn {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
+          justify-content: center;
+          flex-shrink: 0;
+          min-height: 44px;
           background: transparent;
           border: 1px solid var(--divider-color);
-          color: var(--secondary-text-color);
-          padding: 6px 12px;
+          color: var(--primary-text-color);
+          padding: 8px 14px;
           border-radius: 4px;
           cursor: pointer;
           font-family: var(--font-mono, monospace);
           font-size: 12px;
-          font-weight: 600;
+          font-weight: 700;
           transition:
             background 0.2s,
             color 0.2s,
@@ -86,93 +100,7 @@ export class EveneaEmbed extends PolymerElement {
         .close-embed-btn:hover {
           background: rgba(255, 255, 255, 0.08);
           color: var(--primary-text-color);
-          border-color: var(--google-yellow);
-        }
-
-        .header {
-          margin-bottom: 16px;
-          text-align: center;
-        }
-
-        .header h2 {
-          font-family: var(--font-mono, monospace);
-          letter-spacing: 0.02em;
-          text-transform: uppercase;
-        }
-
-        .description {
-          margin: 0 auto;
-          max-width: 680px;
-          color: var(--secondary-text-color);
-        }
-
-        .registration-guide {
-          box-sizing: border-box;
-          display: flex;
-          align-items: flex-start;
-          gap: 14px;
-          max-width: 760px;
-          margin: 20px auto 24px;
-          padding: 14px 16px;
-          border: 1px solid rgba(66, 133, 244, 0.55);
-          border-left: 4px solid var(--google-blue);
-          border-radius: var(--border-radius);
-          background: rgba(66, 133, 244, 0.08);
-          text-align: left;
-        }
-
-        .registration-guide .step-number {
-          display: grid;
-          flex: 0 0 30px;
-          width: 30px;
-          height: 30px;
-          place-items: center;
-          border-radius: 50%;
-          background: var(--google-blue);
-          color: #fff;
-          font-family: var(--font-mono, monospace);
-          font-size: 14px;
-          font-weight: 800;
-        }
-
-        .registration-guide .guide-copy {
-          min-width: 0;
-        }
-
-        .registration-guide .guide-kicker {
-          margin-bottom: 3px;
-          color: var(--google-blue);
-          font-family: var(--font-mono, monospace);
-          font-size: 11px;
-          font-weight: 800;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-        }
-
-        .registration-guide .guide-title {
-          color: var(--primary-text-color);
-          font-size: 16px;
-          font-weight: 800;
-          line-height: 1.35;
-        }
-
-        .registration-guide .guide-title strong {
-          color: var(--google-blue);
-        }
-
-        .registration-guide .guide-copy p {
-          margin: 4px 0 0;
-          color: var(--secondary-text-color);
-          font-size: 14px;
-          line-height: 1.45;
-        }
-
-        .registration-guide .join-label {
-          color: var(--primary-text-color);
-          font-family: var(--font-mono, monospace);
-          font-size: 0.95em;
-          font-weight: 800;
-          white-space: nowrap;
+          border-color: var(--google-blue);
         }
 
         .preview-card,
@@ -221,69 +149,32 @@ export class EveneaEmbed extends PolymerElement {
         @media (max-width: 639px) {
           .embed-top-bar {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
           }
 
           .close-embed-btn {
             width: 100%;
-            justify-content: center;
-          }
-
-          .registration-guide {
-            margin-top: 16px;
-            margin-bottom: 18px;
-            padding: 13px 14px;
-          }
-
-          .registration-guide .guide-title {
-            font-size: 15px;
-          }
-
-          .registration-guide .guide-copy p {
-            font-size: 13px;
           }
         }
       </style>
 
       <section hidden$="[[!enabled]]">
         <div class="embed-top-bar">
-          <div class="active-selection">
-            <template is="dom-if" if="[[selectedTicketName]]">
-              <span>🎟️ Selected ticket: <strong>[[selectedTicketName]]</strong></span>
-            </template>
-            <template is="dom-if" if="[[!selectedTicketName]]">
-              <span>🎟️ <strong>All tickets</strong> available in form</span>
-            </template>
+          <div class="embed-bar-copy" role="status" aria-live="polite">
+            <h2>[[eveneaEmbed.title]]</h2>
+            <p class="active-selection">
+              <template is="dom-if" if="[[selectedTicketName]]">
+                <span
+                  >Selected ticket: <strong>[[selectedTicketName]]</strong> — complete your details
+                  in the Evenea form below.</span
+                >
+              </template>
+              <template is="dom-if" if="[[!selectedTicketName]]">
+                <span>Choose your ticket and quantity in the Evenea form below.</span>
+              </template>
+            </p>
           </div>
-          <button type="button" class="close-embed-btn" on-click="handleClose">▲ Close form</button>
-        </div>
-
-        <div class="header">
-          <h2>[[eveneaEmbed.title]]</h2>
-          <p class="description">[[eveneaEmbed.description]]</p>
-        </div>
-        <div class="registration-guide" role="status" aria-live="polite">
-          <template is="dom-if" if="[[selectedTicketId]]">
-            <div class="step-number">2</div>
-            <div class="guide-copy">
-              <div class="guide-kicker">Next step</div>
-              <div class="guide-title">
-                Continue with your <strong>[[selectedTicketName]]</strong> ticket below.
-              </div>
-              <p>
-                Complete your details below. If the ticket list appears, select your ticket and use
-                the button below the ticket list to continue.
-              </p>
-            </div>
-          </template>
-          <template is="dom-if" if="[[!selectedTicketId]]">
-            <div class="step-number">1</div>
-            <div class="guide-copy">
-              <div class="guide-kicker">Start here</div>
-              <div class="guide-title">Choose your ticket in the Evenea form below.</div>
-              <p>Set the quantity, then use the button below the ticket list to continue.</p>
-            </div>
-          </template>
+          <button type="button" class="close-embed-btn" on-click="handleClose">Close form</button>
         </div>
         <template is="dom-if" if="[[hasBeenOpened]]">
           <template is="dom-if" if="[[isOffline]]">

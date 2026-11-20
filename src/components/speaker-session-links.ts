@@ -35,12 +35,19 @@ export class SpeakerSessionLinks extends LitElement {
       display: grid;
       grid-template-columns: 44px minmax(0, 1fr) 44px;
       align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
     }
     .session-header session-favorite {
       grid-column: 3;
     }
     a {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 6px 4px;
+      box-sizing: border-box;
       color: var(--terminal-copy, #eaf2ff);
       font-size: 14px;
       font-weight: 600;

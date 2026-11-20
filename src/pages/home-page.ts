@@ -19,7 +19,6 @@ import {
 } from '../utils/data';
 import { INCLUDE_SITE_TITLE, updateMetadata } from '../utils/metadata';
 import { POSITION, scrollToElement } from '../utils/scrolling';
-import { getProgrammeSummary, loadPublishedProgramme } from '../utils/published-programme';
 
 // Let the browser paint the hero before loading the remaining page sections.
 // Loading begins on the next frame rather than waiting for a scroll, so deep
@@ -35,12 +34,9 @@ function loadHomeSections() {
     import('../elements/schedule-block'),
     import('../elements/visit-block'),
     import('../elements/footer-block'),
-    import('../elements/map-block'),
     import('../elements/partners-block'),
-    import('../elements/past-devfests-block'),
     import('../elements/previous-speakers-block'),
     import('../elements/speakers-block'),
-    import('../elements/subscribe-block'),
     import('../elements/tickets-block'),
   ]).catch((error: unknown) => {
     sectionsLoading = undefined;
@@ -63,13 +59,26 @@ export class HomePage extends PolymerElement {
         hero-block {
           font-size: 24px;
           text-align: center;
+          min-height: 440px;
+        }
+
+        .deferred-sections {
+          min-height: 85vh;
+        }
+
+        schedule-block {
+          display: block;
+          min-height: 340px;
+        }
+
+        visit-block {
+          display: block;
+          min-height: 480px;
         }
 
         linkedin-updates-block,
         previous-speakers-block,
-        past-devfests-block,
         about-organizer-block,
-        map-block,
         visit-block {
           content-visibility: auto;
           contain-intrinsic-size: auto 600px;
@@ -77,6 +86,7 @@ export class HomePage extends PolymerElement {
 
         .home-content {
           width: min(100%, 980px);
+          margin: 0 auto;
           padding: 24px 20px 52px;
         }
 
@@ -134,7 +144,7 @@ export class HomePage extends PolymerElement {
           display: grid;
           gap: 8px;
           margin: 30px 0 0;
-          text-align: left;
+          text-align: center;
         }
 
         .event-date {
@@ -209,97 +219,6 @@ export class HomePage extends PolymerElement {
           100% {
             transform: translate(0, 0);
           }
-        }
-
-        .terminal-column {
-          display: grid;
-          width: 100%;
-          max-width: 520px;
-          gap: 12px;
-        }
-
-        .terminal-window {
-          overflow: hidden;
-          border: 1px solid var(--terminal-line);
-          border-radius: 10px;
-          background: rgb(10 21 37 / 92%);
-          box-shadow: 0 20px 48px rgb(0 0 0 / 28%);
-          text-align: left;
-        }
-
-        .terminal-bar {
-          display: flex;
-          align-items: center;
-          gap: 7px;
-          min-height: 42px;
-          padding: 0 14px;
-          border-bottom: 1px solid var(--terminal-line);
-        }
-
-        .terminal-bar i {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: var(--google-red);
-        }
-
-        .terminal-bar i:nth-child(2) {
-          background: var(--google-yellow);
-        }
-
-        .terminal-bar i:nth-child(3) {
-          background: var(--google-green);
-        }
-
-        .terminal-bar span {
-          margin-left: 6px;
-          color: var(--terminal-muted);
-          font-family: var(--font-mono);
-          font-size: 11px;
-        }
-
-        .terminal-body {
-          padding: 18px 16px;
-          color: var(--terminal-copy);
-          font-family: var(--font-mono);
-          font-size: 12px;
-          line-height: 1.65;
-        }
-
-        .terminal-line {
-          display: grid;
-          grid-template-columns: 16px 1fr;
-          gap: 6px;
-        }
-
-        .terminal-line + .terminal-line {
-          margin-top: 8px;
-        }
-
-        .terminal-line .prompt {
-          color: var(--terminal-green);
-        }
-
-        .terminal-line .key {
-          color: var(--terminal-muted);
-        }
-
-        .terminal-line .value {
-          color: var(--terminal-copy);
-        }
-
-        .terminal-line .green {
-          color: var(--terminal-green);
-        }
-
-        .terminal-line .blue {
-          color: #8cb5ff;
-        }
-
-        .terminal-body hr {
-          margin: 14px 0;
-          border: 0;
-          border-top: 1px dashed var(--terminal-line);
         }
 
         .y2k-activities {
@@ -388,7 +307,7 @@ export class HomePage extends PolymerElement {
         @media (max-width: 811px) {
           hero-block {
             height: auto;
-            min-height: 0;
+            min-height: 440px;
             max-height: none;
           }
 
@@ -405,26 +324,33 @@ export class HomePage extends PolymerElement {
 
         @media (min-width: 812px) {
           hero-block {
-            height: calc(100vh + 65px);
+            height: auto;
+            min-height: 500px;
+            max-height: none;
+          }
+
+          .home-content {
+            margin-top: 0;
+            padding-top: 0;
+            padding-bottom: 0;
           }
 
           .home-grid {
-            grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
-            gap: clamp(28px, 5vw, 72px);
-            text-align: left;
+            justify-items: center;
+            text-align: center;
           }
 
           .home-intro {
-            align-items: flex-start;
-            text-align: left;
+            align-items: center;
+            text-align: center;
           }
 
           .event-details {
-            text-align: left;
+            text-align: center;
           }
 
-          .terminal-column {
-            justify-self: end;
+          .scroll-down {
+            display: none;
           }
         }
 
@@ -435,7 +361,6 @@ export class HomePage extends PolymerElement {
         }
         @media (max-width: 811px) {
           /* Put the Concierge and programme within reach for attendees already on site. */
-          .terminal-column,
           .scroll-down {
             display: none;
           }
@@ -453,30 +378,6 @@ export class HomePage extends PolymerElement {
           .home-intro devfest-concierge {
             margin-top: 16px;
             width: 100%;
-          }
-        }
-        @media (min-width: 812px) {
-          hero-block {
-            height: auto;
-            max-height: none;
-          }
-          .home-content {
-            margin-top: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-          }
-          .terminal-body {
-            padding-top: 12px;
-            padding-bottom: 12px;
-          }
-          .terminal-line + .terminal-line {
-            margin-top: 4px;
-          }
-          .terminal-body hr {
-            margin: 8px 0;
-          }
-          .scroll-down {
-            display: none;
           }
         }
       </style>
@@ -497,6 +398,8 @@ export class HomePage extends PolymerElement {
                   class="devfest-lockup"
                   src="/images/logos/devfest-2026-wordmark-dark.svg"
                   alt="DevFest 2026"
+                  width="2417"
+                  height="282"
                 />
               </div>
 
@@ -511,61 +414,6 @@ export class HomePage extends PolymerElement {
               <event-countdown></event-countdown>
 
               <devfest-concierge id="concierge" variant="hero"></devfest-concierge>
-            </div>
-
-            <div class="terminal-column">
-              <div class="terminal-window" aria-label="Event status">
-                <div class="terminal-bar"><i></i><i></i><i></i><span>devfest-status.sh</span></div>
-                <div class="terminal-body">
-                  <div class="terminal-line">
-                    <span class="prompt">$</span><span>./event --status</span>
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span
-                      ><span class="key">status:</span> <span class="green">confirmed</span></span
-                    >
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span
-                      ><span class="key">date:</span> <span class="blue">Nov 21, 2026</span></span
-                    >
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span><span class="key">theme:</span> real_work / real_lessons</span>
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span
-                      ><span class="key">spaces:</span> Auditorium, Classroom and Vibe Zone</span
-                    >
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span
-                      ><span class="blue">attendees</span>:
-                      <span class="green">[[heroSettings.attendanceClaim]]</span></span
-                    >
-                  </div>
-                  <hr />
-                  <div class="terminal-line">
-                    <span class="prompt">$</span><span>./programme --status</span>
-                  </div>
-                  <div class="terminal-line">
-                    <span></span><span><span class="key">lineup:</span> complete</span>
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span><span class="key">programme:</span> [[programmeSummary]]</span>
-                  </div>
-                  <div class="terminal-line">
-                    <span></span
-                    ><span><span class="key">focus:</span> practical_ai / real_world_lessons</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -639,18 +487,20 @@ export class HomePage extends PolymerElement {
           </button>
         </div>
       </hero-block>
-      <schedule-block></schedule-block>
-      <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
-      <cloud-credit-block id="cloud-credit" style="scroll-margin-top: 80px;"></cloud-credit-block>
-      <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
-      <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
-      <template is="dom-if" if="{{showForkMeBlock}}">
-        <fork-me-block></fork-me-block>
-      </template>
-      <about-block></about-block>
-      <div id="tickets" style="scroll-margin-top: 80px;"></div>
-      <tickets-block id="registration"></tickets-block>
-      <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
+      <div class="deferred-sections">
+        <schedule-block></schedule-block>
+        <visit-block id="visit" style="scroll-margin-top: 80px;"></visit-block>
+        <cloud-credit-block id="cloud-credit" style="scroll-margin-top: 80px;"></cloud-credit-block>
+        <attendee-photos-block id="photos" style="scroll-margin-top: 80px;"></attendee-photos-block>
+        <speakers-block id="speakers" style="scroll-margin-top: 80px;"></speakers-block>
+        <template is="dom-if" if="{{showForkMeBlock}}">
+          <fork-me-block></fork-me-block>
+        </template>
+        <about-block></about-block>
+        <div id="tickets" style="scroll-margin-top: 80px;"></div>
+        <tickets-block id="registration"></tickets-block>
+        <partners-block id="partners" style="scroll-margin-top: 80px;"></partners-block>
+      </div>
       <hunt-peek-card></hunt-peek-card>
       <section id="y2k-activities" class="y2k-activities" aria-labelledby="y2k-heading">
         <div class="y2k-inner">
@@ -683,17 +533,11 @@ export class HomePage extends PolymerElement {
         </div>
       </section>
       <linkedin-updates-block></linkedin-updates-block>
-      <subscribe-block></subscribe-block>
       <previous-speakers-block></previous-speakers-block>
-      <past-devfests-block></past-devfests-block>
       <about-organizer-block></about-organizer-block>
-      <map-block></map-block>
       <footer-block></footer-block>
     `;
   }
-
-  @property({ type: String })
-  private programmeSummary = 'Loading programme…';
 
   private siteTitle = title;
   private huntLinks = huntSiteLinks;
@@ -755,14 +599,6 @@ export class HomePage extends PolymerElement {
     });
     updateMetadata(title, description, INCLUDE_SITE_TITLE.NO);
     this.showForkMeBlock = this.shouldShowForkMeBlock();
-    void loadPublishedProgramme().then(
-      (programme) => {
-        this.programmeSummary = getProgrammeSummary(programme);
-      },
-      () => {
-        this.programmeSummary = 'Programme unavailable';
-      },
-    );
     this.checkHashAndScroll();
     window.addEventListener('hashchange', this.onHashChange);
     window.addEventListener('click', this.onHomeAnchorClick);

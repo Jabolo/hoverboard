@@ -36,20 +36,20 @@ export class FooterRel extends PolymerElement {
         }
 
         a {
+          display: inline-flex;
+          align-items: center;
+          min-height: 44px;
+          padding: 11px 0;
           color: var(--footer-text-color);
-          padding-bottom: 2px;
           text-decoration: none;
-          pointer-events: all;
+        }
+
+        a:hover {
+          text-decoration: underline;
         }
 
         li {
           display: list-item;
-          line-height: 25px;
-          pointer-events: none;
-        }
-
-        li:hover {
-          text-decoration: underline;
         }
 
         @media (min-width: 768px) {
@@ -66,7 +66,7 @@ export class FooterRel extends PolymerElement {
       </style>
 
       <template is="dom-repeat" items="[[footerRelBlock]]" as="footerRel">
-        <div class="col" layout vertical wrap flex-auto>
+        <nav class="col" aria-label$="[[footerRel.title]]" layout vertical wrap flex-auto>
           <div class="col-heading">[[footerRel.title]]</div>
           <ul class="nav">
             <template is="dom-repeat" items="[[footerRel.links]]" as="link">
@@ -80,7 +80,7 @@ export class FooterRel extends PolymerElement {
               </li>
             </template>
           </ul>
-        </div>
+        </nav>
       </template>
 
       <div class="col" layout vertical flex-auto wrap>

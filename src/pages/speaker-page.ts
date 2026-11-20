@@ -12,7 +12,6 @@ import '../components/speaker-affiliations';
 import '../components/session-favorite';
 import '../components/markdown/short-markdown';
 import '../elements/content-loader';
-import '../elements/previous-speakers-block';
 import '../elements/shared-styles';
 import { SpeakerWithTags } from '../models/speaker';
 import { router } from '../router';
@@ -349,8 +348,6 @@ export class SpeakerPage extends ReduxMixin(PolymerElement) {
           </template>
         </div>
       </div>
-
-      <previous-speakers-block></previous-speakers-block>
 
       <footer-block></footer-block>
     `;

@@ -224,8 +224,6 @@ export class DevfestConcierge extends ThemedElement {
   private teamMembers: TeamMemberInfo[] = [];
   private unsubscribeFavorites: (() => void) | undefined;
   private liveRefreshTimer: number | undefined;
-  private spotlightRaf: number | undefined;
-  private pendingSpotPoint: { target: HTMLElement; x: number; y: number } | null = null;
   private returnFocusEl: HTMLElement | null = null;
   private surfaceTransitionTick = 0;
   private requestCounter = 0;
@@ -237,28 +235,6 @@ export class DevfestConcierge extends ThemedElement {
     return [
       ...super.styles,
       css`
-        @property --_beam-angle {
-          syntax: '<angle>';
-          inherits: false;
-          initial-value: 135deg;
-        }
-
-        @keyframes concierge-beam {
-          to {
-            --_beam-angle: 495deg;
-          }
-        }
-
-        @keyframes launcher-dot-pulse {
-          0%,
-          100% {
-            box-shadow: 0 0 0 0 rgb(126 242 165 / 45%);
-          }
-          50% {
-            box-shadow: 0 0 0 4px rgb(126 242 165 / 0%);
-          }
-        }
-
         @keyframes a2ui-materialize {
           from {
             opacity: 0;
@@ -307,7 +283,7 @@ export class DevfestConcierge extends ThemedElement {
           --_blue: var(--terminal-blue, #8cb5ff);
           --_copy: var(--terminal-copy, #eaf2ff);
           --_muted: var(--terminal-muted, #9bb0d0);
-          --_target: 36px;
+          --_target: 40px;
           background: var(--_bg);
           border-bottom: 1px solid var(--divider-color, var(--_line));
           color: var(--_copy);
@@ -356,125 +332,31 @@ export class DevfestConcierge extends ThemedElement {
 
         .launcher-frame {
           position: relative;
-          overflow: hidden;
           display: grid;
           grid-template-columns: minmax(0, 1fr);
           gap: 8px;
           width: 100%;
           min-width: 0;
-          padding: 10px 12px;
+          padding: 12px 12px 2px;
           border: 1px solid var(--_line);
           border-radius: 10px;
           background: var(--_panel);
+          transition: border-color 160ms ease;
         }
 
-        .launcher-frame > * {
-          position: relative;
-          z-index: 1;
+        .launcher-frame:focus-within {
+          border-color: var(--_green);
         }
 
         :host([variant='hero']) .launcher-frame {
-          padding: 10px 12px;
-          border: 1px solid transparent;
-          background:
-            linear-gradient(rgb(10 21 37 / 92%), rgb(10 21 37 / 92%)) padding-box,
-            conic-gradient(
-                from var(--_beam-angle, 135deg),
-                rgb(38 61 94 / 75%) 0deg,
-                rgb(76 141 247 / 85%) 70deg,
-                rgb(126 242 165 / 92%) 115deg,
-                rgb(38 61 94 / 75%) 185deg,
-                rgb(38 61 94 / 75%) 360deg
-              )
-              border-box;
-          box-shadow: 0 18px 42px -12px rgb(0 0 0 / 55%);
-          backdrop-filter: blur(8px);
-          animation: concierge-beam 10s linear infinite;
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-          :host([variant='hero']) .launcher-frame::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 200ms ease-out;
-            background: radial-gradient(
-              260px circle at var(--_spot-x, 50%) var(--_spot-y, 0%),
-              rgb(76 141 247 / 13%),
-              transparent 72%
-            );
-          }
-
-          :host([variant='hero']) .launcher-frame:hover::before,
-          :host([variant='hero']) .launcher-frame:focus-within::before {
-            opacity: 1;
-          }
-        }
-
-        .launcher-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 8px;
-          padding-bottom: 6px;
-          border-bottom: 1px solid rgb(38 61 94 / 55%);
-        }
-
-        .launcher-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          min-width: 0;
-          color: var(--_copy);
-          font-family: var(--font-mono, monospace);
-          font-size: 11px;
-          font-weight: 700;
-        }
-
-        .launcher-dot {
-          width: 7px;
-          height: 7px;
-          flex: 0 0 auto;
-          border-radius: 50%;
-          background: var(--_green);
-          animation: launcher-dot-pulse 2.6s ease-out infinite;
-        }
-
-        .launcher-meta-group {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          flex: 0 0 auto;
-        }
-
-        .launcher-meta {
-          flex: 0 0 auto;
-          color: var(--_muted);
-          font-family: var(--font-mono, monospace);
-          font-size: 11px;
-          white-space: nowrap;
-        }
-
-        .shortcut-kbd {
-          display: none;
-          padding: 1px 5px;
+          padding: 12px 12px 2px;
           border: 1px solid var(--_line);
-          border-radius: 4px;
-          background: var(--_bg);
-          color: var(--_muted);
-          font-family: var(--font-mono, monospace);
-          font-size: 10px;
-          line-height: 1.3;
+          background: var(--_panel);
+          box-shadow: 0 12px 28px -8px rgb(0 0 0 / 45%);
         }
 
-        @media (hover: hover) and (pointer: fine) {
-          .shortcut-kbd {
-            display: inline-flex;
-            align-items: center;
-          }
+        :host([variant='hero']) .launcher-frame:focus-within {
+          border-color: var(--_green);
         }
 
         .launcher-form {
@@ -487,23 +369,33 @@ export class DevfestConcierge extends ThemedElement {
         }
 
         .ai-privacy-note {
-          margin: 6px 0 0;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0 4px;
+          margin: 0;
           color: var(--_muted);
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
           font-size: 12px;
-          line-height: 1.4;
+          line-height: 1.45;
         }
 
         .ai-privacy-note a {
+          display: inline-flex;
+          align-items: center;
+          min-block-size: 44px;
+          padding: 0 6px;
           color: var(--_green);
+          text-underline-offset: 3px;
         }
 
         .input-wrap {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 4px;
           min-width: 0;
-          min-block-size: var(--_target);
-          padding: 0 10px;
+          min-block-size: 44px;
+          padding: 0 4px 0 12px;
           border: 1px solid var(--_line);
           border-radius: 6px;
           background: var(--_bg);
@@ -511,33 +403,33 @@ export class DevfestConcierge extends ThemedElement {
 
         .input-wrap:focus-within {
           border-color: var(--_green);
-        }
-
-        .prompt-prefix {
-          flex: 0 0 auto;
-          color: var(--_green);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          white-space: nowrap;
+          outline: 2px solid var(--_green);
+          outline-offset: 1px;
         }
 
         input {
           flex: 1 1 auto;
           min-width: 0;
+          min-block-size: 44px;
           border: 0;
           background: transparent;
           color: inherit;
           caret-color: var(--_green);
           font: inherit;
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
+          font-size: 15px;
+          line-height: 1.3;
+          outline: none;
+        }
+
+        input:focus,
+        input:focus-visible {
           outline: none;
         }
 
         input::placeholder {
           color: var(--_muted);
-          opacity: 0.85;
+          opacity: 0.9;
         }
 
         @media (pointer: coarse), (any-pointer: coarse), (max-width: 811px) {
@@ -569,15 +461,15 @@ export class DevfestConcierge extends ThemedElement {
           align-items: center;
           justify-content: center;
           gap: 6px;
-          min-block-size: var(--_target);
-          min-inline-size: var(--_target);
+          min-block-size: 44px;
+          min-inline-size: 44px;
           padding: 0 14px;
           border: 0;
           border-radius: 6px;
           background: var(--google-blue-strong, #1a56db);
           color: #fff;
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
+          font-size: 14px;
           font-weight: 700;
           white-space: nowrap;
           cursor: pointer;
@@ -601,32 +493,11 @@ export class DevfestConcierge extends ThemedElement {
 
         .chip-strip {
           display: flex;
-          flex-wrap: nowrap;
+          flex-wrap: wrap;
           gap: 8px;
           width: 100%;
           min-width: 0;
           max-width: 100%;
-          overflow-x: auto;
-          scroll-snap-type: x proximity;
-          scrollbar-width: none;
-          -webkit-overflow-scrolling: touch;
-        }
-
-        @container (max-width: 30.25rem) {
-          .chip-strip {
-            padding-inline-end: 22px;
-            -webkit-mask-image: linear-gradient(
-              to right,
-              #000 0,
-              #000 calc(100% - 24px),
-              transparent 100%
-            );
-            mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%);
-          }
-        }
-
-        .chip-strip::-webkit-scrollbar {
-          display: none;
         }
 
         .intent-chip {
@@ -639,11 +510,10 @@ export class DevfestConcierge extends ThemedElement {
           border-radius: 6px;
           background: var(--_raised);
           color: var(--_copy);
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
+          font-size: 13px;
           font-weight: 600;
           white-space: nowrap;
-          scroll-snap-align: start;
           cursor: pointer;
         }
 
@@ -657,12 +527,23 @@ export class DevfestConcierge extends ThemedElement {
           color: var(--_green);
         }
 
-        @container (min-width: 30.26rem) {
-          .chip-strip {
+        @container (max-width: 24rem) {
+          .launcher-frame,
+          :host([variant='hero']) .launcher-frame {
+            padding: 10px 10px 2px;
+          }
+
+          .launcher-form {
             gap: 6px;
           }
 
-          .intent-chip {
+          .input-wrap {
+            gap: 2px;
+            padding: 0 2px 0 8px;
+          }
+
+          .go-btn {
+            gap: 4px;
             padding: 0 10px;
           }
         }
@@ -673,7 +554,7 @@ export class DevfestConcierge extends ThemedElement {
           }
 
           .launcher-frame {
-            padding: 12px 14px;
+            padding: 12px 14px 2px;
           }
         }
 
@@ -799,8 +680,8 @@ export class DevfestConcierge extends ThemedElement {
 
         .dialog-title {
           margin: 0;
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
+          font-size: 15px;
           font-weight: 700;
           color: var(--_copy);
         }
@@ -814,7 +695,7 @@ export class DevfestConcierge extends ThemedElement {
           background: rgb(76 141 247 / 12%);
           color: var(--_blue);
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
         }
 
@@ -852,7 +733,7 @@ export class DevfestConcierge extends ThemedElement {
           grid-template-columns: minmax(0, 1fr);
           gap: 8px;
           min-width: 0;
-          padding: 10px 14px;
+          padding: 10px 14px 2px;
           border-bottom: 1px solid var(--_line);
           background: var(--_panel);
         }
@@ -1160,7 +1041,7 @@ export class DevfestConcierge extends ThemedElement {
           background: var(--_raised);
           color: var(--_blue);
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
         }
 
@@ -1220,7 +1101,7 @@ export class DevfestConcierge extends ThemedElement {
         .logistics-label {
           display: block;
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 12px;
           color: var(--_muted);
         }
 
@@ -1352,6 +1233,9 @@ export class DevfestConcierge extends ThemedElement {
         }
 
         .inspector-details summary {
+          display: inline-flex;
+          align-items: center;
+          min-block-size: 44px;
           cursor: pointer;
           padding: 6px 0;
           color: var(--_muted);
@@ -1367,7 +1251,7 @@ export class DevfestConcierge extends ThemedElement {
           border-radius: 6px;
           background: #050a11;
           color: #dbeafe;
-          font-size: 11px;
+          font-size: 12px;
           line-height: 1.45;
         }
 
@@ -1392,7 +1276,7 @@ export class DevfestConcierge extends ThemedElement {
           flex-direction: column;
           align-items: flex-end;
           z-index: 900;
-          font-family: var(--font-mono, monospace);
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
           pointer-events: none;
         }
 
@@ -1403,35 +1287,27 @@ export class DevfestConcierge extends ThemedElement {
           gap: 10px;
           height: 48px;
           padding: 0 16px 0 12px;
-          border: 1px solid transparent;
+          border: 1px solid var(--_line);
           border-radius: 9999px;
-          background:
-            linear-gradient(rgb(11 19 32 / 94%), rgb(11 19 32 / 94%)) padding-box,
-            conic-gradient(
-                from var(--_beam-angle, 135deg),
-                var(--_blue, #4285f4),
-                var(--_green, #34a853),
-                var(--_yellow, #fbbc04),
-                var(--_blue, #4285f4)
-              )
-              border-box;
-          box-shadow:
-            0 8px 24px rgb(4 8 15 / 55%),
-            0 0 0 1px rgb(255 255 255 / 8%),
-            inset 0 1px 0 rgb(255 255 255 / 15%);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          color: #fff;
+          background: var(--_panel);
+          box-shadow: 0 8px 24px -4px rgb(4 8 15 / 55%);
+          color: var(--_copy);
+          white-space: nowrap;
           cursor: pointer;
           user-select: none;
-          transform: scale(0.8) translateY(12px);
+          transform: scale(0.92) translateY(10px);
           opacity: 0;
           visibility: hidden;
           transition:
-            opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
-            transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
-            visibility 280ms allow-discrete;
-          animation: concierge-beam-spin 6s linear infinite;
+            border-color 160ms ease,
+            opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+            transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+            visibility 240ms allow-discrete;
+        }
+
+        :host([variant='floating']) .orbital-fab:hover,
+        :host([variant='floating']) .orbital-fab:focus-visible {
+          border-color: var(--_green);
         }
 
         :host([variant='floating']) dialog.concierge-dialog {
@@ -1447,7 +1323,7 @@ export class DevfestConcierge extends ThemedElement {
         :host([variant='floating'][data-dialog-open]) .orbital-fab {
           opacity: 0;
           visibility: hidden;
-          transform: scale(0.8) translateY(12px);
+          transform: scale(0.92) translateY(10px);
           pointer-events: none;
         }
 
@@ -1458,54 +1334,32 @@ export class DevfestConcierge extends ThemedElement {
           justify-content: center;
           width: 24px;
           height: 24px;
-        }
-
-        .fab-pulse-ring {
-          position: absolute;
-          inset: -3px;
-          border-radius: 50%;
-          border: 1.5px solid var(--_green, #7ef2a5);
-          opacity: 0.7;
-          animation: fab-sonar 2.6s ease-out infinite;
-        }
-
-        @keyframes fab-sonar {
-          0% {
-            transform: scale(0.85);
-            opacity: 0.8;
-          }
-          60% {
-            transform: scale(1.6);
-            opacity: 0;
-          }
-          100% {
-            transform: scale(1.6);
-            opacity: 0;
-          }
+          flex: 0 0 auto;
         }
 
         .fab-spark-svg {
           width: 18px;
           height: 18px;
           fill: var(--_green, #7ef2a5);
-          filter: drop-shadow(0 0 6px rgb(126 242 165 / 65%));
         }
 
         .fab-label {
-          font-family: var(--font-mono, monospace);
-          font-size: 13px;
+          font-family: var(--font-family, system-ui, -apple-system, sans-serif);
+          font-size: 14px;
           font-weight: 700;
-          letter-spacing: 0.02em;
-          color: #fff;
+          white-space: nowrap;
+          color: var(--_copy);
         }
 
         .fab-kbd {
           padding: 2px 6px;
           border-radius: 4px;
-          border: 1px solid rgb(255 255 255 / 20%);
-          background: rgb(255 255 255 / 8%);
-          font-size: 11px;
-          color: var(--_copy-sub, #9fb0c7);
+          border: 1px solid var(--_line);
+          background: var(--_bg);
+          font-family: var(--font-mono, monospace);
+          font-size: 12px;
+          white-space: nowrap;
+          color: var(--_muted);
         }
 
         @media (max-width: 639px) {
@@ -1540,16 +1394,16 @@ export class DevfestConcierge extends ThemedElement {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 36px;
-          height: 36px;
-          min-width: 36px;
-          min-height: 36px;
-          margin-inline-end: 4px;
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
+          min-height: 44px;
+          margin-inline-end: 0;
           padding: 0;
           border: 1px solid transparent;
           border-radius: 6px;
           background: transparent;
-          color: var(--_copy-sub, #9fb0c7);
+          color: var(--_muted);
           cursor: pointer;
           transition:
             color 160ms ease,
@@ -1571,12 +1425,11 @@ export class DevfestConcierge extends ThemedElement {
           color: var(--_green, #7ef2a5);
           border-color: var(--_green, #7ef2a5);
           background: rgb(126 242 165 / 16%);
-          box-shadow: 0 0 10px rgb(126 242 165 / 35%);
         }
 
         .mic-btn.is-transcribing {
-          color: var(--_blue, #4285f4);
-          border-color: var(--_blue, #4285f4);
+          color: var(--_blue, #8cb5ff);
+          border-color: var(--_blue, #8cb5ff);
           background: rgb(66 133 244 / 14%);
         }
 
@@ -1628,17 +1481,8 @@ export class DevfestConcierge extends ThemedElement {
           }
         }
 
-        @media (pointer: coarse) {
-          .mic-btn {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            min-height: 44px;
-          }
-        }
-
         .voice-status-bar {
-          margin: 6px 0 2px;
+          margin: 2px 0;
           padding: 6px 10px;
           border-radius: 4px;
           background: rgb(126 242 165 / 10%);
@@ -1652,49 +1496,46 @@ export class DevfestConcierge extends ThemedElement {
           display: inline-flex;
           align-items: center;
           padding: 2px;
-          border-radius: 4px;
-          border: 1px solid var(--_line, rgb(255 255 255 / 10%));
-          background: var(--_raised, #131d2e);
-          gap: 2px;
-          margin-inline-start: 8px;
+          border-radius: 6px;
+          border: 1px solid var(--_line, #263d5e);
+          background: var(--_panel, #0d1727);
+          gap: 4px;
+          margin-inline-start: 4px;
         }
 
         .lang-toggle-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 44px;
+          min-height: 44px;
           border: 0;
-          border-radius: 3px;
-          padding: 2px 6px;
+          border-radius: 4px;
+          padding: 0 10px;
           background: transparent;
-          color: var(--_copy-sub, #9fb0c7);
+          color: var(--_muted, #9bb0d0);
           font-family: var(--font-mono, monospace);
-          font-size: 11px;
+          font-size: 12px;
           font-weight: 700;
           cursor: pointer;
         }
 
         .lang-toggle-btn.is-active {
-          background: var(--_blue, #4285f4);
-          color: #fff;
+          background: var(--_blue, #8cb5ff);
+          color: #06101a;
         }
 
         @media (prefers-reduced-motion: reduce) {
-          :host([variant='hero']) .launcher-frame,
-          .launcher-dot,
           .loading-bar,
           .surface-node,
           .spinner-icon,
-          :host([variant='floating']) .orbital-fab,
-          .fab-pulse-ring,
           .eq-bar {
             animation: none;
           }
 
-          .fab-pulse-ring {
-            display: none;
-          }
-
           dialog.concierge-dialog,
           dialog.concierge-dialog::backdrop,
-          :host([variant='hero']) .launcher-frame::before,
+          .launcher-frame,
           .go-btn,
           .save-btn,
           :host([variant='floating']) .orbital-fab {
@@ -1740,27 +1581,41 @@ export class DevfestConcierge extends ThemedElement {
     }
   }
 
+  private isHeroVariant(): boolean {
+    return this.variant === 'hero' || this.getAttribute('variant') === 'hero';
+  }
+
+  private isDebugMode(): boolean {
+    return (
+      typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('debug') === '1'
+    );
+  }
+
   override connectedCallback(): void {
     super.connectedCallback();
     this.initVoice();
 
+    const isHero = this.isHeroVariant();
     if (this.variant === 'floating') {
       window.addEventListener('devfest-concierge:hero-visible', this.onHeroVisibleEvent);
       window.addEventListener('devfest-concierge:request', this.onConciergeRequestEvent);
       window.addEventListener('vaadin-router-location-changed', this.onLocationChanged);
       window.addEventListener('keydown', this.onGlobalKeydown);
       this.isFabVisible = typeof window !== 'undefined' && window.location.pathname !== '/';
-    } else {
+    } else if (!isHero) {
       window.addEventListener('keydown', this.onGlobalKeydown);
     }
 
     this.toggleAttribute('data-dialog-open', this.dialogOpen);
     this.toggleAttribute('data-fab-visible', this.isFabVisible);
 
-    this.unsubscribeFavorites = subscribeSessionFavorites(() => {
-      this.syncFavoritesIntoActiveSurface();
-    });
-    void this.bootstrapData();
+    if (!isHero) {
+      this.unsubscribeFavorites = subscribeSessionFavorites(() => {
+        this.syncFavoritesIntoActiveSurface();
+      });
+      void this.bootstrapData();
+    }
   }
 
   override firstUpdated(changedProperties: PropertyValues<this>): void {
@@ -1814,11 +1669,6 @@ export class DevfestConcierge extends ThemedElement {
       );
     }
     this.voiceController?.cancel();
-    if (this.spotlightRaf !== undefined) {
-      window.cancelAnimationFrame(this.spotlightRaf);
-      this.spotlightRaf = undefined;
-    }
-    this.pendingSpotPoint = null;
     this.clearLiveRefreshTimer();
     this.unsubscribeFavorites?.();
     this.unsubscribeFavorites = undefined;
@@ -1841,11 +1691,15 @@ export class DevfestConcierge extends ThemedElement {
       if (custom.detail.trigger) {
         this.returnFocusEl = custom.detail.trigger;
       }
-      void this.runConciergeRequest(
-        custom.detail.query || '',
-        custom.detail.intent,
-        custom.detail.forceAi,
-      );
+      const query = custom.detail.query || '';
+      const intent = custom.detail.intent;
+      void this.runConciergeRequest(query, intent, custom.detail.forceAi);
+      if (!query.trim() && !intent) {
+        requestAnimationFrame(() => {
+          const input = this.shadowRoot?.querySelector<HTMLInputElement>('#concierge-dialog-input');
+          input?.focus({ preventScroll: true });
+        });
+      }
     }
   };
 
@@ -1888,28 +1742,6 @@ export class DevfestConcierge extends ThemedElement {
       }
       event.preventDefault();
       this.openAndFocus();
-    }
-  };
-
-  private readonly onLauncherPointerMove = (event: PointerEvent): void => {
-    if (this.variant !== 'hero' || event.pointerType !== 'mouse') return;
-    const frame = event.currentTarget;
-    if (!(frame instanceof HTMLElement)) return;
-    const rect = frame.getBoundingClientRect();
-    this.pendingSpotPoint = {
-      target: frame,
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top,
-    };
-    if (this.spotlightRaf === undefined) {
-      this.spotlightRaf = window.requestAnimationFrame(() => {
-        this.spotlightRaf = undefined;
-        const point = this.pendingSpotPoint;
-        this.pendingSpotPoint = null;
-        if (!point || !this.isConnected) return;
-        point.target.style.setProperty('--_spot-x', `${Math.round(point.x)}px`);
-        point.target.style.setProperty('--_spot-y', `${Math.round(point.y)}px`);
-      });
     }
   };
 
@@ -2170,7 +2002,11 @@ export class DevfestConcierge extends ThemedElement {
     }
 
     this.dataReady = true;
-    this.renderLocalSurface('', 'overview');
+    if (!this.activeIntent) {
+      this.renderLocalSurface('', 'overview');
+    } else if (this.originLabel === 'local') {
+      this.renderLocalSurface(this.activeQuery, this.activeIntent, false);
+    }
   }
 
   private renderLocalSurface(query: string, intent?: string, animate = true): void {
@@ -2295,15 +2131,11 @@ export class DevfestConcierge extends ThemedElement {
         }
       }
 
-      if (response.status === 429) {
-        this.statusNotice = 'Rate limit reached — running on Grounded Local A2UI Engine';
-      } else {
-        this.statusNotice = 'Live AI temporarily busy — showing grounded local A2UI answer';
-      }
+      this.statusNotice = 'AI busy — showing instant programme answer.';
       this.renderLocalSurface(trimmed, intent);
     } catch {
       if (reqId !== this.requestCounter || !this.isConnected) return;
-      this.statusNotice = 'Live AI temporarily busy — showing grounded local A2UI answer';
+      this.statusNotice = 'AI busy — showing instant programme answer.';
       this.renderLocalSurface(trimmed, intent);
     } finally {
       if (reqId === this.requestCounter) {
@@ -2315,7 +2147,7 @@ export class DevfestConcierge extends ThemedElement {
   private readonly onSubmit = (event: Event): void => {
     event.preventDefault();
     if (!this.query.trim()) {
-      if (!this.processor.getActiveSurface()) {
+      if (!this.isHeroVariant() && !this.processor.getActiveSurface()) {
         this.renderLocalSurface('', 'overview');
       }
       this.openAndFocus();
@@ -2585,7 +2417,7 @@ export class DevfestConcierge extends ThemedElement {
                   : '';
 
                 return html`
-                  <div class="compare-col">
+                  <div class="compare-col" data-session-id=${colSessionId || nothing}>
                     ${colBadge ? html`<span class="compare-badge">${colBadge}</span>` : nothing}
                     <h4 class="compare-heading">
                       ${colHref ? html`<a href=${colHref}>${colHeading}</a>` : html`${colHeading}`}
@@ -2813,37 +2645,41 @@ export class DevfestConcierge extends ThemedElement {
   }
 
   override render() {
+    if (this.variant === 'hero') {
+      return html`${this.renderLauncherShell()}`;
+    }
+
     const surface = this.processor.getActiveSurface();
     const aiModelLabel = formatAiModelLabel(surface?.source);
     const isLiveRoomsClock = this.originLabel === 'local' && this.activeIntent === 'compare-rooms';
     const isLiveOrCached =
       this.originLabel === 'live' || this.originLabel === 'cached' || isLiveRoomsClock;
     const sourceBadgeText =
-      this.originLabel === 'live'
-        ? `Live · ${aiModelLabel}`
-        : this.originLabel === 'cached'
-          ? `Cached · ${aiModelLabel}`
-          : isLiveRoomsClock
-            ? 'Live · Local Clock'
-            : 'Instant · Local A2UI';
+      this.originLabel === 'live' || this.originLabel === 'cached'
+        ? aiModelLabel
+        : isLiveRoomsClock
+          ? 'Live clock'
+          : 'Instant';
 
     const rootNode =
       surface && surface.rootId ? surface.componentsById.get(surface.rootId) : undefined;
 
-    const inspectorJson = surface
-      ? JSON.stringify(
-          {
-            surfaceId: surface.surfaceId,
-            source: surface.source,
-            rootId: surface.rootId,
-            dataModel: surface.dataModel,
-            components: [...surface.componentsById.values()],
-            messages: surface.messages,
-          },
-          null,
-          2,
-        )
-      : '{}';
+    const showInspector = this.isDebugMode();
+    const inspectorJson =
+      showInspector && surface
+        ? JSON.stringify(
+            {
+              surfaceId: surface.surfaceId,
+              source: surface.source,
+              rootId: surface.rootId,
+              dataModel: surface.dataModel,
+              components: [...surface.componentsById.values()],
+              messages: surface.messages,
+            },
+            null,
+            2,
+          )
+        : '';
 
     const canUpgradeToAi =
       this.originLabel === 'local' &&
@@ -2857,6 +2693,7 @@ export class DevfestConcierge extends ThemedElement {
           isLiveOrCached,
           sourceBadgeText,
           canUpgradeToAi,
+          showInspector,
           inspectorJson,
           rootNode,
           surface,
@@ -2870,6 +2707,7 @@ export class DevfestConcierge extends ThemedElement {
         isLiveOrCached,
         sourceBadgeText,
         canUpgradeToAi,
+        showInspector,
         inspectorJson,
         rootNode,
         surface,
@@ -2887,7 +2725,6 @@ export class DevfestConcierge extends ThemedElement {
         @click=${() => this.openAndFocus()}
       >
         <span class="fab-spark-wrap" aria-hidden="true">
-          <span class="fab-pulse-ring"></span>
           <svg class="fab-spark-svg" viewBox="0 0 24 24">
             <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
           </svg>
@@ -2951,33 +2788,16 @@ export class DevfestConcierge extends ThemedElement {
   private renderLauncherShell() {
     return html`
       <section class="launcher-shell" aria-label="DevFest Concierge" data-tick=${this.renderTick}>
-        <div class="launcher-frame" @pointermove=${this.onLauncherPointerMove}>
-          ${
-            this.variant === 'hero'
-              ? html`
-                  <div class="launcher-header">
-                    <span class="launcher-brand">
-                      <span class="launcher-dot" aria-hidden="true"></span>
-                      <span>devfest-concierge</span>
-                    </span>
-                    <span class="launcher-meta-group">
-                      <span class="launcher-meta">Instant + AI</span>
-                      <kbd class="shortcut-kbd" aria-hidden="true">⌘K</kbd>
-                    </span>
-                  </div>
-                `
-              : nothing
-          }
+        <div class="launcher-frame">
           <form class="launcher-form" @submit=${this.onSubmit}>
             <label class="sr-only" for="concierge-input">Ask DevFest Concierge</label>
             <div class="input-wrap">
-              <span class="prompt-prefix" aria-hidden="true">$ ask</span>
               <input
                 id="concierge-input"
                 type="text"
                 .value=${this.query}
                 @input=${this.onInput}
-                placeholder="Ask AI: talks, rooms, $5 credits, venue…"
+                placeholder="Ask about talks, rooms…"
               />
               ${this.renderVoiceMicButton('concierge-input')}
             </div>
@@ -2995,7 +2815,7 @@ export class DevfestConcierge extends ThemedElement {
             </button>
           </form>
 
-          ${this.renderPrivacyNote()} ${this.renderChipStrip()}
+          ${this.renderChipStrip()} ${this.renderPrivacyNote()}
         </div>
       </section>
     `;
@@ -3003,9 +2823,8 @@ export class DevfestConcierge extends ThemedElement {
 
   private renderPrivacyNote() {
     return html`<p class="ai-privacy-note">
-      For adult attendees (18+). Questions and voice may be sent to Google. Do not submit personal
-      or sensitive information.
-      <a href="/privacy/">Privacy &amp; data</a>
+      <span>18+ · Sent to Google · No personal data ·</span>
+      <a href="/privacy/">Privacy</a>
     </p>`;
   }
 
@@ -3013,6 +2832,7 @@ export class DevfestConcierge extends ThemedElement {
     isLiveOrCached: boolean,
     sourceBadgeText: string,
     canUpgradeToAi: boolean,
+    showInspector: boolean,
     inspectorJson: string,
     rootNode?: A2UIComponentNode,
     surface?: SurfaceState,
@@ -3029,8 +2849,10 @@ export class DevfestConcierge extends ThemedElement {
         <div class="dialog-panel">
           <header class="dialog-header">
             <div class="header-title-group">
-              <h2 id="concierge-dialog-title" class="dialog-title">devfest-concierge.a2ui</h2>
-              <span class="source-badge ${isLiveOrCached ? 'is-live' : ''}"
+              <h2 id="concierge-dialog-title" class="dialog-title">DevFest Concierge</h2>
+              <span
+                class="source-badge ${isLiveOrCached ? 'is-live' : ''}"
+                data-origin=${this.originLabel}
                 >${sourceBadgeText}</span
               >
               ${
@@ -3040,6 +2862,7 @@ export class DevfestConcierge extends ThemedElement {
                         <button
                           type="button"
                           class="lang-toggle-btn ${this.voiceLanguage === 'pl-PL' ? 'is-active' : ''}"
+                          aria-pressed=${this.voiceLanguage === 'pl-PL' ? 'true' : 'false'}
                           @click=${() => this.toggleVoiceLanguage('pl-PL')}
                         >
                           PL
@@ -3047,6 +2870,7 @@ export class DevfestConcierge extends ThemedElement {
                         <button
                           type="button"
                           class="lang-toggle-btn ${this.voiceLanguage === 'en-US' ? 'is-active' : ''}"
+                          aria-pressed=${this.voiceLanguage === 'en-US' ? 'true' : 'false'}
                           @click=${() => this.toggleVoiceLanguage('en-US')}
                         >
                           EN
@@ -3077,13 +2901,12 @@ export class DevfestConcierge extends ThemedElement {
             <form class="launcher-form" @submit=${this.onSubmit}>
               <label class="sr-only" for="concierge-dialog-input">Ask DevFest Concierge</label>
               <div class="input-wrap">
-                <span class="prompt-prefix" aria-hidden="true">$ ask</span>
                 <input
                   id="concierge-dialog-input"
                   type="text"
                   .value=${this.query}
                   @input=${this.onInput}
-                  placeholder="Ask AI anything about DevFest Warsaw 2026…"
+                  placeholder="Ask about talks, rooms…"
                 />
                 ${this.renderVoiceMicButton('concierge-dialog-input')}
               </div>
@@ -3100,7 +2923,6 @@ export class DevfestConcierge extends ThemedElement {
                 }
               </button>
             </form>
-            ${this.renderPrivacyNote()}
             ${
               this.voiceNotice
                 ? html`<div class="voice-status-bar" role="status" aria-live="polite">
@@ -3108,7 +2930,7 @@ export class DevfestConcierge extends ThemedElement {
                   </div>`
                 : nothing
             }
-            ${this.renderChipStrip()}
+            ${this.renderChipStrip()} ${this.renderPrivacyNote()}
           </div>
 
           <div class="dialog-body" role="region" aria-live="polite" aria-label="Concierge output">
@@ -3123,7 +2945,7 @@ export class DevfestConcierge extends ThemedElement {
                     <div class="loading-surface" role="status" aria-live="polite">
                       <p class="loading-status">
                         ${this.renderSpinnerIcon()}
-                        <span>Synthesizing grounded A2UI surface…</span>
+                        <span>Finding answers…</span>
                       </p>
                       <div class="loading-bar"></div>
                       <div class="loading-bar short"></div>
@@ -3133,36 +2955,46 @@ export class DevfestConcierge extends ThemedElement {
                   ? this.renderSurfaceNode(rootNode, surface)
                   : this.dataReady
                     ? html`<p class="surface-subtitle">Ask a question or pick a topic above.</p>`
-                    : html`<p class="surface-subtitle">Loading grounded programme surface…</p>`
+                    : html`<p class="surface-subtitle">Finding answers…</p>`
             }
-
-            <div class="dialog-footer">
-              ${
-                canUpgradeToAi
-                  ? html`
-                      <button
-                        type="button"
-                        class="ai-upgrade-btn"
-                        ?disabled=${this.isLoading}
-                        @click=${() =>
-                          void this.runConciergeRequest(
-                            this.activeQuery || 'Personalize my schedule',
-                            this.activeIntent || undefined,
-                            true,
-                          )}
-                      >
-                        <span>Ask Gemini AI to customize</span>
-                        ${this.renderArrowRightIcon()}
-                      </button>
-                    `
-                  : nothing
-              }
-
-              <details class="inspector-details">
-                <summary>Inspect A2UI JSON</summary>
-                <pre><code>${inspectorJson}</code></pre>
-              </details>
-            </div>
+            ${
+              canUpgradeToAi || showInspector
+                ? html`
+                    <div class="dialog-footer">
+                      ${
+                        canUpgradeToAi
+                          ? html`
+                              <button
+                                type="button"
+                                class="ai-upgrade-btn"
+                                ?disabled=${this.isLoading}
+                                @click=${() =>
+                                  void this.runConciergeRequest(
+                                    this.activeQuery || 'Personalize my schedule',
+                                    this.activeIntent || undefined,
+                                    true,
+                                  )}
+                              >
+                                <span>Ask Gemini AI to customize</span>
+                                ${this.renderArrowRightIcon()}
+                              </button>
+                            `
+                          : nothing
+                      }
+                      ${
+                        showInspector
+                          ? html`
+                              <details class="inspector-details">
+                                <summary>Inspect A2UI JSON</summary>
+                                <pre><code>${inspectorJson}</code></pre>
+                              </details>
+                            `
+                          : nothing
+                      }
+                    </div>
+                  `
+                : nothing
+            }
           </div>
         </div>
       </dialog>

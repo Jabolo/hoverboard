@@ -174,7 +174,7 @@
     </script>
 
     {% if not SPEAKERS_PREVIEW %}
-    <script src="/__/firebase/init.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
     {% endif %}
     <script src="./src/hoverboard-app.ts" type="module"></script>
     <script src="./src/components/app-install.ts" type="module"></script>
@@ -187,6 +187,8 @@
       body {
         min-height: 100%;
         height: 100%;
+        background: #070c14;
+        color: #eaf2ff;
       }
 
       body {
@@ -208,14 +210,20 @@
 
       /* styling for render while resources are loading */
       hoverboard-app[unresolved] {
-        padding: 0 16px;
         display: block;
+        min-height: 100%;
+        padding: 0 16px;
         line-height: 68px;
         text-align: center;
+        font-size: 13px;
         font-weight: 600;
-        letter-spacing: 0.3em;
-        color: #202020;
-        overflow: visible;
+        letter-spacing: 0.2em;
+        background: #070c14;
+        color: #eaf2ff;
+        box-shadow:
+          inset 0 68px 0 0 #070c14,
+          inset 0 69px 0 0 #263d5e;
+        overflow: hidden;
       }
     </style>
   </head>

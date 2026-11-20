@@ -92,7 +92,7 @@ describe('local agenda presentation', () => {
     expect(welcome.textContent).toContain('Welcome to DevFest!');
     expect(welcome.querySelector('.space')).toBeNull();
     expect(root.textContent).not.toContain('Working draft.');
-    expect(root.textContent).toContain('Complete programme · All speaking slots are filled');
+    expect(root.textContent).toContain('16 sessions · Auditorium, Classroom & Vibe Zone');
     expect(root.textContent).toContain(
       'AI at Zero Token Cost: Local-First Browser AI and Prompt API',
     );
@@ -104,10 +104,10 @@ describe('local agenda presentation', () => {
     expect(registration.textContent).toContain('From 09:00');
     expect(registration.textContent).toContain('Registration, networking & games');
     expect(registration.textContent).toContain('coffee and a croissant');
-    expect(welcome.querySelectorAll('.confetti i')).toHaveLength(10);
+    expect(welcome.querySelector('.confetti')).toBeNull();
     expect(registration.querySelector('.progress')).toBeNull();
     expect(root.querySelector('.networking .disco-ball')).not.toBeNull();
-    expect(root.querySelectorAll('.networking .party-lights i')).toHaveLength(10);
+    expect(root.querySelector('.networking .party-lights')).toBeNull();
 
     const heart = root.querySelector('session-favorite') as SessionFavorite;
     await heart.updateComplete;

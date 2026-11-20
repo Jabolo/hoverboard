@@ -43,22 +43,6 @@ export class SubscribeBlock extends ReduxMixin(PolymerElement) {
           padding: 16px 0;
         }
 
-        :host::before {
-          position: absolute;
-          top: 0;
-          right: 0;
-          left: 0;
-          height: 4px;
-          background: linear-gradient(
-            90deg,
-            var(--google-blue) 0 25%,
-            var(--google-green) 25% 50%,
-            var(--google-yellow) 50% 75%,
-            var(--google-red) 75%
-          );
-          content: '';
-        }
-
         .description {
           font-size: 24px;
           line-height: 1.5;

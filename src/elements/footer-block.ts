@@ -93,9 +93,9 @@ export class FooterBlock extends PolymerElement {
         .cookie-settings {
           display: inline-flex;
           align-items: center;
-          min-height: 38px;
+          min-height: 44px;
           margin: 12px 16px 0;
-          padding: 6px 12px;
+          padding: 8px 12px;
           border: 1px solid var(--divider-color);
           border-radius: 3px;
           background: var(--terminal-panel);
@@ -121,7 +121,7 @@ export class FooterBlock extends PolymerElement {
         }
       </style>
 
-      <div class="container">
+      <footer class="container">
         <div class="fab">
           <paper-fab
             class="back-to-top"
@@ -154,7 +154,7 @@ export class FooterBlock extends PolymerElement {
         >
           Cookie settings
         </button>
-      </div>
+      </footer>
     `;
   }
 

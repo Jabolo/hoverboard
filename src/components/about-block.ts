@@ -19,23 +19,11 @@ export class AboutBlock extends ThemedElement {
 
         .container {
           position: relative;
-          padding-top: 76px;
+          padding-top: 48px;
           padding-bottom: 56px;
           display: grid;
           grid-gap: 32px;
           grid-template-columns: 1fr;
-        }
-
-        .container::before {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--terminal-green);
-          content: '> about --event';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
         }
 
         p {
@@ -62,6 +50,7 @@ export class AboutBlock extends ThemedElement {
           font-family: var(--font-mono, monospace);
           font-size: 40px;
           font-weight: 800;
+          font-variant-numeric: tabular-nums;
         }
 
         .numbers::after {

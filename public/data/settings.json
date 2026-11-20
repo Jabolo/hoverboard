@@ -19,19 +19,14 @@
   "disabledSchedule": true,
   "navigation": [
     {
-      "route": "home",
-      "permalink": "/",
-      "label": "Home"
+      "route": "schedule",
+      "permalink": "/schedule",
+      "label": "Schedule"
     },
     {
       "route": "sessions",
       "permalink": "/sessions/",
       "label": "Sessions"
-    },
-    {
-      "route": "schedule",
-      "permalink": "/schedule",
-      "label": "Schedule"
     },
     {
       "route": "speakers",
@@ -47,11 +42,6 @@
       "route": "team",
       "permalink": "/team",
       "label": "Team"
-    },
-    {
-      "route": "partners",
-      "permalink": "/#partners",
-      "label": "Partners"
     },
     {
       "route": "faq",
@@ -80,7 +70,7 @@
     "speakers": {
       "title": "Speakers",
       "metaDescription": "Speakers and sessions for GDG DevFest Warsaw 2026",
-      "description": "Meet the complete 2026 lineup: 19 speakers across 16 talks, workshops and a panel. All speaking slots are filled.",
+      "description": "19 speakers · 16 talks, workshops and a panel.",
       "background": {
         "color": "#070C14"
       },

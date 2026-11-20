@@ -456,12 +456,11 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         background-color="var(--terminal-background)"
         font-color="var(--terminal-copy)"
       >
-        <div class="hero-command">&gt; sessions --explore</div>
         <h1 class="hero-title">Sessions</h1>
       </hero-block>
       <section class="explorer" aria-label="Session explorer">
         <div class="intro">
-          <h2>Pick your rabbit hole.</h2>
+          <h2>Browse sessions</h2>
           <p>
             Explore sessions and plan your day.<br />Find your next idea by topic, speaker or
             company.
@@ -473,7 +472,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
             id="session-search"
             type="search"
             autocomplete="off"
-            placeholder="Try Gemini, Flutter, a speaker or a company…"
+            placeholder="Try Gemini, ADK, Cloud, or a speaker…"
             .value=${this.query}
             @input=${(event: Event) => this.search(event)}
             aria-controls="session-results"
@@ -514,7 +513,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
         ${
           failed
             ? html`<div class="empty" role="alert">
-                <h3>The sessions took a wrong turn.</h3>
+                <h3>Unable to load sessions</h3>
                 <p>
                   We couldn’t load the confirmed programme. Please reload this page to try again.
                 </p>
@@ -526,7 +525,7 @@ export class SessionsPage extends ReduxMixin(ThemedElement) {
           !loading && !failed && !filtered.length
             ? html`<div class="empty">
                 <h3>
-                  ${items.length ? 'No sessions down this rabbit hole.' : 'Session details are on their way.'}
+                  ${items.length ? 'No matching sessions' : 'Session details are on their way.'}
                 </h3>
                 <p>
                   ${items.length ? (this.savedOnly ? 'Save sessions with the heart, or adjust your filters.' : 'Try another topic, a shorter search or a speaker’s name.') : 'The confirmed programme could not be displayed. Please check back shortly.'}

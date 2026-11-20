@@ -25,20 +25,8 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         .container {
           position: relative;
-          padding-top: 76px;
+          padding-top: 48px;
           padding-bottom: 56px;
-        }
-
-        .container::before {
-          position: absolute;
-          top: 28px;
-          left: 16px;
-          color: var(--google-blue);
-          content: '> partners --network';
-          font-family: var(--font-mono, monospace);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.05em;
         }
 
         .block-title {
@@ -495,12 +483,8 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
 
         @media (max-width: 639px) {
           .container {
-            padding-top: 48px;
+            padding-top: 40px;
             padding-bottom: 40px;
-          }
-
-          .container::before {
-            display: none;
           }
 
           .organizer-logos,
@@ -558,6 +542,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
               href="https://developers.google.com/"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Google for Developers"
             >
               <img src="/images/logos/google-for-developers-dark.svg" alt="Google for Developers" />
             </a>
@@ -566,8 +551,9 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
               href="https://kol.ski/"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="KOL.SKI"
             >
-              <img src="/images/partners/kolski-wordmark-animated.svg" alt="Kol.ski" />
+              <img src="/images/partners/kolski-wordmark-animated.svg" alt="KOL.SKI" />
             </a>
             <a
               class="organizer-logo gdg-organizer"
@@ -597,6 +583,7 @@ export class PartnersBlock extends ReduxMixin(PolymerElement) {
                 data-partner$="[[logo.id]]"
                 href$="[[logo.url]]"
                 title$="[[logo.name]]"
+                aria-label$="[[logo.name]]"
                 target="_blank"
                 rel="noopener noreferrer"
                 on-pointermove="movePixeloreLight"

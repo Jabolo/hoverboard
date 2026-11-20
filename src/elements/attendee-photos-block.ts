@@ -73,7 +73,7 @@ export class AttendeePhotosBlock extends ThemedElement {
           outline-offset: 4px;
         }
         .scan {
-          display: flex;
+          display: none;
           align-items: center;
           gap: 16px;
         }
@@ -101,6 +101,7 @@ export class AttendeePhotosBlock extends ThemedElement {
             padding: 32px;
           }
           .scan {
+            display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
