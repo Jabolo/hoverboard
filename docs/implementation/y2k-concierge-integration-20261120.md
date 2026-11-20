@@ -15,7 +15,7 @@ The integration worktree does not modify the other checkouts.
 
 ## Evidence and limits
 
-- Production build, full Jest suite (65 suites, 289 tests passed, five skipped)
+- Production build, full Jest suite (65 suites, 290 tests passed, five skipped)
   and lint passed. Lint reports existing warnings.
 - Scratch interaction verification passed at 320, 390 and 1440 pixels, including
   touch, keyboard, reduced motion, persistence and simulated server failure.
@@ -28,9 +28,9 @@ The integration worktree does not modify the other checkouts.
   writes were not tested.
 - Production Firestore rules matched the unmodified main baseline when checked;
   cloud collection rules are not deployed. Production Hosting did not route
-  `/api/concierge` when checked. The active Concierge function source matched
-  the integration branch, but live voice, production OAuth and end-to-end
-  production behavior were not verified.
+  `/api/concierge` when checked. The active Concierge function predates the
+  logging minimization subsequently added on this branch. Live voice, production
+  OAuth and end-to-end production behavior were not verified.
 - The test project retains the authorized test Auth user and a disabled
   revocation marker. See `y2k-cloud-collection.md` for the previous production
   Auth configuration exposure and required security-owner assessment.
@@ -55,5 +55,5 @@ and Hosting as separate operations: the main-branch workflow deploys Hosting
 only. Verify both features and authorized test accounts after release, and watch
 errors and cost. For rollback, restore the previous Hosting release first and
 review rules and any participant data separately; do not delete attendee data as
-a rollback shortcut. The already-deployed Concierge function need not be
-redeployed if its verified source and configuration still match the release.
+a rollback shortcut. Deploy the reviewed Concierge function revision separately:
+it contains logging changes absent from the currently deployed version.

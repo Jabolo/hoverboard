@@ -358,6 +358,43 @@ describe('handleConcierge', () => {
     expect(res2.body).toEqual({ status: 'upstream-error', fallback: 'local-a2ui' });
   });
 
+  it('does not put upstream content or exception messages into error logs', async () => {
+    const privateText = 'private attendee content';
+    const log = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const outcomes = [
+      async () => ({ ok: false, status: 400, text: async () => privateText }),
+      async () => ({ ok: true, json: async () => ({ output_text: privateText }) }),
+      async () => {
+        throw new Error(privateText);
+      },
+    ];
+    try {
+      for (const outcome of outcomes) {
+        await handleConcierge(makeRequest(), createMockResponse() as unknown as Response, {
+          getApiKey: () => 'test-key',
+          fetchFn: outcome as unknown as typeof fetch,
+          sleepFn: async () => {},
+          bypassCache: true,
+        });
+        await handleConcierge(
+          makeRequest({
+            body: { mode: 'transcribe', audio: 'base64audio', mimeType: 'audio/webm' },
+          }),
+          createMockResponse() as unknown as Response,
+          {
+            getApiKey: () => 'test-key',
+            fetchFn: outcome as unknown as typeof fetch,
+            sleepFn: async () => {},
+          },
+        );
+      }
+      expect(log).toHaveBeenCalled();
+      expect(JSON.stringify(log.mock.calls)).not.toContain(privateText);
+    } finally {
+      log.mockRestore();
+    }
+  });
+
   it('enforces 2-tier rate limits and sets rate limit headers', async () => {
     const now = 1795255200000;
     const db = createMockDb();

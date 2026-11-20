@@ -34,7 +34,6 @@ import {
 import { isReleaseReviewHost, type PreviewSource } from '../utils/speakers-preview-data';
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
-const CLIENT_CACHE_PREFIX = 'devfest-2026:concierge-cache:v1:';
 const CLIENT_CACHE_TTL_MS = 30 * 60 * 1000;
 const LIVE_TIME_CLIENT_CACHE_TTL_MS = 5 * 60 * 1000;
 
@@ -189,29 +188,11 @@ function readClientCache(key: string, now: number): A2UIMessage[] | null {
     if (mem.expiresAt > now) return mem.messages;
     memoryResponseCache.delete(key);
   }
-  try {
-    const raw = window.sessionStorage.getItem(`${CLIENT_CACHE_PREFIX}${key}`);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as ClientCacheEntry;
-    if (parsed && Array.isArray(parsed.messages) && parsed.expiresAt > now) {
-      memoryResponseCache.set(key, parsed);
-      return parsed.messages;
-    }
-    window.sessionStorage.removeItem(`${CLIENT_CACHE_PREFIX}${key}`);
-  } catch {
-    // sessionStorage unavailable
-  }
   return null;
 }
 
 function writeClientCache(key: string, messages: A2UIMessage[], expiresAt: number): void {
-  const entry: ClientCacheEntry = { messages, expiresAt };
-  memoryResponseCache.set(key, entry);
-  try {
-    window.sessionStorage.setItem(`${CLIENT_CACHE_PREFIX}${key}`, JSON.stringify(entry));
-  } catch {
-    // Ignore quota errors
-  }
+  memoryResponseCache.set(key, { messages, expiresAt });
 }
 
 @customElement('devfest-concierge')
@@ -502,6 +483,17 @@ export class DevfestConcierge extends ThemedElement {
           align-items: center;
           width: 100%;
           min-width: 0;
+        }
+
+        .ai-privacy-note {
+          margin: 6px 0 0;
+          color: var(--_muted);
+          font-size: 12px;
+          line-height: 1.4;
+        }
+
+        .ai-privacy-note a {
+          color: var(--_green);
         }
 
         .input-wrap {
@@ -2999,10 +2991,17 @@ export class DevfestConcierge extends ThemedElement {
             </button>
           </form>
 
-          ${this.renderChipStrip()}
+          ${this.renderPrivacyNote()} ${this.renderChipStrip()}
         </div>
       </section>
     `;
+  }
+
+  private renderPrivacyNote() {
+    return html`<p class="ai-privacy-note">
+      Questions and voice may be sent to Google. Please avoid personal or sensitive information.
+      <a href="/privacy/">Privacy &amp; data</a>
+    </p>`;
   }
 
   private renderDialog(
@@ -3096,6 +3095,7 @@ export class DevfestConcierge extends ThemedElement {
                 }
               </button>
             </form>
+            ${this.renderPrivacyNote()}
             ${
               this.voiceNotice
                 ? html`<div class="voice-status-bar" role="status" aria-live="polite">

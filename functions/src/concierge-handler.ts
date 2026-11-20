@@ -1350,15 +1350,10 @@ export async function handleConcierge(
         );
 
         if (!upstreamRes.ok) {
-          const bodySnippet =
-            typeof upstreamRes.text === 'function'
-              ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
-              : '';
           console.error('concierge transcribe upstream non-OK', {
             model,
             attempt: attemptIdx + 1,
             status: upstreamRes.status,
-            bodySnippet,
           });
           if (RETRYABLE_UPSTREAM_STATUSES.has(upstreamRes.status) && hasNext) {
             await sleepImpl(FAILOVER_BACKOFF_MS);
@@ -1398,12 +1393,10 @@ export async function handleConcierge(
           model,
         });
         return;
-      } catch (err) {
+      } catch {
         console.error('concierge transcribe upstream exception', {
           model,
           attempt: attemptIdx + 1,
-          name: err instanceof Error ? err.name : 'unknown',
-          message: err instanceof Error ? err.message : String(err),
         });
         if (hasNext) {
           await sleepImpl(FAILOVER_BACKOFF_MS);
@@ -1562,15 +1555,10 @@ export async function handleConcierge(
       );
 
       if (!upstreamRes.ok) {
-        const bodySnippet =
-          typeof upstreamRes.text === 'function'
-            ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
-            : '';
         console.error('concierge upstream non-OK', {
           model,
           attempt: attemptIdx + 1,
           status: upstreamRes.status,
-          bodySnippet,
         });
         if (RETRYABLE_UPSTREAM_STATUSES.has(upstreamRes.status) && hasNext) {
           await sleepImpl(FAILOVER_BACKOFF_MS);
@@ -1585,10 +1573,6 @@ export async function handleConcierge(
         console.error('concierge empty model text', {
           model,
           attempt: attemptIdx + 1,
-          keys:
-            upstreamJson && typeof upstreamJson === 'object'
-              ? Object.keys(upstreamJson as Record<string, unknown>)
-              : [],
         });
         if (hasNext) continue;
         break;
@@ -1599,7 +1583,6 @@ export async function handleConcierge(
         console.error('concierge invalid model plan', {
           model,
           attempt: attemptIdx + 1,
-          rawSnippet: rawText.slice(0, 200),
         });
         if (hasNext) continue;
         break;
@@ -1628,12 +1611,10 @@ export async function handleConcierge(
         messages,
       });
       return;
-    } catch (err) {
+    } catch {
       console.error('concierge upstream exception', {
         model,
         attempt: attemptIdx + 1,
-        name: err instanceof Error ? err.name : 'unknown',
-        message: err instanceof Error ? err.message : String(err),
       });
       if (hasNext) {
         await sleepImpl(FAILOVER_BACKOFF_MS);

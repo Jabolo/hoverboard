@@ -72,6 +72,10 @@ try {
     await fab.click();
     const dialog = page.locator('devfest-concierge[variant="floating"]').locator('dialog');
     await dialog.waitFor({ state: 'visible' });
+    await dialog
+      .getByText('Questions and voice may be sent to Google.', { exact: false })
+      .waitFor();
+    await dialog.getByRole('link', { name: 'Privacy & data' }).waitFor({ state: 'visible' });
     const input = dialog.getByRole('textbox', { name: 'Ask DevFest Concierge' });
     await input.fill('Where is the schedule?');
     assert.equal(await input.inputValue(), 'Where is the schedule?');

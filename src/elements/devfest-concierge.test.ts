@@ -158,6 +158,7 @@ describe('devfest-concierge', () => {
 
     expect(root.querySelector('.source-badge')?.textContent?.trim()).toBe('Live · Gemini AI');
     expect(root.querySelector('.surface-title')?.textContent).toBe('Michał Jabłoński');
+    expect(JSON.stringify(window.sessionStorage)).not.toContain('michał');
 
     // Submit again — should hit client cache without another fetch to /api/concierge
     root
