@@ -15,6 +15,12 @@ const codePattern = /^[a-z0-9]{7}$/;
 const memory = new Map<string, HuntProgressEntry>();
 let storageFailed = false;
 const perfectRuns = new Set<string>();
+const progressListeners = new Set<() => void>();
+
+export function subscribeHuntProgress(listener: () => void): () => void {
+  progressListeners.add(listener);
+  return () => progressListeners.delete(listener);
+}
 
 export function hasHuntPerfect(id: string): boolean {
   if (perfectRuns.has(id)) return true;
@@ -69,7 +75,7 @@ function entryKey(entry: HuntProgressEntry) {
   return `${HUNT_STORAGE_KEY}:${entry.state}:${entry.card.id}`;
 }
 
-function parseEntry(value: unknown): HuntProgressEntry | null {
+export function parseHuntProgressEntry(value: unknown): HuntProgressEntry | null {
   if (!record(value)) return null;
   const { state, card, foundAt, earnedAt } = value;
   if (typeof foundAt !== 'number' || !Number.isFinite(foundAt)) return null;
@@ -94,7 +100,7 @@ export function getHuntProgress(): HuntProgressEntry[] {
       const raw = storage.getItem(key);
       if (!raw) continue;
       try {
-        const entry = parseEntry(JSON.parse(raw));
+        const entry = parseHuntProgressEntry(JSON.parse(raw));
         if (entry && entryKey(entry) === key) entries.set(key, entry);
       } catch {
         // A corrupt card record does not affect the collection's other records.
@@ -109,6 +115,18 @@ export function getHuntProgress(): HuntProgressEntry[] {
     if (entry.state === 'earned' || !cards.has(entry.card.id)) cards.set(entry.card.id, entry);
   }
   return Array.from(cards.values());
+}
+
+/** Combine independent replicas without letting an unopened card replace a reveal. */
+export function mergeHuntProgress(...replicas: HuntProgressEntry[][]): HuntProgressEntry[] {
+  const merged = new Map<string, HuntProgressEntry>();
+  for (const entry of replicas.flat()) {
+    const previous = merged.get(entry.card.id);
+    if (!previous || (previous.state === 'found' && entry.state === 'earned')) {
+      merged.set(entry.card.id, entry);
+    }
+  }
+  return Array.from(merged.values());
 }
 
 export function huntStorageAvailable(): boolean {
@@ -143,6 +161,7 @@ export function rememberHuntCard(result: StorableResult): void {
     memory.set(key, entry);
     storageFailed = true;
   }
+  for (const listener of progressListeners) listener();
 }
 
 async function huntRequest(path: string, method: 'GET' | 'POST', signal?: AbortSignal) {

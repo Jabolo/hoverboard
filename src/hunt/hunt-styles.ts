@@ -120,6 +120,48 @@ export const huntStyles = css`
     border-bottom: 1px solid var(--hunt-line);
   }
 
+  .cloud-panel {
+    margin-bottom: 18px;
+    padding: 20px;
+    border: 1px solid var(--hunt-line);
+    border-radius: 14px;
+    background: var(--hunt-panel);
+  }
+
+  .cloud-panel h2 {
+    font-size: 1.15rem;
+  }
+
+  .cloud-panel p {
+    margin-top: 8px;
+    color: var(--hunt-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .cloud-panel a {
+    color: var(--hunt-lime);
+    text-underline-offset: 0.2em;
+  }
+
+  .cloud-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .cloud-actions button {
+    margin-left: 0;
+    scroll-margin-block-end: 110px;
+  }
+
+  .cloud-actions button:disabled {
+    opacity: 0.6;
+  }
+
   .code-panel[open] {
     flex: 1 1 260px;
   }

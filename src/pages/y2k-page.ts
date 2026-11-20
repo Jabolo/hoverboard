@@ -675,8 +675,8 @@ export class Y2kPage extends ThemedElement {
                     Open a card. Scratch the foil with your finger or mouse, or choose Reveal.
                   </li>
                   <li>
-                    Find your revealed cards in My Collection. Stay in the same browser to keep your
-                    finds together.
+                    Find your revealed cards in My Collection. You can optionally sync them with a
+                    Google account to see them on another device.
                   </li>
                   <li>
                     Try a tiny game, borrow a creative prompt, or follow the next clue. Some finds
@@ -684,8 +684,8 @@ export class Y2kPage extends ThemedElement {
                   </li>
                 </ol>
                 <p class="small">
-                  Optional motion effects. No account needed. Clearing site data can remove your
-                  collection. Card Hunt is separate from the DevFest Quest and challenge
+                  Optional motion effects. No account needed to play. Clearing site data can remove
+                  browser-saved cards. Card Hunt is separate from the DevFest Quest and challenge
                   submissions.
                 </p>
               </div>
