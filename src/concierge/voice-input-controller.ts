@@ -187,7 +187,7 @@ export class VoiceInputController {
 
     try {
       this.recognition = new SpeechClass();
-      this.recognition.continuous = false;
+      this.recognition.continuous = true;
       this.recognition.interimResults = true;
       this.recognition.lang = this.lang;
 
@@ -196,13 +196,14 @@ export class VoiceInputController {
         let interim = '';
         let final = '';
         const results = event.results || [];
-        for (let i = event.resultIndex || 0; i < results.length; i += 1) {
+        for (let i = 0; i < results.length; i += 1) {
           const item = results[i];
           if (!item) continue;
+          const part = (item[0]?.transcript || '').trim();
           if (item.isFinal) {
-            final += item[0]?.transcript || '';
+            final += (final ? ' ' : '') + part;
           } else {
-            interim += item[0]?.transcript || '';
+            interim += (interim ? ' ' : '') + part;
           }
         }
         const text = (final || interim).trim();
@@ -214,16 +215,31 @@ export class VoiceInputController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.recognition.onerror = (event: any) => {
         const error = event.error || 'speech-error';
-        if (error === 'not-allowed' || error === 'service-not-allowed') {
+        if (error === 'not-allowed') {
           this.options.onError('Microphone access denied. Please grant permission.');
+          this.setState('error');
+        } else if (error === 'service-not-allowed') {
+          this.options.onError('Microphone access denied. Please grant permission.');
+          this.setState('error');
+        } else if (error === 'network') {
+          if (
+            typeof navigator !== 'undefined' &&
+            Boolean(navigator.mediaDevices?.getUserMedia) &&
+            typeof MediaRecorder !== 'undefined'
+          ) {
+            this.options.onError('Browser speech offline. Switching to Gemini voice…');
+            void this.startMediaRecorder();
+            return;
+          }
+          this.options.onError('Speech recognition network error.');
+          this.setState('error');
         } else if (error === 'no-speech') {
           this.options.onError('No speech detected. Please try speaking again.');
-        } else if (error === 'network') {
-          this.options.onError('Speech recognition network error.');
+          this.setState('error');
         } else {
           this.options.onError(`Speech error: ${error}`);
+          this.setState('error');
         }
-        this.setState('error');
       };
 
       this.recognition.onend = () => {
@@ -234,6 +250,11 @@ export class VoiceInputController {
 
       this.setState('listening');
       this.recognition.start();
+
+      const maxDuration = this.options.maxDurationMs || 15_000;
+      this.autoStopTimeoutId = setTimeout(() => {
+        this.stop();
+      }, maxDuration);
 
       // Web Speech simulated volume pulses for lively visual EQ
       if (this.options.onVolume) {

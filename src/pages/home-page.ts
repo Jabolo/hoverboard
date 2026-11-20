@@ -302,60 +302,6 @@ export class HomePage extends PolymerElement {
           border-top: 1px dashed var(--terminal-line);
         }
 
-        .terminal-command {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 10px;
-          min-height: 48px;
-          padding: 0 12px;
-          border: 1px solid rgb(126 242 165 / 36%);
-          border-radius: 6px;
-          background: rgb(126 242 165 / 8%);
-          color: var(--terminal-green);
-          font-family: var(--font-mono);
-          font-size: 11px;
-          text-decoration: none;
-          font-weight: 700;
-        }
-
-        .terminal-cmd-trailing {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          flex: 0 0 auto;
-        }
-
-        .terminal-kbd {
-          padding: 2px 6px;
-          border: 1px solid rgb(126 242 165 / 35%);
-          border-radius: 4px;
-          font-family: var(--font-mono);
-          font-size: 10px;
-          line-height: 1.2;
-          color: var(--terminal-green);
-          background: rgb(7 12 20 / 65%);
-        }
-
-        .terminal-arrow {
-          width: 14px;
-          height: 14px;
-          flex: 0 0 auto;
-        }
-
-        .terminal-command:hover {
-          background: rgb(126 242 165 / 15%);
-        }
-
-        .terminal-command:focus-visible {
-          outline: 2px solid var(--terminal-green);
-          outline-offset: 4px;
-        }
-
-        .terminal-command + .terminal-command {
-          margin-top: 8px;
-        }
-
         .y2k-activities {
           padding: 40px 24px;
           color: var(--terminal-copy, var(--primary-text-color));
@@ -618,51 +564,6 @@ export class HomePage extends PolymerElement {
                     <span></span
                     ><span><span class="key">focus:</span> practical_ai / real_world_lessons</span>
                   </div>
-                  <hr />
-                  <a class="terminal-command" href="/#concierge" on-click="openConcierge">
-                    <span>$ ./concierge --ask</span>
-                    <span class="terminal-cmd-trailing">
-                      <kbd class="terminal-kbd">⌘K</kbd>
-                      <svg
-                        class="terminal-arrow"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M3 8h10M9 4l4 4-4 4"
-                          stroke="currentColor"
-                          stroke-width="1.8"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </a>
-                  <a class="terminal-command" href="/schedule/">
-                    <span>View full programme</span>
-                    <svg class="terminal-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <path
-                        d="M3 8h10M9 4l4 4-4 4"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </a>
-                  <a class="terminal-command" href$="[[huntLinks.activities]]">
-                    <span>Y2K Vibe Lab &amp; Arcade</span>
-                    <svg class="terminal-arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                      <path
-                        d="M3 8h10M9 4l4 4-4 4"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </a>
                 </div>
               </div>
             </div>

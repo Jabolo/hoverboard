@@ -88,6 +88,11 @@ export class CookieConsent extends LitElement {
       font-size: 12px;
     }
 
+    /* The mounted page footer provides the same control without covering content or FABs */
+    :host([data-cookie-footer]) .settings {
+      display: none !important;
+    }
+
     @media (max-width: 640px) {
       :host {
         right: 8px;
@@ -110,11 +115,6 @@ export class CookieConsent extends LitElement {
 
       button {
         width: 100%;
-      }
-
-      /* The mounted page footer provides the same control without covering content. */
-      :host([data-cookie-footer]) .settings {
-        display: none;
       }
     }
   `;

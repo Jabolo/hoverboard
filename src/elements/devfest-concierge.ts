@@ -743,6 +743,7 @@ export class DevfestConcierge extends ThemedElement {
           flex-direction: column;
           width: 100%;
           max-height: 88dvh;
+          min-height: 0;
           border: 0;
           border-top: 1px solid var(--_line);
           border-radius: 16px 16px 0 0;
@@ -756,7 +757,10 @@ export class DevfestConcierge extends ThemedElement {
             margin: auto;
             width: min(760px, calc(100vw - 32px));
             max-width: 760px;
-            max-height: 82dvh;
+            height: min(84dvh, 760px);
+            max-height: 84dvh;
+            overflow: hidden;
+            border-radius: 12px;
             transform: scale(0.96) translateY(8px);
             transition-duration: 220ms;
           }
@@ -773,7 +777,9 @@ export class DevfestConcierge extends ThemedElement {
           }
 
           .dialog-panel {
-            max-height: 82dvh;
+            height: 100%;
+            max-height: 100%;
+            min-height: 0;
             border: 1px solid var(--_line);
             border-radius: 12px;
             box-shadow: 0 24px 60px -12px rgb(0 0 0 / 60%);
@@ -860,7 +866,9 @@ export class DevfestConcierge extends ThemedElement {
 
         .dialog-body {
           flex: 1 1 auto;
+          min-height: 0;
           overflow-y: auto;
+          overscroll-behavior: contain;
           min-width: 0;
           scrollbar-width: thin;
           scrollbar-color: var(--_line) transparent;
@@ -1380,8 +1388,16 @@ export class DevfestConcierge extends ThemedElement {
         /* Floating persistent FAB */
         :host([variant='floating']) {
           position: fixed;
-          right: 18px;
-          bottom: calc(18px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+          right: 20px;
+          bottom: calc(20px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+          left: auto !important;
+          top: auto !important;
+          width: auto !important;
+          max-width: none !important;
+          min-width: 0;
+          display: flex !important;
+          flex-direction: column;
+          align-items: flex-end;
           z-index: 900;
           font-family: var(--font-mono, monospace);
           pointer-events: none;
@@ -1497,8 +1513,11 @@ export class DevfestConcierge extends ThemedElement {
 
         @media (max-width: 639px) {
           :host([variant='floating']) {
-            right: 14px;
-            bottom: calc(14px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+            right: 16px;
+            bottom: calc(16px + var(--countdown-offset, 0px) + env(safe-area-inset-bottom, 0px));
+            left: auto !important;
+            top: auto !important;
+            width: auto !important;
           }
 
           :host([variant='floating']) .orbital-fab {
@@ -1507,6 +1526,8 @@ export class DevfestConcierge extends ThemedElement {
             min-width: 52px;
             min-height: 52px;
             padding: 0;
+            margin: 0;
+            box-sizing: border-box;
             justify-content: center;
           }
 
@@ -1694,17 +1715,25 @@ export class DevfestConcierge extends ThemedElement {
         lang: this.voiceLanguage,
         onTranscript: (transcript: string, isFinal: boolean) => {
           this.query = transcript;
-          this.voiceNotice = isFinal ? 'Voice captured. Edit or tap Ask.' : 'Listening…';
+          this.voiceNotice = isFinal
+            ? `Voice captured: "${transcript}"`
+            : `Listening: "${transcript}"`;
           const inputId = this.dialogOpen ? '#concierge-dialog-input' : '#concierge-input';
           const inputEl = this.shadowRoot?.querySelector<HTMLInputElement>(inputId);
-          inputEl?.focus();
+          if (inputEl) {
+            inputEl.value = transcript;
+            inputEl.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+          }
+          if (isFinal) {
+            inputEl?.focus({ preventScroll: true });
+          }
         },
         onStateChange: (state: VoiceInputState) => {
           this.voiceState = state;
           if (state === 'listening') {
-            this.voiceNotice = 'Listening… speak your query now';
+            this.voiceNotice = 'Listening… speak your query now (tap mic to finish)';
           } else if (state === 'transcribing') {
-            this.voiceNotice = 'Transcribing voice with Gemini…';
+            this.voiceNotice = 'Transcribing voice with Gemini AI…';
           }
         },
         onError: (err: string) => {
@@ -2300,7 +2329,7 @@ export class DevfestConcierge extends ThemedElement {
     this.query = input.value;
   };
 
-  private async toggleVoiceInput(e?: Event, targetInputId?: string): Promise<void> {
+  private async toggleVoiceInput(e?: Event): Promise<void> {
     e?.preventDefault();
     e?.stopPropagation();
     if (!this.voiceController) return;
@@ -2308,10 +2337,7 @@ export class DevfestConcierge extends ThemedElement {
     if (this.voiceState === 'listening') {
       this.voiceController.stop();
     } else {
-      if (targetInputId) {
-        const input = this.shadowRoot?.querySelector<HTMLInputElement>(`#${targetInputId}`);
-        input?.focus({ preventScroll: true });
-      }
+      this.voiceNotice = 'Starting microphone…';
       await this.voiceController.start();
     }
   }
@@ -2872,7 +2898,7 @@ export class DevfestConcierge extends ThemedElement {
     `;
   }
 
-  private renderVoiceMicButton(targetInputId: string) {
+  private renderVoiceMicButton(_targetInputId?: string) {
     if (this.voiceSupport === 'unsupported') return nothing;
     const isListening = this.voiceState === 'listening';
     const isTranscribing = this.voiceState === 'transcribing';
@@ -2888,7 +2914,7 @@ export class DevfestConcierge extends ThemedElement {
         class="mic-btn ${isListening ? 'is-listening' : ''} ${isTranscribing ? 'is-transcribing' : ''}"
         aria-label=${title}
         title=${title}
-        @click=${(e: Event) => void this.toggleVoiceInput(e, targetInputId)}
+        @click=${(e: Event) => void this.toggleVoiceInput(e)}
       >
         ${
           isListening
