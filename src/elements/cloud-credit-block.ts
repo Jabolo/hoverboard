@@ -15,20 +15,37 @@ export function isHostedCreditReview(hostname: string): boolean {
 export class CloudCreditBlock extends ThemedElement {
   @state() private claimState:
     'loading' | 'upcoming' | 'open' | 'closed' | 'error' | 'preview-unavailable' = 'loading';
-  private refreshTimer?: ReturnType<typeof setTimeout>;
+  private refreshTimer: ReturnType<typeof setTimeout> | undefined;
+  private pollGeneration = 0;
   private readonly hostedReviewPreview = isHostedCreditReview(window.location.hostname);
   private readonly previewMode =
     localHosts.includes(window.location.hostname) &&
     new URLSearchParams(window.location.search).get('creditPreview') === 'open';
 
+  private readonly onVisibilityChange = () => {
+    if (!this.isConnected || this.hostedReviewPreview || this.claimState === 'closed') return;
+    if (document.hidden) {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = undefined;
+    } else {
+      void this.refreshClaimState();
+    }
+  };
+
   override connectedCallback() {
     super.connectedCallback();
-    void this.refreshClaimState();
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
+    if (!document.hidden || this.hostedReviewPreview) {
+      void this.refreshClaimState();
+    }
   }
 
   override disconnectedCallback() {
-    super.disconnectedCallback();
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    this.pollGeneration++;
     clearTimeout(this.refreshTimer);
+    this.refreshTimer = undefined;
+    super.disconnectedCallback();
   }
 
   private get endpoint() {
@@ -36,15 +53,21 @@ export class CloudCreditBlock extends ThemedElement {
   }
 
   private async refreshClaimState() {
+    clearTimeout(this.refreshTimer);
+    this.refreshTimer = undefined;
     if (this.hostedReviewPreview) {
       this.claimState = 'preview-unavailable';
       return;
     }
+    if (this.claimState === 'closed') return;
+    const generation = ++this.pollGeneration;
     let delay = 30_000;
     try {
       const response = await fetch(this.endpoint, { cache: 'no-store' });
+      if (generation !== this.pollGeneration || !this.isConnected) return;
       if (!response.ok) throw new Error('Status unavailable');
       const data = await response.json();
+      if (generation !== this.pollGeneration || !this.isConnected) return;
       if (!['upcoming', 'open', 'closed'].includes(data.status)) throw new Error('Invalid status');
       this.claimState = data.status;
       if (
@@ -55,10 +78,17 @@ export class CloudCreditBlock extends ThemedElement {
         delay = Math.min(delay, Math.max(250, data.opensAt - data.serverTime + 100));
       }
     } catch {
+      if (generation !== this.pollGeneration || !this.isConnected) return;
       this.claimState = 'error';
     }
-    if (this.isConnected)
+    if (
+      generation === this.pollGeneration &&
+      this.isConnected &&
+      this.claimState !== 'closed' &&
+      !document.hidden
+    ) {
       this.refreshTimer = setTimeout(() => void this.refreshClaimState(), delay);
+    }
   }
 
   static override get styles() {

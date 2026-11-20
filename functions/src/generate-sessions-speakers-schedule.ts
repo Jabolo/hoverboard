@@ -19,12 +19,19 @@ const isScheduleEnabled = async (): Promise<boolean> => {
   }
 };
 
-export const sessionsWrite = functions.firestore
-  .document('sessions/{sessionId}')
+const triggerRuntimeOptions: functions.RuntimeOptions = {
+  maxInstances: 1,
+  timeoutSeconds: 60,
+};
+
+export const sessionsWrite = functions
+  .runWith(triggerRuntimeOptions)
+  .firestore.document('sessions/{sessionId}')
   .onWrite(() => generateAndSaveData());
 
-export const scheduleWrite = functions.firestore
-  .document('schedule/{scheduleId}')
+export const scheduleWrite = functions
+  .runWith(triggerRuntimeOptions)
+  .firestore.document('schedule/{scheduleId}')
   .onWrite(async () => {
     if (await isScheduleEnabled()) {
       return generateAndSaveData();
@@ -32,8 +39,9 @@ export const scheduleWrite = functions.firestore
     return null;
   });
 
-export const speakersWrite = functions.firestore
-  .document('speakers/{speakerId}')
+export const speakersWrite = functions
+  .runWith(triggerRuntimeOptions)
+  .firestore.document('speakers/{speakerId}')
   .onWrite(async (change, context) => {
     const changedSpeaker = change.after.exists
       ? { id: context.params.speakerId, ...change.after.data() }

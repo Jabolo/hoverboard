@@ -2,7 +2,7 @@
   "hosting": {
     "site": "gdg-warsaw-devfest26-web",
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/*.map"],
     "rewrites": [{ "source": "**", "destination": "/index.html" }],
     "headers": [
       {
@@ -22,7 +22,8 @@
           {
             "key": "Strict-Transport-Security",
             "value": "max-age=31536000; includeSubDomains; preload"
-          }
+          },
+          { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }
         ]
       },
       {

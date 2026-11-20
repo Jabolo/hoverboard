@@ -11,8 +11,9 @@ const REMOVE_TOKEN_ERROR = [
   'messaging/registration-token-not-registered',
 ];
 
-export const sendGeneralNotification = functions.firestore
-  .document('/notifications/{timestamp}')
+export const sendGeneralNotification = functions
+  .runWith({ maxInstances: 1, timeoutSeconds: 60 })
+  .firestore.document('/notifications/{timestamp}')
   .onCreate(async (snapshot, context) => {
     const timestamp = context.params.timestamp;
     const message = snapshot.data();

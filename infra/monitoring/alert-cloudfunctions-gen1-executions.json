@@ -1,0 +1,31 @@
+{
+  "displayName": "DevFest26 - Gen1 Cloud Functions Executions (>150 in 5m)",
+  "combiner": "OR",
+  "enabled": true,
+  "documentation": {
+    "content": "## Gen1 Cloud Functions Execution Spike (>150 in 5m)\n\nA Gen1 Cloud Function (`registerNewsletterConsent`, legacy Firestore triggers, or `prerender` if still deployed) exceeded 150 executions in 5 minutes.\n\n### Immediate Triage\n1. Check which `function_name` triggered the alert in Cloud Monitoring / Cloud Logging.\n2. Verify `prerender` has been deleted or has `allUsers` invoker revoked.\n3. If `registerNewsletterConsent` is under spam flood, confirm rate limiting is blocking traffic and consider temporarily revoking `allUsers` `roles/cloudfunctions.invoker`.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Gen1 function execution_count > 150 in 5m per function",
+      "conditionThreshold": {
+        "filter": "metric.type=\"cloudfunctions.googleapis.com/function/execution_count\" AND resource.type=\"cloud_function\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_SUM",
+            "crossSeriesReducer": "REDUCE_SUM",
+            "groupByFields": ["resource.label.function_name"]
+          }
+        ],
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 150,
+        "duration": "0s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ]
+}

@@ -48,11 +48,13 @@ try {
     await setDoc(doc(context.firestore(), 'newsletterContacts/private-fixture'), {
       email: 'example@example.test',
     });
+    await setDoc(doc(context.firestore(), 'featuredSessions/alice'), { sample: true });
   });
   await assertSucceeds(getDoc(doc(guest, 'sessions/public-fixture')));
   await assertFails(setDoc(doc(guest, 'sessions/public-fixture'), { title: 'Changed' }));
   await assertFails(getDoc(doc(guest, 'newsletterContacts/private-fixture')));
-  await assertSucceeds(setDoc(doc(alice, 'featuredSessions/alice'), { sample: true }));
+  await assertSucceeds(getDoc(doc(alice, 'featuredSessions/alice')));
+  await assertFails(setDoc(doc(alice, 'featuredSessions/alice'), { sample: false }));
   await assertFails(getDoc(doc(bob, 'featuredSessions/alice')));
   await assertFails(write(alice, 'earned_test001', earned));
   await assertSucceeds(

@@ -1,12 +1,95 @@
 rules_version = "2";
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Public Read-Only Conference Content (server/Admin SDK written only):
+// - blog/{post}, gallery/{photo}, previousSpeakers/{speaker},
+//   schedule/{day}, generatedSchedule/{day}, sessions/{sessionId},
+//   generatedSessions/{sessionId}, speakers/{speaker},
+//   generatedSpeakers/{speaker}, tickets/{ticket}, videos/{video},
+//   partners/{groupId} (+ nested items/{itemId}),
+//   team/{teamId} (+ nested members/{memberId})
+//   Access: public get/list (non-PII public event catalog), write denied.
+//
+// Server-Only / Locked Collections (allow read, write: if false):
+// - config/{config}, functionsRateLimits/{docId}, notifications/{notificationId},
+//   notificationsSubscribers/{token}, notificationsUsers/{userId},
+//   potentialPartners/{partnerId}, subscribers/{subscriberId},
+//   newsletterContacts/{contactId}
+//
+// User-Owned Read-Only Collections:
+// - users/{userId}:
+//   Access: owner get only, list/write denied.
+// - featuredSessions/{userId}:
+//   Legacy read-only bookmark map imported once on sign-in into localStorage.
+//   Access: owner get only, list/write denied.
+//
+// Collection: sessions/{sessionId}/feedback/{userId}
+// Document ID: userId (must equal request.auth.uid); sessionId matches ^[A-Za-z0-9_-]{1,64}$
+// Note: Parent sessions/{sessionId} doc existence is NOT required because 2026
+// sessions are served from static public/data/programme-2026.json.
+// Fields:
+//   - contentRating: int (required, 0..5)
+//   - styleRating: int (required, 0..5)
+//   - comment: string (required, length 0..256)
+//   - userId: string (required, immutable, must equal document userId and request.auth.uid)
+//
+// Collection: huntCollectionSessions/{userId}
+// Document ID: userId (must equal request.auth.uid with google.com provider)
+// Fields:
+//   - epoch: string (required, 32 lowercase hex chars, must change on update)
+//   - enabled: bool (required, must be true on create, must toggle on update)
+//
+// Collection: huntCollections/{userId}
+// Document ID: userId (must equal request.auth.uid with google.com provider)
+// Fields:
+//   - epoch: string (required, must match active huntCollectionSessions/{userId}.epoch)
+//   - changedKey: string (required, key in entries; only key allowed to change on update)
+//   - entries: map (required, size 1 on create, max 64 entries)
+//     Each entry[entryId]:
+//       - state: string ("found" | "earned")
+//       - card: map { id: ^[a-z0-9]{7}$, title: string (1..200), group: enum,
+//                     and for "earned": text: string (0..4000), optional game: "signal" }
+//       - foundAt: int (0..4102444800000)
+//       - earnedAt: int (only for "earned", foundAt..4102444800000)
+//
+// ===============================================================
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function validRating(userId) {
-      return request.resource.data.keys().hasAll(["contentRating", "styleRating", "comment", "userId"])
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isGoogleOwner(userId) {
+      return isOwner(userId)
+        && request.auth.token.firebase.sign_in_provider == "google.com";
+    }
+
+    function isValidSessionId(sessionId) {
+      return sessionId is string
+        && sessionId.matches("^[A-Za-z0-9_-]{1,64}$");
+    }
+
+    function isValidFeedback(userId) {
+      return isOwner(userId)
+        && request.resource.data.keys().hasAll(["contentRating", "styleRating", "comment", "userId"])
         && request.resource.data.keys().hasOnly(["contentRating", "styleRating", "comment", "userId"])
+        && request.resource.data.contentRating is int
         && request.resource.data.contentRating >= 0
         && request.resource.data.contentRating <= 5
+        && request.resource.data.styleRating is int
         && request.resource.data.styleRating >= 0
         && request.resource.data.styleRating <= 5
         && request.resource.data.comment is string
@@ -16,25 +99,121 @@ service cloud.firestore {
         && request.resource.data.userId == request.auth.uid;
     }
 
+    // ===============================================================
+    // Public Conference Content (Read-Only)
+    // ===============================================================
+
     match /blog/{post} {
-      allow get, list;
+      allow get, list: if true;
       allow write: if false;
     }
 
-    match /config/{config} {
-      allow read, write: if false;
+    match /gallery/{photo} {
+      allow get, list: if true;
+      allow write: if false;
     }
 
-    match /functionsRateLimits/{docId} {
-      allow read, write: if false;
+    match /partners/{groupId} {
+      allow get, list: if true;
+      allow write: if false;
+
+      match /items/{itemId} {
+        allow get, list: if true;
+        allow write: if false;
+      }
+    }
+
+    match /previousSpeakers/{speaker} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /schedule/{day} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /generatedSchedule/{day} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /sessions/{sessionId} {
+      allow get, list: if true;
+      allow write: if false;
+
+      match /feedback/{userId} {
+        allow get, delete: if isValidSessionId(sessionId) && isOwner(userId);
+        allow list: if isValidSessionId(sessionId)
+          && isAuthenticated()
+          && request.auth.uid == resource.data.userId;
+        allow create: if isValidSessionId(sessionId) && isValidFeedback(userId);
+        allow update: if isValidSessionId(sessionId)
+          && resource.data.userId == userId
+          && request.resource.data.userId == resource.data.userId
+          && isValidFeedback(userId);
+      }
+    }
+
+    // Collection group list-only rule required by `collectionGroup('feedback').where('userId', '==', uid)`.
+    // Direct document gets and all writes outside `/sessions/{sessionId}/feedback/{userId}` are denied.
+    match /{path=**}/feedback/{userId} {
+      allow list: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow get, write: if false;
+    }
+
+    match /generatedSessions/{session} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /speakers/{speaker} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /generatedSpeakers/{speaker} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /team/{teamId} {
+      allow get, list: if true;
+      allow write: if false;
+
+      match /members/{memberId} {
+        allow get, list: if true;
+        allow write: if false;
+      }
+    }
+
+    match /tickets/{ticket} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    match /videos/{video} {
+      allow get, list: if true;
+      allow write: if false;
+    }
+
+    // ===============================================================
+    // User-Owned Collections
+    // ===============================================================
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list, write: if false;
+    }
+
+    // Legacy bookmarks are read once on sign-in for localStorage migration; client writes disabled.
+    match /featuredSessions/{userId} {
+      allow get: if isOwner(userId);
+      allow list, write: if false;
     }
 
     // An epoch tombstone revokes stale clients when a collection is deleted.
     match /huntCollectionSessions/{userId} {
-      function owner() {
-        return request.auth != null && request.auth.uid == userId
-          && request.auth.token.firebase.sign_in_provider == "google.com";
-      }
       function validSession() {
         return request.resource.data.keys().hasOnly(["epoch", "enabled"])
           && request.resource.data.keys().hasAll(["epoch", "enabled"])
@@ -42,10 +221,13 @@ service cloud.firestore {
           && request.resource.data.epoch.matches("^[a-f0-9]{32}$")
           && request.resource.data.enabled is bool;
       }
-      allow get: if owner();
+      allow get: if isGoogleOwner(userId);
       allow list, delete: if false;
-      allow create: if owner() && validSession() && request.resource.data.enabled;
-      allow update: if owner() && validSession()
+      allow create: if isGoogleOwner(userId)
+        && validSession()
+        && request.resource.data.enabled == true;
+      allow update: if isGoogleOwner(userId)
+        && validSession()
         && request.resource.data.enabled != resource.data.enabled
         && request.resource.data.epoch != resource.data.epoch;
     }
@@ -53,10 +235,6 @@ service cloud.firestore {
     // Optional Y2K collection. This is a personal souvenir, not proof of attendance
     // or a prize entry: clients can write their own records, so counts are indicative.
     match /huntCollections/{userId} {
-      function owner() {
-        return request.auth != null && request.auth.uid == userId
-          && request.auth.token.firebase.sign_in_provider == "google.com";
-      }
       function validCard(card, state) {
         return card is map
           && card.keys().hasAll(["id", "title", "group"])
@@ -71,16 +249,21 @@ service cloud.firestore {
               && (!("game" in card) || card.game == "signal"));
       }
       function validEntry(entryId, data) {
-        return data.keys().hasAll(["state", "card", "foundAt"])
+        return data is map
+          && data.keys().hasAll(["state", "card", "foundAt"])
           && data.state in ["found", "earned"]
           && validCard(data.card, data.state)
           && entryId == data.state + "_" + data.card.id
-          && data.foundAt is number && data.foundAt >= 0
+          && data.foundAt is int
+          && data.foundAt >= 0
+          && data.foundAt <= 4102444800000
           && (data.state == "found"
             ? data.keys().hasOnly(["state", "card", "foundAt"])
             : data.keys().hasAll(["earnedAt"])
               && data.keys().hasOnly(["state", "card", "foundAt", "earnedAt"])
-              && data.earnedAt is number && data.earnedAt >= 0);
+              && data.earnedAt is int
+              && data.earnedAt >= data.foundAt
+              && data.earnedAt <= 4102444800000);
       }
       function validEnvelope() {
         return request.resource.data.keys().hasOnly(["entries", "changedKey", "epoch"])
@@ -89,153 +272,60 @@ service cloud.firestore {
           && request.resource.data.entries.size() <= 64
           && request.resource.data.changedKey is string
           && request.resource.data.changedKey in request.resource.data.entries
-          && validEntry(request.resource.data.changedKey,
-                        request.resource.data.entries[request.resource.data.changedKey]);
+          && validEntry(
+            request.resource.data.changedKey,
+            request.resource.data.entries[request.resource.data.changedKey]
+          );
       }
       function activeSession() {
-        let session = get(/databases/$(database)/documents/huntCollectionSessions/$(userId));
-        return session.data.enabled == true
-          && session.data.epoch == request.resource.data.epoch;
+        let sessionPath = /databases/$(database)/documents/huntCollectionSessions/$(userId);
+        return exists(sessionPath)
+          && get(sessionPath).data.enabled == true
+          && get(sessionPath).data.epoch == request.resource.data.epoch;
       }
       function validCreate() {
         return validEnvelope() && request.resource.data.entries.size() == 1;
       }
       function validUpdate() {
-        return validEnvelope() && request.resource.data.entries.diff(resource.data.entries)
-          .affectedKeys().hasOnly([request.resource.data.changedKey]);
+        return validEnvelope()
+          && request.resource.data.entries.diff(resource.data.entries)
+            .affectedKeys().hasOnly([request.resource.data.changedKey]);
       }
-      allow get: if owner();
+      allow get: if isGoogleOwner(userId);
       allow list: if false;
-      allow delete: if owner()
+      allow delete: if isGoogleOwner(userId)
+        && existsAfter(/databases/$(database)/documents/huntCollectionSessions/$(userId))
         && getAfter(/databases/$(database)/documents/huntCollectionSessions/$(userId)).data.enabled == false;
-      allow create: if owner() && activeSession() && validCreate();
-      allow update: if owner() && activeSession() && validUpdate();
+      allow create: if isGoogleOwner(userId) && activeSession() && validCreate();
+      allow update: if isGoogleOwner(userId) && activeSession() && validUpdate();
+    }
+
+    // ===============================================================
+    // Locked / Server-Only Collections
+    // ===============================================================
+
+    match /config/{config} {
+      allow read, write: if false;
+    }
+
+    match /functionsRateLimits/{docId} {
+      allow read, write: if false;
     }
 
     match /notifications/{notificationId} {
       allow read, write: if false;
     }
 
-    function validFeaturedSessions() {
-      return request.resource.data is map && request.resource.data.size() <= 200;
-    }
-
-    match /featuredSessions/{userId} {
-      allow get: if request.auth.uid == userId;
-      allow list: if false;
-      allow create, update: if request.auth.uid == userId && validFeaturedSessions();
-      allow delete: if request.auth.uid == userId;
-    }
-
-    match /gallery/{photo} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    function validSubscriberToken(token) {
-      return token.size() >= 10 && token.size() <= 256
-        && request.resource.data.keys().hasAll(["value", "updatedAt"])
-        && request.resource.data.keys().hasOnly(["value", "updatedAt"])
-        && request.resource.data.value is bool
-        && request.resource.data.updatedAt is timestamp;
-    }
-
     match /notificationsSubscribers/{token} {
-      allow list: if false;
-      allow get;
-      allow create, update: if validSubscriberToken(token);
-      allow delete: if token.size() >= 10 && token.size() <= 256;
-    }
-
-    function validNotificationsUsers() {
-      return request.resource.data.keys().hasOnly(["tokens"])
-        && request.resource.data.tokens is map
-        && request.resource.data.tokens.size() <= 20;
+      allow read, write: if false;
     }
 
     match /notificationsUsers/{userId} {
-      allow get: if request.auth.uid == userId;
-      allow list: if false;
-      allow create, update: if request.auth.uid == userId && validNotificationsUsers();
-      allow delete: if request.auth.uid == userId;
-    }
-
-    match /partners/{groupId} {
-      allow get, list;
-      allow write: if false;
-
-      match /items/{itemId} {
-        allow get, list;
-        allow write: if false;
-      }
-    }
-
-    // Scoped collectionGroup rule for partners items
-    match /{path=**}/items/{itemId} {
-      allow get, list: if path[0] == "partners";
-      allow write: if false;
+      allow read, write: if false;
     }
 
     match /potentialPartners/{partnerId} {
-      allow read, update, delete: if false;
-
-      allow create: if request.resource.data.keys().hasAll(["email", "fullName", "companyName"])
-                    && request.resource.data.keys().hasOnly(["email", "fullName", "companyName"])
-                    && request.resource.data.email is string
-                    && request.resource.data.email.size() > 3
-                    && request.resource.data.email.size() <= 320
-                    && request.resource.data.email.matches("^[^@]+@[^@]+\\.[^@]+$")
-                    && request.resource.data.fullName is string
-                    && request.resource.data.fullName.size() > 0
-                    && request.resource.data.fullName.size() <= 120
-                    && request.resource.data.companyName is string
-                    && request.resource.data.companyName.size() > 0
-                    && request.resource.data.companyName.size() <= 120;
-    }
-
-    match /previousSpeakers/{speaker} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /schedule/{day} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /generatedSchedule/{day} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /sessions/{session} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    // Unified, unshadowed collection group & document rules for feedback
-    match /{path=**}/feedback/{userId} {
-      allow get, delete: if request.auth.uid == userId;
-      allow list: if request.auth.uid == resource.data.userId;
-      allow create: if request.auth.uid == userId && validRating(userId);
-      allow update: if request.auth.uid == userId
-                    && resource.data.userId == userId
-                    && validRating(userId);
-    }
-
-    match /generatedSessions/{session} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /speakers/{speaker} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /generatedSpeakers/{speaker} {
-      allow get, list;
-      allow write: if false;
+      allow read, write: if false;
     }
 
     match /subscribers/{subscriberId} {
@@ -246,36 +336,12 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /team/{teamId} {
-      allow get, list;
-      allow write: if false;
+    // ===============================================================
+    // Explicit Default Deny Catch-All
+    // ===============================================================
 
-      match /members/{memberId} {
-        allow get, list;
-        allow write: if false;
-      }
-    }
-
-    // Scoped collectionGroup rule for team members
-    match /{path=**}/members/{memberId} {
-      allow get, list: if path[0] == "team";
-      allow write: if false;
-    }
-
-    match /tickets/{ticket} {
-      allow get, list;
-      allow write: if false;
-    }
-
-    match /users/{userId} {
-      allow list: if false;
-      allow get: if request.auth.uid == userId;
-      allow write: if false;
-    }
-
-    match /videos/{video} {
-      allow get, list;
-      allow write: if false;
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -8,10 +8,12 @@ const geminiApiKey = defineSecret('GEMINI_API_KEY');
 export const concierge = onRequest(
   {
     region: 'us-central1',
-    maxInstances: 5,
+    maxInstances: 3,
+    concurrency: 15,
+    memory: '512MiB',
     secrets: [geminiApiKey],
     cors: false,
-    timeoutSeconds: 45,
+    timeoutSeconds: 35,
   },
   async (req, res) => {
     await handleConcierge(req, res, {

@@ -1,0 +1,30 @@
+{
+  "displayName": "DevFest26 - Firestore Writes Spike (>5000 in 5m)",
+  "combiner": "OR",
+  "enabled": true,
+  "documentation": {
+    "content": "## Firestore Write Spike (>5,000 writes in 5m)\n\nCloud Firestore document writes exceeded 5,000 in 5 minutes (far above normal DevFest Warsaw 2026 event traffic).\n\n### Immediate Triage\n1. Verify hardened `firestore.rules` are deployed (`potentialPartners`, `notificationsSubscribers`, `notificationsUsers`, and `featuredSessions` writes denied; `feedback` scoped to `/sessions/{sessionId}/feedback/{userId}`).\n2. Check whether `functionsRateLimits` is being flooded by `concierge` or `registerNewsletterConsent` traffic.\n3. Check `huntCollections` / `huntCollectionSessions` for an authenticated write loop and disable `CONCIERGE_ENABLED=false` or tighten rules as needed.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Firestore document/write_count > 5000 in 5m",
+      "conditionThreshold": {
+        "filter": "metric.type=\"firestore.googleapis.com/document/write_count\" AND resource.type=\"firestore_instance\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_SUM",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 5000,
+        "duration": "0s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ]
+}

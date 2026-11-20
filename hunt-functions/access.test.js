@@ -4,7 +4,11 @@ import { createAccessGate, PUBLIC_OPEN_AT } from './access.js';
 import { createHuntHandler } from './handler.js';
 
 const code = Buffer.alloc(32, 9).toString('base64url'); // Test fixture only.
-function request(gate, url, { method = 'GET', body, cookie, hunt = createHuntHandler() } = {}) {
+function request(
+  gate,
+  url,
+  { method = 'GET', body, cookie, origin, xff, hunt = createHuntHandler() } = {},
+) {
   const headers = {};
   const res = {
     setHeader: (key, value) => {
@@ -14,8 +18,15 @@ function request(gate, url, { method = 'GET', body, cookie, hunt = createHuntHan
       res.body = JSON.parse(value);
     },
   };
-  gate({ url, method, body, headers: { cookie } }, res, hunt);
+  const reqHeaders = {
+    ...(cookie !== undefined ? { cookie } : {}),
+    ...(origin !== undefined ? { origin } : {}),
+    ...(xff !== undefined ? { 'x-forwarded-for': xff } : {}),
+  };
+  gate({ url, method, body, headers: reqHeaders }, res, hunt);
   assert.match(headers['Cache-Control'], /no-store/);
+  assert.equal(headers['Referrer-Policy'], 'no-referrer');
+  assert.equal(headers['X-Content-Type-Options'], 'nosniff');
   return { status: res.statusCode, body: res.body, headers };
 }
 
@@ -121,4 +132,58 @@ test('scheduled public opening is evaluated on every request at the exact millis
   assert.equal(request(gate, '/api/hunt/card/rmz75w8', { method: 'POST' }).body.status, 'earned');
   const missingCode = createAccessGate({ now: () => time });
   assert.equal(request(missingCode, '/api/hunt/collection').status, 200);
+});
+
+test('access gate rate-limits failed POST attempts per rightmost X-Forwarded-For IP, rejects foreign origins, and guards missing URLs', () => {
+  let time = PUBLIC_OPEN_AT - 60_000;
+  const gate = createAccessGate({ code, now: () => time });
+
+  // Foreign origin rejected on POST, allowed origin accepted
+  assert.equal(
+    request(gate, '/api/hunt/access', {
+      method: 'POST',
+      body: { code },
+      origin: 'https://evil.example',
+    }).status,
+    403,
+  );
+  assert.equal(
+    request(gate, '/api/hunt/access', {
+      method: 'POST',
+      body: { code },
+      origin: 'https://warsaw.devfest.pl',
+    }).status,
+    200,
+  );
+
+  // Missing URL fails safely instead of throwing
+  assert.equal(request(gate, undefined).status, 401);
+
+  // 60 failed attempts from same rightmost IP (even with spoofed leftmost IPs) -> 61st returns 429
+  for (let i = 0; i < 60; i += 1) {
+    const res = request(gate, '/api/hunt/access', {
+      method: 'POST',
+      body: { code: 'wrong-code' },
+      xff: `10.0.0.${i}, 198.51.100.77`,
+    });
+    assert.equal(res.status, 401);
+  }
+  const blocked = request(gate, '/api/hunt/access', {
+    method: 'POST',
+    body: { code },
+    xff: '203.0.113.1, 198.51.100.77',
+  });
+  assert.equal(blocked.status, 429);
+  assert.deepEqual(blocked.body, { status: 'rate-limited' });
+  assert.ok(Number(blocked.headers['Retry-After']) > 0);
+
+  // Another IP is unaffected
+  assert.equal(
+    request(gate, '/api/hunt/access', {
+      method: 'POST',
+      body: { code },
+      xff: '198.51.100.78',
+    }).status,
+    200,
+  );
 });

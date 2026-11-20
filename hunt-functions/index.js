@@ -8,7 +8,14 @@ import { createAccessGate } from './access.js';
 let handler;
 
 export const y2kCardHuntPreview = onRequest(
-  { region: 'us-central1', maxInstances: 3, timeoutSeconds: 10 },
+  {
+    region: 'us-central1',
+    maxInstances: 3,
+    concurrency: 40,
+    memory: '128MiB',
+    timeoutSeconds: 5,
+    cors: false,
+  },
   (request, response) => {
     if (!handler) {
       try {
@@ -35,8 +42,11 @@ let productionHandler;
 export const y2kCardHunt = onRequest(
   {
     region: 'us-central1',
-    maxInstances: 3,
-    timeoutSeconds: 10,
+    maxInstances: 2,
+    concurrency: 40,
+    memory: '128MiB',
+    timeoutSeconds: 5,
+    cors: false,
     secrets: [physicalCatalog, accessCode],
   },
   (request, response) => {

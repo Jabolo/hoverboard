@@ -98,7 +98,7 @@ export class HuntAccessPage extends LitElement {
   private location?: RouterLocation;
   private request?: AbortController;
   private generation = 0;
-  private pollTimer?: ReturnType<typeof setTimeout>;
+  private pollTimer: ReturnType<typeof setTimeout> | undefined;
 
   onAfterEnter(location: RouterLocation) {
     this.location = location;
@@ -108,22 +108,43 @@ export class HuntAccessPage extends LitElement {
   override connectedCallback() {
     super.connectedCallback();
     window.addEventListener('hunt-access-expired', this.onAccessExpired);
+    document.addEventListener('visibilitychange', this.onVisibilityChange);
   }
 
   private readonly onAccessExpired = () => {
     void this.check();
   };
 
+  private readonly onVisibilityChange = () => {
+    if (!this.isConnected || this.access === 'unlocked') return;
+    if (document.hidden) {
+      clearTimeout(this.pollTimer);
+      this.pollTimer = undefined;
+    } else if (!this.busy && (this.access === 'locked' || this.access === 'unavailable')) {
+      void this.check(undefined, true);
+    }
+  };
+
   override disconnectedCallback() {
     window.removeEventListener('hunt-access-expired', this.onAccessExpired);
+    document.removeEventListener('visibilitychange', this.onVisibilityChange);
     this.generation++;
     clearTimeout(this.pollTimer);
+    this.pollTimer = undefined;
     this.request?.abort();
     super.disconnectedCallback();
   }
 
+  private schedulePoll() {
+    clearTimeout(this.pollTimer);
+    this.pollTimer = undefined;
+    if (!this.isConnected || document.hidden) return;
+    this.pollTimer = setTimeout(() => void this.check(undefined, true), 20_000);
+  }
+
   private async check(code?: string, polling = false) {
     clearTimeout(this.pollTimer);
+    this.pollTimer = undefined;
     this.request?.abort();
     const request = new AbortController();
     this.request = request;
@@ -153,17 +174,17 @@ export class HuntAccessPage extends LitElement {
       this.access = 'locked';
       if (polling && this.error.startsWith('Connection interrupted')) this.error = '';
       if (code !== undefined) this.error = 'That code was not accepted. Please try again.';
-      this.pollTimer = setTimeout(() => void this.check(undefined, true), 20_000);
+      this.schedulePoll();
       if (!polling) {
         await this.updateComplete;
         this.renderRoot.querySelector<HTMLInputElement>('#access-code')?.focus();
       }
     } else if (polling) {
       this.error = 'Connection interrupted. We will keep checking.';
-      this.pollTimer = setTimeout(() => void this.check(undefined, true), 20_000);
+      this.schedulePoll();
     } else {
       this.access = 'unavailable';
-      this.pollTimer = setTimeout(() => void this.check(undefined, true), 20_000);
+      this.schedulePoll();
     }
   }
 

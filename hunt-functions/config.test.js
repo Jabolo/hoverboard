@@ -47,12 +47,12 @@ test('production routes and both function codebases are configured without remov
   }
 });
 
-test('PR preview strips the production hunt function while retaining other routing', () => {
+test('PR preview strips all production function rewrites while retaining static routing', () => {
   execFileSync(process.execPath, ['scripts/generate-pr-preview-config.mjs'], { cwd: root });
   const base = read('firebase.json');
   const preview = read('.env.firebase-pr-preview.json');
   assert.deepEqual(
     preview.hosting.rewrites,
-    base.hosting.rewrites.filter(({ source }) => source !== '/api/hunt/**'),
+    base.hosting.rewrites.filter((rule) => !rule.function),
   );
 });

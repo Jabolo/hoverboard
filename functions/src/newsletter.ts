@@ -10,7 +10,7 @@ import {
   normalizeEmail,
   type NewsletterConsentInput,
 } from './newsletter-contract.js';
-import { checkRateLimit, getClientIp } from './rate-limiter.js';
+import { checkRateLimit, getClientIp, hashKey } from './rate-limiter.js';
 
 export {
   NEWSLETTER_CONSENT_SOURCE,
@@ -22,8 +22,11 @@ export {
 } from './newsletter-contract.js';
 
 const RESEND_CONTACTS_URL = 'https://api.resend.com/contacts';
+export const RESEND_FETCH_TIMEOUT_MS = 8_000;
+export const NEWSLETTER_GLOBAL_MAX_ATTEMPTS = 300;
+export const NEWSLETTER_GLOBAL_WINDOW_SECONDS = 3600;
 
-type ResendSyncResult = {
+export type ResendSyncResult = {
   status: 'synced' | 'suppressed' | 'pending' | 'failed';
   detail?: string;
 };
@@ -35,19 +38,54 @@ const resendHeaders = (apiKey: string) => ({
   'Content-Type': 'application/json',
 });
 
-const syncToResend = async (
+type ResendFetchInit = {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: string;
+  signal?: AbortSignal;
+};
+
+type ResendFetchFn = (
+  url: string,
+  init?: ResendFetchInit,
+) => Promise<{ ok: boolean; status: number; json: () => Promise<unknown> }>;
+
+const fetchWithTimeout = async (
+  fetchImpl: ResendFetchFn,
+  url: string,
+  init: Omit<ResendFetchInit, 'signal'>,
+  timeoutMs: number,
+) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetchImpl(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
+export const syncToResend = async (
   email: string,
   firstName: string,
   lastName: string,
+  options?: {
+    apiKey?: string;
+    fetchFn?: ResendFetchFn;
+    timeoutMs?: number;
+  },
 ): Promise<ResendSyncResult> => {
-  const apiKey = getResendApiKey();
+  const apiKey = (options?.apiKey ?? getResendApiKey()).trim();
   if (!apiKey) {
     return { status: 'pending', detail: 'resend_not_configured' };
   }
 
+  const fetchImpl: ResendFetchFn =
+    options?.fetchFn ?? ((url, init) => fetch(url, init as Parameters<typeof fetch>[1]));
+  const timeoutMs = options?.timeoutMs ?? RESEND_FETCH_TIMEOUT_MS;
   const headers = resendHeaders(apiKey);
   const contactUrl = `${RESEND_CONTACTS_URL}/${encodeURIComponent(email)}`;
-  const existingResponse = await fetch(contactUrl, { headers });
+  const existingResponse = await fetchWithTimeout(fetchImpl, contactUrl, { headers }, timeoutMs);
 
   if (existingResponse.ok) {
     const existing = (await existingResponse.json()) as { unsubscribed?: boolean };
@@ -55,11 +93,16 @@ const syncToResend = async (
       return { status: 'suppressed', detail: 'resend_global_unsubscribe' };
     }
 
-    const updateResponse = await fetch(contactUrl, {
-      method: 'PATCH',
-      headers,
-      body: JSON.stringify({ first_name: firstName, last_name: lastName }),
-    });
+    const updateResponse = await fetchWithTimeout(
+      fetchImpl,
+      contactUrl,
+      {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify({ first_name: firstName, last_name: lastName }),
+      },
+      timeoutMs,
+    );
 
     if (!updateResponse.ok) {
       return { status: 'failed', detail: `resend_update_${updateResponse.status}` };
@@ -72,16 +115,21 @@ const syncToResend = async (
     return { status: 'failed', detail: `resend_lookup_${existingResponse.status}` };
   }
 
-  const createResponse = await fetch(RESEND_CONTACTS_URL, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      email,
-      first_name: firstName,
-      last_name: lastName,
-      unsubscribed: false,
-    }),
-  });
+  const createResponse = await fetchWithTimeout(
+    fetchImpl,
+    RESEND_CONTACTS_URL,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        unsubscribed: false,
+      }),
+    },
+    timeoutMs,
+  );
 
   if (!createResponse.ok && createResponse.status !== 409) {
     return { status: 'failed', detail: `resend_create_${createResponse.status}` };
@@ -91,7 +139,12 @@ const syncToResend = async (
 };
 
 export const registerNewsletterConsent = functions
-  .runWith({ secrets: ['RESEND_API_KEY'] })
+  .runWith({
+    secrets: ['RESEND_API_KEY'],
+    maxInstances: 2,
+    timeoutSeconds: 15,
+    memory: '256MB',
+  })
   .https.onCall(async (data: NewsletterConsentInput, context: functions.https.CallableContext) => {
     if (process.env.ENFORCE_APP_CHECK === 'true' && !context.app) {
       throw new functions.https.HttpsError(
@@ -119,6 +172,7 @@ export const registerNewsletterConsent = functions
 
     const db = getFirestore();
     const clientIp = getClientIp(context?.rawRequest);
+    const ipLogHash = hashKey('newsletter_log', clientIp).slice(0, 12);
 
     // Rate limit: max 5 requests per 10 minutes per IP
     const ipLimit = await checkRateLimit({
@@ -130,7 +184,7 @@ export const registerNewsletterConsent = functions
     });
 
     if (!ipLimit.allowed) {
-      functions.logger.warn(`Rate limit exceeded for IP: ${clientIp}`);
+      functions.logger.warn(`Rate limit exceeded for IP hash: ${ipLogHash}`);
       throw new functions.https.HttpsError(
         'resource-exhausted',
         'Too many newsletter registration attempts. Please try again in a few minutes.',
@@ -151,6 +205,23 @@ export const registerNewsletterConsent = functions
       throw new functions.https.HttpsError(
         'resource-exhausted',
         'Too many attempts for this email address. Please try again later.',
+      );
+    }
+
+    // Global rate limit: max 300 registrations per hour
+    const globalLimit = await checkRateLimit({
+      db,
+      prefix: 'newsletter_global',
+      key: 'devfest-2026',
+      maxAttempts: NEWSLETTER_GLOBAL_MAX_ATTEMPTS,
+      windowSeconds: NEWSLETTER_GLOBAL_WINDOW_SECONDS,
+    });
+
+    if (!globalLimit.allowed) {
+      functions.logger.warn('Global newsletter registration rate limit exceeded.');
+      throw new functions.https.HttpsError(
+        'resource-exhausted',
+        'Newsletter registrations are temporarily busy. Please try again later.',
       );
     }
 

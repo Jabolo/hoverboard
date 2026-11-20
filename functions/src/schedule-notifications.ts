@@ -115,8 +115,9 @@ const sendPushNotificationToUsers = async (
   return removeUserTokens(tokensToRemove);
 };
 
-export const scheduleNotifications = functions.pubsub
-  .schedule('every 5 minutes')
+export const scheduleNotifications = functions
+  .runWith({ maxInstances: 1, timeoutSeconds: 60 })
+  .pubsub.schedule('every 5 minutes')
   .onRun(async () => {
     const notificationsConfigPromise = getFirestore()
       .collection('config')

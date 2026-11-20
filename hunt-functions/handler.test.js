@@ -13,7 +13,7 @@ const timedCard = {
 };
 const timedUrl = '/api/hunt/card/abc2345/';
 
-function request(handler, url, method = 'GET') {
+function request(handler, url, method = 'GET', extraHeaders = {}) {
   const headers = new Map();
   const response = {
     setHeader: (name, value) => headers.set(name, value),
@@ -21,9 +21,11 @@ function request(handler, url, method = 'GET') {
       this.body = JSON.parse(payload);
     },
   };
-  handler({ url, method }, response);
+  handler({ url, method, headers: extraHeaders }, response);
   assert.equal(headers.get('Cache-Control'), 'private, no-store, max-age=0');
+  assert.equal(headers.get('Referrer-Policy'), 'no-referrer');
   assert.equal(headers.get('X-Robots-Tag'), 'noindex, nofollow');
+  assert.equal(headers.get('X-Content-Type-Options'), 'nosniff');
   return { status: response.statusCode, body: response.body, headers };
 }
 
@@ -164,4 +166,40 @@ test('arcade souvenir routes use the same find and reveal contract', () => {
     assert.equal(request(handler, `/api/hunt/card/${id}`).body.status, 'open');
     assert.equal(request(handler, `/api/hunt/card/${id}`, 'POST').body.status, 'earned');
   }
+});
+
+test('handler blocks foreign origins on POST, guards missing URLs, and rate-limits card requests at 300/min per rightmost IP', () => {
+  const handler = createHuntHandler({ now: () => Date.parse('2026-11-21T10:00:00Z') });
+
+  assert.equal(
+    request(handler, '/api/hunt/card/rmz75w8', 'POST', { origin: 'https://evil.example' }).status,
+    403,
+  );
+  assert.equal(
+    request(handler, '/api/hunt/card/rmz75w8', 'POST', { origin: 'https://warsaw.devfest.pl' })
+      .status,
+    200,
+  );
+  assert.equal(request(handler, undefined).status, 404);
+
+  // 300 card lookups (including 404 brute-force probes) from same rightmost IP -> 301st returns 429
+  for (let i = 0; i < 300; i += 1) {
+    const res = request(handler, '/api/hunt/card/zzzzzzz', 'GET', {
+      'x-forwarded-for': `10.1.0.${i % 250}, 198.51.100.88`,
+    });
+    assert.equal(res.status, 404);
+  }
+  const blocked = request(handler, '/api/hunt/card/rmz75w8', 'GET', {
+    'x-forwarded-for': '203.0.113.5, 198.51.100.88',
+  });
+  assert.equal(blocked.status, 429);
+  assert.deepEqual(blocked.body, { status: 'rate-limited' });
+  assert.equal(blocked.headers.get('Retry-After'), '60');
+
+  // Another IP is unaffected
+  assert.equal(
+    request(handler, '/api/hunt/card/rmz75w8', 'GET', { 'x-forwarded-for': '198.51.100.89' })
+      .status,
+    200,
+  );
 });

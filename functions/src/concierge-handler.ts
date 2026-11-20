@@ -1,6 +1,11 @@
 import type { Request, Response } from 'express';
 import type { Firestore } from 'firebase-admin/firestore';
-import { checkRateLimit, getClientIp, type RateLimitResult } from './rate-limiter.js';
+import {
+  checkRateLimit,
+  checkShardedRateLimit,
+  getClientIp,
+  type RateLimitResult,
+} from './rate-limiter.js';
 
 export type CanonicalSession = {
   id: string;
@@ -425,36 +430,37 @@ export type ConciergeDeps = {
   fetchFn?: typeof fetch;
   bypassCache?: boolean;
   sleepFn?: (ms: number) => Promise<void>;
+  env?: Record<string, string | undefined>;
+  globalShardIndex?: number;
 };
 
 const MAX_CACHE_ENTRIES = 200;
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const LIVE_TIME_CACHE_TTL_MS = 5 * 60 * 1000;
-const CONCIERGE_MODEL_CHAIN = [
-  'gemini-3.5-flash-lite',
-  'gemini-3.6-flash',
-  'gemini-3.1-flash-lite',
-] as const;
+const CONCIERGE_MODEL_CHAIN = ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite'] as const;
 type ConciergeModelId = (typeof CONCIERGE_MODEL_CHAIN)[number];
 const CONCIERGE_MODEL: ConciergeModelId = CONCIERGE_MODEL_CHAIN[0];
 const CONCIERGE_THINKING_LEVEL = 'minimal';
-const RETRYABLE_UPSTREAM_STATUSES = new Set([429, 500, 502, 503, 504]);
+const CONCIERGE_MAX_OUTPUT_TOKENS = 1200;
+const RETRYABLE_UPSTREAM_STATUSES = new Set([429, 502, 503, 504]);
 const PER_ATTEMPT_TIMEOUT_MS = 10_000;
 const FAILOVER_BACKOFF_MS = 250;
+const MAX_CHAT_CONTENT_LENGTH_BYTES = 24 * 1024;
+const MAX_TRANSCRIBE_CONTENT_LENGTH_BYTES = 260 * 1024;
+const LIVE_TOKEN_EXPIRE_MS = 90_000;
+const LIVE_TOKEN_NEW_SESSION_EXPIRE_MS = 30_000;
 
 function formatModelBadge(model: ConciergeModelId): string {
   switch (model) {
     case 'gemini-3.1-flash-lite':
       return 'A2UI · Gemini 3.1 Flash-Lite';
-    case 'gemini-3.6-flash':
-      return 'A2UI · Gemini 3.6 Flash';
     case 'gemini-3.5-flash-lite':
     default:
       return 'A2UI · Gemini 3.5 Flash-Lite';
   }
 }
 
-const TRANSCRIBE_MAX_BASE64_CHARS = 700_000;
+const TRANSCRIBE_MAX_BASE64_CHARS = 180_000;
 const TRANSCRIBE_ALLOWED_MIME_TYPES = new Set([
   'audio/webm',
   'audio/ogg',
@@ -635,7 +641,8 @@ function setCachedEntry(
   responseCache.set(key, { messages, model, expiresAt });
 }
 
-type ConciergeRequest = Pick<Request, 'method' | 'body' | 'headers' | 'ip' | 'connection'>;
+type ConciergeRequest = Pick<Request, 'method' | 'body' | 'headers' | 'ip' | 'connection'> &
+  Partial<Pick<Request, 'socket'>>;
 
 type ModelBanner = {
   tone?: string;
@@ -682,36 +689,107 @@ type A2UINode = {
   bindings?: Record<string, string>;
 };
 
-const RATE_LIMIT_IP_MAX_ATTEMPTS = 3000;
-const RATE_LIMIT_IP_WINDOW_SECONDS = 900;
-const RATE_LIMIT_CLIENT_MAX_ATTEMPTS = 80;
-const RATE_LIMIT_CLIENT_WINDOW_SECONDS = 900;
-const RATE_LIMIT_GLOBAL_MAX_ATTEMPTS = 15000;
-const RATE_LIMIT_GLOBAL_WINDOW_SECONDS = 108000;
+type ConciergeRateLimitMode = 'chat' | 'transcribe' | 'live-token';
+
+const RATE_LIMIT_WINDOW_15M_SECONDS = 900;
+const RATE_LIMIT_WINDOW_24H_SECONDS = 86_400;
+
+const CONCIERGE_RATE_LIMITS: Record<
+  ConciergeRateLimitMode,
+  {
+    clientPrefix: string;
+    clientMax: number;
+    ipPrefix: string;
+    ipMax: number;
+    globalPrefix: string;
+    globalMax: number;
+    globalShards: number;
+  }
+> = {
+  chat: {
+    clientPrefix: 'concierge-chat-client',
+    clientMax: 30,
+    ipPrefix: 'concierge-chat-ip',
+    ipMax: 600,
+    globalPrefix: 'concierge-chat-global-24h',
+    globalMax: 4000,
+    globalShards: 10,
+  },
+  transcribe: {
+    clientPrefix: 'concierge-transcribe-client',
+    clientMax: 15,
+    ipPrefix: 'concierge-transcribe-ip',
+    ipMax: 120,
+    globalPrefix: 'concierge-transcribe-global-24h',
+    globalMax: 1000,
+    globalShards: 5,
+  },
+  'live-token': {
+    clientPrefix: 'concierge-live-client',
+    clientMax: 10,
+    ipPrefix: 'concierge-live-ip',
+    ipMax: 60,
+    globalPrefix: 'concierge-live-global-24h',
+    globalMax: 600,
+    globalShards: 5,
+  },
+};
+
 const CONCIERGE_CLIENT_HEADER_PATTERN = /^[a-zA-Z0-9_-]{12,64}$/;
+const ALLOWED_CONCIERGE_ORIGINS = new Set([
+  'https://warsaw.devfest.pl',
+  'https://gdg-warsaw-devfest26-web.web.app',
+  'https://gdg-warsaw-devfest26-web.firebaseapp.com',
+]);
+const LOCALHOST_ORIGIN_PATTERN = /^http:\/\/(localhost|127\.0\.0\.1)(?::\d{1,5})?$/;
 
 function setSecurityHeaders(response: Response) {
   response.set('Cache-Control', 'private, no-store, max-age=0');
   response.set('Referrer-Policy', 'no-referrer');
   response.set('X-Robots-Tag', 'noindex, nofollow');
+  response.set('X-Content-Type-Options', 'nosniff');
 }
 
-function getConciergeClientHeader(request: ConciergeRequest): string | null {
-  const headers = request.headers;
+function getHeaderValue(
+  headers: ConciergeRequest['headers'] | undefined,
+  name: string,
+): string | null {
   if (!headers) return null;
-  let raw = headers['x-concierge-client'];
+  let raw = headers[name];
   if (raw === undefined) {
+    const lower = name.toLowerCase();
     for (const [key, value] of Object.entries(headers)) {
-      if (key.toLowerCase() === 'x-concierge-client') {
+      if (key.toLowerCase() === lower) {
         raw = value;
         break;
       }
     }
   }
   const candidate = Array.isArray(raw) ? raw[0] : raw;
-  if (typeof candidate !== 'string') return null;
-  const trimmed = candidate.trim();
-  return CONCIERGE_CLIENT_HEADER_PATTERN.test(trimmed) ? trimmed : null;
+  return typeof candidate === 'string' ? candidate.trim() : null;
+}
+
+function isAllowedConciergeOrigin(origin: string): boolean {
+  return ALLOWED_CONCIERGE_ORIGINS.has(origin) || LOCALHOST_ORIGIN_PATTERN.test(origin);
+}
+
+function isJsonContentType(contentType: string | null): boolean {
+  if (!contentType) return false;
+  const mediaType = contentType.split(';')[0]?.trim().toLowerCase() || '';
+  return mediaType === 'application/json';
+}
+
+function parseContentLength(raw: string | null): number | null {
+  if (!raw) return null;
+  if (!/^\d+$/.test(raw)) return null;
+  const value = Number(raw);
+  return Number.isSafeInteger(value) ? value : null;
+}
+
+function getConciergeClientHeader(request: ConciergeRequest): string | null {
+  const candidate = getHeaderValue(request.headers, 'x-concierge-client');
+  if (!candidate) return null;
+  return CONCIERGE_CLIENT_HEADER_PATTERN.test(candidate) ? candidate : null;
 }
 
 async function enforceConciergeRateLimits(options: {
@@ -719,75 +797,85 @@ async function enforceConciergeRateLimits(options: {
   request: ConciergeRequest;
   response: Response;
   nowDate: Date;
-  globalPrefix: 'concierge-global-30h' | 'concierge-voice-global-30h';
+  mode: ConciergeRateLimitMode;
+  shardIndex?: number;
   rateLimitedBody: (resetAtIso: string) => Record<string, unknown>;
 }): Promise<boolean> {
-  const { db, request, response, nowDate, globalPrefix, rateLimitedBody } = options;
+  const { db, request, response, nowDate, mode, shardIndex, rateLimitedBody } = options;
+  const config = CONCIERGE_RATE_LIMITS[mode];
 
-  const clientHeader = getConciergeClientHeader(request);
-  let clientLimit: RateLimitResult | null = null;
-  if (clientHeader) {
-    clientLimit = await checkRateLimit({
+  try {
+    const clientHeader = getConciergeClientHeader(request);
+    let clientLimit: RateLimitResult | null = null;
+    if (clientHeader) {
+      clientLimit = await checkRateLimit({
+        db,
+        prefix: config.clientPrefix,
+        key: clientHeader,
+        maxAttempts: config.clientMax,
+        windowSeconds: RATE_LIMIT_WINDOW_15M_SECONDS,
+        now: nowDate,
+      });
+      if (!clientLimit.allowed) {
+        response.set('X-RateLimit-Remaining', '0');
+        response.set('X-RateLimit-Reset', String(Math.ceil(clientLimit.resetAt.getTime() / 1000)));
+        response.status(429).json(rateLimitedBody(clientLimit.resetAt.toISOString()));
+        return false;
+      }
+    }
+
+    const clientIp = getClientIp(request);
+    const ipLimit = await checkRateLimit({
       db,
-      prefix: 'concierge-client',
-      key: clientHeader,
-      maxAttempts: RATE_LIMIT_CLIENT_MAX_ATTEMPTS,
-      windowSeconds: RATE_LIMIT_CLIENT_WINDOW_SECONDS,
+      prefix: config.ipPrefix,
+      key: clientIp,
+      maxAttempts: config.ipMax,
+      windowSeconds: RATE_LIMIT_WINDOW_15M_SECONDS,
       now: nowDate,
     });
-    if (!clientLimit.allowed) {
+    if (!ipLimit.allowed) {
       response.set('X-RateLimit-Remaining', '0');
-      response.set('X-RateLimit-Reset', String(Math.ceil(clientLimit.resetAt.getTime() / 1000)));
-      response.status(429).json(rateLimitedBody(clientLimit.resetAt.toISOString()));
+      response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
+      response.status(429).json(rateLimitedBody(ipLimit.resetAt.toISOString()));
       return false;
     }
-  }
 
-  const clientIp = getClientIp(request);
-  const ipLimit = await checkRateLimit({
-    db,
-    prefix: 'concierge-ip',
-    key: clientIp,
-    maxAttempts: RATE_LIMIT_IP_MAX_ATTEMPTS,
-    windowSeconds: RATE_LIMIT_IP_WINDOW_SECONDS,
-    now: nowDate,
-  });
-  if (!ipLimit.allowed) {
-    response.set('X-RateLimit-Remaining', '0');
-    response.set('X-RateLimit-Reset', String(Math.ceil(ipLimit.resetAt.getTime() / 1000)));
-    response.status(429).json(rateLimitedBody(ipLimit.resetAt.toISOString()));
-    return false;
-  }
-
-  const globalLimit = await checkRateLimit({
-    db,
-    prefix: globalPrefix,
-    key: 'devfest-2026-sponsored',
-    maxAttempts: RATE_LIMIT_GLOBAL_MAX_ATTEMPTS,
-    windowSeconds: RATE_LIMIT_GLOBAL_WINDOW_SECONDS,
-    now: nowDate,
-  });
-  if (!globalLimit.allowed) {
-    response.set('X-RateLimit-Remaining', '0');
-    response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
-    response.status(429).json(rateLimitedBody(globalLimit.resetAt.toISOString()));
-    return false;
-  }
-
-  const activeLimits: RateLimitResult[] = clientLimit
-    ? [clientLimit, ipLimit, globalLimit]
-    : [ipLimit, globalLimit];
-  let bindingLimit = activeLimits[0]!;
-  for (let i = 1; i < activeLimits.length; i += 1) {
-    const candidate = activeLimits[i]!;
-    if (candidate.remaining < bindingLimit.remaining) {
-      bindingLimit = candidate;
+    const globalLimit = await checkShardedRateLimit({
+      db,
+      prefix: config.globalPrefix,
+      key: 'devfest-2026-sponsored',
+      maxAttempts: config.globalMax,
+      windowSeconds: RATE_LIMIT_WINDOW_24H_SECONDS,
+      shards: config.globalShards,
+      shardIndex,
+      now: nowDate,
+    });
+    if (!globalLimit.allowed) {
+      response.set('X-RateLimit-Remaining', '0');
+      response.set('X-RateLimit-Reset', String(Math.ceil(globalLimit.resetAt.getTime() / 1000)));
+      response.status(429).json(rateLimitedBody(globalLimit.resetAt.toISOString()));
+      return false;
     }
-  }
 
-  response.set('X-RateLimit-Remaining', String(bindingLimit.remaining));
-  response.set('X-RateLimit-Reset', String(Math.ceil(bindingLimit.resetAt.getTime() / 1000)));
-  return true;
+    const activeLimits: RateLimitResult[] = clientLimit
+      ? [clientLimit, ipLimit, globalLimit]
+      : [ipLimit, globalLimit];
+    let bindingLimit = activeLimits[0]!;
+    for (let i = 1; i < activeLimits.length; i += 1) {
+      const candidate = activeLimits[i]!;
+      if (candidate.remaining < bindingLimit.remaining) {
+        bindingLimit = candidate;
+      }
+    }
+
+    response.set('X-RateLimit-Remaining', String(bindingLimit.remaining));
+    response.set('X-RateLimit-Reset', String(Math.ceil(bindingLimit.resetAt.getTime() / 1000)));
+    return true;
+  } catch {
+    console.error('concierge rate-limit unavailable', { mode });
+    response.status(503).json({ status: 'unavailable', fallback: 'local-a2ui' });
+    return false;
+  }
 }
 
 function parseMinutes(hhmm: string): number {
@@ -1190,16 +1278,65 @@ export async function handleConcierge(
     return;
   }
 
+  const origin = getHeaderValue(request.headers, 'origin');
+  if (origin !== null && !isAllowedConciergeOrigin(origin)) {
+    response.status(403).json({ status: 'forbidden', error: 'Origin not allowed' });
+    return;
+  }
+
+  const contentType = getHeaderValue(request.headers, 'content-type');
+  if (!isJsonContentType(contentType)) {
+    response.status(415).json({
+      status: 'unsupported-media-type',
+      error: 'Content-Type must be application/json',
+    });
+    return;
+  }
+
+  const now = deps.now ?? Date.now();
+  const nowDate = new Date(now);
+  const env = deps.env ?? process.env;
+
+  if ((env.CONCIERGE_ENABLED || '').trim().toLowerCase() === 'false') {
+    response.status(503).json({ status: 'unavailable', fallback: 'local-a2ui' });
+    return;
+  }
+
+  const shutoffRaw = (env.CONCIERGE_SHUTOFF_AT || '').trim();
+  if (shutoffRaw) {
+    const shutoffMs = Date.parse(shutoffRaw);
+    if (Number.isFinite(shutoffMs) && now >= shutoffMs) {
+      response.status(503).json({ status: 'unavailable', fallback: 'local-a2ui' });
+      return;
+    }
+  }
+
   const rawBody = request.body;
   const isLiveToken =
     Boolean(rawBody) &&
     typeof rawBody === 'object' &&
     !Array.isArray(rawBody) &&
     (rawBody as Record<string, unknown>).mode === 'live-token';
+  const isTranscribe =
+    Boolean(rawBody) &&
+    typeof rawBody === 'object' &&
+    !Array.isArray(rawBody) &&
+    (rawBody as Record<string, unknown>).mode === 'transcribe';
+
+  const contentLength = parseContentLength(getHeaderValue(request.headers, 'content-length'));
+  const maxContentLength = isTranscribe
+    ? MAX_TRANSCRIBE_CONTENT_LENGTH_BYTES
+    : MAX_CHAT_CONTENT_LENGTH_BYTES;
+  if (contentLength !== null && contentLength > maxContentLength) {
+    response.status(413).json({ status: 'payload-too-large', error: 'Request payload too large' });
+    return;
+  }
 
   if (isLiveToken) {
-    const now = deps.now ?? Date.now();
-    const nowDate = new Date(now);
+    if ((env.CONCIERGE_LIVE_TOKEN_ENABLED || '').trim().toLowerCase() === 'false') {
+      response.status(503).json({ status: 'unavailable', error: 'Live voice token disabled' });
+      return;
+    }
 
     if (deps.db) {
       const allowed = await enforceConciergeRateLimits({
@@ -1207,7 +1344,8 @@ export async function handleConcierge(
         request,
         response,
         nowDate,
-        globalPrefix: 'concierge-voice-global-30h',
+        mode: 'live-token',
+        shardIndex: deps.globalShardIndex,
         rateLimitedBody: (resetAt) => ({
           status: 'rate-limited',
           error: 'Rate limit exceeded',
@@ -1240,10 +1378,13 @@ export async function handleConcierge(
           },
           body: JSON.stringify({
             uses: 1,
+            expireTime: new Date(now + LIVE_TOKEN_EXPIRE_MS).toISOString(),
+            newSessionExpireTime: new Date(now + LIVE_TOKEN_NEW_SESSION_EXPIRE_MS).toISOString(),
             bidiGenerateContentSetup: {
               model: 'models/gemini-3.5-transcribe-live',
               generationConfig: {
                 responseModalities: ['TEXT'],
+                maxOutputTokens: 256,
               },
               inputAudioTranscription: {
                 mode: 'smart',
@@ -1289,12 +1430,6 @@ export async function handleConcierge(
     }
   }
 
-  const isTranscribe =
-    Boolean(rawBody) &&
-    typeof rawBody === 'object' &&
-    !Array.isArray(rawBody) &&
-    (rawBody as Record<string, unknown>).mode === 'transcribe';
-
   if (isTranscribe) {
     const bodyObj = rawBody as Record<string, unknown>;
     const rawAudio = typeof bodyObj.audio === 'string' ? bodyObj.audio.trim() : '';
@@ -1318,16 +1453,14 @@ export async function handleConcierge(
       return;
     }
 
-    const now = deps.now ?? Date.now();
-    const nowDate = new Date(now);
-
     if (deps.db) {
       const allowed = await enforceConciergeRateLimits({
         db: deps.db,
         request,
         response,
         nowDate,
-        globalPrefix: 'concierge-voice-global-30h',
+        mode: 'transcribe',
+        shardIndex: deps.globalShardIndex,
         rateLimitedBody: (resetAt) => ({
           status: 'rate-limited',
           error: 'Rate limit exceeded',
@@ -1409,7 +1542,6 @@ export async function handleConcierge(
         const upstreamJson = (await upstreamRes.json()) as unknown;
         const rawText = extractModelJsonText(upstreamJson);
         if (!rawText) {
-          if (hasNext) continue;
           break;
         }
 
@@ -1461,27 +1593,6 @@ export async function handleConcierge(
     return;
   }
 
-  const now = deps.now ?? Date.now();
-  const nowDate = new Date(now);
-
-  if (deps.db) {
-    const allowed = await enforceConciergeRateLimits({
-      db: deps.db,
-      request,
-      response,
-      nowDate,
-      globalPrefix: 'concierge-global-30h',
-      rateLimitedBody: (resetAt) => ({
-        status: 'rate-limited',
-        fallback: 'local-a2ui',
-        resetAt,
-      }),
-    });
-    if (!allowed) {
-      return;
-    }
-  }
-
   const timeSensitive = isTimeSensitiveQuery(parsed.query, parsed.intent);
   const slot = timeSensitive ? getServerScheduleSlot(now) : null;
   if (slot) {
@@ -1501,6 +1612,25 @@ export async function handleConcierge(
         cached: true,
         messages: cachedEntry.messages,
       });
+      return;
+    }
+  }
+
+  if (deps.db) {
+    const allowed = await enforceConciergeRateLimits({
+      db: deps.db,
+      request,
+      response,
+      nowDate,
+      mode: 'chat',
+      shardIndex: deps.globalShardIndex,
+      rateLimitedBody: (resetAt) => ({
+        status: 'rate-limited',
+        fallback: 'local-a2ui',
+        resetAt,
+      }),
+    });
+    if (!allowed) {
       return;
     }
   }
@@ -1556,7 +1686,7 @@ export async function handleConcierge(
             input: userInput,
             generation_config: {
               thinking_level: CONCIERGE_THINKING_LEVEL,
-              max_output_tokens: 4096,
+              max_output_tokens: CONCIERGE_MAX_OUTPUT_TOKENS,
             },
             response_format: {
               type: 'text',
@@ -1589,7 +1719,6 @@ export async function handleConcierge(
           model,
           attempt: attemptIdx + 1,
         });
-        if (hasNext) continue;
         break;
       }
 
@@ -1599,7 +1728,6 @@ export async function handleConcierge(
           model,
           attempt: attemptIdx + 1,
         });
-        if (hasNext) continue;
         break;
       }
 

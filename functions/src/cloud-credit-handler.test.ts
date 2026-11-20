@@ -1,6 +1,10 @@
-import { describe, expect, it, jest } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Response } from 'express';
+
+jest.mock('./rate-limiter.js', () => require('./rate-limiter'), { virtual: true });
+
 import {
+  clearCloudCreditRateLimit,
   CREDIT_BUTTON_OPENS_AT,
   CREDIT_CLOSES_AT,
   CREDIT_OPENS_AT,
@@ -12,6 +16,7 @@ function requestAt(
   claim = false,
   url = 'https://example.com/sample',
   preview = false,
+  headers: Record<string, string> = {},
 ) {
   const secret = jest.fn(() => url);
   const response = {
@@ -41,6 +46,7 @@ function requestAt(
     {
       method: 'GET',
       query: { ...(claim ? { claim: '1' } : {}), ...(preview ? { preview: 'open' } : {}) },
+      headers,
     },
     response as unknown as Response,
     now,
@@ -50,6 +56,10 @@ function requestAt(
 }
 
 describe('cloud credit release gate', () => {
+  beforeEach(() => {
+    clearCloudCreditRateLimit();
+  });
+
   it('uses the requested Warsaw time boundaries on 21 November', () => {
     expect(CREDIT_OPENS_AT).toBe(Date.parse('2026-11-21T06:00:00Z'));
     expect(CREDIT_BUTTON_OPENS_AT).toBe(Date.parse('2026-11-21T08:00:00Z'));
@@ -63,6 +73,7 @@ describe('cloud credit release gate', () => {
       expect(response.code).toBe(claim ? 403 : 200);
       expect(response.location).toBe('');
       expect(response.headers['Cache-Control']).toContain('no-store');
+      expect(response.headers['X-Content-Type-Options']).toBe('nosniff');
     }
   });
 
@@ -105,5 +116,34 @@ describe('cloud credit release gate', () => {
       expect(response.code).toBe(503);
       expect(response.location).toBe('');
     }
+  });
+
+  it('rate limits ?claim=1 per rightmost X-Forwarded-For IP at 120 requests/min', () => {
+    for (let i = 0; i < 120; i += 1) {
+      const { response } = requestAt(CREDIT_OPENS_AT, true, 'https://example.com/sample', false, {
+        'x-forwarded-for': `10.0.0.${i}, 198.51.100.20`,
+      });
+      expect(response.code).toBe(302);
+    }
+
+    const blocked = requestAt(CREDIT_OPENS_AT, true, 'https://example.com/sample', false, {
+      'x-forwarded-for': '203.0.113.99, 198.51.100.20',
+    });
+    expect(blocked.response.code).toBe(429);
+    expect(blocked.response.body).toEqual({ status: 'rate-limited' });
+    expect(blocked.response.headers['Retry-After']).toBe('60');
+    expect(blocked.secret).not.toHaveBeenCalled();
+
+    // Non-claim status checks remain available and another IP can claim
+    expect(
+      requestAt(CREDIT_BUTTON_OPENS_AT, false, 'https://example.com/sample', false, {
+        'x-forwarded-for': '198.51.100.20',
+      }).response.code,
+    ).toBe(200);
+    expect(
+      requestAt(CREDIT_OPENS_AT, true, 'https://example.com/sample', false, {
+        'x-forwarded-for': '198.51.100.21',
+      }).response.code,
+    ).toBe(302);
   });
 });

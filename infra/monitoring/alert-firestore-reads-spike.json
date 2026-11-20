@@ -1,0 +1,30 @@
+{
+  "displayName": "DevFest26 - Firestore Reads Spike (>50000 in 5m)",
+  "combiner": "OR",
+  "enabled": true,
+  "documentation": {
+    "content": "## Firestore Read Spike (>50,000 reads in 5m)\n\nCloud Firestore document reads exceeded 50,000 in 5 minutes.\n\n### Immediate Triage\n1. Check whether public collections (`tickets`, `partners`, `previousSpeakers`, `team`) are experiencing scraping or listener fanout after a document edit.\n2. Check whether `functionsRateLimits` reads are surging alongside a Cloud Run / Gen1 request spike.\n3. Verify `sendGeneralNotification` / `scheduleNotifications` legacy functions are not scanning full collections.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Firestore document/read_count > 50000 in 5m",
+      "conditionThreshold": {
+        "filter": "metric.type=\"firestore.googleapis.com/document/read_count\" AND resource.type=\"firestore_instance\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_SUM",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 50000,
+        "duration": "0s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ]
+}

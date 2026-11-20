@@ -8,11 +8,8 @@ import {
   sessionsWrite,
   speakersWrite,
 } from './generate-sessions-speakers-schedule.js';
-import { mailchimpSubscribe } from './mailchimp-subscribe.js';
 import { registerNewsletterConsent } from './newsletter.js';
 import { sendGeneralNotification } from './notifications.js';
-import { optimizeImages } from './optimize-images.js';
-import { prerender } from './prerender.js';
 import { scheduleNotifications } from './schedule-notifications.js';
 
 // TODO: Update `tsconfig.json`
@@ -26,10 +23,7 @@ export {
   concierge,
   sendGeneralNotification,
   scheduleNotifications,
-  optimizeImages,
-  mailchimpSubscribe,
   registerNewsletterConsent,
-  prerender,
   scheduleWrite,
   sessionsWrite,
   speakersWrite,
