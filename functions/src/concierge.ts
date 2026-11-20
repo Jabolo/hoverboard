@@ -6,7 +6,7 @@ import { handleConcierge } from './concierge-handler.js';
 const geminiApiKey = defineSecret('GEMINI_API_KEY');
 
 export const concierge = onRequest(
-  { region: 'us-central1', secrets: [geminiApiKey], cors: false },
+  { region: 'us-central1', secrets: [geminiApiKey], cors: false, timeoutSeconds: 45 },
   async (req, res) => {
     await handleConcierge(req, res, {
       db: getFirestore(),

@@ -98,7 +98,11 @@ function foldDiacritics(input: string): string {
 function findMatchingTeamMembers(query: string, members: TeamMemberInfo[]): TeamMemberInfo[] {
   const foldedQuery = foldDiacritics(query).trim();
   if (!foldedQuery) return [];
-  if (/\b(organizer|organizers|team|who organizes|who runs)\b/.test(foldedQuery)) {
+  if (
+    /\b(organizer|organizers|team|who organizes|who runs|organizator\w*|zespol|ekipa|kto organizuje)\b/.test(
+      foldedQuery,
+    )
+  ) {
     return members;
   }
   return members.filter((member) => {
@@ -293,19 +297,27 @@ function inferIntent(
     return 'team-organizer';
   }
 
-  const q = query.trim().toLowerCase();
+  const q = foldDiacritics(query).trim();
   if (!q) return 'overview';
 
-  if (/credit|\$5|5\$|workshop|hands-on|handson|byod|330|claim/.test(q)) {
+  if (
+    /\b(kredyt\w*|warsztat\w*|laptop|odebrac)\b|credit|\$5|5\$|workshop|hands-on|handson|byod|330|claim/.test(
+      q,
+    )
+  ) {
     return 'credits-workshops';
   }
 
-  if (/\bsaved\b|my schedule|my agenda|bookmark|conflict|overlap/.test(q)) {
+  if (
+    /\b(saved|zapisan\w*|moj plan|moje sesje|konflikt\w*)\b|my schedule|my agenda|bookmark|conflict|overlap/.test(
+      q,
+    )
+  ) {
     return 'saved-schedule';
   }
 
   if (
-    /venue|address|koneser|metro|dworzec|parking|wifi|wi-fi|cloakroom|coat|coffee|(?<!before\s|after\s)\blunch\b|afterparty|accessibility|wheelchair|ticket|doors|directions|how to get|where is/.test(
+    /\b(venue|address|koneser|metro|dworzec|parking|wifi|wi-fi|cloakroom|coat|coffee|afterparty|accessibility|wheelchair|ticket|doors|directions|dojazd|adres|parkow\w*|zapark\w*|obiad|jedzen\w*|kawa|szatni\w*|bilet\w*|wejsci\w*|gdzie|kiedy lunch)\b|(?<!before\s|after\s)\blunch\b|how to get|where is/.test(
       q,
     )
   ) {
@@ -313,7 +325,7 @@ function inferIntent(
   }
 
   if (
-    /compare|\bvs\b|versus|auditorium|classroom|\blive\b|\bnow\b|\bnext\b|parallel|vibe zone|happening/.test(
+    /compare|\bvs\b|versus|auditorium|classroom|\b(live|now|next|teraz|aktualnie|obecnie|nastepn\w*|porown\w*|sal[ae]|scena)\b|na zywo|parallel|vibe zone|happening/.test(
       q,
     )
   ) {
@@ -776,6 +788,25 @@ function buildCompareRoomsNodes(req: LocalConciergeRequest): {
   };
 }
 
+function formatCreditStatus(status: string): string {
+  switch (status) {
+    case 'open':
+      return 'Open now';
+    case 'upcoming':
+      return 'Opens Nov 21 · 09:00';
+    case 'closed':
+      return 'Window closed';
+    case 'claimed':
+      return 'Claimed';
+    case 'preview-unavailable':
+      return 'Preview only';
+    case 'checking':
+      return 'Checking…';
+    default:
+      return 'Check on-site';
+  }
+}
+
 export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UIMessage[] {
   const surfaceId = 'concierge-main';
   const teamPool = req.teamMembers?.length ? req.teamMembers : DEFAULT_TEAM_MEMBERS;
@@ -906,6 +937,8 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
         (item): item is AgendaItem => Boolean(item),
       );
 
+      const friendlyStatus = formatCreditStatus(req.creditStatus);
+
       childNodes.push({
         id: 'credits-banner',
         component: 'CalloutBanner',
@@ -914,7 +947,7 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
           tone: 'success',
           kicker: 'Google Cloud Credits',
           title: '$5 Google Cloud credits for attendees',
-          body: `330 credits available on Nov 21 (09:00–19:00 Warsaw time), valid for 12 hours after claiming. Current status: ${req.creditStatus || 'check on-site'}.`,
+          body: `330 credits available on Nov 21 (09:00–19:00 Warsaw time), valid for 12 hours after claiming. Current status: ${friendlyStatus}.`,
         },
       });
 
@@ -927,7 +960,7 @@ export function generateLocalConciergeMessages(req: LocalConciergeRequest): A2UI
           claimWindow: '09:00–19:00 Warsaw time (Nov 21, 2026)',
           validity: '12 hours after claiming',
           poolSize: '330 credits',
-          statusSummary: `Claim state: ${req.creditStatus || 'available'} · Pool: 330 credits`,
+          statusSummary: `Claim state: ${friendlyStatus} · Pool: 330 credits`,
           steps: [
             'Bring your own laptop (BYOD) to join hands-on Classroom workshops.',
             'Claim your $5 Google Cloud credit between 09:00 and 19:00 Warsaw time on Nov 21.',

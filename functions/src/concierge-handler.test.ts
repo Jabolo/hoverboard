@@ -603,4 +603,112 @@ describe('handleConcierge', () => {
     expect(resOpen.headers['X-Concierge-Cache']).toBe('MISS');
     expect(resOpen.headers['X-Concierge-Slot']).toBe('slot:09:00-10:00');
   });
+
+  it('fails over across model chain on 503 and preserves served model on cache HIT', async () => {
+    const fetchFn = jest.fn(async (_url: string | URL | Request, init?: { body?: string }) => {
+      const body = JSON.parse(String(init?.body)) as { model: string; input: string };
+      if (body.model === 'gemini-3.5-flash-lite') {
+        return {
+          ok: false,
+          status: 503,
+          text: async () => JSON.stringify({ error: { code: 'service_unavailable' } }),
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          status: 'completed',
+          steps: [
+            {
+              type: 'model_output',
+              content: [{ type: 'text', text: JSON.stringify(VALID_PLAN) }],
+            },
+          ],
+        }),
+      };
+    }) as unknown as typeof fetch;
+
+    const sleepFn = jest.fn(async () => {});
+    const now = Date.parse('2026-11-21T12:15:00+01:00');
+    const res1 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'Kiedy jest lunch i gdzie zaparkować?' } }),
+      res1 as unknown as Response,
+      {
+        now,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+        sleepFn,
+      },
+    );
+
+    expect(res1.code).toBe(200);
+    expect(res1.headers['X-Concierge-Cache']).toBe('MISS');
+    expect(res1.headers['X-Concierge-Model']).toBe('gemini-3.1-flash-lite');
+    expect(sleepFn).toHaveBeenCalledTimes(1);
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+
+    const calls = (fetchFn as unknown as jest.Mock).mock.calls;
+    const secondBody = JSON.parse(String((calls[1]![1] as { body?: string }).body)) as {
+      model: string;
+      input: string;
+    };
+    expect(secondBody.model).toBe('gemini-3.1-flash-lite');
+    const parsedInput = JSON.parse(secondBody.input) as {
+      currentWarsawTime: string;
+      scheduleSlot: string;
+    };
+    expect(parsedInput.currentWarsawTime).toContain('12:15 Europe/Warsaw');
+    expect(parsedInput.scheduleSlot).toBe('slot:12:00-12:45');
+
+    const body1 = res1.body as {
+      model: string;
+      messages: Array<Record<string, unknown>>;
+    };
+    expect(body1.model).toBe('gemini-3.1-flash-lite');
+    expect(body1.messages[0]).toMatchObject({
+      type: 'createSurface',
+      source: 'gemini-3.1-flash-lite',
+    });
+
+    // Repeated call hits cache and preserves failover model metadata
+    const res2 = createMockResponse();
+    await handleConcierge(
+      makeRequest({ body: { query: 'Kiedy jest lunch i gdzie zaparkować?' } }),
+      res2 as unknown as Response,
+      {
+        now: now + 2000,
+        getApiKey: () => 'secret-gemini-key',
+        fetchFn,
+        sleepFn,
+      },
+    );
+    expect(res2.code).toBe(200);
+    expect(res2.headers['X-Concierge-Cache']).toBe('HIT');
+    expect(res2.headers['X-Concierge-Model']).toBe('gemini-3.1-flash-lite');
+    expect(res2.body).toMatchObject({ cached: true, model: 'gemini-3.1-flash-lite' });
+    expect(fetchFn).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns 502 when all models in the failover chain return 503', async () => {
+    const fetchFn = jest.fn(async () => ({
+      ok: false,
+      status: 503,
+      text: async () => '{"error":{"code":"service_unavailable"}}',
+    })) as unknown as typeof fetch;
+    const sleepFn = jest.fn(async () => {});
+
+    const res = createMockResponse();
+    await handleConcierge(makeRequest(), res as unknown as Response, {
+      getApiKey: () => 'secret-gemini-key',
+      fetchFn,
+      sleepFn,
+    });
+
+    expect(res.code).toBe(502);
+    expect(res.body).toEqual({ status: 'upstream-error', fallback: 'local-a2ui' });
+    expect(fetchFn).toHaveBeenCalledTimes(3);
+    expect(sleepFn).toHaveBeenCalledTimes(2);
+  });
 });

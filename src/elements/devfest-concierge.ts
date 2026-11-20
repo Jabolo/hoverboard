@@ -109,6 +109,39 @@ function asRecordArray(value: unknown): Array<Record<string, unknown>> {
   );
 }
 
+function formatCreditStatusLabel(status: string): string {
+  switch (status) {
+    case 'open':
+      return 'Open now';
+    case 'upcoming':
+      return 'Opens Nov 21 · 09:00';
+    case 'closed':
+      return 'Window closed';
+    case 'claimed':
+      return 'Claimed';
+    case 'preview-unavailable':
+      return 'Preview only';
+    case 'checking':
+      return 'Checking…';
+    default:
+      return 'Check on-site';
+  }
+}
+
+function formatAiModelLabel(source?: string): string {
+  switch (source) {
+    case 'gemini-4-hydrogen':
+      return 'Gemini 4 Hydrogen';
+    case 'gemini-3.6-flash':
+      return 'Gemini 3.6 Flash';
+    case 'gemini-3.1-flash-lite':
+      return 'Gemini 3.1 Flash-Lite';
+    case 'gemini-3.5-flash-lite':
+    default:
+      return 'Gemini 3.5 Flash-Lite';
+  }
+}
+
 function buildClientCacheKey(
   query: string,
   intent: string,
@@ -199,6 +232,7 @@ export class DevfestConcierge extends ThemedElement {
   private liveRefreshTimer: number | undefined;
   private spotlightRaf: number | undefined;
   private pendingSpotPoint: { target: HTMLElement; x: number; y: number } | null = null;
+  private returnFocusEl: HTMLElement | null = null;
   private surfaceTransitionTick = 0;
   private requestCounter = 0;
 
@@ -290,6 +324,16 @@ export class DevfestConcierge extends ThemedElement {
         @media (pointer: coarse) {
           :host {
             --_target: 44px;
+          }
+
+          input {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 639px) {
+          input {
+            font-size: 16px;
           }
         }
 
@@ -564,7 +608,7 @@ export class DevfestConcierge extends ThemedElement {
           -webkit-overflow-scrolling: touch;
         }
 
-        @container (max-width: 28rem) {
+        @container (max-width: 30.25rem) {
           .chip-strip {
             padding-inline-end: 22px;
             -webkit-mask-image: linear-gradient(
@@ -609,7 +653,7 @@ export class DevfestConcierge extends ThemedElement {
           color: var(--_green);
         }
 
-        @container (min-width: 28.01rem) {
+        @container (min-width: 30.26rem) {
           .chip-strip {
             gap: 6px;
           }
@@ -1467,7 +1511,34 @@ export class DevfestConcierge extends ThemedElement {
     });
   }
 
+  private captureReturnFocus(): void {
+    if (this.dialogOpen) return;
+    let active: Element | null = document.activeElement;
+    while (active && active.shadowRoot?.activeElement) {
+      active = active.shadowRoot.activeElement;
+    }
+    if (
+      active instanceof HTMLElement &&
+      active !== document.body &&
+      active !== document.documentElement &&
+      !this.dialogEl?.contains(active)
+    ) {
+      this.returnFocusEl = active;
+    }
+  }
+
+  private restoreReturnFocus(): void {
+    const target = this.returnFocusEl;
+    this.returnFocusEl = null;
+    if (!target?.isConnected) return;
+    const active = document.activeElement;
+    if (!active || active === document.body || active === document.documentElement) {
+      target.focus({ preventScroll: true });
+    }
+  }
+
   private openDialog(): void {
+    this.captureReturnFocus();
     this.dialogOpen = true;
     const dialog = this.dialogEl;
     if (!dialog) return;
@@ -1488,11 +1559,13 @@ export class DevfestConcierge extends ThemedElement {
     } else {
       dialog.removeAttribute('open');
     }
+    this.restoreReturnFocus();
   };
 
   private readonly onDialogClose = (): void => {
     this.dialogOpen = false;
     this.clearLiveRefreshTimer();
+    this.restoreReturnFocus();
   };
 
   private readonly onDialogClick = (event: MouseEvent): void => {
@@ -1524,6 +1597,14 @@ export class DevfestConcierge extends ThemedElement {
         if (sid && isSessionFavorite(sid)) {
           ids.add(sid);
         }
+        if (node.component === 'ComparisonGrid') {
+          for (const col of asRecordArray(node.props['columns'])) {
+            const colSid = asString(col['sessionId']);
+            if (colSid && isSessionFavorite(colSid)) {
+              ids.add(colSid);
+            }
+          }
+        }
       }
     }
     return [...ids];
@@ -1536,18 +1617,36 @@ export class DevfestConcierge extends ThemedElement {
       return;
     }
 
+    if (this.activeIntent === 'saved-schedule' && this.originLabel === 'local') {
+      this.renderLocalSurface(this.activeQuery, 'saved-schedule', false);
+      return;
+    }
+
     const savedIds = this.getSavedSessionIds();
     const savedSessions: Record<string, boolean> = {};
+    const computedConflicts = computeSavedConflicts(this.agendaItems, savedIds);
+    const conflicts: Record<string, string> = {};
+
     for (const item of this.agendaItems) {
       savedSessions[item.id] = isSessionFavorite(item.id);
+      conflicts[item.id] = computedConflicts[item.id] ?? '';
     }
     for (const node of surface.componentsById.values()) {
       const sid = asString(node.props['sessionId']);
       if (sid) {
         savedSessions[sid] = isSessionFavorite(sid);
+        conflicts[sid] = computedConflicts[sid] ?? '';
+      }
+      if (node.component === 'ComparisonGrid') {
+        for (const col of asRecordArray(node.props['columns'])) {
+          const colSid = asString(col['sessionId']);
+          if (colSid) {
+            savedSessions[colSid] = isSessionFavorite(colSid);
+            conflicts[colSid] = computedConflicts[colSid] ?? '';
+          }
+        }
       }
     }
-    const conflicts = computeSavedConflicts(this.agendaItems, savedIds);
 
     this.processor.process({
       type: 'updateDataModel',
@@ -1605,7 +1704,7 @@ export class DevfestConcierge extends ThemedElement {
     this.renderLocalSurface('', 'overview');
   }
 
-  private renderLocalSurface(query: string, intent?: string): void {
+  private renderLocalSurface(query: string, intent?: string, animate = true): void {
     const req: LocalConciergeRequest = {
       query,
       ...(intent ? { intent } : {}),
@@ -1619,7 +1718,9 @@ export class DevfestConcierge extends ThemedElement {
     const messages = generateLocalConciergeMessages(req);
     this.processor.processBatch(messages);
     this.originLabel = 'local';
-    this.surfaceTransitionTick++;
+    if (animate) {
+      this.surfaceTransitionTick++;
+    }
     this.renderTick++;
     this.scheduleLiveRefreshIfNeeded();
   }
@@ -1636,6 +1737,11 @@ export class DevfestConcierge extends ThemedElement {
     this.statusNotice = '';
     this.clearLiveRefreshTimer();
     this.openDialog();
+
+    if (!trimmed && !intent) {
+      this.renderLocalSurface('', 'overview');
+      return;
+    }
 
     // Serve preset chips and quick intents instantaneously at 0 API cost unless AI personalization is requested
     if (!forceAi && intent && INSTANT_LOCAL_INTENTS.has(intent)) {
@@ -1701,10 +1807,13 @@ export class DevfestConcierge extends ThemedElement {
 
       if (response.status === 429) {
         this.statusNotice = 'Rate limit reached — running on Grounded Local A2UI Engine';
+      } else {
+        this.statusNotice = 'Live AI temporarily busy — showing grounded local A2UI answer';
       }
       this.renderLocalSurface(trimmed, intent);
     } catch {
       if (reqId !== this.requestCounter || !this.isConnected) return;
+      this.statusNotice = 'Live AI temporarily busy — showing grounded local A2UI answer';
       this.renderLocalSurface(trimmed, intent);
     } finally {
       if (reqId === this.requestCounter) {
@@ -1715,6 +1824,13 @@ export class DevfestConcierge extends ThemedElement {
 
   private readonly onSubmit = (event: Event): void => {
     event.preventDefault();
+    if (!this.query.trim()) {
+      if (!this.processor.getActiveSurface()) {
+        this.renderLocalSurface('', 'overview');
+      }
+      this.openAndFocus();
+      return;
+    }
     void this.runConciergeRequest(this.query, undefined, true);
   };
 
@@ -1944,6 +2060,13 @@ export class DevfestConcierge extends ThemedElement {
                 const colHref = asString(col['href']);
                 const colSessionId = asString(col['sessionId']);
                 const colSaved = colSessionId ? isSessionFavorite(colSessionId) : false;
+                const colConflict = colSessionId
+                  ? this.processor.resolveBinding<string>(
+                      `conflicts.${colSessionId}`,
+                      '',
+                      surface.surfaceId,
+                    )
+                  : '';
 
                 return html`
                   <div class="compare-col">
@@ -1976,6 +2099,13 @@ export class DevfestConcierge extends ThemedElement {
                           `
                         : nothing
                     }
+                    ${
+                      colConflict
+                        ? html`<p class="conflict-warning" role="status">
+                            Schedule conflict: ${colConflict}
+                          </p>`
+                        : nothing
+                    }
                   </div>
                 `;
               })}
@@ -1998,7 +2128,7 @@ export class DevfestConcierge extends ThemedElement {
             <div class="credit-facts">
               <div class="fact-box">
                 <span class="fact-label">Live Status</span>
-                <span class="fact-value">${this.creditStatus}</span>
+                <span class="fact-value">${formatCreditStatusLabel(this.creditStatus)}</span>
               </div>
               <div class="fact-box">
                 <span class="fact-label">Claim Window</span>
@@ -2168,8 +2298,7 @@ export class DevfestConcierge extends ThemedElement {
 
   override render() {
     const surface = this.processor.getActiveSurface();
-    const aiModelLabel =
-      surface?.source === 'gemini-4-hydrogen' ? 'Gemini 4 Hydrogen' : 'Gemini 3.5 Flash-Lite';
+    const aiModelLabel = formatAiModelLabel(surface?.source);
     const isLiveRoomsClock = this.originLabel === 'local' && this.activeIntent === 'compare-rooms';
     const isLiveOrCached =
       this.originLabel === 'live' || this.originLabel === 'cached' || isLiveRoomsClock;

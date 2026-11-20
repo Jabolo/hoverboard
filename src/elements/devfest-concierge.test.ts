@@ -459,4 +459,112 @@ describe('devfest-concierge', () => {
     expect(root.querySelector('.loading-surface')).toBeNull();
     expect(root.querySelector('.surface-title')?.textContent).toBe('Resolved Surface');
   });
+
+  it('opens local overview on empty submit with zero /api/concierge calls', async () => {
+    const fetchMock = mockBootstrapFetch();
+    globalThis.fetch = fetchMock;
+
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    root
+      .querySelector<HTMLFormElement>('.launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+
+    expect(root.querySelector<HTMLDialogElement>('#concierge-dialog')?.hasAttribute('open')).toBe(
+      true,
+    );
+    expect(root.querySelector('.surface-title')?.textContent).toBe('DevFest Warsaw 2026 Concierge');
+    const conciergeCalls = fetchMock.mock.calls.filter((call) =>
+      String(call[0]).includes('/api/concierge'),
+    );
+    expect(conciergeCalls).toHaveLength(0);
+  });
+
+  it('clears conflict warnings when unsaving an overlapping session and updates Saved view', async () => {
+    globalThis.fetch = mockBootstrapFetch();
+    setSessionFavorite('CFP-021', true);
+    setSessionFavorite('INVITED-004', true);
+
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    // Open overview (contains both CFP-021 and INVITED-004 opening block cards)
+    root
+      .querySelector<HTMLFormElement>('.launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+
+    expect(root.querySelectorAll('.conflict-warning')).toHaveLength(2);
+
+    // Unsave INVITED-004 while on overview -> remaining CFP-021 conflict must clear
+    const invitedCard = root.querySelector<HTMLElement>(
+      'article.session-card[data-session-id="INVITED-004"]',
+    )!;
+    invitedCard.querySelector<HTMLButtonElement>('.save-btn')!.click();
+    await flushRender(element);
+    expect(root.querySelectorAll('.conflict-warning')).toHaveLength(0);
+
+    // Re-add conflict and switch to Saved view -> unsave one directly inside Saved view
+    invitedCard.querySelector<HTMLButtonElement>('.save-btn')!.click();
+    await flushRender(element);
+    root
+      .querySelector<HTMLButtonElement>('.launcher-shell button[data-intent="saved-schedule"]')!
+      .click();
+    await flushRender(element);
+
+    expect(root.querySelector('.callout-title')?.textContent).toContain(
+      '2 saved sessions overlap in time',
+    );
+    root
+      .querySelector<HTMLElement>('article.session-card[data-session-id="INVITED-004"] .save-btn')!
+      .click();
+    await flushRender(element);
+
+    expect(root.querySelector('.callout-title')?.textContent).toBe('1 saved session ready');
+    expect(root.querySelectorAll('.session-card')).toHaveLength(1);
+    expect(root.querySelectorAll('.conflict-warning')).toHaveLength(0);
+  });
+
+  it('shows human-readable credit status and friendly busy fallback notice on 502', async () => {
+    globalThis.fetch = mockBootstrapFetch(
+      async () =>
+        ({
+          ok: false,
+          status: 502,
+          json: async () => ({ status: 'upstream-error', fallback: 'local-a2ui' }),
+        }) as Response,
+    );
+
+    const element = new DevfestConcierge();
+    document.body.appendChild(element);
+    await flushRender(element);
+
+    const root = element.shadowRoot!;
+    root
+      .querySelector<HTMLButtonElement>('.launcher-shell button[data-intent="credits-workshops"]')!
+      .click();
+    await flushRender(element);
+    expect(root.querySelector('.credit-card .fact-value')?.textContent?.trim()).toBe(
+      'Opens Nov 21 · 09:00',
+    );
+
+    const input = root.querySelector<HTMLInputElement>('#concierge-input')!;
+    input.value = 'Kiedy jest lunch?';
+    input.dispatchEvent(new Event('input'));
+    root
+      .querySelector<HTMLFormElement>('.launcher-form')!
+      .dispatchEvent(new Event('submit', { cancelable: true }));
+    await flushRender(element);
+
+    expect(root.querySelector('.status-notice')?.textContent).toContain(
+      'Live AI temporarily busy — showing grounded local A2UI answer',
+    );
+    expect(root.querySelector('.logistics-card')).not.toBeNull();
+  });
 });

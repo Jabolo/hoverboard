@@ -417,4 +417,43 @@ describe('generateLocalConciergeMessages', () => {
     const liveBanner = collectNodesByComponent(liveProcessor, 'CalloutBanner')[0]!;
     expect(String(liveBanner.props['kicker'])).toContain('Live at 10:20 Warsaw time');
   });
+
+  it('routes Polish queries to grounded LogisticsCard, ComparisonGrid, and CreditGuideCard', () => {
+    const baseReq = {
+      agendaItems,
+      programme,
+      savedSessionIds: [],
+      creditStatus: 'upcoming',
+      now: baseNow,
+    };
+
+    const logisticsProc = new A2UIMessageProcessor();
+    logisticsProc.processBatch(
+      generateLocalConciergeMessages({
+        ...baseReq,
+        query: 'Kiedy jest lunch i gdzie zaparkować?',
+      }),
+    );
+    expect(collectNodesByComponent(logisticsProc, 'LogisticsCard')).toHaveLength(1);
+
+    const compareProc = new A2UIMessageProcessor();
+    compareProc.processBatch(
+      generateLocalConciergeMessages({
+        ...baseReq,
+        query: 'Co się teraz dzieje w salach?',
+      }),
+    );
+    expect(collectNodesByComponent(compareProc, 'ComparisonGrid')).toHaveLength(1);
+
+    const creditsProc = new A2UIMessageProcessor();
+    creditsProc.processBatch(
+      generateLocalConciergeMessages({
+        ...baseReq,
+        query: 'Jak odebrać kredyty i jakie są warsztaty?',
+      }),
+    );
+    const creditCards = collectNodesByComponent(creditsProc, 'CreditGuideCard');
+    expect(creditCards).toHaveLength(1);
+    expect(String(creditCards[0]!.props['statusSummary'])).toContain('Opens Nov 21 · 09:00');
+  });
 });

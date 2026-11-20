@@ -17,7 +17,12 @@ export const ALLOWED_A2UI_COMPONENTS: ReadonlySet<A2UIComponentType> = new Set<A
   'ActionChipRow',
 ]);
 
-export type A2UISurfaceSource = 'gemini-3.5-flash-lite' | 'gemini-4-hydrogen' | 'local-engine';
+export type A2UISurfaceSource =
+  | 'gemini-3.5-flash-lite'
+  | 'gemini-3.1-flash-lite'
+  | 'gemini-3.6-flash'
+  | 'gemini-4-hydrogen'
+  | 'local-engine';
 
 export interface A2UIComponentNode {
   id: string;

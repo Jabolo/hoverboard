@@ -296,6 +296,7 @@ STRICT GROUNDING RULES:
   18:55-19:15 Closing, results & awards (Auditorium); 19:15-21:30 Afterparty & networking.
 - $5 Google Cloud Credits: 330 credits pool, claimable 09:00-19:00 Warsaw time on 21 Nov 2026,
   valid for 12 hours after claiming. Bring your own laptop for Classroom workshops.
+- Reply in the same language as the user's query (e.g., Polish or English) while keeping canonical session titles and IDs exact.
 - DevFest Warsaw 2026 Organizing Team (GDG Warszawa, /team/):
   - Michał Jabłoński (GDG Warszawa organizer | https://michaljablonski.dev/ | https://www.linkedin.com/in/m-jab/ | https://gdg.community.dev/u/mpwqe3/)
   - Vatsal Patel (https://www.linkedin.com/in/vatsal-patel-py/)
@@ -423,13 +424,35 @@ export type ConciergeDeps = {
   getApiKey: () => string;
   fetchFn?: typeof fetch;
   bypassCache?: boolean;
+  sleepFn?: (ms: number) => Promise<void>;
 };
 
 const MAX_CACHE_ENTRIES = 200;
 const CACHE_TTL_MS = 15 * 60 * 1000;
 const LIVE_TIME_CACHE_TTL_MS = 5 * 60 * 1000;
-const CONCIERGE_MODEL = 'gemini-3.5-flash-lite';
+const CONCIERGE_MODEL_CHAIN = [
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+  'gemini-3.6-flash',
+] as const;
+type ConciergeModelId = (typeof CONCIERGE_MODEL_CHAIN)[number];
+const CONCIERGE_MODEL: ConciergeModelId = CONCIERGE_MODEL_CHAIN[0];
 const CONCIERGE_THINKING_LEVEL = 'minimal';
+const RETRYABLE_UPSTREAM_STATUSES = new Set([429, 500, 502, 503, 504]);
+const PER_ATTEMPT_TIMEOUT_MS = 10_000;
+const FAILOVER_BACKOFF_MS = 250;
+
+function formatModelBadge(model: ConciergeModelId): string {
+  switch (model) {
+    case 'gemini-3.1-flash-lite':
+      return 'A2UI · Gemini 3.1 Flash-Lite';
+    case 'gemini-3.6-flash':
+      return 'A2UI · Gemini 3.6 Flash';
+    case 'gemini-3.5-flash-lite':
+    default:
+      return 'A2UI · Gemini 3.5 Flash-Lite';
+  }
+}
 
 const EVENT_TRANSITION_TIMES = [
   '09:00',
@@ -520,6 +543,7 @@ export function isTimeSensitiveQuery(query: string, intent?: string): boolean {
 
 type CacheEntry = {
   messages: ReturnType<typeof buildA2UIMessages>;
+  model: ConciergeModelId;
   expiresAt: number;
 };
 
@@ -560,7 +584,7 @@ function computeServerCacheExpiresAt(slot: ServerScheduleSlot | null, now: numbe
   return now + CACHE_TTL_MS;
 }
 
-function getCachedMessages(key: string, now: number): ReturnType<typeof buildA2UIMessages> | null {
+function getCachedEntry(key: string, now: number): CacheEntry | null {
   const entry = responseCache.get(key);
   if (!entry) return null;
   if (entry.expiresAt <= now) {
@@ -570,12 +594,13 @@ function getCachedMessages(key: string, now: number): ReturnType<typeof buildA2U
   // Refresh LRU order
   responseCache.delete(key);
   responseCache.set(key, entry);
-  return entry.messages;
+  return entry;
 }
 
-function setCachedMessages(
+function setCachedEntry(
   key: string,
   messages: ReturnType<typeof buildA2UIMessages>,
+  model: ConciergeModelId,
   expiresAt: number,
 ): void {
   if (responseCache.size >= MAX_CACHE_ENTRIES) {
@@ -584,7 +609,7 @@ function setCachedMessages(
       responseCache.delete(oldestKey);
     }
   }
-  responseCache.set(key, { messages, expiresAt });
+  responseCache.set(key, { messages, model, expiresAt });
 }
 
 type ConciergeRequest = Pick<Request, 'method' | 'body' | 'headers' | 'ip' | 'connection'>;
@@ -766,6 +791,7 @@ function buildA2UIMessages(
   intent: string,
   savedSessionIds: string[],
   now: number,
+  model: ConciergeModelId = CONCIERGE_MODEL,
 ) {
   const surfaceId = `concierge-${now}`;
   const validSavedIds = savedSessionIds.filter((id) => Boolean(CANONICAL_SESSIONS[id]));
@@ -991,7 +1017,7 @@ function buildA2UIMessages(
       badge:
         typeof plan.badge === 'string' && plan.badge.trim()
           ? plan.badge.trim()
-          : 'A2UI · Gemini 3.5 Flash-Lite',
+          : formatModelBadge(model),
     },
   };
 
@@ -1000,7 +1026,7 @@ function buildA2UIMessages(
       type: 'createSurface',
       surfaceId,
       title: rootNode.props.title,
-      source: CONCIERGE_MODEL,
+      source: model,
       timestamp: now,
     },
     {
@@ -1103,15 +1129,16 @@ export async function handleConcierge(
 
   const cacheKey = buildCacheKey(parsed.query, parsed.intent, parsed.savedSessionIds, now);
   if (!deps.bypassCache) {
-    const cachedMessages = getCachedMessages(cacheKey, now);
-    if (cachedMessages) {
+    const cachedEntry = getCachedEntry(cacheKey, now);
+    if (cachedEntry) {
       response.set('X-Concierge-Cache', 'HIT');
+      response.set('X-Concierge-Model', cachedEntry.model);
       response.status(200).json({
         status: 'ok',
-        model: CONCIERGE_MODEL,
+        model: cachedEntry.model,
         thinkingLevel: CONCIERGE_THINKING_LEVEL,
         cached: true,
-        messages: cachedMessages,
+        messages: cachedEntry.messages,
       });
       return;
     }
@@ -1124,105 +1151,145 @@ export async function handleConcierge(
   }
 
   const fetchImpl = deps.fetchFn ?? fetch;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 25000);
+  const sleepImpl =
+    deps.sleepFn ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
 
-  try {
-    const userInput = JSON.stringify({
-      query: parsed.query,
-      intent: parsed.intent || undefined,
-      savedSessionIds: parsed.savedSessionIds,
-      currentTimestampIso: nowDate.toISOString(),
-    });
+  const warsawTime = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Warsaw',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(nowDate);
+  const currentSlot = slot ?? getServerScheduleSlot(now);
+  const userInput = JSON.stringify({
+    query: parsed.query,
+    intent: parsed.intent || undefined,
+    savedSessionIds: parsed.savedSessionIds,
+    currentTimestampIso: nowDate.toISOString(),
+    currentWarsawTime: `${warsawTime} Europe/Warsaw`,
+    scheduleSlot: currentSlot.slotKey,
+  });
 
-    const upstreamRes = await fetchImpl(
-      'https://generativelanguage.googleapis.com/v1/interactions',
-      {
-        method: 'POST',
-        headers: {
-          'x-goog-api-key': apiKey,
-          'Api-Revision': '2026-05-20',
-          'Content-Type': 'application/json',
+  for (let attemptIdx = 0; attemptIdx < CONCIERGE_MODEL_CHAIN.length; attemptIdx += 1) {
+    const model = CONCIERGE_MODEL_CHAIN[attemptIdx]!;
+    const hasNext = attemptIdx < CONCIERGE_MODEL_CHAIN.length - 1;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), PER_ATTEMPT_TIMEOUT_MS);
+
+    try {
+      const upstreamRes = await fetchImpl(
+        'https://generativelanguage.googleapis.com/v1/interactions',
+        {
+          method: 'POST',
+          headers: {
+            'x-goog-api-key': apiKey,
+            'Api-Revision': '2026-05-20',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model,
+            system_instruction: CONCIERGE_SYSTEM_INSTRUCTION,
+            input: userInput,
+            generation_config: {
+              thinking_level: CONCIERGE_THINKING_LEVEL,
+              max_output_tokens: 4096,
+            },
+            response_format: {
+              type: 'text',
+              mime_type: 'application/json',
+              schema: CONCIERGE_RESPONSE_SCHEMA,
+            },
+            store: false,
+          }),
+          signal: controller.signal,
         },
-        body: JSON.stringify({
-          model: CONCIERGE_MODEL,
-          system_instruction: CONCIERGE_SYSTEM_INSTRUCTION,
-          input: userInput,
-          generation_config: {
-            thinking_level: CONCIERGE_THINKING_LEVEL,
-            max_output_tokens: 4096,
-          },
-          response_format: {
-            type: 'text',
-            mime_type: 'application/json',
-            schema: CONCIERGE_RESPONSE_SCHEMA,
-          },
-          store: false,
-        }),
-        signal: controller.signal,
-      },
-    );
+      );
 
-    if (!upstreamRes.ok) {
-      const bodySnippet =
-        typeof upstreamRes.text === 'function'
-          ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
-          : '';
-      console.error('concierge upstream non-OK', {
-        status: upstreamRes.status,
-        bodySnippet,
+      if (!upstreamRes.ok) {
+        const bodySnippet =
+          typeof upstreamRes.text === 'function'
+            ? (await upstreamRes.text().catch(() => '')).slice(0, 300)
+            : '';
+        console.error('concierge upstream non-OK', {
+          model,
+          attempt: attemptIdx + 1,
+          status: upstreamRes.status,
+          bodySnippet,
+        });
+        if (RETRYABLE_UPSTREAM_STATUSES.has(upstreamRes.status) && hasNext) {
+          await sleepImpl(FAILOVER_BACKOFF_MS);
+          continue;
+        }
+        break;
+      }
+
+      const upstreamJson = (await upstreamRes.json()) as unknown;
+      const rawText = extractModelJsonText(upstreamJson);
+      if (!rawText) {
+        console.error('concierge empty model text', {
+          model,
+          attempt: attemptIdx + 1,
+          keys:
+            upstreamJson && typeof upstreamJson === 'object'
+              ? Object.keys(upstreamJson as Record<string, unknown>)
+              : [],
+        });
+        if (hasNext) continue;
+        break;
+      }
+
+      const plan = parseModelPlan(rawText);
+      if (!plan) {
+        console.error('concierge invalid model plan', {
+          model,
+          attempt: attemptIdx + 1,
+          rawSnippet: rawText.slice(0, 200),
+        });
+        if (hasNext) continue;
+        break;
+      }
+
+      const messages = buildA2UIMessages(
+        plan,
+        parsed.query,
+        parsed.intent,
+        parsed.savedSessionIds,
+        now,
+        model,
+      );
+
+      if (!deps.bypassCache) {
+        const expiresAt = computeServerCacheExpiresAt(slot, now);
+        setCachedEntry(cacheKey, messages, model, expiresAt);
+      }
+      response.set('X-Concierge-Cache', 'MISS');
+      response.set('X-Concierge-Model', model);
+      response.status(200).json({
+        status: 'ok',
+        model,
+        thinkingLevel: CONCIERGE_THINKING_LEVEL,
+        cached: false,
+        messages,
       });
-      response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
       return;
-    }
-
-    const upstreamJson = (await upstreamRes.json()) as unknown;
-    const rawText = extractModelJsonText(upstreamJson);
-    if (!rawText) {
-      console.error('concierge empty model text', {
-        keys:
-          upstreamJson && typeof upstreamJson === 'object'
-            ? Object.keys(upstreamJson as Record<string, unknown>)
-            : [],
+    } catch (err) {
+      console.error('concierge upstream exception', {
+        model,
+        attempt: attemptIdx + 1,
+        name: err instanceof Error ? err.name : 'unknown',
+        message: err instanceof Error ? err.message : String(err),
       });
-      response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
-      return;
+      if (hasNext) {
+        await sleepImpl(FAILOVER_BACKOFF_MS);
+        continue;
+      }
+    } finally {
+      clearTimeout(timeoutId);
     }
-
-    const plan = parseModelPlan(rawText);
-    if (!plan) {
-      console.error('concierge invalid model plan', { rawSnippet: rawText.slice(0, 200) });
-      response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
-      return;
-    }
-
-    const messages = buildA2UIMessages(
-      plan,
-      parsed.query,
-      parsed.intent,
-      parsed.savedSessionIds,
-      now,
-    );
-
-    if (!deps.bypassCache) {
-      const expiresAt = computeServerCacheExpiresAt(slot, now);
-      setCachedMessages(cacheKey, messages, expiresAt);
-    }
-    response.set('X-Concierge-Cache', 'MISS');
-    response.status(200).json({
-      status: 'ok',
-      model: CONCIERGE_MODEL,
-      thinkingLevel: CONCIERGE_THINKING_LEVEL,
-      cached: false,
-      messages,
-    });
-  } catch (err) {
-    console.error('concierge upstream exception', {
-      name: err instanceof Error ? err.name : 'unknown',
-      message: err instanceof Error ? err.message : String(err),
-    });
-    response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
-  } finally {
-    clearTimeout(timeoutId);
   }
+
+  response.status(502).json({ status: 'upstream-error', fallback: 'local-a2ui' });
 }
