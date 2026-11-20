@@ -165,7 +165,7 @@ export class HuntPage extends ThemedElement {
   private readonly deleteCloud = () => {
     if (
       !window.confirm(
-        'Stop syncing on your other devices and tabs first. Delete your synced Card Hunt collection? Cards saved in this browser will stay here.',
+        'Delete your synced Card Hunt collection? Other devices will stop syncing when they reconnect. Cards saved in each browser will stay there.',
       )
     )
       return;

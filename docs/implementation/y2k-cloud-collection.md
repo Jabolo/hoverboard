@@ -28,13 +28,15 @@ a demo project.
   cards to that account. Do not use a shared browser for a private collection.
   Stopping sync hides cloud-only cards on that device, but keeps both the cloud
   copy and browser-local cards. Sign in again to restore the cloud copy.
-- Delete synced cards removes the Firestore collection document, not local
-  browser cards and not the shared Firebase Auth account. Stop sync in other
-  tabs and devices before deleting: active devices can recreate the document.
-  The client waits for its pending writes before deletion, and reports failure
-  instead of success when offline or unable to confirm. Already in-flight writes
-  can finish after a stop. Local site-data clearing and Auth account retention
-  are separate matters.
+- Delete synced cards atomically removes the Firestore collection document and
+  rotates a session marker. Rules reject stale writes from other devices even
+  after a later opt-in re-enables sync. Devices stop sync when they reconnect.
+  This was tested in Firebase emulators, including a stale offline write; real
+  Firebase and physical devices remain unverified. Browser cards and the shared
+  Firebase Auth account are not deleted. A minimal marker containing the UID,
+  a random epoch and disabled state remains in Firestore to reject stale writes;
+  its retention and eventual deletion need an approved policy. The client reports
+  uncertainty if it cannot confirm deletion.
 - The cloud document contains the Firebase UID as its document ID, card IDs,
   titles, group, reveal text and game flag where applicable, plus client-clock
   found/reveal timestamps. Firebase Authentication also processes Google
@@ -172,5 +174,5 @@ appropriate remediation. No production credential was changed.
 
 The [privacy and operations review draft](y2k-privacy-review.md) records the
 unresolved controller, legal basis, retention, shared Auth-account lifecycle,
-cross-device deletion, and abuse controls. These are release blockers, not
+session-marker retention, and abuse controls. These are release blockers, not
 decisions made by this branch.

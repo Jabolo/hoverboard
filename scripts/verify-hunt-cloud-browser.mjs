@@ -245,6 +245,13 @@ try {
   await third.page.getByText('Your cards are synced', { exact: false }).waitFor({ timeout: 30000 });
   console.log('PASS account isolation and rejected-write recovery');
 
+  const empty = await device();
+  await empty.page.goto(`${base}/hunt/`);
+  await login(empty.page, 'empty@example.test', true);
+  empty.page.once('dialog', (dialog) => dialog.accept());
+  await empty.page.getByRole('button', { name: 'Delete synced cards' }).click();
+  await empty.page.getByText('Synced cards deleted.', { exact: false }).waitFor({ timeout: 30000 });
+
   await first.page.getByRole('button', { name: 'Stop syncing' }).click();
   await first.page.getByText('Saved in this browser', { exact: false }).waitFor();
   await first.page.getByRole('button', { name: /Welcome Disc Scratch again/ }).waitFor();
@@ -252,6 +259,7 @@ try {
     await first.page.getByRole('button', { name: /End Credits Scratch again/ }).count(),
     0,
   );
+  await login(first.page, 'alice@example.test');
 
   // Offline deletion must report failure and leave local cards untouched.
   await second.context.setOffline(true);
@@ -262,12 +270,30 @@ try {
   await second.context.setOffline(false);
   await login(second.page, 'alice@example.test');
 
+  // An offline stale device queues a write before another device deletes.
+  await first.context.setOffline(true);
+  await first.page.evaluate(() => {
+    const key = 'devfest-warsaw-2026-hunt:v1:found:test777';
+    const value = JSON.stringify({
+      state: 'found',
+      card: { id: 'test777', title: 'Stale fixture', group: 'web' },
+      foundAt: 1,
+    });
+    localStorage.setItem(key, value);
+    window.dispatchEvent(new StorageEvent('storage', { key, newValue: value }));
+  });
   second.page.once('dialog', (dialog) => dialog.accept());
   await second.page.getByRole('button', { name: 'Delete synced cards' }).click();
   await second.page
     .getByText('Synced cards deleted.', { exact: false })
     .waitFor({ timeout: 30000 });
   await second.page.getByRole('button', { name: /End Credits Scratch again/ }).waitFor();
+  await first.context.setOffline(false);
+  await first.page
+    .getByText('Sync stopped because this collection was deleted or restarted on another device.', {
+      exact: false,
+    })
+    .waitFor({ timeout: 30000 });
 
   const fourth = await device();
   await fourth.page.goto(`${base}/hunt/`);
@@ -279,6 +305,12 @@ try {
   assert.equal(
     await fourth.page.getByRole('button', { name: /End Credits Scratch again/ }).count(),
     0,
+  );
+  assert.equal(
+    await fourth.page
+      .locator('hunt-page')
+      .evaluate((page) => page.progress.some((entry) => entry.card.id === 'test777')),
+    false,
   );
   assert.deepEqual(errors, []);
   console.log(

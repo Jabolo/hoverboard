@@ -10,7 +10,10 @@ newsletter and analytics, but not this cloud collection.
 
 - **Controller:** full legal identity and contact address for this processing.
   The organizers' operational contact `hello@gdgwarsaw.pl` is a contact route,
-  not by itself a legal controller. Confirm its capacity to handle requests.
+  not by itself a legal controller. Michał named GDG Warszawa as the proposed
+  controller, then asked to skip further clarification. The Source of Truth
+  describes it as an informal community; the legal identity and capacity to
+  handle requests remain unverified, not an approved publication claim.
 - **Purpose and legal basis:** choose and document the basis for optional
   cross-device synchronization and for any aggregate usage analysis separately.
   Sign-in is not marketing consent. Verify the basis with the responsible owner.
@@ -26,10 +29,11 @@ newsletter and analytics, but not this cloud collection.
   categories of recipients, service locations, transfer mechanisms, and any
   other authorized recipients. Firestore's Warsaw location alone does not prove
   where Authentication, logs, backups, or support are processed.
-- **Deletion across devices:** current deletion removes the Firestore document;
-  a different signed-in tab or device can re-create it. Agree and implement a
-  reliable revocation/deletion mechanism before making a deletion guarantee.
-  Browser-stored cards are separate and cleared through browser site settings.
+- **Deletion across devices:** the proposed revision atomically deletes card
+  data and rotates a session marker, blocking stale-device writes; this passed
+  an emulator test but has not been verified with real Google sign-in or phones.
+  The marker retains a Firebase UID and random epoch; agree its retention and
+  cleanup. Browser-stored cards are separate and cleared in browser settings.
 - **Security and cost:** confirm access to Firebase, log retention, billing
   alerts, abuse response and stop procedure. A 64-entry cap is not a write-rate
   or account-creation cap. Google's published limits include an IP-based new
@@ -50,7 +54,7 @@ newsletter and analytics, but not this cloud collection.
 > controller's identity, the legal bases, approved retention period, recipients,
 > transfers and how to exercise relevant rights after verification.]
 
-This text deliberately does not claim a retention schedule or reliable deletion
+This text deliberately does not claim a retention schedule or guaranteed deletion
 until the feature and operator process actually provide them. Review final copy
 against the actual Google service configuration and data flow before use.
 

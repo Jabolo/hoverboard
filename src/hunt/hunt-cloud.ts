@@ -12,13 +12,12 @@ import {
 } from 'firebase/auth';
 import {
   connectFirestoreEmulator,
-  deleteDoc,
   doc,
   initializeFirestore,
   memoryLocalCache,
   onSnapshot,
+  runTransaction,
   setDoc,
-  waitForPendingWrites,
   type Unsubscribe,
 } from 'firebase/firestore';
 import { firebaseApp } from '../firebase';
@@ -78,17 +77,29 @@ if (local && !realTest) {
   connectFirestoreEmulator(db, '127.0.0.1', 18080);
 }
 
-function sessionUid(): string | null {
+type SavedSession = { uid: string; epoch: string };
+function savedSession(): SavedSession | null {
   try {
-    return window.sessionStorage.getItem(sessionKey);
+    const raw = window.sessionStorage.getItem(sessionKey);
+    if (!raw) return null;
+    const value: unknown = JSON.parse(raw);
+    if (typeof value !== 'object' || value === null) return null;
+    const session = value as Record<string, unknown>;
+    if (
+      typeof session['uid'] !== 'string' ||
+      typeof session['epoch'] !== 'string' ||
+      !/^[a-f0-9]{32}$/.test(session['epoch'])
+    )
+      return null;
+    return { uid: session['uid'], epoch: session['epoch'] };
   } catch {
     return null;
   }
 }
 
-function setSessionUid(uid: string | null): void {
+function setSession(session: SavedSession | null): void {
   try {
-    if (uid) window.sessionStorage.setItem(sessionKey, uid);
+    if (session) window.sessionStorage.setItem(sessionKey, JSON.stringify(session));
     else window.sessionStorage.removeItem(sessionKey);
   } catch {
     // The current tab can still sync; it will need another sign-in after a reload.
@@ -114,7 +125,10 @@ class HuntCloud {
   private state: CloudState = { status: 'local', progress: [], account: '', message: '' };
   private listeners = new Set<(state: CloudState) => void>();
   private unsubscribe: Unsubscribe | undefined;
+  private unsubscribeSession: Unsubscribe | undefined;
   private activeUid = '';
+  private epoch = '';
+  private sessionVerified = false;
   private generation = 0;
   private writes = new Map<string, string>();
   private failedWrites = new Set<string>();
@@ -127,7 +141,9 @@ class HuntCloud {
     this.ready = setPersistence(auth, browserSessionPersistence).then(() => auth.authStateReady());
     onAuthStateChanged(auth, (user) => {
       if (this.activeUid && user?.uid !== this.activeUid) this.stopListening();
-      if (user && !this.activeUid && sessionUid() === user.uid) this.startListening(user);
+      const saved = savedSession();
+      if (user && !this.activeUid && saved?.uid === user.uid)
+        this.startListening(user, saved.epoch);
     });
     subscribeHuntProgress(() => this.uploadLocal());
     window.addEventListener('storage', (event) => {
@@ -166,8 +182,18 @@ class HuntCloud {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
       const { user } = await signInWithPopup(auth, provider);
-      setSessionUid(user.uid);
-      this.startListening(user);
+      const sessionRef = doc(db, 'huntCollectionSessions', user.uid);
+      const epoch = await runTransaction(db, async (transaction) => {
+        const snapshot = await transaction.get(sessionRef);
+        const current = snapshot.data();
+        if (current?.['enabled'] === true && typeof current['epoch'] === 'string')
+          return current['epoch'];
+        const next = crypto.randomUUID().replaceAll('-', '');
+        transaction.set(sessionRef, { epoch: next, enabled: true });
+        return next;
+      });
+      setSession({ uid: user.uid, epoch });
+      this.startListening(user, epoch);
     } catch (error) {
       const code = error instanceof FirebaseError ? error.code : '';
       const message =
@@ -183,17 +209,47 @@ class HuntCloud {
   retry(): void {
     const user = auth.currentUser;
     if (!user || user.uid !== this.activeUid) return;
+    const epoch = this.epoch;
     this.stopListening();
-    setSessionUid(user.uid);
-    this.startListening(user);
+    setSession({ uid: user.uid, epoch });
+    this.startListening(user, epoch);
   }
 
-  private startListening(user: User): void {
+  private startListening(user: User, epoch: string): void {
     if (this.activeUid === user.uid) return;
     this.stopListening();
     this.activeUid = user.uid;
+    this.epoch = epoch;
     const generation = ++this.generation;
     this.update({ status: 'syncing', account: user.email ?? 'Google account', message: '' });
+    this.unsubscribeSession = onSnapshot(
+      doc(db, 'huntCollectionSessions', user.uid),
+      { includeMetadataChanges: true },
+      (snapshot) => {
+        if (generation !== this.generation || snapshot.metadata.fromCache) return;
+        const session = snapshot.data();
+        if (session?.['enabled'] !== true || session['epoch'] !== epoch) {
+          setSession(null);
+          this.stopListening();
+          this.update({
+            status: 'local',
+            message:
+              'Sync stopped because this collection was deleted or restarted on another device.',
+          });
+          void signOut(auth).catch(() => undefined);
+          return;
+        }
+        this.sessionVerified = true;
+        this.uploadLocal();
+        this.setConnectionStatus();
+      },
+      () => {
+        if (generation === this.generation) {
+          this.listenerFailed = true;
+          this.setConnectionStatus();
+        }
+      },
+    );
     this.unsubscribe = onSnapshot(
       doc(db, 'huntCollections', user.uid),
       { includeMetadataChanges: true },
@@ -218,7 +274,6 @@ class HuntCloud {
         }
       },
     );
-    this.uploadLocal();
   }
 
   private setConnectionStatus(hasPendingWrites = false): void {
@@ -230,7 +285,7 @@ class HuntCloud {
       return;
     }
     const status =
-      !navigator.onLine || this.fromCache
+      !navigator.onLine || this.fromCache || !this.sessionVerified
         ? 'offline'
         : this.pending || hasPendingWrites
           ? 'syncing'
@@ -239,8 +294,9 @@ class HuntCloud {
   }
 
   private uploadLocal(): void {
-    if (!this.activeUid) return;
+    if (!this.activeUid || !this.sessionVerified) return;
     const uid = this.activeUid;
+    const epoch = this.epoch;
     const generation = this.generation;
     for (const entry of getHuntProgress()) {
       const id = `${entry.state}_${entry.card.id}`;
@@ -255,7 +311,7 @@ class HuntCloud {
           if (generation !== this.generation || this.activeUid !== uid) return;
           return setDoc(
             doc(db, 'huntCollections', uid),
-            { entries: { [id]: entry }, changedKey: id },
+            { entries: { [id]: entry }, changedKey: id, epoch },
             { merge: true },
           );
         })
@@ -278,7 +334,11 @@ class HuntCloud {
     this.generation++;
     this.unsubscribe?.();
     this.unsubscribe = undefined;
+    this.unsubscribeSession?.();
+    this.unsubscribeSession = undefined;
     this.activeUid = '';
+    this.epoch = '';
+    this.sessionVerified = false;
     this.writes.clear();
     this.failedWrites.clear();
     this.listenerFailed = false;
@@ -288,7 +348,7 @@ class HuntCloud {
   }
 
   async disconnect(): Promise<void> {
-    setSessionUid(null);
+    setSession(null);
     this.stopListening();
     this.update({ status: 'connecting', message: 'Stopping sync…' });
     try {
@@ -303,17 +363,31 @@ class HuntCloud {
   async deleteCloudCollection(): Promise<void> {
     const uid = this.activeUid;
     if (!uid || auth.currentUser?.uid !== uid) throw new Error('No active account');
+    const epoch = this.epoch;
     // Stop uploads first so a local copy is not immediately re-created in the cloud.
-    setSessionUid(null);
+    setSession(null);
     this.stopListening();
     this.update({ status: 'connecting', message: 'Deleting synced cards…' });
-    // Previously queued writes must reach the server before deletion, otherwise
-    // a late acknowledgement could recreate a card after it was removed.
     try {
       if (!navigator.onLine) throw new Error('Offline');
-      await bounded(waitForPendingWrites(db));
-      if (auth.currentUser?.uid !== uid) throw new Error('Account changed');
-      await bounded(deleteDoc(doc(db, 'huntCollections', uid)));
+      const sessionRef = doc(db, 'huntCollectionSessions', uid);
+      const collectionRef = doc(db, 'huntCollections', uid);
+      await bounded(
+        runTransaction(db, async (transaction) => {
+          const session = (await transaction.get(sessionRef)).data();
+          if (
+            auth.currentUser?.uid !== uid ||
+            session?.['enabled'] !== true ||
+            session['epoch'] !== epoch
+          )
+            throw new Error('Session changed');
+          transaction.set(sessionRef, {
+            enabled: false,
+            epoch: crypto.randomUUID().replaceAll('-', ''),
+          });
+          transaction.delete(collectionRef);
+        }),
+      );
       await signOut(auth);
       this.update({
         status: 'local',

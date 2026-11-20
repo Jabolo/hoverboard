@@ -29,6 +29,27 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // An epoch tombstone revokes stale clients when a collection is deleted.
+    match /huntCollectionSessions/{userId} {
+      function owner() {
+        return request.auth != null && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == "google.com";
+      }
+      function validSession() {
+        return request.resource.data.keys().hasOnly(["epoch", "enabled"])
+          && request.resource.data.keys().hasAll(["epoch", "enabled"])
+          && request.resource.data.epoch is string
+          && request.resource.data.epoch.matches("^[a-f0-9]{32}$")
+          && request.resource.data.enabled is bool;
+      }
+      allow get: if owner();
+      allow list, delete: if false;
+      allow create: if owner() && validSession() && request.resource.data.enabled;
+      allow update: if owner() && validSession()
+        && request.resource.data.enabled != resource.data.enabled
+        && request.resource.data.epoch != resource.data.epoch;
+    }
+
     // Optional Y2K collection. This is a personal souvenir, not proof of attendance
     // or a prize entry: clients can write their own records, so counts are indicative.
     match /huntCollections/{userId} {
@@ -62,14 +83,19 @@ service cloud.firestore {
               && data.earnedAt is number && data.earnedAt >= 0);
       }
       function validEnvelope() {
-        return request.resource.data.keys().hasOnly(["entries", "changedKey"])
-          && request.resource.data.keys().hasAll(["entries", "changedKey"])
+        return request.resource.data.keys().hasOnly(["entries", "changedKey", "epoch"])
+          && request.resource.data.keys().hasAll(["entries", "changedKey", "epoch"])
           && request.resource.data.entries is map
           && request.resource.data.entries.size() <= 64
           && request.resource.data.changedKey is string
           && request.resource.data.changedKey in request.resource.data.entries
           && validEntry(request.resource.data.changedKey,
                         request.resource.data.entries[request.resource.data.changedKey]);
+      }
+      function activeSession() {
+        let session = get(/databases/$(database)/documents/huntCollectionSessions/$(userId));
+        return session.data.enabled == true
+          && session.data.epoch == request.resource.data.epoch;
       }
       function validCreate() {
         return validEnvelope() && request.resource.data.entries.size() == 1;
@@ -78,9 +104,12 @@ service cloud.firestore {
         return validEnvelope() && request.resource.data.entries.diff(resource.data.entries)
           .affectedKeys().hasOnly([request.resource.data.changedKey]);
       }
-      allow get, list, delete: if owner();
-      allow create: if owner() && validCreate();
-      allow update: if owner() && validUpdate();
+      allow get: if owner();
+      allow list: if false;
+      allow delete: if owner()
+        && getAfter(/databases/$(database)/documents/huntCollectionSessions/$(userId)).data.enabled == false;
+      allow create: if owner() && activeSession() && validCreate();
+      allow update: if owner() && activeSession() && validUpdate();
     }
 
     match /notifications/{notificationId} {

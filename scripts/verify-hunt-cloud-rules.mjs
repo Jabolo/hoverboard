@@ -4,7 +4,15 @@ import {
   assertFails,
   assertSucceeds,
 } from '@firebase/rules-unit-testing';
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  writeBatch,
+} from 'firebase/firestore';
 
 const env = await initializeTestEnvironment({
   projectId: 'demo-devfest-y2k',
@@ -19,6 +27,8 @@ const password = env
   .authenticatedContext('alice', { firebase: { sign_in_provider: 'password' } })
   .firestore();
 const path = 'huntCollections/alice';
+const epoch = 'a'.repeat(32);
+const nextEpoch = 'b'.repeat(32);
 const earned = {
   state: 'earned',
   card: { id: 'test001', title: 'Disc', group: 'web', text: 'A reveal.' },
@@ -31,7 +41,7 @@ const found = {
   foundAt: 100,
 };
 const write = (db, id, entry) =>
-  setDoc(doc(db, path), { entries: { [id]: entry }, changedKey: id }, { merge: true });
+  setDoc(doc(db, path), { entries: { [id]: entry }, changedKey: id, epoch }, { merge: true });
 try {
   await env.withSecurityRulesDisabled(async (context) => {
     await setDoc(doc(context.firestore(), 'sessions/public-fixture'), { title: 'Session' });
@@ -44,6 +54,20 @@ try {
   await assertFails(getDoc(doc(guest, 'newsletterContacts/private-fixture')));
   await assertSucceeds(setDoc(doc(alice, 'featuredSessions/alice'), { sample: true }));
   await assertFails(getDoc(doc(bob, 'featuredSessions/alice')));
+  await assertFails(write(alice, 'earned_test001', earned));
+  await assertSucceeds(
+    setDoc(doc(alice, 'huntCollectionSessions/alice'), { enabled: true, epoch }),
+  );
+  await assertFails(getDoc(doc(bob, 'huntCollectionSessions/alice')));
+  await assertFails(
+    setDoc(doc(bob, 'huntCollectionSessions/alice'), { enabled: false, epoch: nextEpoch }),
+  );
+  await assertFails(
+    setDoc(doc(guest, 'huntCollectionSessions/alice'), { enabled: false, epoch: nextEpoch }),
+  );
+  await assertFails(
+    setDoc(doc(password, 'huntCollectionSessions/alice'), { enabled: false, epoch: nextEpoch }),
+  );
   await assertSucceeds(write(alice, 'earned_test001', earned));
   await assertSucceeds(getDoc(doc(alice, path)));
   await assertFails(getDoc(doc(bob, path)));
@@ -69,6 +93,7 @@ try {
   await assertSucceeds(write(alice, 'earned_test001', earned));
   await assertFails(
     setDoc(doc(alice, path), {
+      epoch,
       changedKey: 'found_test002',
       entries: {
         found_test001: found,
@@ -79,6 +104,9 @@ try {
     }),
   );
   const capped = google('capped');
+  await assertSucceeds(
+    setDoc(doc(capped, 'huntCollectionSessions/capped'), { enabled: true, epoch }),
+  );
   const capRef = doc(capped, 'huntCollections/capped');
   for (let index = 0; index < 64; index++) {
     const id = `t${String(index).padStart(6, '0')}`;
@@ -87,6 +115,7 @@ try {
         capRef,
         {
           changedKey: `found_${id}`,
+          epoch,
           entries: { [`found_${id}`]: { ...found, card: { ...found.card, id } } },
         },
         { merge: true },
@@ -98,13 +127,27 @@ try {
       capRef,
       {
         changedKey: 'found_t000064',
+        epoch,
         entries: { found_t000064: { ...found, card: { ...found.card, id: 't000064' } } },
       },
       { merge: true },
     ),
   );
   await assertFails(getDocs(collection(alice, 'huntCollections')));
-  await assertSucceeds(deleteDoc(doc(alice, path)));
+  await assertFails(deleteDoc(doc(alice, path)));
+  const deletion = writeBatch(alice);
+  deletion.set(doc(alice, 'huntCollectionSessions/alice'), { enabled: false, epoch: nextEpoch });
+  deletion.delete(doc(alice, path));
+  await assertSucceeds(deletion.commit());
+  await assertFails(write(alice, 'earned_test001', earned));
+  await assertFails(
+    setDoc(doc(alice, 'huntCollectionSessions/alice'), { enabled: true, epoch: nextEpoch }),
+  );
+  await assertSucceeds(
+    setDoc(doc(alice, 'huntCollectionSessions/alice'), { enabled: true, epoch: 'c'.repeat(32) }),
+  );
+  await assertFails(write(alice, 'earned_test001', earned));
+  await assertFails(deleteDoc(doc(alice, 'huntCollectionSessions/alice')));
   console.log(
     'PASS owner isolation, Google-only access, bounded schema, deletion and existing-rule regressions',
   );
