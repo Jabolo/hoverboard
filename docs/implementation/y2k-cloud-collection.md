@@ -31,8 +31,9 @@ a demo project.
 - Delete synced cards atomically removes the Firestore collection document and
   rotates a session marker. Rules reject stale writes from other devices even
   after a later opt-in re-enables sync. Devices stop sync when they reconnect.
-  This was tested in Firebase emulators, including a stale offline write; real
-  Firebase and physical devices remain unverified. Browser cards and the shared
+  This was tested in Firebase emulators, including a stale offline write, and
+  with two real Google sign-in sessions on one Mac. A real offline stale write
+  and physical mobile devices remain unverified. Browser cards and the shared
   Firebase Auth account are not deleted. A minimal marker containing the UID,
   a random epoch and disabled state remains in Firestore to reject stale writes;
   its retention and eventual deletion need an approved policy. The client reports
@@ -149,13 +150,25 @@ the time of inspection; its Google provider was enabled and
 `warsaw.devfest.pl` was on its authorized-domain list. Neither the live rules nor
 the live Auth configuration was modified.
 
-Real sign-in is **not yet verified**. The test project's Authentication has no
-configuration: the public Identity Platform initialization API reported
-`BILLING_NOT_ENABLED`, and a Google sign-in initiation request returned
-`CONFIGURATION_NOT_FOUND`. No billing account was attached. The no-cost Firebase
-console initialization path and Google provider still need to be set up, with
-`localhost` authorized and the correct test account configured. Do not enable
-billing merely to unblock the test without the owner's decision.
+The public Identity Platform initialization API initially reported
+`BILLING_NOT_ENABLED`. Michał subsequently enabled Google Authentication and
+authorized `localhost` in the test Firebase console; no billing account was
+attached. Read-only configuration checks confirmed both settings and Google
+OAuth initiation returned HTTP 200.
+
+Real sign-in was verified on 20 November with Michał's chosen Google account in
+normal and private Chrome sessions on the same Mac, using the local test server
+and mock cards. The first revealed card appeared in the second session; a second
+card revealed there appeared in the first session. The test project's Firestore
+contained both mock reveals. An initial deletion was followed by a new active
+test collection; whether a new sign-in caused this was not established. In a
+controlled repeat, computer use confirmed deletion in the normal window and
+observed the private window's revocation message. Firestore readback then showed
+zero `huntCollections` documents and one disabled session marker. Local browser
+cards remained. The isolated Firebase Auth user and disabled marker remain;
+do not delete either without the owner's authorization. This does not verify
+physical iPhone/Android devices, offline real-Firebase writes, production OAuth,
+or the live production configuration.
 
 `scripts/serve-hunt-real-auth-test.mjs` prepares an isolated, local-only test of
 the actual branch using mock card responses and the dedicated test project. It

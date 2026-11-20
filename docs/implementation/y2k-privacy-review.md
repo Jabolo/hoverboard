@@ -30,8 +30,9 @@ newsletter and analytics, but not this cloud collection.
   other authorized recipients. Firestore's Warsaw location alone does not prove
   where Authentication, logs, backups, or support are processed.
 - **Deletion across devices:** the proposed revision atomically deletes card
-  data and rotates a session marker, blocking stale-device writes; this passed
-  an emulator test but has not been verified with real Google sign-in or phones.
+  data and rotates a session marker, blocking stale-device writes; emulator
+  tests and a controlled real-Firebase test with two Chrome sessions passed.
+  Real offline stale writes and physical phones have not been verified.
   The marker retains a Firebase UID and random epoch; agree its retention and
   cleanup. Browser-stored cards are separate and cleared in browser settings.
 - **Security and cost:** confirm access to Firebase, log retention, billing
