@@ -134,3 +134,43 @@ release needs rollback, restore Hosting first; evaluate rules and existing cloud
 records separately with the owner. Do not delete participant data as a rollback
 shortcut. The production event gates and physical QR/NFC checks remain as in the
 existing release handoff.
+
+## Test project progress — 20 November 2026
+
+The explicitly selected Google account created the isolated project
+`devfest-y2k-sync-test-1120` (project number `870513500592`) without a billing
+account. Its native Firestore database is in `europe-central2` with free tier
+enabled. The proposed `firestore.rules` was deployed to that project and the
+release was read back successfully. A dedicated Web app was created. The live
+project's rules release matched the unmodified `gdg/main` baseline exactly at
+the time of inspection; its Google provider was enabled and
+`warsaw.devfest.pl` was on its authorized-domain list. Neither the live rules nor
+the live Auth configuration was modified.
+
+Real sign-in is **not yet verified**. The test project's Authentication has no
+configuration: the public Identity Platform initialization API reported
+`BILLING_NOT_ENABLED`, and a Google sign-in initiation request returned
+`CONFIGURATION_NOT_FOUND`. No billing account was attached. The no-cost Firebase
+console initialization path and Google provider still need to be set up, with
+`localhost` authorized and the correct test account configured. Do not enable
+billing merely to unblock the test without the owner's decision.
+
+`scripts/serve-hunt-real-auth-test.mjs` prepares an isolated, local-only test of
+the actual branch using mock card responses and the dedicated test project. It
+requires a local Web app configuration file in `HUNT_TEST_FIREBASE_CONFIG`; the
+server rejects other project IDs and binds to loopback. The cloud client permits
+that exact test project only on localhost; local testing otherwise uses demo
+emulators. Do not publish the test server or use actual attendee data.
+
+The first setup command inherited an existing Firebase CLI token; subsequent
+commands explicitly excluded that token and selected
+`michal.tomasz.jablonski@gmail.com`. The CLI debug log created by this session
+was removed. A production Auth configuration response accidentally included
+password-hash signing material in this chat's tool output. Do not reproduce it;
+ask the Firebase security owner to assess exposure to the chat/tool logs and
+appropriate remediation. No production credential was changed.
+
+The [privacy and operations review draft](y2k-privacy-review.md) records the
+unresolved controller, legal basis, retention, shared Auth-account lifecycle,
+cross-device deletion, and abuse controls. These are release blockers, not
+decisions made by this branch.

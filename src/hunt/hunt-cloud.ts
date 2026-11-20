@@ -1,4 +1,4 @@
-import { FirebaseError, getApp, getApps, initializeApp } from 'firebase/app';
+import { FirebaseError, getApp, getApps, initializeApp, type FirebaseOptions } from 'firebase/app';
 import {
   browserSessionPersistence,
   connectAuthEmulator,
@@ -41,6 +41,17 @@ export type CloudState = {
 const sessionKey = `${HUNT_STORAGE_KEY}:cloud-session`;
 const appName = 'y2k-hunt-sync';
 const local = ['localhost', '127.0.0.1', '[::1]', '::1'].includes(window.location.hostname);
+declare global {
+  interface Window {
+    /** Set only by the local real-auth test server, never on the public website. */
+    huntRealAuthTestConfig?: FirebaseOptions;
+  }
+}
+const testConfig = local ? window.huntRealAuthTestConfig : undefined;
+const realTest =
+  testConfig?.projectId === 'devfest-y2k-sync-test-1120' &&
+  testConfig.authDomain === 'devfest-y2k-sync-test-1120.firebaseapp.com';
+if (testConfig && !realTest) throw new Error('Invalid isolated test project');
 if (!local && window.location.hostname !== 'warsaw.devfest.pl') {
   throw new Error('Card sync is unavailable on this preview origin');
 }
@@ -52,15 +63,17 @@ if (
   throw new Error('Card sync is unavailable with this Firebase configuration');
 }
 // Local previews can never write to the real event database, even if a user signs in.
-const options = local
-  ? { apiKey: 'demo-local', authDomain: 'localhost', projectId: 'demo-devfest-y2k' }
-  : firebaseApp.options;
+const options = realTest
+  ? testConfig
+  : local
+    ? { apiKey: 'demo-local', authDomain: 'localhost', projectId: 'demo-devfest-y2k' }
+    : firebaseApp.options;
 const app = getApps().some((candidate) => candidate.name === appName)
   ? getApp(appName)
   : initializeApp(options, appName);
 const auth = getAuth(app);
 const db = initializeFirestore(app, { localCache: memoryLocalCache() });
-if (local) {
+if (local && !realTest) {
   connectAuthEmulator(auth, 'http://127.0.0.1:19099', { disableWarnings: true });
   connectFirestoreEmulator(db, '127.0.0.1', 18080);
 }
