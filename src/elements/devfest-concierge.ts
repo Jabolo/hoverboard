@@ -1441,6 +1441,10 @@ export class DevfestConcierge extends ThemedElement {
           animation: concierge-beam-spin 6s linear infinite;
         }
 
+        :host([variant='floating']) dialog.concierge-dialog {
+          pointer-events: auto;
+        }
+
         :host([variant='floating'][data-fab-visible]) .orbital-fab {
           opacity: 1;
           visibility: visible;

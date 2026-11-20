@@ -41,9 +41,21 @@ const base = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ headless: true, channel: 'chrome' });
 try {
   for (const width of [320, 390, 1440]) {
-    const page = await browser.newPage({ viewport: { width, height: 844 } });
+    const page = await browser.newPage({
+      viewport: { width, height: 844 },
+      serviceWorkers: 'block',
+    });
     const errors = [];
+    await page.route('**/*', (route) => {
+      if (new URL(route.request().url()).origin === base) return route.continue();
+      return route.fulfill({ status: 204, body: '' });
+    });
     await page.addInitScript(() => {
+      window.firebaseConfig = {
+        apiKey: 'demo-preview',
+        projectId: 'demo-preview',
+        appId: 'demo-preview',
+      };
       window.scratchSoundStarts = 0;
       window.scratchSoundDuration = 0;
       window.lastFoilSnapshot = '';
